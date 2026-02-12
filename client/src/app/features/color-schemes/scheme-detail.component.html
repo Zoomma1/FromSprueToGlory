@@ -1,0 +1,158 @@
+@if (scheme(); as s) {
+
+<!-- ─── Header ─────────────────────────────── -->
+<div class="detail-header">
+    <button mat-icon-button (click)="goBack()" matTooltip="Back">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ editMode() ? 'Editing: ' : '' }}{{ s.name }}</h1>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- VIEW MODE                                 -->
+<!-- ═══════════════════════════════════════════ -->
+@if (!editMode()) {
+<div class="view-mode">
+    <div class="action-bar">
+        <button mat-raised-button color="primary" (click)="enterEditMode()">
+            <mat-icon>edit</mat-icon> Edit
+        </button>
+        <button mat-stroked-button (click)="duplicate()">
+            <mat-icon>content_copy</mat-icon> Duplicate
+        </button>
+        <button mat-stroked-button color="warn" (click)="deleteScheme()">
+            <mat-icon>delete</mat-icon> Delete
+        </button>
+    </div>
+
+    @if (s.description) {
+    <p class="scheme-description">{{ s.description }}</p>
+    }
+
+    @if (s.gameSystem || s.faction) {
+    <div class="meta-chips">
+        @if (s.gameSystem) {
+        <mat-chip-set><mat-chip>{{ s.gameSystem.name }}</mat-chip></mat-chip-set>
+        }
+        @if (s.faction) {
+        <mat-chip-set><mat-chip>{{ s.faction.name }}</mat-chip></mat-chip-set>
+        }
+    </div>
+    }
+
+    <button mat-button class="details-toggle" (click)="toggleDetails()">
+        <mat-icon>{{ showDetails() ? 'expand_less' : 'expand_more' }}</mat-icon>
+        {{ showDetails() ? 'Hide details' : 'Show details' }}
+    </button>
+
+    <h2 class="section-title">Steps ({{ s.steps?.length || 0 }})</h2>
+
+    <div class="steps-list">
+        @for (step of s.steps; track $index; let i = $index) {
+        <mat-card class="step-card">
+            <div class="step-number">{{ i + 1 }}</div>
+            <div class="step-body">
+                <div class="step-main">
+                    <span class="step-area">{{ step.area }}</span>
+                    <span class="step-technique">{{ step.technique?.name }}</span>
+                </div>
+                @if (step.paint) {
+                <span class="step-paint">🎨 {{ step.paint.name }}</span>
+                }
+                @if (showDetails() && step.notes) {
+                <p class="step-notes">{{ step.notes }}</p>
+                }
+                @if (showDetails() && step.paint?.brand) {
+                <span class="step-brand">Brand: {{ step.paint.brand.name }}</span>
+                }
+            </div>
+        </mat-card>
+        }
+    </div>
+
+    @if (!s.steps?.length) {
+    <div class="empty-steps">
+        <p>No steps yet. Click Edit to add painting steps.</p>
+    </div>
+    }
+</div>
+}
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EDIT MODE                                 -->
+<!-- ═══════════════════════════════════════════ -->
+@if (editMode()) {
+<div class="edit-mode">
+    <form [formGroup]="form">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="2"></textarea>
+        </mat-form-field>
+
+        <h3 class="steps-title">
+            Steps
+            <button mat-mini-fab color="primary" (click)="addStep()" type="button">
+                <mat-icon>add</mat-icon>
+            </button>
+        </h3>
+
+        <div formArrayName="steps" cdkDropList (cdkDropListDropped)="reorderStep($event)">
+            @for (step of stepsArray.controls; track $index; let i = $index) {
+            <div [formGroupName]="i" class="step-row" cdkDrag>
+                <div class="step-header">
+                    <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+                    <span class="step-num">Step {{ i + 1 }}</span>
+                    <button mat-icon-button color="warn" (click)="removeStep(i)" type="button">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <div class="step-fields">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Area</mat-label>
+                        <input matInput formControlName="area">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Technique</mat-label>
+                        <mat-select formControlName="techniqueId">
+                            @for (t of techniques(); track t.id) {
+                            <mat-option [value]="t.id">{{ t.name }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Paint</mat-label>
+                        <mat-select formControlName="paintId">
+                            <mat-option [value]="null">None</mat-option>
+                            @for (p of paints(); track p.id) {
+                            <mat-option [value]="p.id">{{ p.name }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Notes</mat-label>
+                    <input matInput formControlName="notes">
+                </mat-form-field>
+            </div>
+            }
+        </div>
+    </form>
+
+    <div class="edit-actions">
+        <button mat-button (click)="cancelEdit()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="save()"
+            [disabled]="form.invalid || stepsArray.length === 0 || saving()">
+            Save
+        </button>
+    </div>
+</div>
+}
+
+} @else {
+<div class="loading-state">Loading...</div>
+}

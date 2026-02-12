@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Model Color White",
+        "code": "70.951",
+        "brandSlug": "vallejo",
+        "type": "BASE"
+    },
+    {
+        "name": "Model Color Black",
+        "code": "70.950",
+        "brandSlug": "vallejo",
+        "type": "BASE"
+    },
+    {
+        "name": "Model Color German Grey",
+        "code": "70.995",
+        "brandSlug": "vallejo",
+        "type": "BASE"
+    },
+    {
+        "name": "Game Color Bloody Red",
+        "code": "72.010",
+        "brandSlug": "vallejo",
+        "type": "BASE"
+    },
+    {
+        "name": "Game Color Electric Blue",
+        "code": "72.023",
+        "brandSlug": "vallejo",
+        "type": "BASE"
+    }
+]

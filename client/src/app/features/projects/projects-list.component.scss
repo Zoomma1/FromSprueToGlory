@@ -1,0 +1,132 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .page-title {
+        margin: 0;
+        color: #d4a34a;
+        font-size: 1.5rem;
+    }
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.project-card {
+    background: #1e1e2e;
+    border: 1px solid #2a2a4a;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+
+    &:hover {
+        border-color: #d4a34a;
+        transform: translateY(-2px);
+    }
+}
+
+.project-avatar {
+    color: #d4a34a;
+}
+
+.project-description {
+    color: #999;
+    font-size: 0.85rem;
+    margin: 4px 0 12px;
+}
+
+.progress-section {
+    margin: 12px 0;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.progress-label {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.progress-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #d4a34a;
+}
+
+.status-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.mini-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    user-select: none;
+
+    &[data-status="WANT"] {
+        background: #2196f3;
+        color: white;
+    }
+
+    &[data-status="BOUGHT"] {
+        background: #ff9800;
+        color: white;
+    }
+
+    &[data-status="ASSEMBLED"] {
+        background: #9c27b0;
+        color: white;
+    }
+
+    &[data-status="WIP"] {
+        background: #f44336;
+        color: white;
+    }
+
+    &[data-status="FINISHED"] {
+        background: #4caf50;
+        color: white;
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 64px 16px;
+    color: #888;
+
+    .empty-icon {
+        font-size: 64px;
+        height: 64px;
+        width: 64px;
+        opacity: 0.3;
+    }
+
+    h2 {
+        color: #d4a34a;
+    }
+}
+
+@media (min-width: 600px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 960px) {
+    .projects-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

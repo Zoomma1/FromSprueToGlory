@@ -1,0 +1,49 @@
+<div class="page-header">
+    <h1 class="page-title">Color Schemes</h1>
+    <button mat-fab color="primary" (click)="openCreateDialog()" matTooltip="New scheme">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
+
+<div class="schemes-grid">
+    @for (scheme of schemes(); track scheme.id) {
+    <mat-card class="scheme-card" [routerLink]="['/color-schemes', scheme.id]">
+        <mat-card-header>
+            <mat-icon mat-card-avatar class="scheme-avatar">palette</mat-icon>
+            <mat-card-title>{{ scheme.name }}</mat-card-title>
+            <mat-card-subtitle>
+                {{ scheme._count?.steps || 0 }} steps · {{ scheme._count?.items || 0 }} items
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            @if (scheme.gameSystem) {
+            <mat-chip-set>
+                <mat-chip>{{ scheme.gameSystem.name }}</mat-chip>
+                @if (scheme.faction) {
+                <mat-chip>{{ scheme.faction.name }}</mat-chip>
+                }
+            </mat-chip-set>
+            }
+            @if (scheme.description) {
+            <p class="scheme-description">{{ scheme.description }}</p>
+            }
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button (click)="openEditDialog(scheme)">
+                <mat-icon>edit</mat-icon> Edit
+            </button>
+            <button mat-button color="warn" (click)="deleteScheme(scheme)">
+                <mat-icon>delete</mat-icon> Delete
+            </button>
+        </mat-card-actions>
+    </mat-card>
+    }
+</div>
+
+@if (schemes().length === 0) {
+<div class="empty-state">
+    <mat-icon class="empty-icon">palette</mat-icon>
+    <h2>No color schemes yet</h2>
+    <p>Create a painting recipe to track your painting steps</p>
+</div>
+}

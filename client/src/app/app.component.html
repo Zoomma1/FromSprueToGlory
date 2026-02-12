@@ -1,0 +1,48 @@
+<!-- Top toolbar -->
+<mat-toolbar class="app-toolbar" color="primary">
+  @if (isMobile() && authService.isLoggedIn()) {
+  <button mat-icon-button (click)="sidenav.toggle()" aria-label="Toggle menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  }
+
+  <mat-icon class="app-logo-icon">auto_fix_high</mat-icon>
+  <span class="app-title">{{ title }}</span>
+
+  <span class="spacer"></span>
+
+  @if (authService.isLoggedIn()) {
+  <button mat-icon-button (click)="authService.logout()" matTooltip="Logout" aria-label="Logout">
+    <mat-icon>logout</mat-icon>
+  </button>
+  }
+</mat-toolbar>
+
+@if (authService.isLoggedIn()) {
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()" [fixedInViewport]="isMobile()"
+    fixedTopGap="64" class="app-sidenav">
+    <mat-nav-list>
+      @for (item of navItems; track item.route) {
+      <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link" (click)="onNavClick()">
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+      }
+    </mat-nav-list>
+    <div class="sidenav-footer">
+      <small>⚔️ From Sprue to Glory</small>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <div class="content-wrapper">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+} @else {
+<div class="content-wrapper auth-page">
+  <router-outlet />
+</div>
+}

@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{ data.mode === 'create' ? 'New Scheme' : 'Edit Scheme' }}</h2>
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="2"></textarea>
+        </mat-form-field>
+
+        <h3 class="steps-title">
+            Steps
+            <button mat-mini-fab color="primary" (click)="addStep()" type="button">
+                <mat-icon>add</mat-icon>
+            </button>
+        </h3>
+
+        <div formArrayName="steps" cdkDropList (cdkDropListDropped)="reorderStep($event)">
+            @for (step of stepsArray.controls; track $index; let i = $index) {
+            <div [formGroupName]="i" class="step-row" cdkDrag>
+                <div class="step-header">
+                    <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+                    <span class="step-num">Step {{ i + 1 }}</span>
+                    <button mat-icon-button color="warn" (click)="removeStep(i)" type="button">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <div class="step-fields">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Area</mat-label>
+                        <input matInput formControlName="area">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Technique</mat-label>
+                        <mat-select formControlName="techniqueId">
+                            @for (t of techniques(); track t.id) {
+                            <mat-option [value]="t.id">{{ t.name }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Paint</mat-label>
+                        <mat-select formControlName="paintId">
+                            <mat-option [value]="null">None</mat-option>
+                            @for (p of paints(); track p.id) {
+                            <mat-option [value]="p.id">{{ p.name }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Notes</mat-label>
+                    <input matInput formControlName="notes">
+                </mat-form-field>
+            </div>
+            }
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()"
+        [disabled]="form.invalid || stepsArray.length === 0 || saving()">
+        {{ data.mode === 'create' ? 'Create' : 'Save' }}
+    </button>
+</mat-dialog-actions>

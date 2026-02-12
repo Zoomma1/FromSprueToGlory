@@ -1,0 +1,143 @@
+<div class="items-header">
+    <h1>Pile of Shame</h1>
+    <button mat-fab color="primary" (click)="openCreateDialog()" matTooltip="Add item">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar">
+    <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Status</mat-label>
+        <mat-select [(value)]="statusFilter" (selectionChange)="loadItems()">
+            <mat-option value="">All</mat-option>
+            @for (s of statuses; track s) {
+            <mat-option [value]="s">{{ statusLabels[s] }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<!-- Desktop Table -->
+@if (!isMobile()) {
+<table mat-table [dataSource]="items()" class="items-table">
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="faction">
+        <th mat-header-cell *matHeaderCellDef>Faction</th>
+        <td mat-cell *matCellDef="let item">{{ item.faction?.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let item">
+            <div class="status-controls">
+                <button mat-icon-button class="status-nav-btn" [disabled]="!canRevert(item)" (click)="prevStatus(item)"
+                    matTooltip="Previous status">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <span class="status-badge" [attr.data-status]="item.status" [matMenuTriggerFor]="statusMenu">
+                    {{ getStatusLabel(item.status) }}
+                </span>
+                <mat-menu #statusMenu="matMenu">
+                    @for (s of statuses; track s) {
+                    <button mat-menu-item [disabled]="item.status === s" (click)="setStatus(item, s)">
+                        {{ statusLabels[s] }}
+                    </button>
+                    }
+                </mat-menu>
+                <button mat-icon-button class="status-nav-btn" [disabled]="!canAdvance(item)" (click)="nextStatus(item)"
+                    matTooltip="Next status">
+                    <mat-icon>chevron_right</mat-icon>
+                </button>
+            </div>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef>Qty</th>
+        <td mat-cell *matCellDef="let item">{{ item.quantity }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let item">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openEditDialog(item)">
+                    <mat-icon>edit</mat-icon> <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="deleteItem(item)">
+                    <mat-icon>delete</mat-icon> <span>Delete</span>
+                </button>
+            </mat-menu>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+}
+
+<!-- Mobile Cards -->
+@if (isMobile()) {
+<div class="cards-grid">
+    @for (item of items(); track item.id) {
+    <mat-card class="item-card">
+        <mat-card-header>
+            <mat-card-title>{{ item.name }}</mat-card-title>
+            <mat-card-subtitle>{{ item.faction?.name }} · x{{ item.quantity }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="status-controls mobile">
+                <button mat-icon-button [disabled]="!canRevert(item)" (click)="prevStatus(item)">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <span class="status-badge clickable" [attr.data-status]="item.status"
+                    [matMenuTriggerFor]="mobileStatusMenu">
+                    {{ getStatusLabel(item.status) }}
+                </span>
+                <mat-menu #mobileStatusMenu="matMenu">
+                    @for (s of statuses; track s) {
+                    <button mat-menu-item [disabled]="item.status === s" (click)="setStatus(item, s)">
+                        {{ statusLabels[s] }}
+                    </button>
+                    }
+                </mat-menu>
+                <button mat-icon-button [disabled]="!canAdvance(item)" (click)="nextStatus(item)">
+                    <mat-icon>chevron_right</mat-icon>
+                </button>
+            </div>
+            @if (item.tags?.length) {
+            <mat-chip-set class="tag-chips">
+                @for (tag of item.tags; track tag) {
+                <mat-chip>{{ tag }}</mat-chip>
+                }
+            </mat-chip-set>
+            }
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button (click)="openEditDialog(item)">
+                <mat-icon>edit</mat-icon> Edit
+            </button>
+            <button mat-button color="warn" (click)="deleteItem(item)">
+                <mat-icon>delete</mat-icon> Delete
+            </button>
+        </mat-card-actions>
+    </mat-card>
+    }
+</div>
+}
+
+@if (items().length === 0) {
+<div class="empty-state">
+    <mat-icon class="empty-icon">inventory_2</mat-icon>
+    <h2>No items yet</h2>
+    <p>Start tracking your pile by clicking the + button above</p>
+</div>
+}

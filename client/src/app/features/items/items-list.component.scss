@@ -1,0 +1,148 @@
+.items-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h1 {
+        margin: 0;
+        color: #d4a34a;
+        font-size: 1.5rem;
+    }
+}
+
+.filters-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.filter-field {
+    min-width: 160px;
+}
+
+.items-table {
+    width: 100%;
+    background: #1e1e2e;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &[data-status="WANT"] {
+        background: #2196f3;
+        color: white;
+    }
+
+    &[data-status="BOUGHT"] {
+        background: #ff9800;
+        color: white;
+    }
+
+    &[data-status="ASSEMBLED"] {
+        background: #9c27b0;
+        color: white;
+    }
+
+    &[data-status="WIP"] {
+        background: #f44336;
+        color: white;
+    }
+
+    &[data-status="FINISHED"] {
+        background: #4caf50;
+        color: white;
+    }
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            filter: brightness(1.15);
+        }
+    }
+}
+
+.status-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+
+    .status-nav-btn {
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+
+        .mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    .status-badge {
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+            filter: brightness(1.15);
+        }
+    }
+
+    &.mobile {
+        justify-content: center;
+        margin: 8px 0;
+    }
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.item-card {
+    background: #1e1e2e;
+    border: 1px solid #2a2a4a;
+}
+
+.tag-chips {
+    margin-top: 8px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 64px 16px;
+    color: #888;
+
+    .empty-icon {
+        font-size: 64px;
+        height: 64px;
+        width: 64px;
+        opacity: 0.3;
+    }
+
+    h2 {
+        color: #d4a34a;
+    }
+}
+
+@media (min-width: 600px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 960px) {
+    .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

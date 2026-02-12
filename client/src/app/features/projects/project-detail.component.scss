@@ -1,0 +1,183 @@
+.detail-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    h1 {
+        margin: 0;
+        color: #d4a34a;
+        font-size: 1.5rem;
+    }
+
+    .project-desc {
+        color: #999;
+        margin: 4px 0 0;
+        font-size: 0.9rem;
+    }
+}
+
+.progress-section {
+    margin-bottom: 24px;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.progress-label {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.progress-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #d4a34a;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+
+    h2 {
+        margin: 0;
+        color: #d4a34a;
+        font-size: 1.1rem;
+    }
+}
+
+.assign-panel {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+}
+
+.assign-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #2a2a4a;
+
+    span:first-child {
+        flex: 1;
+    }
+}
+
+.assign-meta {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.muted {
+    color: #666;
+    font-style: italic;
+}
+
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.item-row-card {
+    background: #1e1e2e;
+    border: 1px solid #2a2a4a;
+}
+
+.item-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+}
+
+.item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.item-name {
+    display: block;
+    font-weight: 500;
+}
+
+.item-meta {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.item-status-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+        filter: brightness(1.15);
+    }
+
+    &[data-status="WANT"] {
+        background: #2196f3;
+        color: white;
+    }
+
+    &[data-status="BOUGHT"] {
+        background: #ff9800;
+        color: white;
+    }
+
+    &[data-status="ASSEMBLED"] {
+        background: #9c27b0;
+        color: white;
+    }
+
+    &[data-status="WIP"] {
+        background: #f44336;
+        color: white;
+    }
+
+    &[data-status="FINISHED"] {
+        background: #4caf50;
+        color: white;
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 16px;
+    color: #888;
+
+    .empty-icon {
+        font-size: 48px;
+        height: 48px;
+        width: 48px;
+        opacity: 0.3;
+    }
+
+    h3 {
+        color: #d4a34a;
+    }
+}
+
+.loading-state {
+    text-align: center;
+    padding: 64px;
+    color: #888;
+}

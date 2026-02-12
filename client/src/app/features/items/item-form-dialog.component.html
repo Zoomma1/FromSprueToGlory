@@ -1,0 +1,100 @@
+<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Add Item' : 'Edit Item' }}</h2>
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+        </mat-form-field>
+
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Game System</mat-label>
+                <mat-select formControlName="gameSystemId" (selectionChange)="onGameSystemChange($event.value)">
+                    @for (gs of gameSystems(); track gs.id) {
+                    <mat-option [value]="gs.id">{{ gs.name }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Faction</mat-label>
+                <mat-select formControlName="factionId" (selectionChange)="onFactionChange($event.value)">
+                    @for (faction of factions(); track faction.id) {
+                    <mat-option [value]="faction.id">{{ faction.name }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Model / Unit (optional)</mat-label>
+            <mat-select formControlName="modelId">
+                <mat-option [value]="null">— None —</mat-option>
+                @for (model of models(); track model.id) {
+                <mat-option [value]="model.id">{{ model.name }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                    <mat-option value="WANT">Want</mat-option>
+                    <mat-option value="BOUGHT">Bought</mat-option>
+                    <mat-option value="ASSEMBLED">Assembled</mat-option>
+                    <mat-option value="WIP">WIP</mat-option>
+                    <mat-option value="FINISHED">Finished</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Quantity</mat-label>
+                <input matInput type="number" formControlName="quantity" min="1">
+            </mat-form-field>
+        </div>
+
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Price</mat-label>
+                <input matInput type="number" formControlName="price" step="0.01">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Currency</mat-label>
+                <mat-select formControlName="currency">
+                    <mat-option value="EUR">EUR</mat-option>
+                    <mat-option value="USD">USD</mat-option>
+                    <mat-option value="GBP">GBP</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Store</mat-label>
+            <input matInput formControlName="store">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Project (optional)</mat-label>
+            <mat-select formControlName="projectId">
+                <mat-option [value]="null">— None —</mat-option>
+                @for (proj of projects(); track proj.id) {
+                <mat-option [value]="proj.id">{{ proj.name }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notes</mat-label>
+            <textarea matInput formControlName="notes" rows="3"></textarea>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid || saving()">
+        {{ data.mode === 'create' ? 'Create' : 'Save' }}
+    </button>
+</mat-dialog-actions>

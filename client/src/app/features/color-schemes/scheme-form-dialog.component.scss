@@ -1,0 +1,54 @@
+mat-dialog-content {
+    max-height: 70vh;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.steps-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #d4a34a;
+}
+
+.step-row {
+    background: #12121f;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #555;
+    margin-right: 8px;
+}
+
+.step-num {
+    flex: 1;
+    font-weight: 600;
+    color: #d4a34a;
+}
+
+.step-fields {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.cdk-drag-preview {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0.3;
+}

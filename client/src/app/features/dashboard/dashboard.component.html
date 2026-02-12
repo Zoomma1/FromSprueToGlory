@@ -1,0 +1,46 @@
+<h1 class="page-title">Dashboard</h1>
+
+<div class="stats-grid">
+    @for (stat of stats(); track stat.status) {
+    <mat-card class="stat-card" [style.border-left-color]="stat.color">
+        <mat-card-content>
+            <div class="stat-content">
+                <div class="stat-info">
+                    <span class="stat-count">{{ stat.count }}</span>
+                    <span class="stat-label">{{ stat.status }}</span>
+                </div>
+                <mat-icon class="stat-icon" [style.color]="stat.color">{{ stat.icon }}</mat-icon>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    }
+</div>
+
+<div class="total-card-container">
+    <mat-card class="total-card">
+        <mat-card-content>
+            <div class="stat-content">
+                <div class="stat-info">
+                    <span class="stat-count gold">{{ totalItems() }}</span>
+                    <span class="stat-label">Total Items in Pile</span>
+                </div>
+                <mat-icon class="stat-icon gold">inventory_2</mat-icon>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<div class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="actions-row">
+        <button mat-stroked-button [routerLink]="['/items']">
+            <mat-icon>list</mat-icon> View Items
+        </button>
+        <button mat-stroked-button [routerLink]="['/projects']">
+            <mat-icon>folder_special</mat-icon> Projects
+        </button>
+        <button mat-stroked-button [routerLink]="['/color-schemes']">
+            <mat-icon>palette</mat-icon> Color Schemes
+        </button>
+    </div>
+</div>

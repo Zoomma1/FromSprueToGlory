@@ -1,0 +1,98 @@
+// ──────────────────────────────────────────────
+// App Shell Styles — Mobile First
+// ──────────────────────────────────────────────
+
+// ─── Toolbar ─────────────────────────────────
+.app-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-bottom: 2px solid #d4a34a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.app-logo-icon {
+    margin-right: 8px;
+    color: #d4a34a;
+}
+
+.app-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    color: #f0e6d3;
+
+    @media (max-width: 480px) {
+        font-size: 0.95rem;
+    }
+}
+
+// ─── Sidenav container ───────────────────────
+.sidenav-container {
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+// ─── Sidenav panel ───────────────────────────
+.app-sidenav {
+    width: 240px;
+    background: #1a1a2e;
+    border-right: 1px solid #2a2a4a;
+
+    .active-link {
+        background: rgba(212, 163, 74, 0.15);
+        border-left: 3px solid #d4a34a;
+
+        mat-icon {
+            color: #d4a34a;
+        }
+
+        span {
+            color: #d4a34a;
+            font-weight: 500;
+        }
+    }
+
+    mat-icon {
+        color: #888;
+        transition: color 0.2s ease;
+    }
+
+    a:hover mat-icon {
+        color: #d4a34a;
+    }
+}
+
+.sidenav-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    text-align: center;
+    color: #555;
+    border-top: 1px solid #2a2a4a;
+    font-style: italic;
+}
+
+// ─── Main content ────────────────────────────
+.main-content {
+    background: #121212;
+    min-height: 100%;
+}
+
+.content-wrapper {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    @media (max-width: 600px) {
+        padding: 12px;
+    }
+}

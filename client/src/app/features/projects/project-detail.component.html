@@ -1,0 +1,98 @@
+@if (project(); as proj) {
+<div class="detail-header">
+    <button mat-icon-button (click)="goBack()" matTooltip="Back to projects">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-info">
+        <h1>{{ proj.name }}</h1>
+        @if (proj.description) {
+        <p class="project-desc">{{ proj.description }}</p>
+        }
+    </div>
+</div>
+
+<div class="progress-section">
+    <div class="progress-header">
+        <span class="progress-label">Overall Completion</span>
+        <span class="progress-value">{{ proj.completion }}%</span>
+    </div>
+    <mat-progress-bar mode="determinate" [value]="proj.completion"
+        [color]="proj.completion === 100 ? 'accent' : 'primary'">
+    </mat-progress-bar>
+</div>
+
+<div class="section-header">
+    <h2>Items ({{ proj.items?.length || 0 }})</h2>
+    <button mat-stroked-button (click)="toggleAssignPanel()">
+        <mat-icon>{{ showAssignPanel() ? 'close' : 'add' }}</mat-icon>
+        {{ showAssignPanel() ? 'Close' : 'Add Items' }}
+    </button>
+</div>
+
+<!-- Assign Panel -->
+@if (showAssignPanel()) {
+<mat-card class="assign-panel">
+    <mat-card-header>
+        <mat-card-title>Available Items</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        @if (unassignedItems().length === 0) {
+        <p class="muted">No unassigned items available</p>
+        }
+        @for (item of unassignedItems(); track item.id) {
+        <div class="assign-row">
+            <span>{{ item.name }}</span>
+            <span class="assign-meta">{{ item.faction?.name }}</span>
+            <button mat-icon-button color="primary" (click)="assignItem(item.id)" matTooltip="Add to project">
+                <mat-icon>add_circle</mat-icon>
+            </button>
+        </div>
+        }
+    </mat-card-content>
+</mat-card>
+}
+
+<!-- Project Items -->
+<div class="items-list">
+    @for (item of proj.items; track item.id) {
+    <mat-card class="item-row-card">
+        <div class="item-row">
+            <div class="item-info">
+                <span class="item-name">{{ item.name }}</span>
+                <span class="item-meta">{{ item.faction?.name }} · x{{ item.quantity }}</span>
+            </div>
+            <div class="item-status-controls">
+                <span class="status-badge" [attr.data-status]="item.status" [matMenuTriggerFor]="statusMenu">
+                    {{ getStatusLabel(item.status) }}
+                </span>
+                <mat-menu #statusMenu="matMenu">
+                    @for (s of statuses; track s) {
+                    <button mat-menu-item [disabled]="item.status === s" (click)="setStatus(item, s)">
+                        {{ statusLabels[s] }}
+                    </button>
+                    }
+                </mat-menu>
+                @if (canAdvance(item)) {
+                <button mat-icon-button (click)="nextStatus(item)" matTooltip="Next status">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+                }
+            </div>
+            <button mat-icon-button color="warn" (click)="unassignItem(item.id)" matTooltip="Remove from project">
+                <mat-icon>remove_circle_outline</mat-icon>
+            </button>
+        </div>
+    </mat-card>
+    }
+</div>
+
+@if (!proj.items?.length) {
+<div class="empty-state">
+    <mat-icon class="empty-icon">inventory_2</mat-icon>
+    <h3>No items in this project</h3>
+    <p>Click "Add Items" above to assign items to this project</p>
+</div>
+}
+} @else {
+<div class="loading-state">Loading...</div>
+}
