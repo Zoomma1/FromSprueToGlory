@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { createApp } from './app';
+import { prisma } from './lib/prisma';
 
 // ──────────────────────────────────────────────
 // 🚀 Server Entry Point
@@ -17,11 +18,34 @@ import { createApp } from './app';
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const app = createApp();
 
-app.listen(PORT, () => {
+async function start() {
+  // ─── Validate DB connection before accepting requests ───
+  try {
+    await prisma.$queryRawUnsafe('SELECT 1');
+    console.log('  ✅ Database connection verified');
+  } catch (err: any) {
+    console.error(`
+  ❌ DATABASE CONNECTION FAILED
+  ─────────────────────────────────────
+  Could not connect to the database.
+  
+  Check your DATABASE_URL in .env:
+    ${process.env.DATABASE_URL?.replace(/\/\/.*@/, '//***@') || '(not set)'}
+  
+  Error: ${err.message}
+  ─────────────────────────────────────
+        `);
+    process.exit(1);
+  }
+
+  app.listen(PORT, () => {
     console.log(`
   ⚔️  From Sprue to Glory API
   📡 Running on http://localhost:${PORT}
   🏥 Health check: http://localhost:${PORT}/api/health
   🌍 Environment: ${process.env.NODE_ENV || 'development'}
   `);
-});
+  });
+}
+
+start();

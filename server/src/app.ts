@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import { prisma } from './lib/prisma';
 
 // Route imports
 import authRoutes from './routes/auth.routes';
@@ -50,11 +51,22 @@ export function createApp() {
     app.use(express.urlencoded({ extended: true }));
 
     // ─── Health check ─────────────────────────
-    app.get('/api/health', (_req, res) => {
-        res.json({
-            status: 'ok',
+    app.get('/api/health', async (_req, res) => {
+        let dbStatus = 'ok';
+        let dbError: string | undefined;
+        try {
+            await prisma.$queryRawUnsafe('SELECT 1');
+        } catch (err: any) {
+            dbStatus = 'unreachable';
+            dbError = err.message || 'Unknown error';
+        }
+        const status = dbStatus === 'ok' ? 'ok' : 'degraded';
+        res.status(status === 'ok' ? 200 : 503).json({
+            status,
             name: 'From Sprue to Glory API',
             timestamp: new Date().toISOString(),
+            database: dbStatus,
+            ...(dbError && { dbError }),
         });
     });
 
