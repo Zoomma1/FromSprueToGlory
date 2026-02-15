@@ -95,7 +95,8 @@ export class AuthService {
         if (refreshToken) {
             this.http
                 .post(`${environment.apiUrl}/auth/logout`, { refreshToken })
-                .subscribe({ error: () => { } }); // fire-and-forget
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                .subscribe({ error: () => {} }); // fire-and-forget, suppress error intentionally
         }
 
         localStorage.removeItem('accessToken');

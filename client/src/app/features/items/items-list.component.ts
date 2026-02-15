@@ -17,6 +17,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
+import { Item } from '../../classes/items';
 import { ItemFormDialogComponent } from './item-form-dialog.component';
 
 const STATUS_ORDER = ['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED'] as const;
@@ -42,7 +43,7 @@ export class ItemsListComponent implements OnInit {
     private snackBar = inject(MatSnackBar);
     private breakpointObserver = inject(BreakpointObserver);
 
-    items = signal<any[]>([]);
+    items = signal<Item[]>([]);
     isMobile = signal(false);
     statusFilter = '';
     displayedColumns = ['name', 'faction', 'status', 'quantity', 'actions'];
@@ -68,29 +69,29 @@ export class ItemsListComponent implements OnInit {
         return STATUS_LABELS[status] || status;
     }
 
-    canAdvance(item: any): boolean {
+    canAdvance(item: Item): boolean {
         return STATUS_ORDER.indexOf(item.status) < STATUS_ORDER.length - 1;
     }
 
-    canRevert(item: any): boolean {
+    canRevert(item: Item): boolean {
         return STATUS_ORDER.indexOf(item.status) > 0;
     }
 
-    nextStatus(item: any) {
+    nextStatus(item: Item) {
         const idx = STATUS_ORDER.indexOf(item.status);
         if (idx < STATUS_ORDER.length - 1) {
             this.setStatus(item, STATUS_ORDER[idx + 1]);
         }
     }
 
-    prevStatus(item: any) {
+    prevStatus(item: Item) {
         const idx = STATUS_ORDER.indexOf(item.status);
         if (idx > 0) {
             this.setStatus(item, STATUS_ORDER[idx - 1]);
         }
     }
 
-    setStatus(item: any, status: string) {
+    setStatus(item: Item, status: string) {
         if (item.status === status) return;
         this.api.changeItemStatus(item.id, status).subscribe({
             next: () => {
@@ -114,7 +115,7 @@ export class ItemsListComponent implements OnInit {
         });
     }
 
-    openEditDialog(item: any) {
+    openEditDialog(item: Item) {
         const dialogRef = this.dialog.open(ItemFormDialogComponent, {
             width: '600px', maxWidth: '95vw',
             data: { mode: 'edit', item },
@@ -124,7 +125,7 @@ export class ItemsListComponent implements OnInit {
         });
     }
 
-    deleteItem(item: any) {
+    deleteItem(item: Item) {
         if (!confirm(`Delete "${item.name}"?`)) return;
         this.api.deleteItem(item.id).subscribe(() => {
             this.snackBar.open('Item deleted', 'OK', { duration: 3000 });

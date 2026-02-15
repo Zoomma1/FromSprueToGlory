@@ -13,6 +13,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiService } from '../../core/services/api.service';
 import { SchemeFormDialogComponent } from './scheme-form-dialog.component';
+import { ColorScheme } from '../../classes/color-scheme';
 
 @Component({
     selector: 'app-color-schemes-list',
@@ -30,7 +31,7 @@ export class ColorSchemesListComponent implements OnInit {
     private dialog = inject(MatDialog);
     private snackBar = inject(MatSnackBar);
 
-    schemes = signal<any[]>([]);
+    schemes = signal<ColorScheme[]>([]);
 
     ngOnInit() {
         this.loadSchemes();
@@ -48,7 +49,7 @@ export class ColorSchemesListComponent implements OnInit {
         ref.afterClosed().subscribe((result) => { if (result) this.loadSchemes(); });
     }
 
-    openEditDialog(scheme: any) {
+    openEditDialog(scheme: ColorScheme) {
         this.api.getColorScheme(scheme.id).subscribe((full) => {
             const ref = this.dialog.open(SchemeFormDialogComponent, {
                 width: '700px', maxWidth: '95vw',
@@ -58,7 +59,7 @@ export class ColorSchemesListComponent implements OnInit {
         });
     }
 
-    deleteScheme(scheme: any) {
+    deleteScheme(scheme: ColorScheme) {
         if (!confirm(`Delete "${scheme.name}"?`)) return;
         this.api.deleteColorScheme(scheme.id).subscribe(() => {
             this.snackBar.open('Scheme deleted', 'OK', { duration: 3000 });

@@ -12,6 +12,15 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { GameSystem } from '../../classes/game-system';
+import { Faction } from '../../classes/factions';
+import { Model } from '../../classes/model';
+import { PaintBrand } from '../../classes/paint-brand';
+import { Paint } from '../../classes/paint';
+import { Technique } from '../../classes/technique';
+import { Item, ItemPayload, ItemStatusHistory } from '../../classes/items';
+import { ColorScheme, ColorSchemePayload, ColorSchemeFull } from '../../classes/color-scheme';
+import { Project } from '../../classes/project';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -19,86 +28,86 @@ export class ApiService {
     private baseUrl = environment.apiUrl;
 
     // ─── Reference Data ────────────────────────
-    getGameSystems(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/reference/game-systems`);
+    getGameSystems(): Observable<GameSystem[]> {
+        return this.http.get<GameSystem[]>(`${this.baseUrl}/reference/game-systems`);
     }
 
-    getFactions(gameSystemId?: string): Observable<any[]> {
+    getFactions(gameSystemId?: string): Observable<Faction[]> {
         let params = new HttpParams();
         if (gameSystemId) params = params.set('gameSystemId', gameSystemId);
-        return this.http.get<any[]>(`${this.baseUrl}/reference/factions`, { params });
+        return this.http.get<Faction[]>(`${this.baseUrl}/reference/factions`, { params });
     }
 
-    getModels(factionId?: string): Observable<any[]> {
+    getModels(factionId?: string): Observable<Model[]> {
         let params = new HttpParams();
         if (factionId) params = params.set('factionId', factionId);
-        return this.http.get<any[]>(`${this.baseUrl}/reference/models`, { params });
+        return this.http.get<Model[]>(`${this.baseUrl}/reference/models`, { params });
     }
 
-    getPaintBrands(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/reference/paint-brands`);
+    getPaintBrands(): Observable<PaintBrand[]> {
+        return this.http.get<PaintBrand[]>(`${this.baseUrl}/reference/paint-brands`);
     }
 
-    getPaints(brandId?: string): Observable<any[]> {
+    getPaints(brandId?: string): Observable<Paint[]> {
         let params = new HttpParams();
         if (brandId) params = params.set('brandId', brandId);
-        return this.http.get<any[]>(`${this.baseUrl}/reference/paints`, { params });
+        return this.http.get<Paint[]>(`${this.baseUrl}/reference/paints`, { params });
     }
 
-    getTechniques(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/reference/techniques`);
+    getTechniques(): Observable<Technique[]> {
+        return this.http.get<Technique[]>(`${this.baseUrl}/reference/techniques`);
     }
 
     // ─── Items ─────────────────────────────────
-    getItems(filters?: Record<string, string>): Observable<any[]> {
+    getItems(filters?: Record<string, string>): Observable<Item[]> {
         let params = new HttpParams();
         if (filters) {
             Object.entries(filters).forEach(([key, value]) => {
                 if (value) params = params.set(key, value);
             });
         }
-        return this.http.get<any[]>(`${this.baseUrl}/items`, { params });
+        return this.http.get<Item[]>(`${this.baseUrl}/items`, { params });
     }
 
-    getItem(id: string): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}/items/${id}`);
+    getItem(id: string): Observable<Item> {
+        return this.http.get<Item>(`${this.baseUrl}/items/${id}`);
     }
 
-    createItem(data: any): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/items`, data);
+    createItem(data: ItemPayload): Observable<Item> {
+        return this.http.post<Item>(`${this.baseUrl}/items`, data);
     }
 
-    updateItem(id: string, data: any): Observable<any> {
-        return this.http.put<any>(`${this.baseUrl}/items/${id}`, data);
+    updateItem(id: string, data: ItemPayload): Observable<Item> {
+        return this.http.put<Item>(`${this.baseUrl}/items/${id}`, data);
     }
 
     deleteItem(id: string): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/items/${id}`);
     }
 
-    changeItemStatus(id: string, status: string): Observable<any> {
-        return this.http.patch<any>(`${this.baseUrl}/items/${id}/status`, { status });
+    changeItemStatus(id: string, status: string): Observable<Item> {
+        return this.http.patch<Item>(`${this.baseUrl}/items/${id}/status`, { status });
     }
 
-    getItemHistory(id: string): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/items/${id}/history`);
+    getItemHistory(id: string): Observable<ItemStatusHistory[]> {
+        return this.http.get<ItemStatusHistory[]>(`${this.baseUrl}/items/${id}/history`);
     }
 
     // ─── Color Schemes ─────────────────────────
-    getColorSchemes(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/color-schemes`);
+    getColorSchemes(): Observable<ColorScheme[]> {
+        return this.http.get<ColorScheme[]>(`${this.baseUrl}/color-schemes`);
     }
 
-    getColorScheme(id: string): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}/color-schemes/${id}`);
+    getColorScheme(id: string): Observable<ColorSchemeFull> {
+        return this.http.get<ColorSchemeFull>(`${this.baseUrl}/color-schemes/${id}`);
     }
 
-    createColorScheme(data: any): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/color-schemes`, data);
+    createColorScheme(data: ColorSchemePayload): Observable<ColorScheme> {
+        return this.http.post<ColorScheme>(`${this.baseUrl}/color-schemes`, data);
     }
 
-    updateColorScheme(id: string, data: any): Observable<any> {
-        return this.http.put<any>(`${this.baseUrl}/color-schemes/${id}`, data);
+    updateColorScheme(id: string, data: ColorSchemePayload): Observable<ColorScheme> {
+        return this.http.put<ColorScheme>(`${this.baseUrl}/color-schemes/${id}`, data);
     }
 
     deleteColorScheme(id: string): Observable<void> {
@@ -106,32 +115,32 @@ export class ApiService {
     }
 
     // ─── Projects ─────────────────────────────
-    getProjects(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/projects`);
+    getProjects(): Observable<Project[]> {
+        return this.http.get<Project[]>(`${this.baseUrl}/projects`);
     }
 
-    getProject(id: string): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}/projects/${id}`);
+    getProject(id: string): Observable<Project> {
+        return this.http.get<Project>(`${this.baseUrl}/projects/${id}`);
     }
 
-    createProject(data: any): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/projects`, data);
+    createProject(data: Project): Observable<Project> {
+        return this.http.post<Project>(`${this.baseUrl}/projects`, data);
     }
 
-    updateProject(id: string, data: any): Observable<any> {
-        return this.http.put<any>(`${this.baseUrl}/projects/${id}`, data);
+    updateProject(id: string, data: Project): Observable<Project> {
+        return this.http.put<Project>(`${this.baseUrl}/projects/${id}`, data);
     }
 
     deleteProject(id: string): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/projects/${id}`);
     }
 
-    assignItemsToProject(projectId: string, itemIds: string[]): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/projects/${projectId}/assign`, { itemIds });
+    assignItemsToProject(projectId: string, itemIds: string[]): Observable<void> {
+        return this.http.post<void>(`${this.baseUrl}/projects/${projectId}/assign`, { itemIds });
     }
 
-    unassignItemsFromProject(projectId: string, itemIds: string[]): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/projects/${projectId}/unassign`, { itemIds });
+    unassignItemsFromProject(projectId: string, itemIds: string[]): Observable<void> {
+        return this.http.post<void>(`${this.baseUrl}/projects/${projectId}/unassign`, { itemIds });
     }
 
     // ─── Media ─────────────────────────────────
@@ -147,15 +156,15 @@ export class ApiService {
     }
 
     // ─── Export ────────────────────────────────
-    exportItems(format: 'json' | 'csv' = 'json'): Observable<any> {
+    exportItems(format: 'json' | 'csv' = 'json'): Observable<Item[] | string> {
         if (format === 'csv') {
-            return this.http.get(`${this.baseUrl}/export/items?format=csv`, { responseType: 'text' as any });
+            return this.http.get(`${this.baseUrl}/export/items?format=csv`, { responseType: 'text' });
         }
-        return this.http.get<any>(`${this.baseUrl}/export/items`);
+        return this.http.get<Item[]>(`${this.baseUrl}/export/items`);
     }
 
     // ─── Account ───────────────────────────────
-    deleteAccount(): Observable<any> {
-        return this.http.delete<any>(`${this.baseUrl}/account`);
+    deleteAccount(): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/account`);
     }
 }

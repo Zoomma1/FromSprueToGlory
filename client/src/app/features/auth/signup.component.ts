@@ -42,8 +42,9 @@ export class SignupComponent {
         try {
             await this.authService.signup(this.form.value.email, this.form.value.password);
             this.router.navigate(['/dashboard']);
-        } catch (err: any) {
-            this.error.set(err?.error?.error || 'Signup failed');
+        } catch (err: unknown) {
+            const error = err as { error?: { error?: string } };
+            this.error.set(error?.error?.error || 'Signup failed');
         } finally {
             this.loading.set(false);
         }

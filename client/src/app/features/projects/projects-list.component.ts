@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiService } from '../../core/services/api.service';
+import { Project } from '../../classes/project';
 import { ProjectFormDialogComponent } from './project-form-dialog.component';
 
 @Component({
@@ -30,7 +31,7 @@ export class ProjectsListComponent implements OnInit {
     private dialog = inject(MatDialog);
     private snackBar = inject(MatSnackBar);
 
-    projects = signal<any[]>([]);
+    projects = signal<Project[]>([]);
 
     ngOnInit() {
         this.loadProjects();
@@ -48,7 +49,7 @@ export class ProjectsListComponent implements OnInit {
         ref.afterClosed().subscribe((result) => { if (result) this.loadProjects(); });
     }
 
-    openEditDialog(project: any, event: Event) {
+    openEditDialog(project: Project, event: Event) {
         event.stopPropagation();
         const ref = this.dialog.open(ProjectFormDialogComponent, {
             width: '500px', maxWidth: '95vw',
@@ -57,7 +58,7 @@ export class ProjectsListComponent implements OnInit {
         ref.afterClosed().subscribe((result) => { if (result) this.loadProjects(); });
     }
 
-    deleteProject(project: any, event: Event) {
+    deleteProject(project: Project, event: Event) {
         event.stopPropagation();
         if (!confirm(`Delete project "${project.name}"?`)) return;
         this.api.deleteProject(project.id).subscribe(() => {

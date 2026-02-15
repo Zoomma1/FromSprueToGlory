@@ -9,18 +9,18 @@
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Game System</mat-label>
-                <mat-select formControlName="gameSystemId" (selectionChange)="onGameSystemChange($event.value)">
+                <mat-select formControlName="gameSystem" (selectionChange)="onGameSystemChange($event.value?.id)">
                     @for (gs of gameSystems(); track gs.id) {
-                    <mat-option [value]="gs.id">{{ gs.name }}</mat-option>
+                    <mat-option [value]="gs">{{ gs.name }}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Faction</mat-label>
-                <mat-select formControlName="factionId" (selectionChange)="onFactionChange($event.value)">
+                <mat-select formControlName="faction" (selectionChange)="onFactionChange($event.value?.id)">
                     @for (faction of factions(); track faction.id) {
-                    <mat-option [value]="faction.id">{{ faction.name }}</mat-option>
+                    <mat-option [value]="faction">{{ faction.name }}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
@@ -28,10 +28,10 @@
 
         <mat-form-field appearance="outline" class="full-width">
             <mat-label>Model / Unit (optional)</mat-label>
-            <mat-select formControlName="modelId">
+            <mat-select formControlName="model">
                 <mat-option [value]="null">— None —</mat-option>
                 @for (model of models(); track model.id) {
-                <mat-option [value]="model.id">{{ model.name }}</mat-option>
+                <mat-option [value]="model">{{ model.name }}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
@@ -77,10 +77,10 @@
 
         <mat-form-field appearance="outline" class="full-width">
             <mat-label>Project (optional)</mat-label>
-            <mat-select formControlName="projectId">
+            <mat-select formControlName="project">
                 <mat-option [value]="null">— None —</mat-option>
                 @for (proj of projects(); track proj.id) {
-                <mat-option [value]="proj.id">{{ proj.name }}</mat-option>
+                <mat-option [value]="proj">{{ proj.name }}</mat-option>
                 }
             </mat-select>
         </mat-form-field>

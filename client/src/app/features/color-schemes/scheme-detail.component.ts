@@ -16,6 +16,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkDragDrop, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { ApiService } from '../../core/services/api.service';
+import { ColorSchemeFull, ColorSchemeStepPayload, ColorSchemeStepFull } from '../../classes/color-scheme';
+import { Technique } from '../../classes/technique';
+import { Paint } from '../../classes/paint';
 
 @Component({
     selector: 'app-scheme-detail',
@@ -36,13 +39,13 @@ export class SchemeDetailComponent implements OnInit {
     private fb = inject(FormBuilder);
     private snackBar = inject(MatSnackBar);
 
-    scheme = signal<any>(null);
+    scheme = signal<ColorSchemeFull | null>(null);
     editMode = signal(false);
     showDetails = signal(false);
     saving = signal(false);
 
-    techniques = signal<any[]>([]);
-    paints = signal<any[]>([]);
+    techniques = signal<Technique[]>([]);
+    paints = signal<Paint[]>([]);
 
     form: FormGroup = this.fb.group({
         name: ['', Validators.required],
@@ -108,11 +111,11 @@ export class SchemeDetailComponent implements OnInit {
         controls.forEach((c) => this.stepsArray.push(c));
     }
 
-    private createStepGroup(step?: any): FormGroup {
+    private createStepGroup(step?: ColorSchemeStepPayload): FormGroup {
         return this.fb.group({
             area: [step?.area || '', Validators.required],
-            techniqueId: [step?.techniqueId || step?.technique?.id || '', Validators.required],
-            paintId: [step?.paintId || step?.paint?.id || null],
+            techniqueId: [step?.techniqueId || '', Validators.required],
+            paintId: [step?.paintId || null],
             notes: [step?.notes || ''],
         });
     }
@@ -121,10 +124,12 @@ export class SchemeDetailComponent implements OnInit {
         if (this.form.invalid || this.stepsArray.length === 0) return;
         this.saving.set(true);
 
-        const value = {
+        interface StepFormValue { area: string; techniqueId: string; paintId?: string | null; notes?: string | null }
+
+        const value: { name: string; description?: string | null; steps: ColorSchemeStepPayload[] } = {
             name: this.form.value.name,
             description: this.form.value.description,
-            steps: this.form.value.steps.map((s: any, i: number) => ({
+            steps: this.form.value.steps.map((s: StepFormValue, i: number) => ({
                 orderIndex: i + 1,
                 area: s.area,
                 techniqueId: s.techniqueId,
@@ -133,7 +138,7 @@ export class SchemeDetailComponent implements OnInit {
             })),
         };
 
-        this.api.updateColorScheme(this.scheme().id, value).subscribe({
+        this.api.updateColorScheme(this.scheme()!.id, value).subscribe({
             next: () => {
                 this.snackBar.open('Saved!', 'OK', { duration: 3000 });
                 this.editMode.set(false);
@@ -150,16 +155,19 @@ export class SchemeDetailComponent implements OnInit {
     duplicate() {
         const s = this.scheme();
         if (!s) return;
-        const data = {
+        const data: { name: string; description?: string | null; steps: ColorSchemeStepPayload[] } = {
             name: `${s.name} (copy)`,
             description: s.description,
-            steps: (s.steps || []).map((step: any, i: number) => ({
-                orderIndex: i + 1,
-                area: step.area,
-                techniqueId: step.techniqueId || step.technique?.id,
-                paintId: step.paintId || step.paint?.id || null,
-                notes: step.notes || null,
-            })),
+            steps: (s.steps || []).map((step: ColorSchemeStepFull, i: number) => {
+                const techniqueId = step.techniqueId || step.technique?.id;
+                return {
+                    orderIndex: i + 1,
+                    area: step.area,
+                    techniqueId: techniqueId || '',
+                    paintId: step.paintId || step.paint?.id || null,
+                    notes: step.notes || null,
+                };
+            }),
         };
         this.api.createColorScheme(data).subscribe({
             next: (created) => {
@@ -174,7 +182,7 @@ export class SchemeDetailComponent implements OnInit {
 
     deleteScheme() {
         if (!confirm(`Delete "${this.scheme()?.name}"?`)) return;
-        this.api.deleteColorScheme(this.scheme().id).subscribe(() => {
+        this.api.deleteColorScheme(this.scheme()!.id).subscribe(() => {
             this.snackBar.open('Deleted', 'OK', { duration: 3000 });
             this.router.navigate(['/color-schemes']);
         });

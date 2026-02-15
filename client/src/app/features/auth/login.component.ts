@@ -61,8 +61,9 @@ export class LoginComponent {
         try {
             await this.authService.login(this.form.value.email, this.form.value.password);
             this.router.navigate(['/dashboard']);
-        } catch (err: any) {
-            this.error.set(err?.error?.error || 'Login failed');
+        } catch (err: unknown) {
+            const error = err as { error?: { error?: string } };
+            this.error.set(error?.error?.error || 'Login failed');
         } finally {
             this.loading.set(false);
         }

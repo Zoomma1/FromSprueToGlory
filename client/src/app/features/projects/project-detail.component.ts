@@ -14,6 +14,8 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { ApiService } from '../../core/services/api.service';
+import { Project } from '../../classes/project';
+import { Item } from '../../classes/items';
 
 const STATUS_ORDER = ['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED'] as const;
 const STATUS_LABELS: Record<string, string> = {
@@ -39,8 +41,8 @@ export class ProjectDetailComponent implements OnInit {
     private snackBar = inject(MatSnackBar);
     private dialog = inject(MatDialog);
 
-    project = signal<any>(null);
-    unassignedItems = signal<any[]>([]);
+    project = signal<Project | null>(null);
+    unassignedItems = signal<Item[]>([]);
     showAssignPanel = signal(false);
 
     readonly statuses = STATUS_ORDER;
@@ -62,18 +64,18 @@ export class ProjectDetailComponent implements OnInit {
         return STATUS_LABELS[status] || status;
     }
 
-    canAdvance(item: any): boolean {
+    canAdvance(item: Item): boolean {
         return STATUS_ORDER.indexOf(item.status) < STATUS_ORDER.length - 1;
     }
 
-    nextStatus(item: any) {
+    nextStatus(item: Item) {
         const idx = STATUS_ORDER.indexOf(item.status);
         if (idx < STATUS_ORDER.length - 1) {
             this.setStatus(item, STATUS_ORDER[idx + 1]);
         }
     }
 
-    setStatus(item: any, status: string) {
+    setStatus(item: Item, status: string) {
         if (item.status === status) return;
         this.api.changeItemStatus(item.id, status).subscribe({
             next: () => {
@@ -92,7 +94,7 @@ export class ProjectDetailComponent implements OnInit {
         if (this.showAssignPanel()) {
             this.api.getItems({ projectId: '' }).subscribe((items) => {
                 // Filter to items not assigned to any project
-                this.unassignedItems.set(items.filter((i: any) => !i.projectId));
+                this.unassignedItems.set(items.filter((i: Item) => !i.projectId));
             });
         }
     }

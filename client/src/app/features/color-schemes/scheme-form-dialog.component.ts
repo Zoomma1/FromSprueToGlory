@@ -13,6 +13,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CdkDragDrop, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { ApiService } from '../../core/services/api.service';
+import { Technique } from '../../classes/technique';
+import { Paint } from '../../classes/paint';
+import { ColorSchemePayload, ColorSchemeStepPayload } from '../../classes/color-scheme';
 
 @Component({
     selector: 'app-scheme-form-dialog',
@@ -32,8 +35,8 @@ export class SchemeFormDialogComponent implements OnInit {
     private snackBar = inject(MatSnackBar);
     data = inject(MAT_DIALOG_DATA);
 
-    techniques = signal<any[]>([]);
-    paints = signal<any[]>([]);
+    techniques = signal<Technique[]>([]);
+    paints = signal<Paint[]>([]);
     saving = signal(false);
 
     form: FormGroup = this.fb.group({
@@ -77,11 +80,11 @@ export class SchemeFormDialogComponent implements OnInit {
         controls.forEach((c) => this.stepsArray.push(c));
     }
 
-    private createStepGroup(step?: any): FormGroup {
+    private createStepGroup(step?: ColorSchemeStepPayload): FormGroup {
         return this.fb.group({
             area: [step?.area || '', Validators.required],
-            techniqueId: [step?.techniqueId || step?.technique?.id || '', Validators.required],
-            paintId: [step?.paintId || step?.paint?.id || null],
+            techniqueId: [step?.techniqueId || step?.techniqueId || '', Validators.required],
+            paintId: [step?.paintId || null],
             notes: [step?.notes || ''],
         });
     }
@@ -90,10 +93,12 @@ export class SchemeFormDialogComponent implements OnInit {
         if (this.form.invalid || this.stepsArray.length === 0) return;
         this.saving.set(true);
 
-        const value = {
+        interface StepFormValue { area: string; techniqueId: string; paintId?: string | null; notes?: string | null }
+
+        const value: ColorSchemePayload = {
             name: this.form.value.name,
             description: this.form.value.description,
-            steps: this.form.value.steps.map((s: any, i: number) => ({
+            steps: this.form.value.steps.map((s: StepFormValue, i: number): ColorSchemeStepPayload => ({
                 orderIndex: i + 1,
                 area: s.area,
                 techniqueId: s.techniqueId,
