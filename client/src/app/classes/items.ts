@@ -11,7 +11,6 @@ export class Item {
     purchaseDate!: string | null; // ISO date string
     price!: number | null;
     currency!: string;
-    store!: string | null;
     notes!: string | null;
     tags!: string[];
     status!: ItemStatus; // changed from string

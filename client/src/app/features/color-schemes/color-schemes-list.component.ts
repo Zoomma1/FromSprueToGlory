@@ -13,7 +13,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiService } from '../../core/services/api.service';
 import { SchemeFormDialogComponent } from './scheme-form-dialog.component';
-import { ColorScheme } from '../../classes/color-scheme';
+import { ColorScheme, ColorSchemeFull } from '../../classes/color-scheme';
 
 @Component({
     selector: 'app-color-schemes-list',
@@ -31,7 +31,7 @@ export class ColorSchemesListComponent implements OnInit {
     private dialog = inject(MatDialog);
     private snackBar = inject(MatSnackBar);
 
-    schemes = signal<ColorScheme[]>([]);
+    schemes = signal<ColorSchemeFull[]>([]);
 
     ngOnInit() {
         this.loadSchemes();

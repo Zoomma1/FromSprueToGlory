@@ -29,17 +29,6 @@
     <p class="scheme-description">{{ s.description }}</p>
     }
 
-    @if (s.gameSystem || s.faction) {
-    <div class="meta-chips">
-        @if (s.gameSystem) {
-        <mat-chip-set><mat-chip>{{ s.gameSystem.name }}</mat-chip></mat-chip-set>
-        }
-        @if (s.faction) {
-        <mat-chip-set><mat-chip>{{ s.faction.name }}</mat-chip></mat-chip-set>
-        }
-    </div>
-    }
-
     <button mat-button class="details-toggle" (click)="toggleDetails()">
         <mat-icon>{{ showDetails() ? 'expand_less' : 'expand_more' }}</mat-icon>
         {{ showDetails() ? 'Hide details' : 'Show details' }}
@@ -63,7 +52,7 @@
                 <p class="step-notes">{{ step.notes }}</p>
                 }
                 @if (showDetails() && step.paint?.brand) {
-                <span class="step-brand">Brand: {{ step.paint.brand.name }}</span>
+                <span class="step-brand">Brand: {{ step!.paint!.brand.name }}</span>
                 }
             </div>
         </mat-card>

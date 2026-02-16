@@ -76,21 +76,46 @@
     align-items: center;
     gap: 2px;
 
+    position: relative;
+    padding: 0 36px;
+    justify-content: center;
+
     .status-nav-btn {
         width: 28px;
         height: 28px;
         line-height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
 
         .mat-icon {
             font-size: 18px;
             width: 18px;
             height: 18px;
         }
+
+        &.prev {
+            left: 8px;
+        }
+
+        &.next {
+            right: 8px;
+        }
     }
 
     .status-badge {
+        /* center badge visually and make sure it sits above nav buttons */
+        margin: 0 auto;
+        z-index: 1;
         cursor: pointer;
         user-select: none;
+        min-width: 120px;
+        text-align: center;
+        display: inline-block;
 
         &:hover {
             filter: brightness(1.15);
@@ -98,8 +123,16 @@
     }
 
     &.mobile {
+        /* On mobile we remove absolute spacing and let layout flow vertically */
+        padding: 0;
+        gap: 8px;
+        flex-direction: row;
         justify-content: center;
-        margin: 8px 0;
+
+        .status-nav-btn {
+            position: static;
+            transform: none;
+        }
     }
 }
 

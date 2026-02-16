@@ -12,18 +12,10 @@
             <mat-icon mat-card-avatar class="scheme-avatar">palette</mat-icon>
             <mat-card-title>{{ scheme.name }}</mat-card-title>
             <mat-card-subtitle>
-                {{ scheme._count?.steps || 0 }} steps · {{ scheme._count?.items || 0 }} items
+                {{ scheme.steps || 0 }} steps
             </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            @if (scheme.gameSystem) {
-            <mat-chip-set>
-                <mat-chip>{{ scheme.gameSystem.name }}</mat-chip>
-                @if (scheme.faction) {
-                <mat-chip>{{ scheme.faction.name }}</mat-chip>
-                }
-            </mat-chip-set>
-            }
             @if (scheme.description) {
             <p class="scheme-description">{{ scheme.description }}</p>
             }

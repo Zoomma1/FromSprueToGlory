@@ -28,19 +28,19 @@
             </div>
             <div class="status-summary">
                 @if (project.statusCounts?.WANT) {
-                <span class="mini-badge" data-status="WANT">{{ project.statusCounts.WANT }} want</span>
+                <span class="mini-badge" data-status="WANT">{{ project.statusCounts?.WANT }} want</span>
                 }
                 @if (project.statusCounts?.BOUGHT) {
-                <span class="mini-badge" data-status="BOUGHT">{{ project.statusCounts.BOUGHT }} bought</span>
+                <span class="mini-badge" data-status="BOUGHT">{{ project.statusCounts?.BOUGHT }} bought</span>
                 }
                 @if (project.statusCounts?.ASSEMBLED) {
-                <span class="mini-badge" data-status="ASSEMBLED">{{ project.statusCounts.ASSEMBLED }} asm</span>
+                <span class="mini-badge" data-status="ASSEMBLED">{{ project.statusCounts?.ASSEMBLED }} asm</span>
                 }
                 @if (project.statusCounts?.WIP) {
-                <span class="mini-badge" data-status="WIP">{{ project.statusCounts.WIP }} wip</span>
+                <span class="mini-badge" data-status="WIP">{{ project.statusCounts?.WIP }} wip</span>
                 }
                 @if (project.statusCounts?.FINISHED) {
-                <span class="mini-badge" data-status="FINISHED">{{ project.statusCounts.FINISHED }} done</span>
+                <span class="mini-badge" data-status="FINISHED">{{ project.statusCounts?.FINISHED }} done</span>
                 }
             </div>
         </mat-card-content>

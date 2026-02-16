@@ -7,7 +7,7 @@
 // WHY middleware instead of checking in each route?
 //   - DRY: write once, protect all routes that need auth
 //   - Express middleware pattern: req → middleware → handler
-//   - ALTERNATIVE: use a decorator pattern (cleaner but needs class-based controllers)
+//   - ALTERNATIVE: use a decorator pattern (cleaner but needs classes-based controllers)
 // ──────────────────────────────────────────────────────────
 
 import { Request, Response, NextFunction } from 'express';

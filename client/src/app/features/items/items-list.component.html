@@ -113,7 +113,7 @@
                     <mat-icon>chevron_right</mat-icon>
                 </button>
             </div>
-            @if (item.tags?.length) {
+            @if (item?.tags?.length) {
             <mat-chip-set class="tag-chips">
                 @for (tag of item.tags; track tag) {
                 <mat-chip>{{ tag }}</mat-chip>

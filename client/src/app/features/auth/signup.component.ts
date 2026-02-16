@@ -27,12 +27,19 @@ export class SignupComponent {
 
     form: FormGroup = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(8)]],
-    });
+        password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/)]],
+        confirmPassword: ['', [Validators.required]],
+    }, { validators: this.passwordsMatchValidator.bind(this) });
 
     hidePassword = signal(true);
     loading = signal(false);
     error = signal('');
+
+    private passwordsMatchValidator(form: FormGroup) {
+        const password = form.get('password')?.value;
+        const confirm = form.get('confirmPassword')?.value;
+        return password === confirm ? null : { passwordMismatch: true };
+    }
 
     async onSubmit() {
         if (this.form.invalid) return;

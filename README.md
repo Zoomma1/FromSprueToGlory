@@ -86,6 +86,18 @@ cd server && npm run dev
 cd client && npx ng serve
 ```
 
+### 6. Final check before commit
+```bash
+# Terminal 1: Backend tests
+cd server && npm run test
+# Terminal 2: Frontend tests
+cd client && npm run test
+
+# Lint both
+cd server && npm run lint
+cd client && npm run lint
+```
+
 - **Frontend:** http://localhost:4200
 - **Backend API:** http://localhost:3000
 - **API Health:** http://localhost:3000/api/health
