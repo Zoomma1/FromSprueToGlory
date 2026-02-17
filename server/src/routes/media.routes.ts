@@ -51,7 +51,7 @@ router.post('/presign-upload', async (req: Request, res: Response) => {
     }
 
     // Build a unique key: users/{userId}/{timestamp}-{fileName}
-    const userId = (req as any).userId;
+    const userId = req.userId;
     const key = `users/${userId}/${Date.now()}-${fileName}`;
 
     try {

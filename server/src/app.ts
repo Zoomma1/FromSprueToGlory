@@ -56,9 +56,14 @@ export function createApp() {
         let dbError: string | undefined;
         try {
             await prisma.$queryRawUnsafe('SELECT 1');
-        } catch (err: any) {
+        } catch (err: unknown) {
             dbStatus = 'unreachable';
-            dbError = err.message || 'Unknown error';
+            if (err instanceof Error) {
+                dbError = err.message;
+            } else {
+                dbError = typeof err === 'string' ? err : JSON.stringify(err);
+            }
+            if (!dbError) dbError = 'Unknown error';
         }
         const status = dbStatus === 'ok' ? 'ok' : 'degraded';
         res.status(status === 'ok' ? 200 : 503).json({

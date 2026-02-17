@@ -62,7 +62,7 @@ router.get('/paints', async (req, res) => {
     const paints = await prisma.paint.findMany({
         where: {
             ...(brandId ? { brandId: brandId as string } : {}),
-            ...(type ? { type: type as any } : {}),
+            ...(type ? { type: type as never } : {}),
         },
         orderBy: { name: 'asc' },
         include: { brand: { select: { name: true, slug: true } } },

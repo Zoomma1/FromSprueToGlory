@@ -49,30 +49,40 @@ const statusChangeSchema = z.object({
 
 // ─── GET /api/items — List items with filters ────────────
 router.get('/', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
     const { status, gameSystemId, factionId, modelId, tags, search, sortBy, sortDir } = req.query;
 
-    // Build where clause dynamically
-    const where: any = { userId };
-    if (status) where.status = status;
-    if (gameSystemId) where.gameSystemId = gameSystemId;
-    if (factionId) where.factionId = factionId;
-    if (modelId) where.modelId = modelId;
+    const where: Record<string, unknown> = { userId };
+    if (status) (where as Record<string, unknown>).status = status as string;
+    if (gameSystemId) (where as Record<string, unknown>).gameSystemId = gameSystemId as string;
+    if (factionId) (where as Record<string, unknown>).factionId = factionId as string;
+    if (modelId) (where as Record<string, unknown>).modelId = modelId as string;
     if (tags) {
         const tagList = (tags as string).split(',');
-        where.tags = { hasSome: tagList };
+        // Use a non-any cast to keep ESLint happy
+        (where as Record<string, unknown>).tags = { hasSome: tagList };
     }
     if (search) {
-        where.OR = [
+        (where as Record<string, unknown>).OR = [
             { name: { contains: search as string, mode: 'insensitive' } },
             { notes: { contains: search as string, mode: 'insensitive' } },
         ];
     }
 
-    // Sorting
-    const orderBy: any = {};
+    // Sorting - whitelist supported fields to keep Prisma typing clean
+    const allowedSortFields = ['createdAt', 'updatedAt', 'name', 'price', 'quantity'];
     const sortField = (sortBy as string) || 'createdAt';
-    orderBy[sortField] = (sortDir as string) || 'desc';
+    const sortDirection = (sortDir as string) === 'asc' ? 'asc' : 'desc';
+
+    // Use a typed, permissive orderBy structure instead of `any` to avoid ESLint warnings
+    let orderBy: Record<string, 'asc' | 'desc'> | undefined;
+    if (allowedSortFields.includes(sortField)) {
+        // Build an orderBy object
+        orderBy = { [sortField]: sortDirection as 'asc' | 'desc' };
+    } else {
+        // fallback
+        orderBy = { createdAt: 'desc' };
+    }
 
     const items = await prisma.item.findMany({
         where,
@@ -91,9 +101,10 @@ router.get('/', async (req: Request, res: Response) => {
 
 // ─── GET /api/items/:id — Single item ────────────────────
 router.get('/:id', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
     const item = await prisma.item.findFirst({
-        where: { id: req.params.id, userId },
+        where: { id, userId },
         include: {
             gameSystem: true,
             faction: true,
@@ -112,7 +123,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 // ─── POST /api/items — Create item ──────────────────────
 router.post('/', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
     const parsed = createItemSchema.safeParse(req.body);
 
     if (!parsed.success) {
@@ -133,8 +144,9 @@ router.post('/', async (req: Request, res: Response) => {
 
 // ─── PUT /api/items/:id — Update item ───────────────────
 router.put('/:id', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
     const parsed = updateItemSchema.safeParse(req.body);
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
     if (!parsed.success) {
         res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
@@ -142,14 +154,14 @@ router.put('/:id', async (req: Request, res: Response) => {
     }
 
     // Verify ownership
-    const existing = await prisma.item.findFirst({ where: { id: req.params.id, userId } });
+    const existing = await prisma.item.findFirst({ where: { id, userId } });
     if (!existing) {
         res.status(404).json({ error: 'Item not found' });
         return;
     }
 
     const item = await prisma.item.update({
-        where: { id: req.params.id },
+        where: { id },
         data: {
             ...parsed.data,
             purchaseDate: parsed.data.purchaseDate ? new Date(parsed.data.purchaseDate) : undefined,
@@ -161,30 +173,32 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 // ─── DELETE /api/items/:id — Delete item ────────────────
 router.delete('/:id', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
-    const existing = await prisma.item.findFirst({ where: { id: req.params.id, userId } });
+    const existing = await prisma.item.findFirst({ where: { id, userId } });
     if (!existing) {
         res.status(404).json({ error: 'Item not found' });
         return;
     }
 
-    await prisma.item.delete({ where: { id: req.params.id } });
+    await prisma.item.delete({ where: { id } });
     res.status(204).send();
 });
 
 // ─── PATCH /api/items/:id/status — Change status ────────
 // This is the KEY endpoint: it updates status AND creates history
 router.patch('/:id/status', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
     const parsed = statusChangeSchema.safeParse(req.body);
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
     if (!parsed.success) {
         res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
         return;
     }
 
-    const existing = await prisma.item.findFirst({ where: { id: req.params.id, userId } });
+    const existing = await prisma.item.findFirst({ where: { id, userId } });
     if (!existing) {
         res.status(404).json({ error: 'Item not found' });
         return;
@@ -198,12 +212,12 @@ router.patch('/:id/status', async (req: Request, res: Response) => {
     // Transaction: update status + create history entry atomically
     const [item] = await prisma.$transaction([
         prisma.item.update({
-            where: { id: req.params.id },
+            where: { id },
             data: { status: parsed.data.status },
         }),
         prisma.itemStatusHistory.create({
             data: {
-                itemId: req.params.id,
+                itemId: id,
                 fromStatus: existing.status,
                 toStatus: parsed.data.status,
             },
@@ -215,16 +229,17 @@ router.patch('/:id/status', async (req: Request, res: Response) => {
 
 // ─── GET /api/items/:id/history — Status history ────────
 router.get('/:id/history', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
-    const existing = await prisma.item.findFirst({ where: { id: req.params.id, userId } });
+    const existing = await prisma.item.findFirst({ where: { id, userId } });
     if (!existing) {
         res.status(404).json({ error: 'Item not found' });
         return;
     }
 
     const history = await prisma.itemStatusHistory.findMany({
-        where: { itemId: req.params.id },
+        where: { itemId: id },
         orderBy: { changedAt: 'desc' },
     });
 

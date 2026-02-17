@@ -19,7 +19,7 @@ router.use(authMiddleware);
 
 // ─── DELETE /api/account ─────────────────────────────────
 router.delete('/', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
 
     // Delete the user — all related data cascades
     await prisma.user.delete({ where: { id: userId } });
