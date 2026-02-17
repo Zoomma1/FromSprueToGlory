@@ -54,8 +54,9 @@ router.get('/', async (req: Request, res: Response) => {
         orderBy: { updatedAt: 'desc' },
     });
 
-    // @ts-expect-error Temporary fix
-    const result = projects.map((p) => ({
+    type ProjectWithItems = (typeof projects)[number];
+
+    const result = projects.map((p: ProjectWithItems) => ({
         id: p.id,
         name: p.name,
         description: p.description,
@@ -66,8 +67,7 @@ router.get('/', async (req: Request, res: Response) => {
         statusCounts: Object.fromEntries(
             Object.keys(STATUS_WEIGHT).map((s) => [
                 s,
-                // @ts-expect-error Temporary fix
-                (p.items ?? []).filter((i) => i.status === s).reduce((sum: number, i) => sum + i.quantity, 0),
+                (p.items ?? []).filter((i: ProjectWithItems['items'][number]) => i.status === s).reduce((sum: number, i: ProjectWithItems['items'][number]) => sum + i.quantity, 0),
             ]),
         ),
     }));

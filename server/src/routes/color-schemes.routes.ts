@@ -20,6 +20,7 @@ import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { authMiddleware } from '../middleware/auth.middleware';
+import type { Prisma } from '@prisma/client';
 
 const router = Router();
 router.use(authMiddleware);
@@ -167,8 +168,7 @@ router.put('/:id', async (req: Request, res: Response) => {
         }
 
         // Transaction: delete old steps, update scheme, create new steps
-        // @ts-expect-error Temporary fix
-      const scheme = await prisma.$transaction(async (tx) => {
+      const scheme = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
             await tx.colorSchemeStep.deleteMany({ where: { colorSchemeId: id } });
             return tx.colorScheme.update({
                 where: { id },

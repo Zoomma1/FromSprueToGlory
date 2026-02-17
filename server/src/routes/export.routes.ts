@@ -28,8 +28,9 @@ router.get('/items', async (req: Request, res: Response) => {
 
     if (format === 'csv') {
         const headers = 'name,status,gameSystem,faction,model,quantity,price,currency,store,tags,notes,purchaseDate,createdAt';
-        // @ts-expect-error Temporary fix
-        const rows = items.map((i) =>
+        type ItemWithIncludes = (typeof items)[number];
+
+        const rows = items.map((i: ItemWithIncludes) =>
             [
                 `"${i.name}"`, i.status, `"${i.gameSystem.name}"`, `"${i.faction.name}"`,
                 `"${i.model?.name || ''}"`, i.quantity, i.price ?? '', i.currency,
