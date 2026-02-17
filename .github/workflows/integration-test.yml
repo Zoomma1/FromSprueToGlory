@@ -65,5 +65,5 @@ jobs:
       run: npm run test -- --browsers=ChromeHeadless --watch=false
       working-directory: ./client
     - name: Build the app
-      run: ng build --if-present
+      run: ng build
       working-directory: ./client
