@@ -62,7 +62,7 @@ jobs:
       run: ng lint
       working-directory: ./client
     - name: Run tests
-      run: npm run test -- --browsers=ChromeHeadless
+      run: npm run test -- --browsers=ChromeHeadless --watch=false
       working-directory: ./client
     - name: Build the app
       run: ng build --if-present
