@@ -20,6 +20,7 @@ import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { authMiddleware } from '../middleware/auth.middleware';
+import type { Prisma } from '@prisma/client';
 
 const router = Router();
 router.use(authMiddleware);
@@ -63,7 +64,7 @@ function validateStepOrder(steps: z.infer<typeof stepSchema>[]): string | null {
 
 // ─── GET /api/color-schemes ──────────────────────────────
 router.get('/', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
 
     const schemes = await prisma.colorScheme.findMany({
         where: { userId },
@@ -80,10 +81,11 @@ router.get('/', async (req: Request, res: Response) => {
 
 // ─── GET /api/color-schemes/:id ──────────────────────────
 router.get('/:id', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
     const scheme = await prisma.colorScheme.findFirst({
-        where: { id: req.params.id, userId },
+        where: { id, userId },
         include: {
             gameSystem: true,
             faction: true,
@@ -107,7 +109,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 // ─── POST /api/color-schemes ─────────────────────────────
 router.post('/', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
     const parsed = createSchemeSchema.safeParse(req.body);
 
     if (!parsed.success) {
@@ -141,15 +143,16 @@ router.post('/', async (req: Request, res: Response) => {
 
 // ─── PUT /api/color-schemes/:id ──────────────────────────
 router.put('/:id', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
     const parsed = updateSchemeSchema.safeParse(req.body);
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
     if (!parsed.success) {
         res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
         return;
     }
 
-    const existing = await prisma.colorScheme.findFirst({ where: { id: req.params.id, userId } });
+    const existing = await prisma.colorScheme.findFirst({ where: { id, userId } });
     if (!existing) {
         res.status(404).json({ error: 'Color scheme not found' });
         return;
@@ -165,10 +168,10 @@ router.put('/:id', async (req: Request, res: Response) => {
         }
 
         // Transaction: delete old steps, update scheme, create new steps
-        const scheme = await prisma.$transaction(async (tx) => {
-            await tx.colorSchemeStep.deleteMany({ where: { colorSchemeId: req.params.id } });
+      const scheme = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+            await tx.colorSchemeStep.deleteMany({ where: { colorSchemeId: id } });
             return tx.colorScheme.update({
-                where: { id: req.params.id },
+                where: { id },
                 data: {
                     ...schemeData,
                     steps: { create: steps },
@@ -180,7 +183,7 @@ router.put('/:id', async (req: Request, res: Response) => {
         res.json(scheme);
     } else {
         const scheme = await prisma.colorScheme.update({
-            where: { id: req.params.id },
+            where: { id },
             data: schemeData,
             include: { steps: { orderBy: { orderIndex: 'asc' } } },
         });
@@ -190,15 +193,16 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 // ─── DELETE /api/color-schemes/:id ───────────────────────
 router.delete('/:id', async (req: Request, res: Response) => {
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
-    const existing = await prisma.colorScheme.findFirst({ where: { id: req.params.id, userId } });
+    const existing = await prisma.colorScheme.findFirst({ where: { id, userId } });
     if (!existing) {
         res.status(404).json({ error: 'Color scheme not found' });
         return;
     }
 
-    await prisma.colorScheme.delete({ where: { id: req.params.id } });
+    await prisma.colorScheme.delete({ where: { id } });
     res.status(204).send();
 });
 

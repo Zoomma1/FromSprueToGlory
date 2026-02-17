@@ -25,8 +25,8 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
 
     try {
         const payload = verifyAccessToken(token);
-        (req as any).userId = payload.userId;
-        (req as any).userEmail = payload.email;
+        req.userId = payload.userId;
+        req.userEmail = payload.email;
         next();
     } catch {
         res.status(401).json({ error: 'Invalid or expired token' });

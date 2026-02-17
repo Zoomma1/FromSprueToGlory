@@ -23,7 +23,8 @@ async function start() {
   try {
     await prisma.$queryRawUnsafe('SELECT 1');
     console.log('  ✅ Database connection verified');
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errMessage = err instanceof Error ? err.message : String(err);
     console.error(`
   ❌ DATABASE CONNECTION FAILED
   ─────────────────────────────────────
@@ -32,7 +33,7 @@ async function start() {
   Check your DATABASE_URL in .env:
     ${process.env.DATABASE_URL?.replace(/\/\/.*@/, '//***@') || '(not set)'}
   
-  Error: ${err.message}
+  Error: ${errMessage}
   ─────────────────────────────────────
         `);
     process.exit(1);
