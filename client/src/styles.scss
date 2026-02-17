@@ -48,6 +48,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+// ─── Global user select fix───────────────────────────────
+h1, h2, h3, h4, h5, h6,
+span,
+mat-card, .mat-card,
+mat-card-title, .mat-card-title,
+mat-card-subtitle, .mat-card-subtitle,
+.page-title {
+  cursor: default !important;
+  caret-color: transparent !important;
+}
+
+button, a, .mat-button, .mat-icon-button, .clickable {
+  cursor: pointer;
+}
+
 // ─── Utility classes ─────────────────────────────────────
 .container {
   width: 100%;
@@ -77,21 +92,6 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #777;
-}
-
-// ─── Read-only chip / label fix ──────────────────────────
-// Angular Material 19 mat-chip renders as focusable <button>.
-// In read-only contexts (chip-set without input), clicking shows
-// an unwanted caret/focus ring. Disable pointer events on these.
-mat-chip-set:not([contenteditable]) .mat-mdc-chip:not(.mat-mdc-chip-editable) {
-  pointer-events: none;
-  user-select: none;
-  cursor: default;
-}
-
-.status-badge {
-  user-select: none;
-  cursor: default;
 }
 
 // ─── Mobile-first helper ─────────────────────────────────
