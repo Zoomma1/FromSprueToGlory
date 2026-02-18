@@ -22,6 +22,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { firstValueFrom } from 'rxjs';
 
 interface AuthResponse {
     accessToken: string;
@@ -53,9 +54,9 @@ export class AuthService {
     }
 
     async signup(email: string, password: string): Promise<void> {
-        const res = await this.http
-            .post<AuthResponse>(`${environment.apiUrl}/auth/signup`, { email, password })
-            .toPromise();
+        const res = await firstValueFrom(this.http
+              .post<AuthResponse>(`${environment.apiUrl}/auth/signup`, { email, password }));
+        console.log('res : ', res);
         if (res) this.storeTokens(res);
     }
 
