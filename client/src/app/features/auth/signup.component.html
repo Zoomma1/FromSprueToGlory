@@ -33,12 +33,20 @@
                   <mat-error>Email is required</mat-error>
                 }
 
-                @else if (form.get('password')?.hasError('minlength') && form.get('password')?.touched || form.get('password')?.hasError('pattern') && form.get('password')?.touched) {
-                  <mat-error>Password must be more then 8 characters, have a least one upper case and one lower case characters, contain one number and a special character</mat-error>
+                @else if (form.get('password')?.hasError('pattern') && form.get('password')?.touched) {
+                  <mat-error>Password must be at least 8 characters, have at least one uppercase and one lowercase character, contain one number and a special character</mat-error>
                 }
 
-                @else if (form.get('confirmPassword')?.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
-                  <mat-error>Password does not match</mat-error>
+                @else if (form.get('confirmPassword')?.hasError('required') && form.get('confirmPassword')?.touched) {
+                  <mat-error>Confirm password is required</mat-error>
+                }
+
+                @else if (form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched) {
+                  <mat-error>Passwords do not match</mat-error>
+                }
+
+                @else if (form.hasError('Conflict') && form.touched) {
+                  <mat-error>An account with this email already exists, please login or create a new account</mat-error>
                 }
 
                 <button mat-raised-button color="primary" type="submit" [disabled]="loading() || form.invalid"

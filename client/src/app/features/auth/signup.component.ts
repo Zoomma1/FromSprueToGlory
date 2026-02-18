@@ -27,7 +27,7 @@ export class SignupComponent {
 
     form: FormGroup = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/)]],
+        password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/)]],
         confirmPassword: ['', [Validators.required]],
     }, { validators: this.passwordsMatchValidator.bind(this) });
 
@@ -35,10 +35,21 @@ export class SignupComponent {
     loading = signal(false);
     error = signal('');
 
+    constructor() {
+        this.form.get('password')?.valueChanges.subscribe(() => {
+            this.form.get('confirmPassword')?.updateValueAndValidity({ emitEvent: false });
+        });
+    }
+
     private passwordsMatchValidator(form: FormGroup) {
         const password = form.get('password')?.value;
         const confirm = form.get('confirmPassword')?.value;
-        return password === confirm ? null : { passwordMismatch: true };
+
+        if (!password || !confirm) {
+            return null;
+        }
+
+        return password === confirm ? null : { passwordsMismatch: true };
     }
 
     async onSubmit() {
@@ -48,10 +59,11 @@ export class SignupComponent {
 
         try {
             await this.authService.signup(this.form.value.email, this.form.value.password);
-            this.router.navigate(['/dashboard']);
+            await this.router.navigate(['/dashboard']);
         } catch (err: unknown) {
             const error = err as { error?: { error?: string } };
             this.error.set(error?.error?.error || 'Signup failed');
+            this.form.setErrors({ Conflict: true });
         } finally {
             this.loading.set(false);
         }
