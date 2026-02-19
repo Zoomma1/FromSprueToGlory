@@ -56,7 +56,9 @@ export class ProjectDetailComponent implements OnInit {
     loadProject(id?: string) {
         const projectId = id || this.project()?.id;
         if (!projectId) return;
-        this.api.getProject(projectId).subscribe((p) => this.project.set(p));
+        this.api.getProject(projectId).subscribe((p: Project) => {
+            this.project.set(p);
+        });
     }
 
     // ─── Status helpers ───────────────────────────

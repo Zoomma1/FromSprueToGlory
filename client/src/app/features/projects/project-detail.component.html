@@ -22,7 +22,7 @@
 </div>
 
 <div class="section-header">
-    <h2>Items ({{ proj.items?.items?.length || 0 }})</h2>
+    <h2>Items ({{ proj.items?.length || 0 }})</h2>
     <button mat-stroked-button (click)="toggleAssignPanel()">
         <mat-icon>{{ showAssignPanel() ? 'close' : 'add' }}</mat-icon>
         {{ showAssignPanel() ? 'Close' : 'Add Items' }}
@@ -54,7 +54,7 @@
 
 <!-- Project Items -->
 <div class="items-list">
-    @for (item of proj.items?.items; track item.id) {
+    @for (item of proj.items; track item.id) {
     <mat-card class="item-row-card">
         <div class="item-row">
             <div class="item-info">
@@ -86,7 +86,7 @@
     }
 </div>
 
-@if (!proj.items?.items?.length) {
+@if (!proj.items?.length) {
 <div class="empty-state">
     <mat-icon class="empty-icon">inventory_2</mat-icon>
     <h3>No items in this project</h3>
