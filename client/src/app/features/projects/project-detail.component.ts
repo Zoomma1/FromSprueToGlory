@@ -131,8 +131,10 @@ export class ProjectDetailComponent implements OnInit {
         width: '600px', maxWidth: '95vw',
         data: { mode: 'edit', item: newItem },
       });
-      dialogRef.afterClosed().subscribe(() => {
-        this.loadProject();
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loadProject();
+        }
       });
     }
 }
