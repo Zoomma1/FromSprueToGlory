@@ -80,6 +80,9 @@ export class ItemFormDialogComponent implements OnInit {
             if (this.editSavedIds?.projectId) {
                 const proj = p.find((x: Project) => x.id === this.editSavedIds!.projectId);
                 if (proj) this.form.patchValue({ project: proj });
+            } else if (this.data.mode === 'create' && this.data.defaultProjectId) {
+                const proj = p.find((x: Project) => x.id === this.data.defaultProjectId);
+                if (proj) this.form.patchValue({ project: proj });
             }
         });
 
