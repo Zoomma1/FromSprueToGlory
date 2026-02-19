@@ -56,8 +56,18 @@ export class ProjectDetailComponent implements OnInit {
     loadProject(id?: string) {
         const projectId = id || this.project()?.id;
         if (!projectId) return;
-        this.api.getProject(projectId).subscribe((p: Project) => {
-            this.project.set(p);
+        this.api.getProject(projectId).subscribe({
+            next: (p: Project) => {
+                this.project.set(p);
+            },
+            error: (err) => {
+                // Handle failed project load to avoid leaving the UI in a broken state
+                console.error('Failed to load project', err);
+                this.snackBar.open('Failed to load project details. Please try again.', 'Dismiss', {
+                    duration: 5000,
+                });
+                this.router.navigate(['/projects']);
+            },
         });
     }
 
