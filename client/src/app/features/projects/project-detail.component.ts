@@ -127,7 +127,6 @@ export class ProjectDetailComponent implements OnInit {
     openCreateDialog() {
       const newItem = new Item();
       newItem.project = this.project() ? { id: this.project()!.id, name: this.project()!.name } : null;
-      console.log(newItem);
       const dialogRef = this.dialog.open(ItemFormDialogComponent, {
         width: '600px', maxWidth: '95vw',
         data: { mode: 'edit', item: newItem },
