@@ -31,13 +31,24 @@
 
 <!-- Assign Panel -->
 @if (showAssignPanel()) {
+<mat-card class="create-and-assign-panel">
+    <mat-card-header>
+        <mat-card-title>Create a new item to add to the project !</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <button mat-stroked-button class="new-item-button" color="primary" (click)="openCreateDialog()">
+        <mat-icon>add_circle</mat-icon>
+        Create & Add New Item
+      </button>
+    </mat-card-content>
+</mat-card>
 <mat-card class="assign-panel">
     <mat-card-header>
         <mat-card-title>Available Items</mat-card-title>
     </mat-card-header>
     <mat-card-content>
         @if (unassignedItems().length === 0) {
-        <p class="muted">No unassigned items available</p>
+        <p class="muted">No unassigned items available please create or buy some new ones your pile of shame shouldn't be empty you filthy heretic !</p>
         }
         @for (item of unassignedItems(); track item.id) {
         <div class="assign-row">

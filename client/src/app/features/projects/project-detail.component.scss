@@ -51,7 +51,7 @@
     }
 }
 
-.assign-panel {
+.assign-panel, .create-and-assign-panel {
     background: #1a1a2e;
     border: 1px solid #2a2a4a;
     margin-bottom: 16px;
@@ -180,4 +180,8 @@
     text-align: center;
     padding: 64px;
     color: #888;
+}
+
+.new-item-button {
+  margin-top: 16px;
 }
