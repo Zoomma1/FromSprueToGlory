@@ -40,7 +40,16 @@ import { ApiService } from '../../core/services/api.service';
             </button>
         </mat-dialog-actions>
     `,
-    styles: [`.full-width { width: 100%; }`],
+    styles: [`
+      mat-dialog-content {
+        max-height: 75vh;
+        overflow-y: auto;
+        overflow-x: visible;
+        padding-top: 12px !important;
+      }
+      .full-width {
+        width: 100%;
+    }`],
 })
 export class ProjectFormDialogComponent {
     private fb = inject(FormBuilder);
