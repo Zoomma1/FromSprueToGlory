@@ -1,6 +1,8 @@
 mat-dialog-content {
-    max-height: 70vh;
+    max-height: 75vh;
     overflow-y: auto;
+    overflow-x: visible;
+    padding-top: 12px !important;
 }
 
 .full-width {

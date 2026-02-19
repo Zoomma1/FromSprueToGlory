@@ -16,6 +16,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ApiService } from '../../core/services/api.service';
 import { Project } from '../../classes/project';
 import { Item } from '../../classes/items';
+import { ItemFormDialogComponent } from '../items/item-form-dialog.component';
 
 const STATUS_ORDER = ['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED'] as const;
 const STATUS_LABELS: Record<string, string> = {
@@ -120,5 +121,19 @@ export class ProjectDetailComponent implements OnInit {
 
     goBack() {
         this.router.navigate(['/projects']);
+    }
+
+    // Item creation
+    openCreateDialog() {
+      const newItem = new Item();
+      newItem.project = this.project() ? { id: this.project()!.id, name: this.project()!.name } : null;
+      console.log(newItem);
+      const dialogRef = this.dialog.open(ItemFormDialogComponent, {
+        width: '600px', maxWidth: '95vw',
+        data: { mode: 'edit', item: newItem },
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        this.loadProject();
+      });
     }
 }
