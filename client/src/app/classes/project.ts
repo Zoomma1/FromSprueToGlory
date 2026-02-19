@@ -1,4 +1,4 @@
-import { Items, ItemStatus } from './items';
+import { Item, ItemStatus } from './items';
 
 export class Projects {
     projects: Project[] = [];
@@ -11,9 +11,8 @@ export class Project {
     description!: string | null;
     createdAt!: string;
     updatedAt!: string;
-    items?: Items;
+    items?: Item[];
     completion?: number;
     itemCount?: number;
     statusCounts?: Partial<Record<ItemStatus, number>>;
 }
-
