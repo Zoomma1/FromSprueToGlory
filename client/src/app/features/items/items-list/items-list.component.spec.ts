@@ -1,7 +1,3 @@
-// ──────────────────────────────────────────────────────────
-// 🧪 Items List Component Tests
-// ──────────────────────────────────────────────────────────
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
@@ -16,58 +12,58 @@ describe('ItemsListComponent', () => {
     let fixture: ComponentFixture<ItemsListComponent>;
     let apiSpy: jasmine.SpyObj<ApiService>;
 
-  const mockItems: Item[] = [
-    {
-      id: '1',
-      userId: 'user1',
-      name: 'Intercessors',
-      status: 'WANT',
-      quantity: 5,
-      points: 100,
-      purchaseDate: null,
-      price: null,
-      currency: 'USD',
-      notes: null,
-      tags: [],
-      photoKey: null,
-      createdAt: '2026-02-15T00:00:00Z',
-      updatedAt: '2026-02-15T00:00:00Z',
-      factionId: '1',
-      faction: { id: '1', name: 'Ultramarines' },
-      gameSystemId: '1',
-      gameSystem: { id: '1', name: '40K', slug: '40k' },
-      modelId: null,
-      model: null,
-      colorScheme: null,
-      projectId: null,
-      project: null,
-    },
-    {
-      id: '2',
-      userId: 'user1',
-      name: 'Ork Boyz',
-      status: 'BOUGHT',
-      quantity: 10,
-      points: 80,
-      purchaseDate: null,
-      price: null,
-      currency: 'USD',
-      notes: null,
-      tags: [],
-      photoKey: null,
-      createdAt: '2026-02-15T00:00:00Z',
-      updatedAt: '2026-02-15T00:00:00Z',
-      factionId: '2',
-      faction: { id: '2', name: 'Orks' },
-      gameSystemId: '1',
-      gameSystem: { id: '1', name: '40K', slug: '40k' },
-      modelId: null,
-      model: null,
-      colorScheme: null,
-      projectId: null,
-      project: null,
-    },
-  ];
+    const mockItems: Item[] = [
+        {
+            id: '1',
+            userId: 'user1',
+            name: 'Intercessors',
+            status: 'WANT',
+            quantity: 5,
+            points: 100,
+            purchaseDate: null,
+            price: null,
+            currency: 'USD',
+            notes: null,
+            tags: [],
+            photoKey: null,
+            createdAt: '2026-02-15T00:00:00Z',
+            updatedAt: '2026-02-15T00:00:00Z',
+            factionId: '1',
+            faction: { id: '1', name: 'Ultramarines' },
+            gameSystemId: '1',
+            gameSystem: { id: '1', name: '40K', slug: '40k' },
+            modelId: null,
+            model: null,
+            colorScheme: null,
+            projectId: null,
+            project: null,
+        },
+        {
+            id: '2',
+            userId: 'user1',
+            name: 'Ork Boyz',
+            status: 'BOUGHT',
+            quantity: 10,
+            points: 80,
+            purchaseDate: null,
+            price: null,
+            currency: 'USD',
+            notes: null,
+            tags: [],
+            photoKey: null,
+            createdAt: '2026-02-15T00:00:00Z',
+            updatedAt: '2026-02-15T00:00:00Z',
+            factionId: '2',
+            faction: { id: '2', name: 'Orks' },
+            gameSystemId: '1',
+            gameSystem: { id: '1', name: '40K', slug: '40k' },
+            modelId: null,
+            model: null,
+            colorScheme: null,
+            projectId: null,
+            project: null,
+        },
+    ];
 
     beforeEach(async () => {
         apiSpy = jasmine.createSpyObj('ApiService', ['getItems', 'deleteItem']);
@@ -87,24 +83,30 @@ describe('ItemsListComponent', () => {
         fixture.detectChanges();
     });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
+    describe('Component initialization', () => {
+        it('should create', () => {
+            expect(component).toBeTruthy();
+        });
+
+        it('should call ApiService.getItems on init', () => {
+            expect(apiSpy.getItems).toHaveBeenCalled();
+        });
     });
 
-    it('should call ApiService.getItems on init', () => {
-        expect(apiSpy.getItems).toHaveBeenCalled();
+    describe('Data loading', () => {
+        it('should populate items signal after load', () => {
+            expect(component.items().length).toBe(2);
+            expect(component.items()[0].name).toBe('Intercessors');
+        });
     });
 
-    it('should populate items signal after load', () => {
-        expect(component.items().length).toBe(2);
-        expect(component.items()[0].name).toBe('Intercessors');
-    });
+    describe('Filtering', () => {
+        it('should reload items when status filter changes', () => {
+            apiSpy.getItems.calls.reset();
+            component.statusFilter = 'BOUGHT';
+            component.loadItems();
 
-    it('should reload items when status filter changes', () => {
-        apiSpy.getItems.calls.reset();
-        component.statusFilter = 'BOUGHT';
-        component.loadItems();
-
-        expect(apiSpy.getItems).toHaveBeenCalledWith({ status: 'BOUGHT' });
+            expect(apiSpy.getItems).toHaveBeenCalledWith({ status: 'BOUGHT' });
+        });
     });
 });

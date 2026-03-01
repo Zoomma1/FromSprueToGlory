@@ -1,13 +1,3 @@
-// ──────────────────────────────────────────────────────────
-// 📡 API Service — Centralized HTTP client for all API calls
-// ──────────────────────────────────────────────────────────
-// WHY a centralized API service?
-//   - All API calls go through one place
-//   - Easy to change base URL, add headers, or swap implementation
-//   - Type-safe with generics
-//   - ALTERNATIVE: call HttpClient directly in each component (scattered, hard to maintain)
-// ──────────────────────────────────────────────────────────
-
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -27,7 +17,7 @@ export class ApiService {
     private http = inject(HttpClient);
     private baseUrl = environment.apiUrl;
 
-    // ─── Reference Data ────────────────────────
+    //  Reference Data
     getGameSystems(): Observable<GameSystem[]> {
         return this.http.get<GameSystem[]>(`${this.baseUrl}/reference/game-systems`);
     }
@@ -58,7 +48,7 @@ export class ApiService {
         return this.http.get<Technique[]>(`${this.baseUrl}/reference/techniques`);
     }
 
-    // ─── Items ─────────────────────────────────
+    //  Items
     getItems(filters?: Record<string, string>): Observable<Item[]> {
         let params = new HttpParams();
         if (filters) {
@@ -93,7 +83,7 @@ export class ApiService {
         return this.http.get<ItemStatusHistory[]>(`${this.baseUrl}/items/${id}/history`);
     }
 
-    // ─── Color Schemes ─────────────────────────
+    //  Color Schemes
     getColorSchemes(): Observable<ColorScheme[]> {
         return this.http.get<ColorScheme[]>(`${this.baseUrl}/color-schemes`);
     }
@@ -114,7 +104,7 @@ export class ApiService {
         return this.http.delete<void>(`${this.baseUrl}/color-schemes/${id}`);
     }
 
-    // ─── Projects ─────────────────────────────
+    //  Projects
     getProjects(): Observable<Project[]> {
         return this.http.get<Project[]>(`${this.baseUrl}/projects`);
     }
@@ -143,7 +133,7 @@ export class ApiService {
         return this.http.post<void>(`${this.baseUrl}/projects/${projectId}/unassign`, { itemIds });
     }
 
-    // ─── Media ─────────────────────────────────
+    //  Media
     getPresignUpload(fileName: string, contentType: string): Observable<{ uploadUrl: string; key: string }> {
         return this.http.post<{ uploadUrl: string; key: string }>(
             `${this.baseUrl}/media/presign-upload`,
@@ -155,7 +145,7 @@ export class ApiService {
         return this.http.get<{ readUrl: string }>(`${this.baseUrl}/media/presign-read/${key}`);
     }
 
-    // ─── Export ────────────────────────────────
+    //  Export
     exportItems(format: 'json' | 'csv' = 'json'): Observable<Item[] | string> {
         if (format === 'csv') {
             return this.http.get(`${this.baseUrl}/export/items?format=csv`, { responseType: 'text' });
@@ -163,7 +153,7 @@ export class ApiService {
         return this.http.get<Item[]>(`${this.baseUrl}/export/items`);
     }
 
-    // ─── Account ───────────────────────────────
+    //  Account
     deleteAccount(): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/account`);
     }
