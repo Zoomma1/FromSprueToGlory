@@ -128,7 +128,7 @@ describe(ProjectDetailComponent.name, () => {
     expect(component.canAdvance({ status: 'FINISHED' } as never)).toBeFalse();
   });
 
-  // nextStatus────
+  // nextStatus
 
   it('should advance item status', fakeAsync(() => {
     component.nextStatus({ id: 'item-1', status: 'WANT' } as never);
@@ -145,7 +145,7 @@ describe(ProjectDetailComponent.name, () => {
     expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
   });
 
-  // setStatus─────
+  // setStatus
 
   it('should set item status', fakeAsync(() => {
     component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'FINISHED');
@@ -170,7 +170,7 @@ describe(ProjectDetailComponent.name, () => {
     expect(snackBarSpy.open).toHaveBeenCalledWith('Failed', 'OK', { duration: 3000 });
   }));
 
-  // Assign panel──
+  // Assign panel
 
   it('should toggle assign panel visibility', () => {
     expect(component.showAssignPanel()).toBeFalse();
@@ -201,7 +201,7 @@ describe(ProjectDetailComponent.name, () => {
     expect(apiSpy.getItems).toHaveBeenCalledTimes(1);
   });
 
-  // Assign / Unassign ────────────────────────────────────────────────────
+  // Assign / Unassign
 
   it('should assign item to project', fakeAsync(() => {
     component.assignItem('item-1');
@@ -265,7 +265,7 @@ describe(ProjectDetailComponent.name, () => {
     expect(apiSpy.getProject).toHaveBeenCalledTimes(3);
   }));
 
-  // Navigation────
+  // Navigation
 
   it('should navigate back to projects list', () => {
     const router = TestBed.inject(Router);
@@ -273,7 +273,7 @@ describe(ProjectDetailComponent.name, () => {
     expect(router.navigate).toHaveBeenCalledWith(['/projects']);
   });
 
-  // Dialog────────
+  // Dialog
 
   it('should open item creation dialog', () => {
     component.openCreateDialog();
