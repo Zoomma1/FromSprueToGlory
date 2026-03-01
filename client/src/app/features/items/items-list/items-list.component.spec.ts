@@ -8,8 +8,8 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { ItemsListComponent } from './items-list.component';
-import { ApiService } from '../../core/services/api.service';
-import { Item } from '../../classes/items';
+import { ApiService } from '../../../core/services/api.service';
+import { Item } from '../../../classes/items';
 
 describe('ItemsListComponent', () => {
     let component: ItemsListComponent;

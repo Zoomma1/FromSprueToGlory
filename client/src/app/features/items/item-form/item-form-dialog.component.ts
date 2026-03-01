@@ -13,12 +13,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ApiService } from '../../core/services/api.service';
-import { GameSystem } from '../../classes/game-system';
-import { Faction } from '../../classes/factions';
-import { Model } from '../../classes/model';
-import { Project } from '../../classes/project';
-import { ItemPayload } from '../../classes/items';
+import { ApiService } from '../../../core/services/api.service';
+import { GameSystem } from '../../../classes/game-system';
+import { Faction } from '../../../classes/factions';
+import { Model } from '../../../classes/model';
+import { Project } from '../../../classes/project';
+import { ItemPayload } from '../../../classes/items';
 
 @Component({
     selector: 'app-item-form-dialog',

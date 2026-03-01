@@ -16,9 +16,9 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../core/services/api.service';
-import { Item } from '../../classes/items';
-import { ItemFormDialogComponent } from './item-form-dialog.component';
+import { ApiService } from '../../../core/services/api.service';
+import { Item } from '../../../classes/items';
+import { ItemFormDialogComponent } from '../item-form/item-form-dialog.component';
 
 const STATUS_ORDER = ['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED'] as const;
 const STATUS_LABELS: Record<string, string> = {

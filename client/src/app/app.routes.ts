@@ -22,7 +22,7 @@ export const routes: Routes = [
     {
         path: 'items',
         loadComponent: () =>
-            import('./features/items/items-list.component').then((m) => m.ItemsListComponent),
+            import('./features/items/items-list/items-list.component').then((m) => m.ItemsListComponent),
         canActivate: [authGuard],
     },
     {
