@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ApiService } from '../../core/services/api.service';
+import { ApiService } from '../../../core/services/api.service';
 
 @Component({
     selector: 'app-project-form-dialog',
@@ -18,38 +18,8 @@ import { ApiService } from '../../core/services/api.service';
         MatDialogModule, MatFormFieldModule, MatInputModule,
         MatButtonModule, MatSnackBarModule,
     ],
-    template: `
-        <h2 mat-dialog-title>{{ data.mode === 'create' ? 'New Project' : 'Edit Project' }}</h2>
-        <mat-dialog-content>
-            <form [formGroup]="form">
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Name</mat-label>
-                    <input matInput formControlName="name">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Description</mat-label>
-                    <textarea matInput formControlName="description" rows="3"></textarea>
-                </mat-form-field>
-            </form>
-        </mat-dialog-content>
-        <mat-dialog-actions align="end">
-            <button mat-button mat-dialog-close>Cancel</button>
-            <button mat-raised-button color="primary" (click)="save()"
-                [disabled]="form.invalid || saving()">
-                {{ data.mode === 'create' ? 'Create' : 'Save' }}
-            </button>
-        </mat-dialog-actions>
-    `,
-    styles: [`
-      mat-dialog-content {
-        max-height: 75vh;
-        overflow-y: auto;
-        overflow-x: visible;
-        padding-top: 12px !important;
-      }
-      .full-width {
-        width: 100%;
-    }`],
+    templateUrl: './project-form-dialog.component.html',
+    styleUrls: ['./project-form-dialog.component.scss'],
 })
 export class ProjectFormDialogComponent {
     private fb = inject(FormBuilder);

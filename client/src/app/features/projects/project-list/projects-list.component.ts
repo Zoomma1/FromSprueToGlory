@@ -11,9 +11,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ApiService } from '../../core/services/api.service';
-import { Project } from '../../classes/project';
-import { ProjectFormDialogComponent } from './project-form-dialog.component';
+import { ApiService } from '../../../core/services/api.service';
+import { Project } from '../../../classes/project';
+import { ProjectFormDialogComponent } from '../project-form-dialog/project-form-dialog.component';
 
 @Component({
     selector: 'app-projects-list',
