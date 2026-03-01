@@ -6,6 +6,7 @@ import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { authMiddleware } from '../middleware/auth.middleware';
+import { STATUS_WEIGHT } from '../constants/status-weight';
 
 const router = Router();
 router.use(authMiddleware);
@@ -18,15 +19,6 @@ const createProjectSchema = z.object({
 });
 
 const updateProjectSchema = createProjectSchema.partial();
-
-// ─── Status weights for completion calculation ───────────
-const STATUS_WEIGHT: Record<string, number> = {
-    WANT: 0,
-    BOUGHT: 25,
-    ASSEMBLED: 50,
-    WIP: 75,
-    FINISHED: 100,
-};
 
 function computeCompletion(items: { status: string; quantity: number }[]): number {
     if (items.length === 0) return 0;
