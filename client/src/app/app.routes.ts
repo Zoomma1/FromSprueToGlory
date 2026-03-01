@@ -44,7 +44,7 @@ export const routes: Routes = [
     {
         path: 'projects',
         loadComponent: () =>
-            import('./features/projects/projects-list.component').then(
+            import('./features/projects/project-list/projects-list.component').then(
                 (m) => m.ProjectsListComponent,
             ),
         canActivate: [authGuard],
@@ -52,7 +52,7 @@ export const routes: Routes = [
     {
         path: 'projects/:id',
         loadComponent: () =>
-            import('./features/projects/project-detail.component').then(
+            import('./features/projects/project-detail/project-detail.component').then(
                 (m) => m.ProjectDetailComponent,
             ),
         canActivate: [authGuard],
