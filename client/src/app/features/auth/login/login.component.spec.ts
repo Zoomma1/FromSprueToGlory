@@ -8,7 +8,7 @@ import { provideHttpClient } from '@angular/common/http';
 class DummyComponent { }
 
 import { LoginComponent } from './login.component';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 describe('LoginComponent', () => {
     let component: LoginComponent;

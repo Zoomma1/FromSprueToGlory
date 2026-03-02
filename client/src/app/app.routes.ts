@@ -6,12 +6,12 @@ export const routes: Routes = [
     {
         path: 'auth/login',
         loadComponent: () =>
-            import('./features/auth/login.component').then((m) => m.LoginComponent),
+            import('./features/auth/login/login.component').then((m) => m.LoginComponent),
     },
     {
         path: 'auth/signup',
         loadComponent: () =>
-            import('./features/auth/signup.component').then((m) => m.SignupComponent),
+            import('./features/auth/signup/signup.component').then((m) => m.SignupComponent),
     },
     {
         path: 'dashboard',
