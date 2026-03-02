@@ -11,9 +11,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ApiService } from '../../core/services/api.service';
-import { SchemeFormDialogComponent } from './scheme-form-dialog.component';
-import { ColorScheme, ColorSchemeFull } from '../../classes/color-scheme';
+import { ApiService } from '../../../core/services/api.service';
+import { SchemeFormDialogComponent } from '../scheme-form-dialog/scheme-form-dialog.component';
+import { ColorScheme, ColorSchemeFull } from '../../../classes/color-scheme';
 
 @Component({
     selector: 'app-color-schemes-list',

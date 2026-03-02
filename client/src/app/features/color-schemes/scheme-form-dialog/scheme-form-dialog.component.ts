@@ -12,10 +12,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CdkDragDrop, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
-import { ApiService } from '../../core/services/api.service';
-import { Technique } from '../../classes/technique';
-import { Paint } from '../../classes/paint';
-import { ColorSchemePayload, ColorSchemeStepPayload } from '../../classes/color-scheme';
+import { ApiService } from '../../../core/services/api.service';
+import { Technique } from '../../../classes/technique';
+import { Paint } from '../../../classes/paint';
+import { ColorSchemePayload, ColorSchemeStepPayload } from '../../../classes/color-scheme';
 
 @Component({
     selector: 'app-scheme-form-dialog',

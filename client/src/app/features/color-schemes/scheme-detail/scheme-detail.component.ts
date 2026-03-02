@@ -15,10 +15,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkDragDrop, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
-import { ApiService } from '../../core/services/api.service';
-import { ColorSchemeFull, ColorSchemeStepPayload, ColorSchemeStepFull } from '../../classes/color-scheme';
-import { Technique } from '../../classes/technique';
-import { Paint } from '../../classes/paint';
+import { ApiService } from '../../../core/services/api.service';
+import { ColorSchemeFull, ColorSchemeStepPayload, ColorSchemeStepFull } from '../../../classes/color-scheme';
+import { Technique } from '../../../classes/technique';
+import { Paint } from '../../../classes/paint';
 
 @Component({
     selector: 'app-scheme-detail',

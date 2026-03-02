@@ -28,7 +28,7 @@ export const routes: Routes = [
     {
         path: 'color-schemes',
         loadComponent: () =>
-            import('./features/color-schemes/color-schemes-list.component').then(
+            import('./features/color-schemes/color-schemes-list/color-schemes-list.component').then(
                 (m) => m.ColorSchemesListComponent,
             ),
         canActivate: [authGuard],
@@ -36,7 +36,7 @@ export const routes: Routes = [
     {
         path: 'color-schemes/:id',
         loadComponent: () =>
-            import('./features/color-schemes/scheme-detail.component').then(
+            import('./features/color-schemes/scheme-detail/scheme-detail.component').then(
                 (m) => m.SchemeDetailComponent,
             ),
         canActivate: [authGuard],
