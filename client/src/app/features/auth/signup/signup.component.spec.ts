@@ -84,6 +84,42 @@ describe('SignupComponent', () => {
       expect(authServiceSpy.signup).toHaveBeenCalledWith('test@test.test', 'Test123!');
     });
 
+    it('should not call AuthService.signup on invalid form', async () => {
+      component.form.controls['email'].setValue('invalid-email');
+      component.form.controls['password'].setValue('weak');
+      component.form.controls['confirmPassword'].setValue('weak');
+      component.form.markAllAsTouched();
+
+      await component.onSubmit();
+
+      expect(authServiceSpy.signup).not.toHaveBeenCalled();
+    })
+
+    it('should navigate to dashboard on successful signup', async () => {
+      const routerSpy = spyOn(component['router'], 'navigate');
+      authServiceSpy.signup.and.returnValue(Promise.resolve());
+      component.form.controls['email'].setValue('test@test.test');
+      component.form.controls['password'].setValue('Test123!');
+      component.form.controls['confirmPassword'].setValue('Test123!');
+
+      await component.onSubmit();
+
+      expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
+    });
+
+    it('should set loading state correctly', async () => {
+      authServiceSpy.signup.and.returnValue(new Promise(resolve => setTimeout(resolve, 100)));
+      component.form.controls['email'].setValue('test@test.test');
+      component.form.controls['password'].setValue('Test123!');
+      component.form.controls['confirmPassword'].setValue('Test123!');
+
+      const submitPromise = component.onSubmit();
+      expect(component.loading()).toBeTrue();
+
+      await submitPromise;
+      expect(component.loading()).toBeFalse();
+    })
+
      it('should set form error on signup failure', async () => {
       authServiceSpy.signup.and.returnValue(Promise.reject({ error: { error: 'Email already exists' } }));
       component.form.controls['email'].setValue('admin@sprue.dev');
@@ -94,6 +130,40 @@ describe('SignupComponent', () => {
 
       expect(component.error()).toBe('Email already exists');
       expect(component.form.hasError('Conflict')).toBeTrue();
+     });
+
+     it('should set generic error message if signup fails without specific error', async () => {
+      authServiceSpy.signup.and.returnValue(Promise.reject({}));
+      component.form.controls['email'].setValue('test@test.test');
+      component.form.controls['password'].setValue('Test123!');
+      component.form.controls['confirmPassword'].setValue('Test123!');
+
+      await component.onSubmit();
+
+      expect(component.error()).toBe('Signup failed');
+      expect(component.form.hasError('Conflict')).toBeTrue();
+     });
+
+     it('should not have pattern error if password meets strength requirements', () => {
+      component.form.controls['password'].setValue('StrongPass1!');
+      component.form.controls['password'].markAsTouched();
+      expect(component.form.controls['password'].hasError('pattern')).toBeFalse();
+     });
+
+     it('should not have passwordsMismatch error if passwords match', () => {
+      component.form.controls['password'].setValue('StrongPass1!');
+      component.form.controls['confirmPassword'].setValue('StrongPass1!');
+      component.form.markAllAsTouched();
+      expect(component.form.hasError('passwordsMismatch')).toBeFalse();
+     });
+
+     it('should not have errors if form is valid', () => {
+      component.form.controls['email'].setValue('test@test.test');
+      component.form.controls['password'].setValue('Test123!');
+      component.form.controls['confirmPassword'].setValue('Test123!');
+      component.form.markAllAsTouched();
+      expect(component.form.valid).toBeTrue();
+      expect(component.form.errors).toBeNull();
      });
   })
 
