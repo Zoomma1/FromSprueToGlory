@@ -77,6 +77,17 @@ describe('LoginComponent', () => {
             expect(authServiceSpy.login).toHaveBeenCalledWith('test@example.com', 'password123');
         });
 
+        it('should navigate to dashboard on successful login', async () => {
+            const routerSpy = spyOn(component['router'], 'navigate');
+            authServiceSpy.login.and.returnValue(Promise.resolve());
+            component.form.controls['email'].setValue('admin@sprue.dev');
+            component.form.controls['password'].setValue('admin');
+
+            await component.onSubmit();
+
+            expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
+        })
+
         it('should set error signal on failed login', async () => {
             authServiceSpy.login.and.rejectWith({ error: { error: 'Invalid credentials' } });
             component.form.controls['email'].setValue('test@example.com');
@@ -85,6 +96,86 @@ describe('LoginComponent', () => {
             await component.onSubmit();
 
             expect(component.error()).toBe('Invalid credentials');
+        });
+
+        it('should not call AuthService.login if form is invalid', async () => {
+            component.form.controls['email'].setValue('invalid-email');
+            component.form.controls['password'].setValue('');
+            await component.onSubmit();
+            expect(authServiceSpy.login).not.toHaveBeenCalled();
+        });
+
+        it('should set loading signal during login process', async () => {
+            let resolveLogin: () => void;
+            authServiceSpy.login.and.returnValue(new Promise((resolve) => (resolveLogin = resolve)));
+            component.form.controls['email'].setValue('admin@sprue.dev');
+            component.form.controls['password'].setValue('admin');
+
+            const submitPromise = component.onSubmit();
+            expect(component.loading()).toBeTrue();
+
+            resolveLogin!();
+            await submitPromise;
+
+            expect(component.loading()).toBeFalse();
+        });
+
+        it('should set error signal to generic message if login fails without error details', async () => {
+            authServiceSpy.login.and.rejectWith({});
+            component.form.controls['email'].setValue('admin@sprue.dev');
+            component.form.controls['password'].setValue('admin');
+
+            await component.onSubmit();
+
+            expect(component.error()).toBe('Login failed');
+        });
+
+        it('should set error signal to generic message if login fails with non-standard error response', async () => {
+            authServiceSpy.login.and.rejectWith({ error: 'Unexpected error format' });
+            component.form.controls['email'].setValue('admin@sprue.dev');
+            component.form.controls['password'].setValue('admin');
+
+            await component.onSubmit();
+
+            expect(component.error()).toBe('Login failed');
+        });
+
+        it('should set error signal to generic message if login fails with non-object error response', async () => {
+            authServiceSpy.login.and.rejectWith('Server is down');
+            component.form.controls['email'].setValue('admin@sprue.dev');
+            component.form.controls['password'].setValue('admin');
+
+            await component.onSubmit();
+
+            expect(component.error()).toBe('Login failed');
+        });
+
+        it('should set error signal to generic message if login fails with null error response', async () => {
+            authServiceSpy.login.and.rejectWith(null);
+            component.form.controls['email'].setValue('admin@sprue.dev');
+            component.form.controls['password'].setValue('admin');
+
+            await component.onSubmit();
+
+            expect(component.error()).toBe('Login failed');
+        });
+
+        it('should set error signal to generic message if login fails with undefined error response', async () => {
+            authServiceSpy.login.and.rejectWith(undefined);
+            component.form.controls['email'].setValue('admin@sprue.dev');
+            component.form.controls['password'].setValue('admin');
+
+            await component.onSubmit();
+
+            expect(component.error()).toBe('Login failed');
+        });
+    });
+
+    describe('HidePassword', () => {
+        it('should toggle hidePassword signal', () => {
+            expect(component.hidePassword()).toBeTrue();
+            component.hidePassword.set(false);
+            expect(component.hidePassword()).toBeFalse();
         });
     });
 });
