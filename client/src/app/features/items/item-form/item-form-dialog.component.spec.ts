@@ -291,6 +291,33 @@ describe('ItemFormDialogComponent', () => {
             expect(snackBarSpy.open).toHaveBeenCalledWith('Save failed', 'OK', { duration: 5000 });
         });
 
+        it('should display generic error when save fails without specific message', () => {
+            component.form.patchValue({
+                name: 'New Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+            });
+
+            apiSpy.createItem.and.returnValue(throwError(() => ({})));
+
+            component.save();
+
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to save', 'OK', { duration: 5000 });
+        });
+
+        it('should set saving to true during save', () => {
+            component.form.patchValue({
+                name: 'New Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+            });
+            apiSpy.createItem.and.returnValue(of({} as Item));
+
+            component.save();
+
+            expect(component.saving()).toBeTrue();
+        });
+
         it('should set saving to false on save failure', () => {
             component.form.patchValue({
                 name: 'New Item',

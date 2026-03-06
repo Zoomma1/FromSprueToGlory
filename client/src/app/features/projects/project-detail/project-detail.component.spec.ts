@@ -313,6 +313,17 @@ describe(ProjectDetailComponent.name, () => {
             expect(dialogSpy.open).toHaveBeenCalled();
         });
 
+        it('should pass project id and name as dialog data', () => {
+            component.openCreateDialog();
+            expect(dialogSpy.open).toHaveBeenCalledWith(jasmine.any(Function), jasmine.objectContaining({
+                data: jasmine.objectContaining({
+                    mode: 'create',
+                    defaultProjectId: 'project-1',
+                    defaultProjectName: 'Project 1',
+                }),
+            }));
+        });
+
         it('should reload project after creating item', fakeAsync(() => {
             component.openCreateDialog();
             tick();

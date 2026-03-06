@@ -135,7 +135,20 @@ describe('ColorSchemesListComponent', () => {
       expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
     });
 
-    it('should not call loadSchemes if API result is false', () => {
+    it('should reload schemes after edit dialog closes with result', () => {
+      const scheme = mockColorSchemes[0];
+      const fullScheme = { ...scheme, steps: [] };
+      apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
+      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(true) });
+      dialogSpy.open.and.returnValue(dialogRefSpyObj);
+
+      apiServiceSpy.getColorSchemes.calls.reset();
+      component.openEditDialog(scheme);
+
+      expect(apiServiceSpy.getColorSchemes).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not reload schemes if edit dialog result is false', () => {
       const scheme = mockColorSchemes[0];
       const fullScheme = { ...scheme, steps: [] };
       apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
@@ -171,6 +184,17 @@ describe('ColorSchemesListComponent', () => {
       expect(window.confirm).toHaveBeenCalledWith(`Delete "${scheme.name}"?`);
       expect(apiServiceSpy.deleteColorScheme).toHaveBeenCalledWith(scheme.id);
       expect(snackBarSpy.open).toHaveBeenCalledWith('Scheme deleted', 'OK', { duration: 3000 });
+    });
+
+    it('should reload schemes after successful deletion', () => {
+      spyOn(window, 'confirm').and.returnValue(true);
+      const scheme = mockColorSchemes[0];
+      apiServiceSpy.deleteColorScheme.and.returnValue(of(undefined));
+
+      apiServiceSpy.getColorSchemes.calls.reset();
+      component.deleteScheme(scheme);
+
+      expect(apiServiceSpy.getColorSchemes).toHaveBeenCalledTimes(1);
     });
 
     it('should not delete the scheme if confirmation is cancelled', () => {

@@ -122,15 +122,14 @@ describe('SettingsComponent', () => {
     it('should create a blob and trigger download', () => {
       const blob = new Blob(['test data'], { type: 'text/plain' });
       spyOn(document, 'createElement').and.callThrough();
-      spyOn(document.body, 'appendChild').and.callThrough();
-      spyOn(document.body, 'removeChild').and.callThrough();
       spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
-      spyOn(URL, 'revokeObjectURL').and.callThrough();
+      const revokeSpy = spyOn(URL, 'revokeObjectURL');
 
       component['download'](blob, 'test.txt');
 
       expect(document.createElement).toHaveBeenCalledWith('a');
       expect(URL.createObjectURL).toHaveBeenCalledWith(blob);
+      expect(revokeSpy).toHaveBeenCalledWith('blob:url');
     });
   });
 });

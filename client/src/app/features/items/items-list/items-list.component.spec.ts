@@ -298,6 +298,15 @@ describe('ItemsListComponent', () => {
             }));
             expect(apiSpy.getItems).toHaveBeenCalledTimes(1);
         });
+
+        it('should open edit dialog and not reload if dismissed', () => {
+            apiSpy.getItems.calls.reset();
+            dialogSpy.open.and.returnValue({ afterClosed: () => of(false) } as unknown as ReturnType<MatDialog['open']>);
+
+            component.openEditDialog(mockItems[0]);
+            expect(dialogSpy.open).toHaveBeenCalled();
+            expect(apiSpy.getItems).not.toHaveBeenCalled();
+        });
   });
 
   describe('Item deletion', () => {
@@ -309,6 +318,22 @@ describe('ItemsListComponent', () => {
             component.deleteItem(mockItems[0]);
             expect(apiSpy.deleteItem).toHaveBeenCalledWith('1');
             expect(apiSpy.getItems).toHaveBeenCalledTimes(1);
+        });
+
+        it('should show snackbar after successful deletion', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            apiSpy.deleteItem.and.returnValue(of(undefined));
+
+            component.deleteItem(mockItems[0]);
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Item deleted', 'OK', { duration: 3000 });
+        });
+
+        it('should display correct item name in confirm dialog', () => {
+            const confirmSpy = spyOn(window, 'confirm').and.returnValue(true);
+            apiSpy.deleteItem.and.returnValue(of(undefined));
+
+            component.deleteItem(mockItems[0]);
+            expect(confirmSpy).toHaveBeenCalledWith('Delete "Intercessors"?');
         });
 
         it('should not call deleteItem if user cancels', () => {

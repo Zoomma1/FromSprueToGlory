@@ -77,6 +77,6 @@ describe('Dashboard', () => {
         { status: 'FINISHED', count: 0, icon: 'check_circle', color: '#4caf50' },
       ]);
       expect(component.totalItems()).toBe(0);
-    })
+    });
   });
 });

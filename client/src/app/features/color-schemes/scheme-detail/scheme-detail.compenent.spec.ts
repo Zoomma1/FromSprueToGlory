@@ -247,6 +247,18 @@ describe('SchemeDetailComponent', () => {
       expect(component.saving()).toBeFalse();
     });
 
+    it('should reload scheme after successful save', () => {
+      component.scheme.set(mockScheme);
+      component.form.patchValue({ name: 'Test' });
+      component.stepsArray.push(component['createStepGroup']({ area: 'A', techniqueId: 't' } as never));
+      apiServiceSpy.updateColorScheme.and.returnValue(of(new ColorScheme()));
+
+      apiServiceSpy.getColorScheme.calls.reset();
+      component.save();
+
+      expect(apiServiceSpy.getColorScheme).toHaveBeenCalledWith('1');
+    });
+
     it('should show error snackBar and reset saving on failure', () => {
       component.scheme.set(mockScheme);
       component.form.patchValue({ name: 'Test' });
@@ -311,6 +323,27 @@ describe('SchemeDetailComponent', () => {
         steps: [jasmine.objectContaining({
           techniqueId: 'tech-fallback',
           paintId: 'paint-fallback',
+        })],
+      }));
+    });
+
+    it('should map steps with direct techniqueId without fallback', () => {
+      const schemeWithDirectIds: ColorSchemeFull = {
+        ...mockScheme,
+        steps: [
+          { orderIndex: 1, area: 'Cloak', techniqueId: 'tech-direct', paintId: 'paint-direct', notes: 'two thin coats' },
+        ],
+      };
+      component.scheme.set(schemeWithDirectIds);
+      apiServiceSpy.createColorScheme.and.returnValue(of({ ...mockScheme, id: '4' }));
+
+      component.duplicate();
+
+      expect(apiServiceSpy.createColorScheme).toHaveBeenCalledWith(jasmine.objectContaining({
+        steps: [jasmine.objectContaining({
+          techniqueId: 'tech-direct',
+          paintId: 'paint-direct',
+          notes: 'two thin coats',
         })],
       }));
     });

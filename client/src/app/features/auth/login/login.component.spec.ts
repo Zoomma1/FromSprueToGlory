@@ -169,6 +169,19 @@ describe('LoginComponent', () => {
 
             expect(component.error()).toBe('Login failed');
         });
+
+        it('should clear error signal before retrying submit', async () => {
+            authServiceSpy.login.and.rejectWith({ error: { error: 'First error' } });
+            component.form.controls['email'].setValue('test@example.com');
+            component.form.controls['password'].setValue('password123');
+            await component.onSubmit();
+            expect(component.error()).toBe('First error');
+
+            authServiceSpy.login.and.returnValue(Promise.resolve());
+            const submitPromise = component.onSubmit();
+            expect(component.error()).toBe('');
+            await submitPromise;
+        });
     });
 
     describe('HidePassword', () => {
