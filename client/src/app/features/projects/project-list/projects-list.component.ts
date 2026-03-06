@@ -11,9 +11,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ApiService } from '../../core/services/api.service';
-import { Project } from '../../classes/project';
-import { ProjectFormDialogComponent } from './project-form-dialog.component';
+import { ApiService } from '../../../core/services/api.service';
+import { Project } from '../../../classes/project';
+import { ProjectFormDialogComponent } from '../project-form-dialog/project-form-dialog.component';
 
 @Component({
     selector: 'app-projects-list',
@@ -38,7 +38,12 @@ export class ProjectsListComponent implements OnInit {
     }
 
     loadProjects() {
-        this.api.getProjects().subscribe((p) => this.projects.set(p));
+        this.api.getProjects().subscribe({
+            next: (p) => this.projects.set(p),
+            error: () => {
+                this.snackBar.open('Failed to load projects', 'OK', { duration: 3000 });
+            },
+        });
     }
 
     openCreateDialog() {
@@ -61,9 +66,14 @@ export class ProjectsListComponent implements OnInit {
     deleteProject(project: Project, event: Event) {
         event.stopPropagation();
         if (!confirm(`Delete project "${project.name}"?`)) return;
-        this.api.deleteProject(project.id).subscribe(() => {
-            this.snackBar.open('Project deleted', 'OK', { duration: 3000 });
-            this.loadProjects();
+        this.api.deleteProject(project.id).subscribe({
+            next: () => {
+                this.snackBar.open('Project deleted', 'OK', { duration: 3000 });
+                this.loadProjects();
+            },
+            error: () => {
+                this.snackBar.open('Failed to delete project', 'OK', { duration: 3000 });
+            },
         });
     }
 }

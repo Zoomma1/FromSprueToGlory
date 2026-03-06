@@ -12,10 +12,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CdkDragDrop, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
-import { ApiService } from '../../core/services/api.service';
-import { Technique } from '../../classes/technique';
-import { Paint } from '../../classes/paint';
-import { ColorSchemePayload, ColorSchemeStepPayload } from '../../classes/color-scheme';
+import { ApiService } from '../../../core/services/api.service';
+import { Technique } from '../../../classes/technique';
+import { Paint } from '../../../classes/paint';
+import { ColorSchemePayload, ColorSchemeStepPayload } from '../../../classes/color-scheme';
 
 @Component({
     selector: 'app-scheme-form-dialog',
@@ -50,8 +50,18 @@ export class SchemeFormDialogComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.api.getTechniques().subscribe((t) => this.techniques.set(t));
-        this.api.getPaints().subscribe((p) => this.paints.set(p));
+        this.api.getTechniques().subscribe({
+            next: (t) => this.techniques.set(t),
+            error: () => {
+                this.snackBar.open('Failed to load techniques', 'OK', { duration: 3000 });
+            },
+        });
+        this.api.getPaints().subscribe({
+            next: (p) => this.paints.set(p),
+            error: () => {
+                this.snackBar.open('Failed to load paints', 'OK', { duration: 3000 });
+            },
+        });
 
         if (this.data.mode === 'edit' && this.data.scheme) {
             this.form.patchValue({

@@ -54,17 +54,17 @@ export class AuthService {
     }
 
     async signup(email: string, password: string): Promise<void> {
-        const res = await firstValueFrom(this.http
-              .post<AuthResponse>(`${environment.apiUrl}/auth/signup`, { email, password }));
-        console.log('res : ', res);
-        if (res) this.storeTokens(res);
+        const res = await firstValueFrom(
+            this.http.post<AuthResponse>(`${environment.apiUrl}/auth/signup`, { email, password })
+        );
+        this.storeTokens(res);
     }
 
     async login(email: string, password: string): Promise<void> {
-        const res = await this.http
-            .post<AuthResponse>(`${environment.apiUrl}/auth/login`, { email, password })
-            .toPromise();
-        if (res) this.storeTokens(res);
+        const res = await firstValueFrom(
+            this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, { email, password })
+        );
+        this.storeTokens(res);
     }
 
     async refresh(): Promise<string | null> {

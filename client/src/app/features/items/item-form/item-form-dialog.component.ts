@@ -13,12 +13,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ApiService } from '../../core/services/api.service';
-import { GameSystem } from '../../classes/game-system';
-import { Faction } from '../../classes/factions';
-import { Model } from '../../classes/model';
-import { Project } from '../../classes/project';
-import { ItemPayload } from '../../classes/items';
+import { ApiService } from '../../../core/services/api.service';
+import { GameSystem } from '../../../classes/game-system';
+import { Faction } from '../../../classes/factions';
+import { Model } from '../../../classes/model';
+import { Project } from '../../../classes/project';
+import { ItemPayload } from '../../../classes/items';
 
 @Component({
     selector: 'app-item-form-dialog',
@@ -62,28 +62,36 @@ export class ItemFormDialogComponent implements OnInit {
     });
 
     ngOnInit() {
-        this.api.getGameSystems().subscribe((gs) => {
-            this.gameSystems.set(gs);
-            // if editing, resolve saved gameSystemId to object and trigger cascade
-            if (this.editSavedIds?.gameSystemId) {
-                const gsObj = gs.find((g: GameSystem) => g.id === this.editSavedIds!.gameSystemId);
-                if (gsObj) {
-                    this.form.patchValue({ gameSystem: gsObj });
-                    // trigger faction load
-                    this.onGameSystemChange(gsObj.id);
+        this.api.getGameSystems().subscribe({
+            next: (gs) => {
+                this.gameSystems.set(gs);
+                if (this.editSavedIds?.gameSystemId) {
+                    const gsObj = gs.find((g: GameSystem) => g.id === this.editSavedIds!.gameSystemId);
+                    if (gsObj) {
+                        this.form.patchValue({ gameSystem: gsObj });
+                        this.onGameSystemChange(gsObj.id);
+                    }
                 }
-            }
+            },
+            error: () => {
+                this.snackBar.open('Failed to load game systems', 'OK', { duration: 3000 });
+            },
         });
 
-        this.api.getProjects().subscribe((p) => {
-            this.projects.set(p);
-            if (this.editSavedIds?.projectId) {
-                const proj = p.find((x: Project) => x.id === this.editSavedIds!.projectId);
-                if (proj) this.form.patchValue({ project: proj });
-            } else if (this.data.mode === 'create' && this.data.defaultProjectId) {
-                const proj = p.find((x: Project) => x.id === this.data.defaultProjectId);
-                if (proj) this.form.patchValue({ project: proj });
-            }
+        this.api.getProjects().subscribe({
+            next: (p) => {
+                this.projects.set(p);
+                if (this.editSavedIds?.projectId) {
+                    const proj = p.find((x: Project) => x.id === this.editSavedIds!.projectId);
+                    if (proj) this.form.patchValue({ project: proj });
+                } else if (this.data.mode === 'create' && this.data.defaultProjectId) {
+                    const proj = p.find((x: Project) => x.id === this.data.defaultProjectId);
+                    if (proj) this.form.patchValue({ project: proj });
+                }
+            },
+            error: () => {
+                this.snackBar.open('Failed to load projects', 'OK', { duration: 3000 });
+            },
         });
 
         if (this.data.mode === 'edit' && this.data.item) {
@@ -125,35 +133,41 @@ export class ItemFormDialogComponent implements OnInit {
     }
 
     onGameSystemChange(gameSystemId: string) {
-        this.api.getFactions(gameSystemId).subscribe((f) => {
-            this.factions.set(f);
-            // if editing and have saved faction id, resolve it
-            if (this.editSavedIds?.factionId) {
-                const fac = f.find((x: Faction) => x.id === this.editSavedIds!.factionId);
-                if (fac) {
-                    this.form.patchValue({ faction: fac });
-                    // trigger models load for faction
-                    this.onFactionChange(fac.id);
-                }
-                // clear saved faction id so we don't try again
-                this.editSavedIds!.factionId = undefined;
-            }
-        });
         this.form.patchValue({ faction: null, model: null });
         this.models.set([]);
+        this.api.getFactions(gameSystemId).subscribe({
+            next: (f) => {
+                this.factions.set(f);
+                if (this.editSavedIds?.factionId) {
+                    const fac = f.find((x: Faction) => x.id === this.editSavedIds!.factionId);
+                    if (fac) {
+                        this.form.patchValue({ faction: fac });
+                        this.onFactionChange(fac.id);
+                    }
+                    this.editSavedIds!.factionId = undefined;
+                }
+            },
+            error: () => {
+                this.snackBar.open('Failed to load factions', 'OK', { duration: 3000 });
+            },
+        });
     }
 
     onFactionChange(factionId: string) {
-        this.api.getModels(factionId).subscribe((m) => {
-            this.models.set(m);
-            // resolve saved model id if present
-            if (this.editSavedIds?.modelId) {
-                const modelObj = m.find((x: Model) => x.id === this.editSavedIds!.modelId);
-                if (modelObj) this.form.patchValue({ model: modelObj });
-                this.editSavedIds!.modelId = undefined;
-            }
-        });
         this.form.patchValue({ model: null });
+        this.api.getModels(factionId).subscribe({
+            next: (m) => {
+                this.models.set(m);
+                if (this.editSavedIds?.modelId) {
+                    const modelObj = m.find((x: Model) => x.id === this.editSavedIds!.modelId);
+                    if (modelObj) this.form.patchValue({ model: modelObj });
+                    this.editSavedIds!.modelId = undefined;
+                }
+            },
+            error: () => {
+                this.snackBar.open('Failed to load models', 'OK', { duration: 3000 });
+            },
+        });
     }
 
     save() {

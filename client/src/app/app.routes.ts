@@ -6,12 +6,12 @@ export const routes: Routes = [
     {
         path: 'auth/login',
         loadComponent: () =>
-            import('./features/auth/login.component').then((m) => m.LoginComponent),
+            import('./features/auth/login/login.component').then((m) => m.LoginComponent),
     },
     {
         path: 'auth/signup',
         loadComponent: () =>
-            import('./features/auth/signup.component').then((m) => m.SignupComponent),
+            import('./features/auth/signup/signup.component').then((m) => m.SignupComponent),
     },
     {
         path: 'dashboard',
@@ -22,13 +22,13 @@ export const routes: Routes = [
     {
         path: 'items',
         loadComponent: () =>
-            import('./features/items/items-list.component').then((m) => m.ItemsListComponent),
+            import('./features/items/items-list/items-list.component').then((m) => m.ItemsListComponent),
         canActivate: [authGuard],
     },
     {
         path: 'color-schemes',
         loadComponent: () =>
-            import('./features/color-schemes/color-schemes-list.component').then(
+            import('./features/color-schemes/color-schemes-list/color-schemes-list.component').then(
                 (m) => m.ColorSchemesListComponent,
             ),
         canActivate: [authGuard],
@@ -36,7 +36,7 @@ export const routes: Routes = [
     {
         path: 'color-schemes/:id',
         loadComponent: () =>
-            import('./features/color-schemes/scheme-detail.component').then(
+            import('./features/color-schemes/scheme-detail/scheme-detail.component').then(
                 (m) => m.SchemeDetailComponent,
             ),
         canActivate: [authGuard],
@@ -44,7 +44,7 @@ export const routes: Routes = [
     {
         path: 'projects',
         loadComponent: () =>
-            import('./features/projects/projects-list.component').then(
+            import('./features/projects/project-list/projects-list.component').then(
                 (m) => m.ProjectsListComponent,
             ),
         canActivate: [authGuard],
@@ -52,7 +52,7 @@ export const routes: Routes = [
     {
         path: 'projects/:id',
         loadComponent: () =>
-            import('./features/projects/project-detail.component').then(
+            import('./features/projects/project-detail/project-detail.component').then(
                 (m) => m.ProjectDetailComponent,
             ),
         canActivate: [authGuard],

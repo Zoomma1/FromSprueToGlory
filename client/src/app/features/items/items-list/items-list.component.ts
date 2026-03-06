@@ -16,9 +16,9 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../core/services/api.service';
-import { Item } from '../../classes/items';
-import { ItemFormDialogComponent } from './item-form-dialog.component';
+import { ApiService } from '../../../core/services/api.service';
+import { Item } from '../../../classes/items';
+import { ItemFormDialogComponent } from '../item-form/item-form-dialog.component';
 
 const STATUS_ORDER = ['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED'] as const;
 const STATUS_LABELS: Record<string, string> = {
@@ -61,7 +61,12 @@ export class ItemsListComponent implements OnInit {
     loadItems() {
         const filters: Record<string, string> = {};
         if (this.statusFilter) filters['status'] = this.statusFilter;
-        this.api.getItems(filters).subscribe((items) => this.items.set(items));
+        this.api.getItems(filters).subscribe({
+            next: (items) => this.items.set(items),
+            error: () => {
+                this.snackBar.open('Failed to load items', 'OK', { duration: 3000 });
+            },
+        });
     }
 
     // ─── Status helpers ───────────────────────────
@@ -127,9 +132,14 @@ export class ItemsListComponent implements OnInit {
 
     deleteItem(item: Item) {
         if (!confirm(`Delete "${item.name}"?`)) return;
-        this.api.deleteItem(item.id).subscribe(() => {
-            this.snackBar.open('Item deleted', 'OK', { duration: 3000 });
-            this.loadItems();
+        this.api.deleteItem(item.id).subscribe({
+            next: () => {
+                this.snackBar.open('Item deleted', 'OK', { duration: 3000 });
+                this.loadItems();
+            },
+            error: () => {
+                this.snackBar.open('Failed to delete item', 'OK', { duration: 3000 });
+            },
         });
     }
 }

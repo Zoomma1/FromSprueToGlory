@@ -13,10 +13,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
-import { ApiService } from '../../core/services/api.service';
-import { Project } from '../../classes/project';
-import { Item } from '../../classes/items';
-import { ItemFormDialogComponent } from '../items/item-form-dialog.component';
+import { ApiService } from '../../../core/services/api.service';
+import { Project } from '../../../classes/project';
+import { Item } from '../../../classes/items';
+import { ItemFormDialogComponent } from '../../items/item-form/item-form-dialog.component';
 
 const STATUS_ORDER = ['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED'] as const;
 const STATUS_LABELS: Record<string, string> = {
@@ -105,9 +105,13 @@ export class ProjectDetailComponent implements OnInit {
     toggleAssignPanel() {
         this.showAssignPanel.update((v) => !v);
         if (this.showAssignPanel()) {
-            this.api.getItems({ projectId: '' }).subscribe((items) => {
-                // Filter to items not assigned to any project
-                this.unassignedItems.set(items.filter((i: Item) => !i.projectId));
+            this.api.getItems({ projectId: '' }).subscribe({
+                next: (items) => {
+                    this.unassignedItems.set(items.filter((i: Item) => !i.projectId));
+                },
+                error: () => {
+                    this.snackBar.open('Failed to load unassigned items', 'OK', { duration: 3000 });
+                },
             });
         }
     }
@@ -115,19 +119,29 @@ export class ProjectDetailComponent implements OnInit {
     assignItem(itemId: string) {
         const projectId = this.project()?.id;
         if (!projectId) return;
-        this.api.assignItemsToProject(projectId, [itemId]).subscribe(() => {
-            this.snackBar.open('Item assigned', 'OK', { duration: 2000 });
-            this.loadProject();
-            this.unassignedItems.update((items) => items.filter((i) => i.id !== itemId));
+        this.api.assignItemsToProject(projectId, [itemId]).subscribe({
+            next: () => {
+                this.snackBar.open('Item assigned', 'OK', { duration: 2000 });
+                this.loadProject();
+                this.unassignedItems.update((items) => items.filter((i) => i.id !== itemId));
+            },
+            error: () => {
+                this.snackBar.open('Failed to assign item', 'OK', { duration: 3000 });
+            },
         });
     }
 
     unassignItem(itemId: string) {
         const projectId = this.project()?.id;
         if (!projectId) return;
-        this.api.unassignItemsFromProject(projectId, [itemId]).subscribe(() => {
-            this.snackBar.open('Item removed from project', 'OK', { duration: 2000 });
-            this.loadProject();
+        this.api.unassignItemsFromProject(projectId, [itemId]).subscribe({
+            next: () => {
+                this.snackBar.open('Item removed from project', 'OK', { duration: 2000 });
+                this.loadProject();
+            },
+            error: () => {
+                this.snackBar.open('Failed to remove item', 'OK', { duration: 3000 });
+            },
         });
     }
 
