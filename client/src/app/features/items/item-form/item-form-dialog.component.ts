@@ -125,35 +125,31 @@ export class ItemFormDialogComponent implements OnInit {
     }
 
     onGameSystemChange(gameSystemId: string) {
+        this.form.patchValue({ faction: null, model: null });
+        this.models.set([]);
         this.api.getFactions(gameSystemId).subscribe((f) => {
             this.factions.set(f);
-            // if editing and have saved faction id, resolve it
             if (this.editSavedIds?.factionId) {
                 const fac = f.find((x: Faction) => x.id === this.editSavedIds!.factionId);
                 if (fac) {
                     this.form.patchValue({ faction: fac });
-                    // trigger models load for faction
                     this.onFactionChange(fac.id);
                 }
-                // clear saved faction id so we don't try again
                 this.editSavedIds!.factionId = undefined;
             }
         });
-        this.form.patchValue({ faction: null, model: null });
-        this.models.set([]);
     }
 
     onFactionChange(factionId: string) {
+        this.form.patchValue({ model: null });
         this.api.getModels(factionId).subscribe((m) => {
             this.models.set(m);
-            // resolve saved model id if present
             if (this.editSavedIds?.modelId) {
                 const modelObj = m.find((x: Model) => x.id === this.editSavedIds!.modelId);
                 if (modelObj) this.form.patchValue({ model: modelObj });
                 this.editSavedIds!.modelId = undefined;
             }
         });
-        this.form.patchValue({ model: null });
     }
 
     save() {

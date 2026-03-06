@@ -2,35 +2,66 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ItemFormDialogComponent } from './item-form-dialog.component';
 import { ApiService } from '../../../core/services/api.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { Item } from '../../../classes/items';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('ItemFormDialogComponent', () => {
     let component: ItemFormDialogComponent;
     let fixture: ComponentFixture<ItemFormDialogComponent>;
     let apiSpy: jasmine.SpyObj<ApiService>;
+    let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
+    let dialogRefSpy: jasmine.SpyObj<MatDialogRef<ItemFormDialogComponent>>;
 
-    beforeEach(async () => {
+    const mockItem: Item[] = [
+        {
+            id: 'item-1',
+            name: 'Test Item',
+            gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+        } as Item,
+        {
+          id: 'item-2',
+          name: 'Test Item 2',
+          gameSystem: { id: 'gs-2', name: 'Warhammer Fantasy' } } as Item,
+    ];
+
+    async function createComponent(
+        dialogData: Record<string, unknown> = { mode: 'create' },
+        spySetup?: (api: jasmine.SpyObj<ApiService>) => void,
+    ) {
         apiSpy = jasmine.createSpyObj('ApiService', [
             'getGameSystems', 'getFactions', 'getModels', 'getProjects', 'createItem', 'updateItem'
         ]);
+        snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+        dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
 
         apiSpy.getGameSystems.and.returnValue(of([]));
         apiSpy.getProjects.and.returnValue(of([]));
         apiSpy.getFactions.and.returnValue(of([]));
         apiSpy.getModels.and.returnValue(of([]));
 
-        await TestBed.configureTestingModule({
+        if (spySetup) spySetup(apiSpy);
+
+        await TestBed.resetTestingModule().configureTestingModule({
             imports: [ItemFormDialogComponent],
-            providers: [
-                { provide: ApiService, useValue: apiSpy },
-                { provide: MAT_DIALOG_DATA, useValue: { mode: 'create' } },
-                { provide: MatDialogRef, useValue: { close: close() } },
-            ],
+        }).overrideComponent(ItemFormDialogComponent, {
+            set: {
+                providers: [
+                    { provide: ApiService, useValue: apiSpy },
+                    { provide: MAT_DIALOG_DATA, useValue: dialogData },
+                    { provide: MatDialogRef, useValue: dialogRefSpy },
+                    { provide: MatSnackBar, useValue: snackBarSpy },
+                ],
+            }
         }).compileComponents();
 
         fixture = TestBed.createComponent(ItemFormDialogComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+    }
+
+    beforeEach(async () => {
+        await createComponent();
     });
 
     describe('Component initialization', () => {
@@ -42,6 +73,16 @@ describe('ItemFormDialogComponent', () => {
             expect(apiSpy.getGameSystems).toHaveBeenCalledTimes(1);
             expect(apiSpy.getProjects).toHaveBeenCalledTimes(1);
         });
+
+        it('should set project if defaultProjectId is provided in create mode', async () => {
+            const fakeProjects = [{ id: 'proj-1', userId: 'u-1', name: 'Project 1', description: 'Desc', createdAt: new Date().toDateString(), updatedAt: new Date().toDateString() }];
+            await createComponent(
+                { mode: 'create', defaultProjectId: 'proj-1' },
+                (api) => api.getProjects.and.returnValue(of(fakeProjects)),
+             );
+
+            expect(component.form.get('project')?.value).toEqual(jasmine.objectContaining({ id: 'proj-1', name: 'Project 1' }));
+        })
     });
 
     describe('Form initialization', () => {
@@ -50,6 +91,50 @@ describe('ItemFormDialogComponent', () => {
             expect(component.form.get('name')).toBeTruthy();
             expect(component.form.get('gameSystem')).toBeTruthy();
             expect(component.form.get('faction')).toBeTruthy();
+        });
+    });
+
+    describe('Form edit mode', () => {
+        it('should initialize form with item data when in edit mode', async () => {
+            await createComponent(
+                { mode: 'edit', item: { ...mockItem[0], gameSystemId: 'gs-1' } },
+                (api) => api.getGameSystems.and.returnValue(of([{ id: 'gs-1', name: 'Warhammer 40k', slug: 'warhammer-40k', factionCount: 0 }])),
+            );
+
+            expect(component.form.get('name')?.value).toEqual('Test Item');
+            expect(component.form.get('gameSystem')?.value).toEqual(jasmine.objectContaining({ id: 'gs-1', name: 'Warhammer 40k' }));
+        });
+
+        it('should handle missing game system gracefully in edit mode', async () => {
+            await createComponent({ mode: 'edit', item: { ...mockItem[0], gameSystemId: 'non-existent' } });
+
+            expect(component.form.get('gameSystem')?.value).toBeNull();
+        });
+
+        it('should handle missing project gracefully in edit mode', async () => {
+            await createComponent({ mode: 'edit', item: { ...mockItem[0], projectId: 'non-existent' } });
+
+            expect(component.form.get('project')?.value).toBeNull();
+        });
+
+        it('should cascade load factions and models when initializing in edit mode', async () => {
+            const fakeGameSystems = [{ id: 'gs-1', name: 'Warhammer 40k', slug: 'warhammer-40k', factionCount: 0 }];
+            const fakeFactions = [{ id: 'f-1', name: 'Space Marines', gameSystemId: 'gs-1', gameSystem: { name: 'Warhammer 40k', slug: 'Warhammer 40k' } }];
+            const fakeModels = [{ id: 'm-1', name: 'Tactical Marine', factionId: 'f-1', faction: { name: 'Space Marines', slug: 'Space Marines' }, pointsCost: 15 }];
+
+            await createComponent(
+                { mode: 'edit', item: { ...mockItem[0], gameSystemId: 'gs-1', factionId: 'f-1', modelId: 'm-1' } },
+                (api) => {
+                    api.getGameSystems.and.returnValue(of(fakeGameSystems));
+                    api.getFactions.and.returnValue(of(fakeFactions));
+                    api.getModels.and.returnValue(of(fakeModels));
+                },
+            );
+
+            expect(apiSpy.getFactions).toHaveBeenCalledWith('gs-1');
+            expect(apiSpy.getModels).toHaveBeenCalledWith('f-1');
+            expect(component.form.get('faction')?.value).toEqual(jasmine.objectContaining({ id: 'f-1', name: 'Space Marines' }));
+            expect(component.form.get('model')?.value).toEqual(jasmine.objectContaining({ id: 'm-1', name: 'Tactical Marine' }));
         });
     });
 
@@ -88,4 +173,149 @@ describe('ItemFormDialogComponent', () => {
             expect(component.form.get('model')?.value).toBeNull();
         });
     });
+
+  describe('Faction change', () => {
+        it('should load models when onFactionChange is called', () => {
+            const fakeModels = [{ id: 'm-1', name: 'Tactical Marine', factionId: 'f-1', faction: { name: 'Space Marines', slug: 'Space Marines' }, pointsCost: 15 }];
+            apiSpy.getModels.and.returnValue(of(fakeModels));
+
+            component.onFactionChange('f-1');
+
+            expect(apiSpy.getModels).toHaveBeenCalledWith('f-1');
+            expect(component.models()).toEqual(fakeModels);
+        });
+
+        it('should reset model when faction changes', () => {
+            component.form.patchValue({ model: { id: 'm-1', name: 'Old Model' } });
+
+            component.onFactionChange('f-2');
+
+            expect(component.form.get('model')?.value).toBeNull();
+        });
+
+        it('should resolve saved model id when loading models on faction change in edit mode', async () => {
+            const fakeModels = [{ id: 'm-1', name: 'Tactical Marine', factionId: 'f-1', faction: { name: 'Space Marines', slug: 'Space Marines' }, pointsCost: 15 }];
+
+            await createComponent(
+                { mode: 'edit', item: { ...mockItem[0], factionId: 'f-1', modelId: 'm-1' } },
+            );
+            apiSpy.getModels.and.returnValue(of(fakeModels));
+
+            (component as unknown as Record<string, unknown>)['editSavedIds'] = { modelId: 'm-1' };
+            component.onFactionChange('f-1');
+
+            expect(apiSpy.getModels).toHaveBeenCalledWith('f-1');
+            expect(component.form.get('model')?.value).toEqual(jasmine.objectContaining({ id: 'm-1', name: 'Tactical Marine' }));
+        });
+  });
+
+  describe('Save', () => {
+        it('should call createItem on save when in create mode', () => {
+            component.form.patchValue({
+                name: 'New Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+            });
+            apiSpy.createItem.and.returnValue(of({} as Item));
+
+            component.save();
+
+            expect(apiSpy.createItem).toHaveBeenCalled();
+         });
+
+        it('should call updateItem on save when in edit mode', async () => {
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+            });
+
+            component.form.patchValue({
+                name: 'Updated Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+            });
+            apiSpy.updateItem.and.returnValue(of({} as Item));
+
+            component.save();
+
+            expect(apiSpy.updateItem).toHaveBeenCalledWith('item-1', jasmine.objectContaining({
+                name: 'Updated Item',
+                gameSystemId: 'gs-1',
+                factionId: 'f-1',
+            }));
+          });
+
+        it('should display snackbar and close dialog on successful save', () => {
+            component.form.patchValue({
+                name: 'New Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+            });
+            apiSpy.createItem.and.returnValue(of({} as Item));
+
+            component.save();
+
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Item created!', 'OK', { duration: 3000 });
+            expect(dialogRefSpy.close).toHaveBeenCalled();
+        });
+
+        it('should display snackbar with correct message on edit mode', async () => {
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+             });
+
+            component.form.patchValue({
+                name: 'Updated Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+            });
+            apiSpy.updateItem.and.returnValue(of({} as Item));
+
+            component.save();
+
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Item updated!', 'OK', { duration: 3000 });
+        });
+
+        it('should display snackbar with error message on save failure', () => {
+            component.form.patchValue({
+                name: 'New Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+            });
+
+            apiSpy.createItem.and.returnValue(throwError(() => ({ error: { error: 'Save failed' } })));
+
+            component.save();
+
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Save failed', 'OK', { duration: 5000 });
+        });
+
+        it('should set saving to false on save failure', () => {
+            component.form.patchValue({
+                name: 'New Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+            });
+
+            apiSpy.createItem.and.returnValue(throwError(() => ({ error: { error: 'Save failed' } })));
+
+            component.save();
+
+            expect(component.saving()).toBeFalse();
+        });
+
+        it('should not call API if form is invalid', () => {
+            component.form.patchValue({
+                name: '',
+                gameSystem: null,
+                faction: null,
+            });
+
+            component.save();
+
+            expect(apiSpy.createItem).not.toHaveBeenCalled();
+            expect(apiSpy.updateItem).not.toHaveBeenCalled();
+        });
+  });
 });
