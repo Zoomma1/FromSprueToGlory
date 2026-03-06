@@ -341,4 +341,26 @@ describe(ProjectDetailComponent.name, () => {
             expect(apiSpy.getProject).not.toHaveBeenCalled();
         }));
     });
+
+    describe('Error Handling', () => {
+        it('should show error snackbar when getItems fails in toggleAssignPanel', () => {
+            apiSpy.getItems.and.returnValue(throwError(() => new Error('fail')));
+            component.toggleAssignPanel();
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load unassigned items', 'OK', { duration: 3000 });
+        });
+
+        it('should show error snackbar when assignItem fails', fakeAsync(() => {
+            apiSpy.assignItemsToProject.and.returnValue(throwError(() => new Error('fail')));
+            component.assignItem('item-1');
+            tick();
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to assign item', 'OK', { duration: 3000 });
+        }));
+
+        it('should show error snackbar when unassignItem fails', fakeAsync(() => {
+            apiSpy.unassignItemsFromProject.and.returnValue(throwError(() => new Error('fail')));
+            component.unassignItem('item-2');
+            tick();
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to remove item', 'OK', { duration: 3000 });
+        }));
+    });
 });

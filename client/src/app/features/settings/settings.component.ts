@@ -23,25 +23,40 @@ export class SettingsComponent {
     private snackBar = inject(MatSnackBar);
 
     exportJSON() {
-        this.api.exportItems('json').subscribe((data) => {
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            this.download(blob, 'pile-of-shame.json');
+        this.api.exportItems('json').subscribe({
+            next: (data) => {
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                this.download(blob, 'pile-of-shame.json');
+            },
+            error: () => {
+                this.snackBar.open('Failed to export JSON', 'OK', { duration: 3000 });
+            },
         });
     }
 
     exportCSV() {
-        this.api.exportItems('csv').subscribe((data) => {
-            const blob = new Blob([data as string], { type: 'text/csv' });
-            this.download(blob, 'pile-of-shame.csv');
+        this.api.exportItems('csv').subscribe({
+            next: (data) => {
+                const blob = new Blob([data as string], { type: 'text/csv' });
+                this.download(blob, 'pile-of-shame.csv');
+            },
+            error: () => {
+                this.snackBar.open('Failed to export CSV', 'OK', { duration: 3000 });
+            },
         });
     }
 
     deleteAccount() {
         if (!confirm('This will permanently delete your account and ALL data. Are you sure?')) return;
         if (!confirm('This cannot be undone. Type are you REALLY sure?')) return;
-        this.api.deleteAccount().subscribe(() => {
-            this.snackBar.open('Account deleted', 'OK', { duration: 3000 });
-            this.authService.logout();
+        this.api.deleteAccount().subscribe({
+            next: () => {
+                this.snackBar.open('Account deleted', 'OK', { duration: 3000 });
+                this.authService.logout();
+            },
+            error: () => {
+                this.snackBar.open('Failed to delete account', 'OK', { duration: 3000 });
+            },
         });
     }
 

@@ -1,7 +1,7 @@
 import { DashboardComponent } from './dashboard.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ApiService } from '../../core/services/api.service';
 import { Item } from '../../classes/items';
 
@@ -76,6 +76,15 @@ describe('Dashboard', () => {
         { status: 'WIP', count: 0, icon: 'brush', color: '#f44336' },
         { status: 'FINISHED', count: 0, icon: 'check_circle', color: '#4caf50' },
       ]);
+      expect(component.totalItems()).toBe(0);
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('should reset stats and totalItems when getItems fails', () => {
+      apiSpy.getItems.and.returnValue(throwError(() => new Error('API error')));
+      component.ngOnInit();
+      expect(component.stats()).toEqual([]);
       expect(component.totalItems()).toBe(0);
     });
   });

@@ -38,22 +38,28 @@ export class DashboardComponent implements OnInit {
     };
 
     ngOnInit() {
-        this.api.getItems().subscribe((items) => {
-            const counts: Record<string, number> = {};
-            for (const item of items) {
-                counts[item.status] = (counts[item.status] || 0) + 1;
-            }
+        this.api.getItems().subscribe({
+            next: (items) => {
+                const counts: Record<string, number> = {};
+                for (const item of items) {
+                    counts[item.status] = (counts[item.status] || 0) + 1;
+                }
 
-            this.stats.set(
-                Object.entries(this.statusConfig).map(([status, config]) => ({
-                    status,
-                    count: counts[status] || 0,
-                    icon: config.icon,
-                    color: config.color,
-                })),
-            );
+                this.stats.set(
+                    Object.entries(this.statusConfig).map(([status, config]) => ({
+                        status,
+                        count: counts[status] || 0,
+                        icon: config.icon,
+                        color: config.color,
+                    })),
+                );
 
-            this.totalItems.set(items.length);
+                this.totalItems.set(items.length);
+            },
+            error: () => {
+                this.stats.set([]);
+                this.totalItems.set(0);
+            },
         });
     }
 }

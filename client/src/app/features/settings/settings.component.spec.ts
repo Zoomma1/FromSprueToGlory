@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from '../../core/services/api.service';
 import { SettingsComponent } from './settings.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { computed } from '@angular/core';
 import { Item } from '../../classes/items';
 
@@ -73,6 +73,12 @@ describe('SettingsComponent', () => {
       component.exportJSON();
       expect(snackBarSpy.open).toHaveBeenCalledWith('Downloaded pile-of-shame.json', 'OK', { duration: 3000 });
     });
+
+    it('should show error snackbar when JSON export fails', () => {
+      apiSpy.exportItems.and.returnValue(throwError(() => new Error('fail')));
+      component.exportJSON();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to export JSON', 'OK', { duration: 3000 });
+    });
   });
 
   describe('Export csv', () => {
@@ -84,6 +90,12 @@ describe('SettingsComponent', () => {
     it('should show a snackbar on successful export', () => {
       component.exportCSV();
       expect(snackBarSpy.open).toHaveBeenCalledWith('Downloaded pile-of-shame.csv', 'OK', { duration: 3000 });
+    });
+
+    it('should show error snackbar when CSV export fails', () => {
+      apiSpy.exportItems.and.returnValue(throwError(() => new Error('fail')));
+      component.exportCSV();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to export CSV', 'OK', { duration: 3000 });
     });
   });
 
@@ -115,6 +127,13 @@ describe('SettingsComponent', () => {
       component.deleteAccount();
       expect(snackBarSpy.open).toHaveBeenCalledWith('Account deleted', 'OK', { duration: 3000 });
       expect(authServiceStub.logout).toHaveBeenCalled();
+    });
+
+    it('should show error snackbar when deleteAccount fails', () => {
+      apiSpy.deleteAccount.and.returnValue(throwError(() => new Error('fail')));
+      spyOn(window, 'confirm').and.returnValue(true);
+      component.deleteAccount();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to delete account', 'OK', { duration: 3000 });
     });
   });
 

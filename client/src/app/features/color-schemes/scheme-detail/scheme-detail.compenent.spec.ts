@@ -406,4 +406,26 @@ describe('SchemeDetailComponent', () => {
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/color-schemes']);
     });
   });
+
+  describe('Error Handling', () => {
+    it('should show error snackbar when loadScheme fails', () => {
+      apiServiceSpy.getColorScheme.and.returnValue(throwError(() => new Error('fail')));
+      component.loadScheme('1');
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load scheme', 'OK', { duration: 3000 });
+    });
+
+    it('should show error snackbar when getTechniques fails in enterEditMode', () => {
+      component.scheme.set(mockScheme);
+      apiServiceSpy.getTechniques.and.returnValue(throwError(() => new Error('fail')));
+      component.enterEditMode();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load techniques', 'OK', { duration: 3000 });
+    });
+
+    it('should show error snackbar when getPaints fails in enterEditMode', () => {
+      component.scheme.set(mockScheme);
+      apiServiceSpy.getPaints.and.returnValue(throwError(() => new Error('fail')));
+      component.enterEditMode();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load paints', 'OK', { duration: 3000 });
+    });
+  });
 });

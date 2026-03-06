@@ -341,5 +341,20 @@ describe('ItemsListComponent', () => {
             component.deleteItem(mockItems[0]);
             expect(apiSpy.deleteItem).not.toHaveBeenCalled();
         });
+
+        it('should show error snackbar when deleteItem fails', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            apiSpy.deleteItem.and.returnValue(throwError(() => new Error('fail')));
+            component.deleteItem(mockItems[0]);
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to delete item', 'OK', { duration: 3000 });
+        });
+  });
+
+  describe('Error Handling', () => {
+        it('should show error snackbar when loadItems fails', () => {
+            apiSpy.getItems.and.returnValue(throwError(() => new Error('fail')));
+            component.loadItems();
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load items', 'OK', { duration: 3000 });
+        });
   });
 });

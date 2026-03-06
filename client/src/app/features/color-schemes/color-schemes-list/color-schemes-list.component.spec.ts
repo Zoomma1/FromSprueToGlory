@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ColorScheme } from '../../../classes/color-scheme';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 describe('ColorSchemesListComponent', () => {
   let component: ColorSchemesListComponent;
@@ -217,5 +217,28 @@ describe('ColorSchemesListComponent', () => {
       expect(window.confirm).toHaveBeenCalledWith(`Delete "${scheme.name}"?`);
       expect(apiServiceSpy.deleteColorScheme).not.toHaveBeenCalled();
     })
+  });
+
+  describe('Error Handling', () => {
+    it('should show error snackbar when loadSchemes fails', () => {
+      apiServiceSpy.getColorSchemes.and.returnValue(throwError(() => new Error('fail')));
+      component.loadSchemes();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load color schemes', 'OK', { duration: 3000 });
+    });
+
+    it('should show error snackbar when getColorScheme fails in openEditDialog', () => {
+      const scheme = mockColorSchemes[0];
+      apiServiceSpy.getColorScheme.and.returnValue(throwError(() => new Error('fail')));
+      component.openEditDialog(scheme);
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load scheme details', 'OK', { duration: 3000 });
+    });
+
+    it('should show error snackbar when deleteColorScheme fails', () => {
+      spyOn(window, 'confirm').and.returnValue(true);
+      const scheme = mockColorSchemes[0];
+      apiServiceSpy.deleteColorScheme.and.returnValue(throwError(() => new Error('fail')));
+      component.deleteScheme(scheme);
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to delete scheme', 'OK', { duration: 3000 });
+    });
   });
 });

@@ -65,7 +65,12 @@ export class SchemeDetailComponent implements OnInit {
     loadScheme(id?: string) {
         const schemeId = id || this.scheme()?.id;
         if (!schemeId) return;
-        this.api.getColorScheme(schemeId).subscribe((s) => this.scheme.set(s));
+        this.api.getColorScheme(schemeId).subscribe({
+            next: (s) => this.scheme.set(s),
+            error: () => {
+                this.snackBar.open('Failed to load scheme', 'OK', { duration: 3000 });
+            },
+        });
     }
 
     // ─── View Mode ────────────────────────────────
@@ -79,8 +84,18 @@ export class SchemeDetailComponent implements OnInit {
         if (!s) return;
 
         // Load reference data
-        this.api.getTechniques().subscribe((t) => this.techniques.set(t));
-        this.api.getPaints().subscribe((p) => this.paints.set(p));
+        this.api.getTechniques().subscribe({
+            next: (t) => this.techniques.set(t),
+            error: () => {
+                this.snackBar.open('Failed to load techniques', 'OK', { duration: 3000 });
+            },
+        });
+        this.api.getPaints().subscribe({
+            next: (p) => this.paints.set(p),
+            error: () => {
+                this.snackBar.open('Failed to load paints', 'OK', { duration: 3000 });
+            },
+        });
 
         // Populate form
         this.form.patchValue({ name: s.name, description: s.description });

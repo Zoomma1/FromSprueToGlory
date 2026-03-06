@@ -333,5 +333,21 @@ describe('SchemeFormDialogComponent', () => {
             expect(apiSpy.createColorScheme).not.toHaveBeenCalled();
         });
     });
+
+    describe('Error Handling', () => {
+        it('should show error snackbar when getTechniques fails', async () => {
+            await createComponent({ mode: 'create' }, (api) => {
+                api.getTechniques.and.returnValue(throwError(() => new Error('fail')));
+            });
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load techniques', 'OK', { duration: 3000 });
+        });
+
+        it('should show error snackbar when getPaints fails', async () => {
+            await createComponent({ mode: 'create' }, (api) => {
+                api.getPaints.and.returnValue(throwError(() => new Error('fail')));
+            });
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load paints', 'OK', { duration: 3000 });
+        });
+    });
 });
 

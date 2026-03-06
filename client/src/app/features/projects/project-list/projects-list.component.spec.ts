@@ -179,6 +179,23 @@ describe('ProjectsListComponent', () => {
             component.deleteProject(mockProjects[0], event);
             expect(confirmSpy).toHaveBeenCalledWith('Delete project "Kill Team"?');
         });
+
+        it('should show error snackbar when deleteProject fails', () => {
+            apiSpy.deleteProject.and.returnValue(throwError(() => new Error('fail')));
+            spyOn(window, 'confirm').and.returnValue(true);
+            const event = new Event('click');
+
+            component.deleteProject(mockProjects[0], event);
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to delete project', 'OK', { duration: 3000 });
+        });
+    });
+
+    describe('Error Handling', () => {
+        it('should show error snackbar when loadProjects fails', () => {
+            apiSpy.getProjects.and.returnValue(throwError(() => new Error('fail')));
+            component.loadProjects();
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load projects', 'OK', { duration: 3000 });
+        });
     });
 });
 

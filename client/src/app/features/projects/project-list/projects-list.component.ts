@@ -38,7 +38,12 @@ export class ProjectsListComponent implements OnInit {
     }
 
     loadProjects() {
-        this.api.getProjects().subscribe((p) => this.projects.set(p));
+        this.api.getProjects().subscribe({
+            next: (p) => this.projects.set(p),
+            error: () => {
+                this.snackBar.open('Failed to load projects', 'OK', { duration: 3000 });
+            },
+        });
     }
 
     openCreateDialog() {
@@ -61,9 +66,14 @@ export class ProjectsListComponent implements OnInit {
     deleteProject(project: Project, event: Event) {
         event.stopPropagation();
         if (!confirm(`Delete project "${project.name}"?`)) return;
-        this.api.deleteProject(project.id).subscribe(() => {
-            this.snackBar.open('Project deleted', 'OK', { duration: 3000 });
-            this.loadProjects();
+        this.api.deleteProject(project.id).subscribe({
+            next: () => {
+                this.snackBar.open('Project deleted', 'OK', { duration: 3000 });
+                this.loadProjects();
+            },
+            error: () => {
+                this.snackBar.open('Failed to delete project', 'OK', { duration: 3000 });
+            },
         });
     }
 }

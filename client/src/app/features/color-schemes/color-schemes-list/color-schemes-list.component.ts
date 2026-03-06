@@ -38,7 +38,12 @@ export class ColorSchemesListComponent implements OnInit {
     }
 
     loadSchemes() {
-        this.api.getColorSchemes().subscribe((s) => this.schemes.set(s));
+        this.api.getColorSchemes().subscribe({
+            next: (s) => this.schemes.set(s),
+            error: () => {
+                this.snackBar.open('Failed to load color schemes', 'OK', { duration: 3000 });
+            },
+        });
     }
 
     openCreateDialog() {
@@ -50,20 +55,30 @@ export class ColorSchemesListComponent implements OnInit {
     }
 
     openEditDialog(scheme: ColorScheme) {
-        this.api.getColorScheme(scheme.id).subscribe((full) => {
-            const ref = this.dialog.open(SchemeFormDialogComponent, {
-                width: '700px', maxWidth: '95vw',
-                data: { mode: 'edit', scheme: full },
-            });
-            ref.afterClosed().subscribe((result) => { if (result) this.loadSchemes(); });
+        this.api.getColorScheme(scheme.id).subscribe({
+            next: (full) => {
+                const ref = this.dialog.open(SchemeFormDialogComponent, {
+                    width: '700px', maxWidth: '95vw',
+                    data: { mode: 'edit', scheme: full },
+                });
+                ref.afterClosed().subscribe((result) => { if (result) this.loadSchemes(); });
+            },
+            error: () => {
+                this.snackBar.open('Failed to load scheme details', 'OK', { duration: 3000 });
+            },
         });
     }
 
     deleteScheme(scheme: ColorScheme) {
         if (!confirm(`Delete "${scheme.name}"?`)) return;
-        this.api.deleteColorScheme(scheme.id).subscribe(() => {
-            this.snackBar.open('Scheme deleted', 'OK', { duration: 3000 });
-            this.loadSchemes();
+        this.api.deleteColorScheme(scheme.id).subscribe({
+            next: () => {
+                this.snackBar.open('Scheme deleted', 'OK', { duration: 3000 });
+                this.loadSchemes();
+            },
+            error: () => {
+                this.snackBar.open('Failed to delete scheme', 'OK', { duration: 3000 });
+            },
         });
     }
 }
