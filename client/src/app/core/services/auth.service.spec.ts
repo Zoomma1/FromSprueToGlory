@@ -102,11 +102,11 @@ describe('AuthService', () => {
             expect(JSON.parse(localStorage.getItem('user')!)).toEqual({ id: 'u1', email: 'test@test.com' });
         });
 
-        it('should handle signup failure gracefully', async () => {
+        it('should reject on signup failure', async () => {
             const promise = service.signup('test@test.com', 'password123');
             const req = httpMock.expectOne(`${baseUrl}/auth/signup`);
             req.flush(null, { status: 400, statusText: 'Bad Request' });
-            await promise;
+            await expectAsync(promise).toBeRejected();
 
             expect(service.isLoggedIn()).toBeFalse();
             expect(service.user()).toBeNull();
@@ -141,11 +141,11 @@ describe('AuthService', () => {
             expect(localStorage.getItem('refreshToken')).toBe('refresh-456');
         });
 
-        it('should handle login failure gracefully', async () => {
+        it('should reject on login failure', async () => {
             const promise = service.login('test@test.com', 'password123');
             const req = httpMock.expectOne(`${baseUrl}/auth/login`);
             req.flush(null, { status: 401, statusText: 'Unauthorized' });
-            await promise;
+            await expectAsync(promise).toBeRejected();
 
             expect(service.isLoggedIn()).toBeFalse();
             expect(service.user()).toBeNull();
