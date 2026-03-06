@@ -155,6 +155,32 @@ describe(ProjectDetailComponent.name, () => {
             expect(apiSpy.getProject).toHaveBeenCalledTimes(2);
         }));
 
+        it('should set item status back to previous status', fakeAsync(() => {
+            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'WANT');
+            tick();
+
+            expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('item-2', 'WANT');
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Status → Want', 'OK', { duration: 2000 });
+            expect(apiSpy.getProject).toHaveBeenCalledTimes(2);
+        }));
+
+        it('should set item status to same status', fakeAsync(() => {
+            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'WIP');
+            tick();
+
+            expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
+            expect(snackBarSpy.open).not.toHaveBeenCalled();
+        }));
+
+        it('should set item status with intermediate status', fakeAsync(() => {
+            component.setStatus({ id: 'item-1', status: 'WANT' } as never, 'FINISHED');
+            tick();
+
+            expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('item-1', 'FINISHED');
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Status → Finished', 'OK', { duration: 2000 });
+            expect(apiSpy.getProject).toHaveBeenCalledTimes(2);
+        }));
+
         it('should not call API if setting to same status', () => {
             apiSpy.changeItemStatus.calls.reset();
             component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'WIP');
@@ -167,6 +193,14 @@ describe(ProjectDetailComponent.name, () => {
             tick();
 
             expect(snackBarSpy.open).toHaveBeenCalledWith('Failed', 'OK', { duration: 3000 });
+        }));
+
+        it('should handle error with message when changing status', fakeAsync(() => {
+            apiSpy.changeItemStatus.and.returnValue(throwError(() => ({ error: { error: 'Custom error' } })));
+            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'FINISHED');
+            tick();
+
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Custom error', 'OK', { duration: 3000 });
         }));
     });
 
