@@ -2,15 +2,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ItemsListComponent } from './items-list.component';
 import { ApiService } from '../../../core/services/api.service';
 import { Item } from '../../../classes/items';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 describe('ItemsListComponent', () => {
     let component: ItemsListComponent;
     let fixture: ComponentFixture<ItemsListComponent>;
     let apiSpy: jasmine.SpyObj<ApiService>;
+    let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
+    let dialogSpy: jasmine.SpyObj<MatDialog>;
 
     const mockItems: Item[] = [
         {
@@ -66,8 +71,13 @@ describe('ItemsListComponent', () => {
     ];
 
     beforeEach(async () => {
-        apiSpy = jasmine.createSpyObj('ApiService', ['getItems', 'deleteItem']);
+        apiSpy = jasmine.createSpyObj('ApiService', ['getItems', 'deleteItem', 'changeItemStatus']);
         apiSpy.getItems.and.returnValue(of(mockItems));
+        apiSpy.changeItemStatus.and.returnValue(of(mockItems[0]));
+
+        snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+
+        dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
 
         await TestBed.configureTestingModule({
             imports: [ItemsListComponent, NoopAnimationsModule],
@@ -75,7 +85,17 @@ describe('ItemsListComponent', () => {
                 provideRouter([]),
                 provideHttpClient(),
                 { provide: ApiService, useValue: apiSpy },
+                { provide: MatSnackBar, useValue: snackBarSpy },
+                { provide: MatDialog, useValue: dialogSpy },
             ],
+        }).overrideComponent(ItemsListComponent, {
+              set: {
+                providers: [
+                    { provide: ApiService, useValue: apiSpy },
+                    { provide: MatSnackBar, useValue: snackBarSpy },
+                    { provide: MatDialog, useValue: dialogSpy },
+                ]
+              }
         }).compileComponents();
 
         fixture = TestBed.createComponent(ItemsListComponent);
@@ -98,6 +118,142 @@ describe('ItemsListComponent', () => {
             expect(component.items().length).toBe(2);
             expect(component.items()[0].name).toBe('Intercessors');
         });
+
+        it('should apply status filter when loading items', () => {
+            apiSpy.getItems.calls.reset();
+            component.statusFilter = 'BOUGHT';
+            component.loadItems();
+
+            expect(apiSpy.getItems).toHaveBeenCalledWith({ status: 'BOUGHT' });
+        });
+
+        it('should load all items when status filter is cleared', () => {
+            apiSpy.getItems.calls.reset();
+            component.statusFilter = '';
+            component.loadItems();
+
+            expect(apiSpy.getItems).toHaveBeenCalledWith({});
+        })
+
+        it('should handle empty items list', () => {
+            apiSpy.getItems.and.returnValue(of([]));
+            component.loadItems();
+            expect(component.items().length).toBe(0);
+        })
+
+        it('should set isMobile based on BreakpointObserver', () => {
+            const breakpointObserver = TestBed.inject(BreakpointObserver);
+            spyOn(breakpointObserver, 'observe').and.returnValue(of({ matches: true, breakpoints: {} }));
+
+            component.ngOnInit();
+            expect(component.isMobile()).toBeTrue();
+        })
+    });
+
+    describe('Status helpers', () => {
+        it('should return correct status label', () => {
+            expect(component.getStatusLabel('WANT')).toBe('Want');
+            expect(component.getStatusLabel('BOUGHT')).toBe('Bought');
+            expect(component.getStatusLabel('ASSEMBLED')).toBe('Assembled');
+            expect(component.getStatusLabel('WIP')).toBe('WIP');
+            expect(component.getStatusLabel('FINISHED')).toBe('Finished');
+            expect(component.getStatusLabel('UNKNOWN')).toBe('UNKNOWN');
+        });
+
+        it('should determine if item can advance status', () => {
+            expect(component.canAdvance(mockItems[0])).toBeTrue();
+            expect(component.canAdvance(mockItems[1])).toBeTrue();
+        });
+
+        it('should determine if item can revert status', () => {
+            expect(component.canRevert(mockItems[0])).toBeFalse();
+            expect(component.canRevert(mockItems[1])).toBeTrue();
+        });
+
+        it('should set the status with setStatus', () => {
+            component.setStatus(mockItems[0], 'BOUGHT');
+            expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('1', 'BOUGHT');
+
+            apiSpy.changeItemStatus.calls.reset();
+            component.setStatus(mockItems[1], 'WANT');
+            expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('2', 'WANT');
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Status → Want', 'OK', { duration: 2000 });
+        });
+
+        it('should not call changeItemStatus if new status is same as current', () => {
+            component.setStatus(mockItems[0], 'WANT');
+            expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
+
+            component.setStatus(mockItems[1], 'BOUGHT');
+            expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
+            expect(snackBarSpy.open).not.toHaveBeenCalled();
+        })
+    });
+
+    describe('Status change', () => {
+        it('should call changeItemStatus with next status', () => {
+          component.nextStatus(mockItems[0]);
+          expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('1', 'BOUGHT');
+
+          apiSpy.changeItemStatus.calls.reset();
+          component.nextStatus(mockItems[1]);
+          expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('2', 'ASSEMBLED');
+        });
+
+        it('should call changeItemStatus with previous status', () => {
+          component.prevStatus(mockItems[1]);
+          expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('2', 'WANT');
+
+          apiSpy.changeItemStatus.calls.reset();
+          component.prevStatus(mockItems[0]);
+          expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
+        });
+
+        it('should not call changeItemStatus if status cannot advance', () => {
+          const finishedItem = { ...mockItems[1], status: 'FINISHED' } as Item;
+          component.nextStatus(finishedItem);
+          expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
+        });
+
+        it('should not call changeItemStatus if status cannot revert', () => {
+          component.prevStatus(mockItems[0]);
+          component.prevStatus(mockItems[0]);
+          expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
+        });
+
+        it('should reload items after status change to next status', () => {
+          component.nextStatus(mockItems[0]);
+          expect(apiSpy.getItems).toHaveBeenCalledTimes(2);
+        });
+
+        it('should reload items after status change to previous status', () => {
+          component.prevStatus(mockItems[1]);
+          expect(apiSpy.getItems).toHaveBeenCalledTimes(2);
+        });
+
+        it('should show snackbar on successful status change to next status', () => {
+          component.nextStatus(mockItems[0]);
+          expect(snackBarSpy.open).toHaveBeenCalledWith('Status → Bought', 'OK', { duration: 2000 });
+        });
+
+        it('should show snackbar on successful status change to previous status', () => {
+          component.prevStatus(mockItems[1]);
+          expect(snackBarSpy.open).toHaveBeenCalledWith('Status → Want', 'OK', { duration: 2000 });
+        });
+
+        it('should show snackbar on status change error with specific message', () => {
+          snackBarSpy.open.calls.reset();
+          apiSpy.changeItemStatus.and.returnValue(throwError(() => ({ error: { error: 'Custom error message' } })));
+          component.nextStatus(mockItems[0]);
+          expect(snackBarSpy.open).toHaveBeenCalledWith('Custom error message', 'OK', { duration: 3000 });
+        });
+
+        it('should show snackbar on status change error', () => {
+          snackBarSpy.open.calls.reset();
+          apiSpy.changeItemStatus.and.returnValue(throwError(() => ({})));
+          component.nextStatus(mockItems[0]);
+          expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to change status', 'OK', { duration: 3000 });
+        });
     });
 
     describe('Filtering', () => {
@@ -109,4 +265,56 @@ describe('ItemsListComponent', () => {
             expect(apiSpy.getItems).toHaveBeenCalledWith({ status: 'BOUGHT' });
         });
     });
+
+  describe('Dialog form', () => {
+        it('should open create dialog and reload after close', () => {
+            apiSpy.getItems.calls.reset();
+            dialogSpy.open.and.returnValue({ afterClosed: () => of(true) } as unknown as ReturnType<MatDialog['open']>);
+
+            component.openCreateDialog();
+            expect(dialogSpy.open).toHaveBeenCalled();
+            expect(apiSpy.getItems).toHaveBeenCalledTimes(1);
+        });
+
+        it('should open create dialog and not reload if result is falsy', () => {
+            apiSpy.getItems.calls.reset();
+            dialogSpy.open.and.returnValue({ afterClosed: () => of(false) } as unknown as ReturnType<MatDialog['open']>);
+
+            component.openCreateDialog();
+            expect(dialogSpy.open).toHaveBeenCalled();
+            expect(apiSpy.getItems).not.toHaveBeenCalled();
+        });
+
+        it('should open edit dialog, populate it and reload after close', () => {
+            apiSpy.getItems.calls.reset();
+            dialogSpy.open.and.returnValue({ afterClosed: () => of(true) } as unknown as ReturnType<MatDialog['open']>);
+
+            component.openEditDialog(mockItems[0]);
+            expect(dialogSpy.open).toHaveBeenCalledWith(jasmine.any(Function), jasmine.objectContaining({
+                data: jasmine.objectContaining({
+                    mode: 'edit',
+                    item: mockItems[0],
+                }),
+            }));
+            expect(apiSpy.getItems).toHaveBeenCalledTimes(1);
+        });
+  });
+
+  describe('Item deletion', () => {
+        it('should call deleteItem and reload items on success', () => {
+            apiSpy.getItems.calls.reset();
+            spyOn(window, 'confirm').and.returnValue(true);
+            apiSpy.deleteItem.and.returnValue(of(undefined));
+
+            component.deleteItem(mockItems[0]);
+            expect(apiSpy.deleteItem).toHaveBeenCalledWith('1');
+            expect(apiSpy.getItems).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not call deleteItem if user cancels', () => {
+            spyOn(window, 'confirm').and.returnValue(false);
+            component.deleteItem(mockItems[0]);
+            expect(apiSpy.deleteItem).not.toHaveBeenCalled();
+        });
+  });
 });
