@@ -251,6 +251,17 @@ describe('ApiService', () => {
             req.flush(mockData);
         });
 
+        it('should not add query params when filters are empty', (done) => {
+            service.getItems({}).subscribe(data => {
+                expect(data).toEqual(mockItems);
+                done();
+            });
+
+            const req = httpMock.expectOne(`${baseUrl}/items`);
+            expect(req.request.params.keys().length).toBe(0);
+            req.flush(mockItems);
+        });
+
         it('should create a new item', (done) => {
             const payload = { name: 'New Item' };
             const mockResponse: Item = { id: 'item-1', ...payload } as Item;
@@ -549,6 +560,34 @@ describe('ApiService', () => {
             const req = httpMock.expectOne(`${baseUrl}/export/items`);
             req.flush(mockData);
         });
+
+        it('should have correct content type for JSON export', (done) => {
+            const mockData: Item[] = [{ id: 'item-1', name: 'Item 1' } as Item];
+
+            service.exportItems('json').subscribe(data => {
+                expect(data).toEqual(mockData);
+                done();
+            });
+
+            const req = httpMock.expectOne(`${baseUrl}/export/items`);
+            expect(req.request.method).toBe('GET');
+            expect(req.request.responseType).toBe('json');
+            req.flush(mockData);
+        });
+
+          it('should have correct content type for CSV export', (done) => {
+            const mockData = 'id,name\nitem-1,Item 1';
+
+            service.exportItems('csv').subscribe(data => {
+                expect(data).toEqual(mockData);
+                done();
+            });
+
+            const req = httpMock.expectOne(`${baseUrl}/export/items?format=csv`);
+            expect(req.request.method).toBe('GET');
+            expect(req.request.responseType).toBe('text');
+            req.flush(mockData);
+          });
     });
 
     describe('Account', () => {

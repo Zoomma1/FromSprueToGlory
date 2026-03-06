@@ -55,15 +55,22 @@ export class AuthService {
 
     async signup(email: string, password: string): Promise<void> {
         const res = await firstValueFrom(this.http
-              .post<AuthResponse>(`${environment.apiUrl}/auth/signup`, { email, password }));
-        console.log('res : ', res);
+              .post<AuthResponse>(`${environment.apiUrl}/auth/signup`, { email, password })).catch(
+            (error) => {
+                console.error('Signup failed', error);
+            }
+        );
         if (res) this.storeTokens(res);
     }
 
     async login(email: string, password: string): Promise<void> {
         const res = await this.http
             .post<AuthResponse>(`${environment.apiUrl}/auth/login`, { email, password })
-            .toPromise();
+            .toPromise().catch(
+                (error) => {
+                    console.error('Login failed', error);
+                }
+          );
         if (res) this.storeTokens(res);
     }
 

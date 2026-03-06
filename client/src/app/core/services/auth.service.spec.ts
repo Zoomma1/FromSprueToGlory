@@ -17,10 +17,13 @@ describe('AuthService', () => {
         user: { id: 'u1', email: 'test@test.com' }
     };
 
-    beforeEach(() => {
+    function setup(localStorageEntries: Record<string, string> = {}) {
         localStorage.clear();
+        Object.entries(localStorageEntries).forEach(([k, v]) => localStorage.setItem(k, v));
+
         routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
+        TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [
                 provideHttpClient(),
@@ -29,9 +32,10 @@ describe('AuthService', () => {
                 { provide: Router, useValue: routerSpy }
             ]
         });
+
         service = TestBed.inject(AuthService);
         httpMock = TestBed.inject(HttpTestingController);
-    });
+    }
 
     afterEach(() => {
         httpMock.verify();
@@ -39,19 +43,40 @@ describe('AuthService', () => {
     });
 
     describe('Service initialization', () => {
-        it('should create the service', () => {
-            expect(service).toBeTruthy();
+        describe('with empty localStorage', () => {
+            beforeEach(() => setup());
+
+            it('should create the service', () => {
+                expect(service).toBeTruthy();
+            });
+
+            it('should start logged out', () => {
+                expect(service.isLoggedIn()).toBeFalse();
+                expect(service.user()).toBeNull();
+                expect(service.accessToken).toBeNull();
+                expect(service.refreshToken).toBeNull();
+            });
         });
 
-        it('should start logged out when localStorage is empty', () => {
-            expect(service.isLoggedIn()).toBeFalse();
-            expect(service.user()).toBeNull();
-            expect(service.accessToken).toBeNull();
-            expect(service.refreshToken).toBeNull();
+        describe('with existing tokens in localStorage', () => {
+            beforeEach(() => setup({
+                accessToken: 'access-123',
+                refreshToken: 'refresh-456',
+                user: JSON.stringify({ id: 'u1', email: 'test@test.com' })
+            }));
+
+            it('should restore logged-in state', () => {
+                expect(service.isLoggedIn()).toBeTrue();
+                expect(service.user()).toEqual({ id: 'u1', email: 'test@test.com' });
+                expect(service.accessToken).toBe('access-123');
+                expect(service.refreshToken).toBe('refresh-456');
+            });
         });
     });
 
     describe('signup', () => {
+        beforeEach(() => setup());
+
         it('should POST to /auth/signup and store tokens', async () => {
             const promise = service.signup('test@test.com', 'password123');
             const req = httpMock.expectOne(`${baseUrl}/auth/signup`);
@@ -76,9 +101,23 @@ describe('AuthService', () => {
             expect(localStorage.getItem('refreshToken')).toBe('refresh-456');
             expect(JSON.parse(localStorage.getItem('user')!)).toEqual({ id: 'u1', email: 'test@test.com' });
         });
+
+        it('should handle signup failure gracefully', async () => {
+            const promise = service.signup('test@test.com', 'password123');
+            const req = httpMock.expectOne(`${baseUrl}/auth/signup`);
+            req.flush(null, { status: 400, statusText: 'Bad Request' });
+            await promise;
+
+            expect(service.isLoggedIn()).toBeFalse();
+            expect(service.user()).toBeNull();
+            expect(service.accessToken).toBeNull();
+            expect(service.refreshToken).toBeNull();
+        });
     });
 
     describe('login', () => {
+        beforeEach(() => setup());
+
         it('should POST to /auth/login and store tokens', async () => {
             const promise = service.login('test@test.com', 'password123');
             const req = httpMock.expectOne(`${baseUrl}/auth/login`);
@@ -101,9 +140,23 @@ describe('AuthService', () => {
             expect(localStorage.getItem('accessToken')).toBe('access-123');
             expect(localStorage.getItem('refreshToken')).toBe('refresh-456');
         });
+
+        it('should handle login failure gracefully', async () => {
+            const promise = service.login('test@test.com', 'password123');
+            const req = httpMock.expectOne(`${baseUrl}/auth/login`);
+            req.flush(null, { status: 401, statusText: 'Unauthorized' });
+            await promise;
+
+            expect(service.isLoggedIn()).toBeFalse();
+            expect(service.user()).toBeNull();
+            expect(service.accessToken).toBeNull();
+            expect(service.refreshToken).toBeNull();
+        });
     });
 
     describe('refresh', () => {
+        beforeEach(() => setup());
+
         it('should POST to /auth/refresh with the stored refreshToken', async () => {
             localStorage.setItem('refreshToken', 'refresh-456');
             const promise = service.refresh();
@@ -116,6 +169,17 @@ describe('AuthService', () => {
             expect(token).toBe('new-access');
             expect(localStorage.getItem('accessToken')).toBe('new-access');
             expect(localStorage.getItem('refreshToken')).toBe('new-refresh');
+        });
+
+        it('should update signals on successful refresh', async () => {
+            localStorage.setItem('refreshToken', 'refresh-456');
+            const promise = service.refresh();
+            const req = httpMock.expectOne(`${baseUrl}/auth/refresh`);
+            req.flush({ accessToken: 'new-access', refreshToken: 'new-refresh' });
+            await promise;
+
+            expect(service.accessToken).toBe('new-access');
+            expect(service.isLoggedIn()).toBeTrue();
         });
 
         it('should return null when no refreshToken exists', async () => {
@@ -140,6 +204,8 @@ describe('AuthService', () => {
     });
 
     describe('logout', () => {
+        beforeEach(() => setup());
+
         it('should POST to /auth/logout when a refreshToken exists', () => {
             localStorage.setItem('refreshToken', 'refresh-456');
             service.logout();

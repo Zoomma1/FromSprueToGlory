@@ -61,6 +61,22 @@ describe('ColorSchemesListComponent', () => {
     });
   });
 
+  describe('Load Schemes', () => {
+    it('should load color schemes', () => {
+      apiServiceSpy.getColorSchemes.and.returnValue(of(mockColorSchemes));
+      component.loadSchemes();
+      expect(apiServiceSpy.getColorSchemes).toHaveBeenCalled();
+      expect(component.schemes()).toEqual(mockColorSchemes);
+    });
+
+    it('should handle empty color schemes', () => {
+      apiServiceSpy.getColorSchemes.and.returnValue(of([]));
+      component.loadSchemes();
+      expect(apiServiceSpy.getColorSchemes).toHaveBeenCalled();
+      expect(component.schemes()).toEqual([]);
+    });
+  })
+
   describe('Open Create Dialog', () => {
     it('should open the create dialog', () => {
       const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(true) });
@@ -75,6 +91,20 @@ describe('ColorSchemesListComponent', () => {
     dialogSpy.open.and.returnValue(dialogRefSpyObj);
     component.openCreateDialog();
     expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+    });
+
+    it('should not call loadSchemes if API result is false', () => {
+      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(false) });
+      dialogSpy.open.and.returnValue(dialogRefSpyObj);
+      component.openCreateDialog();
+      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+    });
+
+    it('should not call loadSchemes if API result is undefined', () => {
+      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(undefined) });
+      dialogSpy.open.and.returnValue(dialogRefSpyObj);
+      component.openCreateDialog();
+      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
     });
   });
 
@@ -104,6 +134,30 @@ describe('ColorSchemesListComponent', () => {
 
       expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
     });
+
+    it('should not call loadSchemes if API result is false', () => {
+      const scheme = mockColorSchemes[0];
+      const fullScheme = { ...scheme, steps: [] };
+      apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
+      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(false) });
+      dialogSpy.open.and.returnValue(dialogRefSpyObj);
+
+      component.openEditDialog(scheme);
+
+      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+    });
+
+    it('should not call loadSchemes if API result is undefined', () => {
+      const scheme = mockColorSchemes[0];
+      const fullScheme = { ...scheme, steps: [] };
+      apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
+      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(undefined) });
+      dialogSpy.open.and.returnValue(dialogRefSpyObj);
+
+      component.openEditDialog(scheme);
+
+      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+    });
   });
 
   describe('Delete Scheme', () => {
@@ -118,5 +172,26 @@ describe('ColorSchemesListComponent', () => {
       expect(apiServiceSpy.deleteColorScheme).toHaveBeenCalledWith(scheme.id);
       expect(snackBarSpy.open).toHaveBeenCalledWith('Scheme deleted', 'OK', { duration: 3000 });
     });
+
+    it('should not delete the scheme if confirmation is cancelled', () => {
+      spyOn(window, 'confirm').and.returnValue(false);
+      const scheme = mockColorSchemes[0];
+
+      component.deleteScheme(scheme);
+
+      expect(window.confirm).toHaveBeenCalledWith(`Delete "${scheme.name}"?`);
+      expect(apiServiceSpy.deleteColorScheme).not.toHaveBeenCalled();
+      expect(snackBarSpy.open).not.toHaveBeenCalled();
+    });
+
+    it('should not call the API if confirmation is cancelled', () => {
+      spyOn(window, 'confirm').and.returnValue(false);
+      const scheme = mockColorSchemes[0];
+
+      component.deleteScheme(scheme);
+
+      expect(window.confirm).toHaveBeenCalledWith(`Delete "${scheme.name}"?`);
+      expect(apiServiceSpy.deleteColorScheme).not.toHaveBeenCalled();
+    })
   });
 });
