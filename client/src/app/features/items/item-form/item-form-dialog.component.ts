@@ -49,14 +49,12 @@ export class ItemFormDialogComponent implements OnInit {
 
     form: FormGroup = this.fb.group({
         name: ['', Validators.required],
-        gameSystem: [null, Validators.required], // will hold object {id,name}
+        gameSystem: [null, Validators.required],
         faction: [null, Validators.required],
-        model: [null],
         status: ['WANT'],
         quantity: [1, [Validators.required, Validators.min(1)]],
         price: [null],
         currency: ['EUR'],
-        store: [''],
         notes: [''],
         project: [null],
     });
@@ -100,7 +98,6 @@ export class ItemFormDialogComponent implements OnInit {
             this.editSavedIds = {
                 gameSystemId: item.gameSystemId,
                 factionId: item.factionId,
-                modelId: item.modelId,
                 projectId: item.projectId,
             };
 
@@ -110,7 +107,6 @@ export class ItemFormDialogComponent implements OnInit {
                 quantity: item.quantity,
                 price: item.price,
                 currency: item.currency,
-                store: item.store,
                 notes: item.notes,
             });
 
@@ -181,12 +177,10 @@ export class ItemFormDialogComponent implements OnInit {
             name: v.name,
             gameSystemId: v.gameSystem?.id,
             factionId: v.faction?.id,
-            modelId: v.model?.id ?? null,
             status: v.status,
             quantity: v.quantity,
             price: v.price,
             currency: v.currency,
-            store: v.store,
             notes: v.notes,
             projectId: v.project?.id ?? null,
         };

@@ -32,8 +32,8 @@
     </ng-container>
 
     <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let item">
+        <th mat-header-cell *matHeaderCellDef class="status-col-header">Status</th>
+        <td mat-cell *matCellDef="let item" class="status-col-cell">
             <div class="status-controls">
                 <button mat-icon-button class="status-nav-btn" [disabled]="!canRevert(item)" (click)="prevStatus(item)"
                     matTooltip="Previous status">
@@ -55,6 +55,11 @@
                 </button>
             </div>
         </td>
+    </ng-container>
+
+    <ng-container matColumnDef="project">
+        <th mat-header-cell *matHeaderCellDef>Project</th>
+        <td mat-cell *matCellDef="let item">{{ item.project?.name }}</td>
     </ng-container>
 
     <ng-container matColumnDef="quantity">

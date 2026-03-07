@@ -26,16 +26,6 @@
             </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Model / Unit (optional)</mat-label>
-            <mat-select formControlName="model">
-                <mat-option [value]="null">— None —</mat-option>
-                @for (model of models(); track model.id) {
-                <mat-option [value]="model">{{ model.name }}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Status</mat-label>
@@ -69,11 +59,6 @@
                 </mat-select>
             </mat-form-field>
         </div>
-
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Store</mat-label>
-            <input matInput formControlName="store">
-        </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
             <mat-label>Project (optional)</mat-label>

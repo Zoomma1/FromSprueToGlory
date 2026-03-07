@@ -71,6 +71,19 @@
     }
 }
 
+.status-col-header {
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+.status-col-cell {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    height: inherit;
+}
+
 .status-controls {
     display: inline-flex;
     align-items: center;
