@@ -84,8 +84,8 @@ export class ApiService {
     }
 
     //  Color Schemes
-    getColorSchemes(): Observable<ColorScheme[]> {
-        return this.http.get<ColorScheme[]>(`${this.baseUrl}/color-schemes`);
+    getColorSchemes(): Observable<ColorSchemeFull[]> {
+        return this.http.get<ColorSchemeFull[]>(`${this.baseUrl}/color-schemes`);
     }
 
     getColorScheme(id: string): Observable<ColorSchemeFull> {

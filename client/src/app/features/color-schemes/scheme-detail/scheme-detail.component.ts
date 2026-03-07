@@ -1,7 +1,7 @@
 // ──────────────────────────────────────────────────────────
 // 🎨 Scheme Detail Component — View/Edit Color Scheme
 // ──────────────────────────────────────────────────────────
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -43,6 +43,14 @@ export class SchemeDetailComponent implements OnInit {
     editMode = signal(false);
     showDetails = signal(false);
     saving = signal(false);
+    areaFilter = signal<string>('');
+
+    filteredSteps = computed(() => {
+        const steps = this.scheme()?.steps || [];
+        const filter = this.areaFilter();
+        if (!filter) return steps;
+        return steps.filter(s => s.area === filter);
+    });
 
     techniques = signal<Technique[]>([]);
     paints = signal<Paint[]>([]);
@@ -76,6 +84,19 @@ export class SchemeDetailComponent implements OnInit {
     // ─── View Mode ────────────────────────────────
     toggleDetails() {
         this.showDetails.update((v) => !v);
+    }
+
+    get availableAreas(): string[] {
+      const allAreas = this.scheme()?.steps?.map(s => s.area) || [];
+      return Array.from(new Set(allAreas));
+    }
+
+    setAreaFilter(area: string) {
+        this.areaFilter.set(area);
+    }
+
+    resetAreaFilter() {
+        this.areaFilter.set('');
     }
 
     // ─── Edit Mode ────────────────────────────────
