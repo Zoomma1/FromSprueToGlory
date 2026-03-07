@@ -428,4 +428,81 @@ describe('SchemeDetailComponent', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load paints', 'OK', { duration: 3000 });
     });
   });
+
+  describe('Area filter', () => {
+    describe('Initialisation', () => {
+      it('should have no area filter by default', () => {
+        expect(component.availableAreas).toEqual([]);
+        expect(component.areaFilter()).toBe('')
+      });
+
+      it('should load unique areas from steps into area filter options', () => {
+        const schemeWithAreas: ColorSchemeFull = {
+          ...mockScheme,
+          steps: [
+            { orderIndex: 1, area: 'Head', techniqueId: 't1', paintId: 'p1', notes: null },
+            { orderIndex: 2, area: 'Body', techniqueId: 't2', paintId: 'p2', notes: null },
+            { orderIndex: 3, area: 'Head', techniqueId: 't3', paintId: 'p3', notes: null },
+          ],
+        };
+        component.scheme.set(schemeWithAreas);
+        expect(component.availableAreas).toEqual(['Head', 'Body']);
+      });
+
+      it('should return empty array for area filter options if there are no steps', () => {
+        component.scheme.set({ ...mockScheme, steps: [] });
+        expect(component.availableAreas).toEqual([]);
+      });
+    });
+
+    describe('Filtering', () => {
+      it('should return all steps when no area filter is set', () => {
+        component.scheme.set(mockSchemeWithSteps);
+        component.setAreaFilter('');
+        expect(component.filteredSteps()).toEqual(mockSteps);
+      });
+
+      it('should return only steps matching the area filter', () => {
+        component.scheme.set(mockSchemeWithSteps);
+        component.setAreaFilter('Base');
+        expect(component.areaFilter()).toBe('Base');
+        expect(component.filteredSteps()).toEqual([mockSteps[0]]);
+      });
+
+      it('should return empty array when no steps match the area filter', () => {
+        component.scheme.set(mockSchemeWithSteps);
+        component.setAreaFilter('Nonexistent Area');
+        expect(component.filteredSteps()).toEqual([]);
+      });
+    });
+
+    describe('Reset', () => {
+      it('should reset area filter to show all steps', () => {
+        component.scheme.set(mockSchemeWithSteps);
+        component.setAreaFilter('Base');
+        component.resetAreaFilter();
+        expect(component.filteredSteps()).toEqual(mockSteps);
+      });
+    });
+
+    describe('Edge Cases', () => {
+      it('should return empty areas when scheme has no steps', () => {
+        component.scheme.set({ ...mockScheme, steps: [] });
+        expect(component.availableAreas).toEqual([]);
+      });
+
+      it('should not have duplicate areas in filter options', () => {
+        const schemeWithDuplicateAreas: ColorSchemeFull = {
+          ...mockScheme,
+          steps: [
+            { orderIndex: 1, area: 'Arm', techniqueId: 't1', paintId: 'p1', notes: null },
+            { orderIndex: 2, area: 'Arm', techniqueId: 't2', paintId: 'p2', notes: null },
+            { orderIndex: 3, area: 'Leg', techniqueId: 't3', paintId: 'p3', notes: null },
+          ],
+        };
+        component.scheme.set(schemeWithDuplicateAreas);
+        expect(component.availableAreas).toEqual(['Arm', 'Leg']);
+      });
+    })
+  });
 });

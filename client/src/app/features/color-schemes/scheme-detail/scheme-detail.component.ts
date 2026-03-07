@@ -43,6 +43,7 @@ export class SchemeDetailComponent implements OnInit {
     editMode = signal(false);
     showDetails = signal(false);
     saving = signal(false);
+    areaFilter = signal<string>('');
 
     techniques = signal<Technique[]>([]);
     paints = signal<Paint[]>([]);
@@ -76,6 +77,26 @@ export class SchemeDetailComponent implements OnInit {
     // ─── View Mode ────────────────────────────────
     toggleDetails() {
         this.showDetails.update((v) => !v);
+    }
+
+
+    get availableAreas(): string[] {
+      const allAreas = this.scheme()?.steps?.map(s => s.area) || [];
+      return Array.from(new Set(allAreas));
+    }
+
+    filteredSteps() {
+        const filter = this.areaFilter();
+        if (!filter) return this.scheme()?.steps || [];
+        return (this.scheme()?.steps || []).filter(s => s.area === filter);
+    }
+
+    setAreaFilter(area: string) {
+        this.areaFilter.set(area);
+    }
+
+    resetAreaFilter() {
+        this.areaFilter.set('');
     }
 
     // ─── Edit Mode ────────────────────────────────

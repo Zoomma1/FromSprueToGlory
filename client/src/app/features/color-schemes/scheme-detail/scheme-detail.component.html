@@ -34,10 +34,27 @@
         {{ showDetails() ? 'Hide details' : 'Show details' }}
     </button>
 
-    <h2 class="section-title">Steps ({{ s.steps?.length || 0 }})</h2>
+    <h2 class="section-title">Steps ({{ filteredSteps().length }}/{{ s.steps?.length || 0 }})</h2>
+
+    @if (availableAreas.length > 1) {
+    <mat-chip-listbox class="area-filter" aria-label="Filter by area">
+        <mat-chip-option
+            [selected]="areaFilter() === ''"
+            (click)="resetAreaFilter()">
+            All
+        </mat-chip-option>
+        @for (area of availableAreas; track area) {
+        <mat-chip-option
+            [selected]="areaFilter() === area"
+            (click)="setAreaFilter(area)">
+            {{ area }}
+        </mat-chip-option>
+        }
+    </mat-chip-listbox>
+    }
 
     <div class="steps-list">
-        @for (step of s.steps; track $index; let i = $index) {
+        @for (step of filteredSteps(); track $index; let i = $index) {
         <mat-card class="step-card">
             <div class="step-number">{{ i + 1 }}</div>
             <div class="step-body">
