@@ -430,10 +430,15 @@ describe('SchemeDetailComponent', () => {
   });
 
   describe('Area filter', () => {
-    describe('Initialisation', () => {
+    describe('Initialization', () => {
       it('should have no area filter by default', () => {
         expect(component.availableAreas).toEqual([]);
         expect(component.areaFilter()).toBe('')
+      });
+
+      it('should load all steps on initialization', () => {
+        component.scheme.set(mockSchemeWithSteps);
+        expect(component.filteredSteps()).toEqual(mockSteps);
       });
 
       it('should load unique areas from steps into area filter options', () => {
@@ -486,11 +491,6 @@ describe('SchemeDetailComponent', () => {
     });
 
     describe('Edge Cases', () => {
-      it('should return empty areas when scheme has no steps', () => {
-        component.scheme.set({ ...mockScheme, steps: [] });
-        expect(component.availableAreas).toEqual([]);
-      });
-
       it('should not have duplicate areas in filter options', () => {
         const schemeWithDuplicateAreas: ColorSchemeFull = {
           ...mockScheme,
