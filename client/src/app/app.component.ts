@@ -4,8 +4,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from './core/services/auth.service';
 
 @Component({
@@ -24,6 +25,8 @@ export class AppComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   private breakpointObserver = inject(BreakpointObserver);
   authService = inject(AuthService);
+  private matIconRegistry = inject(MatIconRegistry);
+  private sanitizer = inject(DomSanitizer);
 
   navItems = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
@@ -37,6 +40,8 @@ export class AppComponent implements OnInit {
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe((result) => { this.isMobile.set(result.matches); });
+
+    this.matIconRegistry.addSvgIcon('app-icon', this.sanitizer.bypassSecurityTrustResourceUrl('assets/app-icon.svg'));
   }
 
   onNavClick(): void {
