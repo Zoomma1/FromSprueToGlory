@@ -9,10 +9,10 @@
 // ──────────────────────────────────────────────────────────
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import * as request from 'supertest';
+import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
-import * as bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { verifyRefreshToken } from '../src/utils/jwt';
 
 // ─── Mock Prisma ─────────────────────────────────────────
