@@ -13,6 +13,7 @@ export class ColorScheme {
     referencePhotoKey!: string | null;
     createdAt!: string;
     updatedAt!: string;
+    _count?: { steps: number; items: number };
 }
 
 export interface ColorSchemeStepPayload {

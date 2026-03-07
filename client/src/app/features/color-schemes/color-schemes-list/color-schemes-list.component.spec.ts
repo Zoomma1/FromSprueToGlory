@@ -14,8 +14,8 @@ describe('ColorSchemesListComponent', () => {
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
 
   const mockColorSchemes: ColorScheme[] = [
-    { id: '1', name: 'Scheme 1', description: 'Description 1' } as ColorScheme,
-    { id: '2', name: 'Scheme 2', description: 'Description 2' } as ColorScheme,
+    { id: '1', name: 'Scheme 1', description: 'Description 1', _count: { steps: 3, items: 1 } } as ColorScheme,
+    { id: '2', name: 'Scheme 2', description: 'Description 2', _count: { steps: 5, items: 2 } } as ColorScheme,
   ];
 
   beforeEach(() => {
@@ -67,6 +67,13 @@ describe('ColorSchemesListComponent', () => {
       component.loadSchemes();
       expect(apiServiceSpy.getColorSchemes).toHaveBeenCalled();
       expect(component.schemes()).toEqual(mockColorSchemes);
+    });
+
+    it('should display step count from _count.steps', () => {
+      apiServiceSpy.getColorSchemes.and.returnValue(of(mockColorSchemes));
+      component.loadSchemes();
+      expect(component.schemes()[0]._count?.steps).toEqual(3);
+      expect(component.schemes()[1]._count?.steps).toEqual(5);
     });
 
     it('should handle empty color schemes', () => {
