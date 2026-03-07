@@ -7,8 +7,9 @@
 // ──────────────────────────────────────────────────────────
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import request from 'supertest';
+import * as request from 'supertest';
 import { createApp } from '../src/app';
+import { prisma } from '../src/lib/prisma';
 
 // ─── Mock Prisma ─────────────────────────────────────────
 vi.mock('../src/lib/prisma', () => ({
@@ -19,8 +20,6 @@ vi.mock('../src/lib/prisma', () => ({
         refreshToken: { create: vi.fn(), findUnique: vi.fn(), delete: vi.fn(), deleteMany: vi.fn() },
     },
 }));
-
-import { prisma } from '../src/lib/prisma';
 
 const app = createApp();
 

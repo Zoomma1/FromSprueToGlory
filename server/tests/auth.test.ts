@@ -1,13 +1,19 @@
 // ──────────────────────────────────────────────────────────
-// 🧪 Auth Route Tests
+// Auth Route Tests
 // ──────────────────────────────────────────────────────────
-// Tests for signup, login, refresh, and logout endpoints.
-// Prisma + bcrypt are mocked so no live database is needed.
+// Covers every branch of the auth routes:
+//   POST /api/auth/signup  — validation, duplicate email, success
+//   POST /api/auth/login   — validation, unknown user, wrong password, success
+//   POST /api/auth/refresh — missing token, invalid JWT, not in DB, expired, success
+//   POST /api/auth/logout  — with and without a refresh token
 // ──────────────────────────────────────────────────────────
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import request from 'supertest';
+import * as request from 'supertest';
 import { createApp } from '../src/app';
+import { prisma } from '../src/lib/prisma';
+import * as bcrypt from 'bcryptjs';
+import { verifyRefreshToken } from '../src/utils/jwt';
 
 // ─── Mock Prisma ─────────────────────────────────────────
 vi.mock('../src/lib/prisma', () => ({
@@ -41,10 +47,6 @@ vi.mock('../src/utils/jwt', () => ({
     verifyRefreshToken: vi.fn(),
 }));
 
-import { prisma } from '../src/lib/prisma';
-import bcrypt from 'bcryptjs';
-import { verifyRefreshToken } from '../src/utils/jwt';
-
 const app = createApp();
 
 describe('Auth Routes', () => {
@@ -52,15 +54,15 @@ describe('Auth Routes', () => {
         vi.clearAllMocks();
     });
 
-    // ─── SIGNUP ──────────────────────────────────
+    // ─── SIGNUP ──────────────────────────────────────────
     describe('POST /api/auth/signup', () => {
-        it('should create a user and return tokens', async () => {
-            (prisma.user.findUnique as any).mockResolvedValue(null);
-            (prisma.user.create as any).mockResolvedValue({
+        it('creates a user and returns tokens with 201', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+            (prisma.user.create as ReturnType<typeof vi.fn>).mockResolvedValue({
                 id: 'user-1',
                 email: 'test@example.com',
             });
-            (prisma.refreshToken.create as any).mockResolvedValue({});
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             const res = await request(app)
                 .post('/api/auth/signup')
@@ -72,8 +74,20 @@ describe('Auth Routes', () => {
             expect(res.body.user.email).toBe('test@example.com');
         });
 
-        it('should return 409 for duplicate email', async () => {
-            (prisma.user.findUnique as any).mockResolvedValue({
+        it('stores the refresh token in the database after signup', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+            (prisma.user.create as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 'user-1', email: 'test@example.com' });
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            await request(app)
+                .post('/api/auth/signup')
+                .send({ email: 'test@example.com', password: 'password123' });
+
+            expect(prisma.refreshToken.create).toHaveBeenCalledTimes(1);
+        });
+
+        it('returns 409 when the email is already registered', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
                 id: 'user-1',
                 email: 'test@example.com',
             });
@@ -86,26 +100,50 @@ describe('Auth Routes', () => {
             expect(res.body.error).toBe('Email already registered');
         });
 
-        it('should return 400 for invalid input', async () => {
+        it('returns 400 for an invalid email format', async () => {
             const res = await request(app)
                 .post('/api/auth/signup')
-                .send({ email: 'bad', password: 'short' });
+                .send({ email: 'not-an-email', password: 'password123' });
 
             expect(res.status).toBe(400);
             expect(res.body.error).toBe('Validation failed');
         });
+
+        it('returns 400 when password is shorter than 8 characters', async () => {
+            const res = await request(app)
+                .post('/api/auth/signup')
+                .send({ email: 'test@example.com', password: 'short' });
+
+            expect(res.status).toBe(400);
+            expect(res.body.error).toBe('Validation failed');
+        });
+
+        it('returns 400 when both email and password are missing', async () => {
+            const res = await request(app).post('/api/auth/signup').send({});
+
+            expect(res.status).toBe(400);
+            expect(res.body.error).toBe('Validation failed');
+        });
+
+        it('returns 400 when email is missing', async () => {
+            const res = await request(app)
+                .post('/api/auth/signup')
+                .send({ password: 'password123' });
+
+            expect(res.status).toBe(400);
+        });
     });
 
-    // ─── LOGIN ───────────────────────────────────
+    // ─── LOGIN ────────────────────────────────────────────
     describe('POST /api/auth/login', () => {
-        it('should login with valid credentials', async () => {
-            (prisma.user.findUnique as any).mockResolvedValue({
+        it('logs in with valid credentials and returns tokens', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
                 id: 'user-1',
                 email: 'test@example.com',
                 passwordHash: '$hashed$',
             });
-            (bcrypt.compare as any).mockResolvedValue(true);
-            (prisma.refreshToken.create as any).mockResolvedValue({});
+            (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             const res = await request(app)
                 .post('/api/auth/login')
@@ -114,15 +152,16 @@ describe('Auth Routes', () => {
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('accessToken');
             expect(res.body).toHaveProperty('refreshToken');
+            expect(res.body.user.email).toBe('test@example.com');
         });
 
-        it('should return 401 for wrong password', async () => {
-            (prisma.user.findUnique as any).mockResolvedValue({
+        it('returns 401 when the password is wrong', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
                 id: 'user-1',
                 email: 'test@example.com',
                 passwordHash: '$hashed$',
             });
-            (bcrypt.compare as any).mockResolvedValue(false);
+            (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(false);
 
             const res = await request(app)
                 .post('/api/auth/login')
@@ -132,31 +171,65 @@ describe('Auth Routes', () => {
             expect(res.body.error).toBe('Invalid email or password');
         });
 
-        it('should return 401 for unknown email', async () => {
-            (prisma.user.findUnique as any).mockResolvedValue(null);
+        it('returns 401 when the email is not registered', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
             const res = await request(app)
                 .post('/api/auth/login')
-                .send({ email: 'no@user.com', password: 'password123' });
+                .send({ email: 'nobody@example.com', password: 'password123' });
 
             expect(res.status).toBe(401);
+            expect(res.body.error).toBe('Invalid email or password');
+        });
+
+        it('returns 400 for an invalid email format', async () => {
+            const res = await request(app)
+                .post('/api/auth/login')
+                .send({ email: 'not-valid', password: 'password123' });
+
+            expect(res.status).toBe(400);
+            expect(res.body.error).toBe('Validation failed');
+        });
+
+        it('returns 400 when password is too short', async () => {
+            const res = await request(app)
+                .post('/api/auth/login')
+                .send({ email: 'test@example.com', password: 'short' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('stores a new refresh token in the DB after login', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                email: 'test@example.com',
+                passwordHash: '$hashed$',
+            });
+            (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            await request(app)
+                .post('/api/auth/login')
+                .send({ email: 'test@example.com', password: 'password123' });
+
+            expect(prisma.refreshToken.create).toHaveBeenCalledTimes(1);
         });
     });
 
-    // ─── REFRESH ─────────────────────────────────
+    // ─── REFRESH ──────────────────────────────────────────
     describe('POST /api/auth/refresh', () => {
-        it('should return new tokens for valid refresh token', async () => {
-            (verifyRefreshToken as any).mockReturnValue({
+        it('returns new tokens for a valid refresh token', async () => {
+            (verifyRefreshToken as ReturnType<typeof vi.fn>).mockReturnValue({
                 userId: 'user-1',
                 email: 'test@example.com',
             });
-            (prisma.refreshToken.findUnique as any).mockResolvedValue({
+            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
                 id: 'rt-1',
                 token: 'valid-refresh-token',
-                expiresAt: new Date(Date.now() + 86400000), // future
+                expiresAt: new Date(Date.now() + 86400000),
             });
-            (prisma.refreshToken.delete as any).mockResolvedValue({});
-            (prisma.refreshToken.create as any).mockResolvedValue({});
+            (prisma.refreshToken.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             const res = await request(app)
                 .post('/api/auth/refresh')
@@ -167,19 +240,85 @@ describe('Auth Routes', () => {
             expect(res.body).toHaveProperty('refreshToken');
         });
 
-        it('should return 400 for missing refresh token', async () => {
-            const res = await request(app)
+        it('rotates the token: deletes old and creates new', async () => {
+            (verifyRefreshToken as ReturnType<typeof vi.fn>).mockReturnValue({
+                userId: 'user-1',
+                email: 'test@example.com',
+            });
+            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'rt-1',
+                token: 'valid-refresh-token',
+                expiresAt: new Date(Date.now() + 86400000),
+            });
+            (prisma.refreshToken.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            await request(app)
                 .post('/api/auth/refresh')
-                .send({});
+                .send({ refreshToken: 'valid-refresh-token' });
+
+            expect(prisma.refreshToken.delete).toHaveBeenCalledWith({ where: { id: 'rt-1' } });
+            expect(prisma.refreshToken.create).toHaveBeenCalledTimes(1);
+        });
+
+        it('returns 400 when refreshToken field is missing', async () => {
+            const res = await request(app).post('/api/auth/refresh').send({});
 
             expect(res.status).toBe(400);
         });
+
+        it('returns 401 when the JWT signature is invalid', async () => {
+            (verifyRefreshToken as ReturnType<typeof vi.fn>).mockImplementationOnce(() => {
+                throw new Error('invalid signature');
+            });
+
+            const res = await request(app)
+                .post('/api/auth/refresh')
+                .send({ refreshToken: 'tampered-token' });
+
+            expect(res.status).toBe(401);
+            expect(res.body.error).toBe('Invalid refresh token');
+        });
+
+        it('returns 401 when the token is not found in the database', async () => {
+            (verifyRefreshToken as ReturnType<typeof vi.fn>).mockReturnValue({
+                userId: 'user-1',
+                email: 'test@example.com',
+            });
+            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+
+            const res = await request(app)
+                .post('/api/auth/refresh')
+                .send({ refreshToken: 'unknown-token' });
+
+            expect(res.status).toBe(401);
+            expect(res.body.error).toBe('Invalid or expired refresh token');
+        });
+
+        it('returns 401 when the token is expired', async () => {
+            (verifyRefreshToken as ReturnType<typeof vi.fn>).mockReturnValue({
+                userId: 'user-1',
+                email: 'test@example.com',
+            });
+            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'rt-1',
+                token: 'expired-token',
+                expiresAt: new Date(Date.now() - 1000), // in the past
+            });
+
+            const res = await request(app)
+                .post('/api/auth/refresh')
+                .send({ refreshToken: 'expired-token' });
+
+            expect(res.status).toBe(401);
+            expect(res.body.error).toBe('Invalid or expired refresh token');
+        });
     });
 
-    // ─── LOGOUT ──────────────────────────────────
+    // ─── LOGOUT ───────────────────────────────────────────
     describe('POST /api/auth/logout', () => {
-        it('should return logged out message', async () => {
-            (prisma.refreshToken.deleteMany as any).mockResolvedValue({});
+        it('deletes the refresh token and returns 200', async () => {
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             const res = await request(app)
                 .post('/api/auth/logout')
@@ -187,6 +326,18 @@ describe('Auth Routes', () => {
 
             expect(res.status).toBe(200);
             expect(res.body.message).toBe('Logged out');
+            expect(prisma.refreshToken.deleteMany).toHaveBeenCalledWith({
+                where: { token: 'some-token' },
+            });
+        });
+
+        it('returns 200 even when no refreshToken is provided in the body', async () => {
+            const res = await request(app).post('/api/auth/logout').send({});
+
+            expect(res.status).toBe(200);
+            expect(res.body.message).toBe('Logged out');
+            // No token to delete — deleteMany should not be called
+            expect(prisma.refreshToken.deleteMany).not.toHaveBeenCalled();
         });
     });
 });
