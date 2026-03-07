@@ -161,22 +161,3 @@ npm run import -- --type paints --file data/paints.json
 
 See `server/prisma/schema.prisma` for the full schema.
 
-## 📐 Milestones
-
-- **M0** ✅ Setup repo + Angular Material + Docker Postgres + PWA
-- **M1** ✅ Prisma schema + migration + seed MVP
-- **M2** ✅ Import scripts (CSV/JSON)
-- **M3** ✅ API reference endpoints
-- **M4** ✅ API Items CRUD + tags + history
-- **M5** ✅ API ColorSchemes + step builder backend
-- **M6** ✅ Auth JWT + refresh + security
-- **M7** ✅ S3 media (pre-signed upload/read)
-- **M8** ✅ Angular Auth + routing + guards
-- **M9** ✅ UI Items + dashboard + export
-- **M10** ✅ UI Kanban + history tracking
-- **M11** ✅ UI Color Schemes (step builder)
-- **M12** ✅ Tests + lint + polish
-
-## 📄 License
-
-Private project — learning purposes.

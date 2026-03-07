@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="4" fill="#1a1a2e"/>
+
+  <!-- ═══ SPRUE FRAME (cadre rectangulaire) ═══ -->
+  <!-- Outer frame -->
+  <rect x="3" y="16" width="26" height="13" rx="1.5" fill="none" stroke="#8fa3b8" stroke-width="1.8"/>
+
+  <!-- Vertical spine (tige centrale verticale) -->
+  <line x1="16" y1="16" x2="16" y2="29" stroke="#8fa3b8" stroke-width="1.2"/>
+
+  <!-- Horizontal mid bar -->
+  <line x1="3" y1="22.5" x2="29" y2="22.5" stroke="#8fa3b8" stroke-width="1.2"/>
+
+  <!-- Tiges vers les pièces - quadrant haut gauche -->
+  <line x1="7" y1="16" x2="7" y2="19" stroke="#8fa3b8" stroke-width="0.9"/>
+  <line x1="11" y1="16" x2="11" y2="19.5" stroke="#8fa3b8" stroke-width="0.9"/>
+
+  <!-- Tiges quadrant haut droit -->
+  <line x1="21" y1="16" x2="21" y2="19" stroke="#8fa3b8" stroke-width="0.9"/>
+  <line x1="25" y1="16" x2="25" y2="19.5" stroke="#8fa3b8" stroke-width="0.9"/>
+
+  <!-- Tiges quadrant bas gauche -->
+  <line x1="7" y1="22.5" x2="7" y2="26" stroke="#8fa3b8" stroke-width="0.9"/>
+  <line x1="11" y1="22.5" x2="11" y2="25.5" stroke="#8fa3b8" stroke-width="0.9"/>
+
+  <!-- Tiges quadrant bas droit -->
+  <line x1="21" y1="22.5" x2="21" y2="26" stroke="#8fa3b8" stroke-width="0.9"/>
+  <line x1="25" y1="22.5" x2="25" y2="25.5" stroke="#8fa3b8" stroke-width="0.9"/>
+
+  <!-- Pièces (petites formes au bout des tiges) -->
+  <!-- Haut gauche -->
+  <rect x="5" y="18.5" width="4" height="2.5" rx="0.6" fill="#6b8299"/>
+  <rect x="9" y="19" width="3.5" height="2" rx="0.6" fill="#6b8299"/>
+
+  <!-- Haut droit -->
+  <rect x="19" y="18.5" width="4" height="2.5" rx="0.6" fill="#6b8299"/>
+  <rect x="23.5" y="19" width="3" height="2" rx="0.6" fill="#6b8299"/>
+
+  <!-- Bas gauche -->
+  <rect x="5" y="25.5" width="4" height="2.5" rx="0.6" fill="#6b8299"/>
+  <rect x="9" y="25" width="3.5" height="2" rx="0.6" fill="#6b8299"/>
+
+  <!-- Bas droit -->
+  <rect x="19" y="25.5" width="4" height="2.5" rx="0.6" fill="#6b8299"/>
+  <rect x="23.5" y="25" width="3" height="2" rx="0.6" fill="#6b8299"/>
+
+  <!-- ═══ CROWN (au dessus du sprue) ═══ -->
+  <!-- Base band -->
+  <rect x="8" y="10" width="16" height="4" rx="1" fill="#c9a84c"/>
+  <rect x="8" y="13.2" width="16" height="1" rx="0.5" fill="#a07828"/>
+
+  <!-- 5 spikes -->
+  <polygon points="9,10  10.6,6.5  12.2,10"  fill="#c9a84c"/>
+  <polygon points="12,10 13.6,7.5 15.2,10"   fill="#c9a84c"/>
+  <polygon points="14.4,10 16,5.5 17.6,10"   fill="#e0bc5a"/>
+  <polygon points="16.8,10 18.4,7.5 20,10"   fill="#c9a84c"/>
+  <polygon points="19.8,10 21.4,6.5 23,10"   fill="#c9a84c"/>
+
+  <!-- Gems sur la bande -->
+  <circle cx="11" cy="11.8" r="0.9" fill="#c0392b"/>
+  <circle cx="16" cy="11.8" r="1.1" fill="#e74c3c"/>
+  <circle cx="21" cy="11.8" r="0.9" fill="#c0392b"/>
+</svg>
