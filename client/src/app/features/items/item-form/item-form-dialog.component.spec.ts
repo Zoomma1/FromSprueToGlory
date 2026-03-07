@@ -30,7 +30,7 @@ describe('ItemFormDialogComponent', () => {
         spySetup?: (api: jasmine.SpyObj<ApiService>) => void,
     ) {
         apiSpy = jasmine.createSpyObj('ApiService', [
-            'getGameSystems', 'getFactions', 'getModels', 'getProjects', 'createItem', 'updateItem'
+            'getGameSystems', 'getFactions', 'getProjects', 'createItem', 'updateItem'
         ]);
         snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
         dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
@@ -38,7 +38,6 @@ describe('ItemFormDialogComponent', () => {
         apiSpy.getGameSystems.and.returnValue(of([]));
         apiSpy.getProjects.and.returnValue(of([]));
         apiSpy.getFactions.and.returnValue(of([]));
-        apiSpy.getModels.and.returnValue(of([]));
 
         if (spySetup) spySetup(apiSpy);
 
@@ -117,24 +116,20 @@ describe('ItemFormDialogComponent', () => {
             expect(component.form.get('project')?.value).toBeNull();
         });
 
-        it('should cascade load factions and models when initializing in edit mode', async () => {
+        it('should cascade load factions when initializing in edit mode', async () => {
             const fakeGameSystems = [{ id: 'gs-1', name: 'Warhammer 40k', slug: 'warhammer-40k', factionCount: 0 }];
             const fakeFactions = [{ id: 'f-1', name: 'Space Marines', gameSystemId: 'gs-1', gameSystem: { name: 'Warhammer 40k', slug: 'Warhammer 40k' } }];
-            const fakeModels = [{ id: 'm-1', name: 'Tactical Marine', factionId: 'f-1', faction: { name: 'Space Marines', slug: 'Space Marines' }, pointsCost: 15 }];
 
             await createComponent(
-                { mode: 'edit', item: { ...mockItem[0], gameSystemId: 'gs-1', factionId: 'f-1', modelId: 'm-1' } },
+                { mode: 'edit', item: { ...mockItem[0], gameSystemId: 'gs-1', factionId: 'f-1' } },
                 (api) => {
                     api.getGameSystems.and.returnValue(of(fakeGameSystems));
                     api.getFactions.and.returnValue(of(fakeFactions));
-                    api.getModels.and.returnValue(of(fakeModels));
                 },
             );
 
             expect(apiSpy.getFactions).toHaveBeenCalledWith('gs-1');
-            expect(apiSpy.getModels).toHaveBeenCalledWith('f-1');
             expect(component.form.get('faction')?.value).toEqual(jasmine.objectContaining({ id: 'f-1', name: 'Space Marines' }));
-            expect(component.form.get('model')?.value).toEqual(jasmine.objectContaining({ id: 'm-1', name: 'Tactical Marine' }));
         });
     });
 
@@ -164,50 +159,14 @@ describe('ItemFormDialogComponent', () => {
             expect(component.factions()).toEqual(fakeFactions);
         });
 
-        it('should reset faction and model when game system changes', () => {
-            component.form.patchValue({ faction: { id: 'f-1', name: 'Old' }, model: { id: 'm-1', name: 'Old Model' } });
+        it('should reset faction when game system changes', () => {
+            component.form.patchValue({ faction: { id: 'f-1', name: 'Old' }});
 
             component.onGameSystemChange('gs-2');
 
             expect(component.form.get('faction')?.value).toBeNull();
-            expect(component.form.get('model')?.value).toBeNull();
         });
     });
-
-  describe('Faction change', () => {
-        it('should load models when onFactionChange is called', () => {
-            const fakeModels = [{ id: 'm-1', name: 'Tactical Marine', factionId: 'f-1', faction: { name: 'Space Marines', slug: 'Space Marines' }, pointsCost: 15 }];
-            apiSpy.getModels.and.returnValue(of(fakeModels));
-
-            component.onFactionChange('f-1');
-
-            expect(apiSpy.getModels).toHaveBeenCalledWith('f-1');
-            expect(component.models()).toEqual(fakeModels);
-        });
-
-        it('should reset model when faction changes', () => {
-            component.form.patchValue({ model: { id: 'm-1', name: 'Old Model' } });
-
-            component.onFactionChange('f-2');
-
-            expect(component.form.get('model')?.value).toBeNull();
-        });
-
-        it('should resolve saved model id when loading models on faction change in edit mode', async () => {
-            const fakeModels = [{ id: 'm-1', name: 'Tactical Marine', factionId: 'f-1', faction: { name: 'Space Marines', slug: 'Space Marines' }, pointsCost: 15 }];
-
-            await createComponent(
-                { mode: 'edit', item: { ...mockItem[0], factionId: 'f-1', modelId: 'm-1' } },
-            );
-            apiSpy.getModels.and.returnValue(of(fakeModels));
-
-            (component as unknown as Record<string, unknown>)['editSavedIds'] = { modelId: 'm-1' };
-            component.onFactionChange('f-1');
-
-            expect(apiSpy.getModels).toHaveBeenCalledWith('f-1');
-            expect(component.form.get('model')?.value).toEqual(jasmine.objectContaining({ id: 'm-1', name: 'Tactical Marine' }));
-        });
-  });
 
   describe('Save', () => {
         it('should call createItem on save when in create mode', () => {

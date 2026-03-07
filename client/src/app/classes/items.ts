@@ -18,7 +18,6 @@ export class Item {
     createdAt!: string;
     updatedAt!: string;
 
-    // Nested relations (we no longer keep the raw *Id fields here)
     gameSystem?: {
         id: string;
         name: string;
@@ -29,12 +28,6 @@ export class Item {
         id: string;
         name: string;
     };
-
-    model?: {
-        id: string;
-        name: string;
-        pointsCost?: number | null;
-    } | null;
 
     colorScheme?: {
         id: string;
@@ -55,10 +48,6 @@ export class Item {
         return this.faction?.id;
     }
 
-    get modelId(): string | undefined | null {
-        return this.model?.id ?? null;
-    }
-
     get projectId(): string | undefined | null {
         return this.project?.id ?? null;
     }
@@ -70,13 +59,11 @@ export interface ItemPayload {
     name: string;
     gameSystemId: string;
     factionId: string;
-    modelId?: string | null;
     points?: number | null;
     quantity?: number;
     purchaseDate?: string | null;
     price?: number | null;
     currency?: string;
-    store?: string | null;
     notes?: string | null;
     tags?: string[];
     status?: ItemStatus;

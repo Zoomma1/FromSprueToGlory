@@ -46,7 +46,7 @@ export class ItemsListComponent implements OnInit {
     items = signal<Item[]>([]);
     isMobile = signal(false);
     statusFilter = '';
-    displayedColumns = ['name', 'faction', 'status', 'quantity', 'actions'];
+    displayedColumns = ['name', 'faction', 'status', 'project', 'quantity', 'actions'];
 
     readonly statuses = STATUS_ORDER;
     readonly statusLabels = STATUS_LABELS;
