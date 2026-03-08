@@ -2,15 +2,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SchemeDetailComponent } from './scheme-detail.component';
 import { ApiService } from '../../../core/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of, throwError } from 'rxjs';
 import { ColorSchemeFull, ColorScheme, ColorSchemeStepFull } from '../../../classes/color-scheme';
+import { Paint } from '../../../classes/paint';
 
 describe('SchemeDetailComponent', () => {
   let component: SchemeDetailComponent;
   let fixture: ComponentFixture<SchemeDetailComponent>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
   let routerSpy: jasmine.SpyObj<Router>;
+  let locationSpy: jasmine.SpyObj<Location>;
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
 
   const mockSteps: ColorSchemeStepFull[] = [
@@ -37,10 +40,20 @@ describe('SchemeDetailComponent', () => {
       'updateColorScheme', 'createColorScheme', 'deleteColorScheme',
     ]);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    locationSpy = jasmine.createSpyObj('Location', ['back']);
     snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     const activatedRouteStub = {
-      snapshot: { paramMap: { get: (key: string) => key === 'id' ? '1' : null } }
+      snapshot: {
+        paramMap: {
+          get: (key: string) => {
+            if (key === 'mode') return 'view';
+            if (key === 'id') return '1';
+            return null;
+          }
+        },
+        url: [{ path: 'color-schemes' }, { path: 'view' }, { path: '1' }],
+      }
     };
 
     TestBed.configureTestingModule({
@@ -49,6 +62,7 @@ describe('SchemeDetailComponent', () => {
         { provide: ApiService, useValue: apiServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: Router, useValue: routerSpy },
+        { provide: Location, useValue: locationSpy },
         { provide: MatSnackBar, useValue: snackBarSpy },
       ]
     }).overrideComponent(SchemeDetailComponent, {
@@ -57,6 +71,7 @@ describe('SchemeDetailComponent', () => {
           { provide: ApiService, useValue: apiServiceSpy },
           { provide: ActivatedRoute, useValue: activatedRouteStub },
           { provide: Router, useValue: routerSpy },
+          { provide: Location, useValue: locationSpy },
           { provide: MatSnackBar, useValue: snackBarSpy },
         ]
       }
@@ -295,7 +310,7 @@ describe('SchemeDetailComponent', () => {
         name: 'Test Scheme (copy)',
         description: 'A test color scheme',
       }));
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/color-schemes', '2']);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/color-schemes', 'view', '2']);
     });
 
     it('should show Duplicated snackBar on success', () => {
@@ -401,9 +416,34 @@ describe('SchemeDetailComponent', () => {
   });
 
   describe('Go Back', () => {
-    it('should navigate back to the color schemes list', () => {
+    it('should call location.back() when not in edit mode', () => {
+      component.editMode.set(false);
       component.goBack();
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/color-schemes']);
+      expect(locationSpy.back).toHaveBeenCalled();
+    });
+
+    it('should call location.back() when in edit mode with no dirty form', () => {
+      component.editMode.set(true);
+      component.goBack();
+      expect(locationSpy.back).toHaveBeenCalled();
+    });
+
+    it('should warn and go back when user confirms leaving with unsaved changes', () => {
+      component.editMode.set(true);
+      component.form.markAsDirty();
+      spyOn(window, 'confirm').and.returnValue(true);
+      component.goBack();
+      expect(window.confirm).toHaveBeenCalledWith('You have unsaved changes. Leave without saving?');
+      expect(locationSpy.back).toHaveBeenCalled();
+    });
+
+    it('should not go back when user cancels leaving with unsaved changes', () => {
+      component.editMode.set(true);
+      component.form.markAsDirty();
+      spyOn(window, 'confirm').and.returnValue(false);
+      component.goBack();
+      expect(window.confirm).toHaveBeenCalledWith('You have unsaved changes. Leave without saving?');
+      expect(locationSpy.back).not.toHaveBeenCalled();
     });
   });
 
@@ -504,5 +544,115 @@ describe('SchemeDetailComponent', () => {
         expect(component.availableAreas).toEqual(['Arm', 'Leg']);
       });
     })
+  });
+
+  describe('Create Mode', () => {
+    it('should enter create mode when route id is "new"', () => {
+      component.createMode.set(true);
+      component.editMode.set(true);
+      component.scheme.set({
+        id: '', name: '', description: '', steps: [],
+        userId: '', referencePhotoKey: '', createdAt: '', updatedAt: '',
+      });
+      expect(component.createMode()).toBeTrue();
+      expect(component.editMode()).toBeTrue();
+      expect(component.scheme()).toBeTruthy();
+    });
+
+    it('should call createColorScheme on save in create mode', () => {
+      component.createMode.set(true);
+      component.editMode.set(true);
+      component.scheme.set({
+        id: '', name: '', description: '', steps: [],
+        userId: '', referencePhotoKey: '', createdAt: '', updatedAt: '',
+      });
+      component.form.patchValue({ name: 'New Scheme' });
+      component.stepsArray.push(component['createStepGroup']({ area: 'Base', techniqueId: 'tech1' } as never));
+      const created = { ...mockScheme, id: 'new-id', name: 'New Scheme' };
+      apiServiceSpy.createColorScheme.and.returnValue(of(created));
+
+      component.save();
+
+      expect(apiServiceSpy.createColorScheme).toHaveBeenCalled();
+      expect(apiServiceSpy.updateColorScheme).not.toHaveBeenCalled();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/color-schemes', 'view', 'new-id']);
+    });
+
+    it('should navigate back on cancelEdit in create mode', () => {
+      component.createMode.set(true);
+      component.cancelEdit();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/color-schemes']);
+    });
+
+    it('should not navigate on cancelEdit in edit mode', () => {
+      component.createMode.set(false);
+      component.editMode.set(true);
+      component.cancelEdit();
+      expect(component.editMode()).toBeFalse();
+      expect(routerSpy.navigate).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Paint Autocomplete', () => {
+    const mockPaints = [
+      { id: 'p1', name: 'Abaddon Black' },
+      { id: 'p2', name: 'White Scar' },
+      { id: 'p3', name: 'Mephiston Red' },
+    ] as Paint[];
+
+    it('should display paint name for a valid paint id', () => {
+      component.paints.set(mockPaints);
+      expect(component.displayPaintName('p1')).toBe('Abaddon Black');
+    });
+
+    it('should return empty string for null paint id', () => {
+      component.paints.set(mockPaints);
+      expect(component.displayPaintName(null)).toBe('');
+    });
+
+    it('should return empty string for unknown paint id', () => {
+      component.paints.set(mockPaints);
+      expect(component.displayPaintName('unknown')).toBe('');
+    });
+
+    it('should filter displayed paints by input', () => {
+      component.paints.set(mockPaints);
+      component.onPaintInput('black');
+      expect(component.displayedPaints().length).toBe(1);
+      expect(component.displayedPaints()[0].name).toBe('Abaddon Black');
+    });
+
+    it('should show all paints when filter is empty', () => {
+      component.paints.set(mockPaints);
+      component.paintFilter.set('');
+      expect(component.displayedPaints().length).toBe(3);
+    });
+
+    it('should set paintId on step when paint is selected', () => {
+      component.addStep();
+      component.onPaintSelected('p1', 0);
+      expect(component.stepsArray.at(0).value.paintId).toBe('p1');
+    });
+
+    it('should clear paintId on step when clearPaint is called', () => {
+      component.addStep();
+      component.stepsArray.at(0).patchValue({ paintId: 'p1' });
+      component.clearPaint(0);
+      expect(component.stepsArray.at(0).value.paintId).toBeNull();
+    });
+
+    it('should reset paint filter after selection', () => {
+      component.paintFilter.set('black');
+      component.addStep();
+      component.onPaintSelected('p1', 0);
+      expect(component.paintFilter()).toBe('');
+    });
+
+    it('should reset paint filter after clearing', () => {
+      component.paintFilter.set('black');
+      component.addStep();
+      component.clearPaint(0);
+      expect(component.paintFilter()).toBe('');
+    });
   });
 });

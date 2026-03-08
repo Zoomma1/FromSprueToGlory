@@ -5,7 +5,7 @@
     <button mat-icon-button (click)="goBack()" matTooltip="Back">
         <mat-icon>arrow_back</mat-icon>
     </button>
-    <h1>{{ editMode() ? 'Editing: ' : '' }}{{ s.name }}</h1>
+    <h1>{{ createMode() ? 'New Scheme' : editMode() ? 'Editing: ' + s.name : s.name }}</h1>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -132,12 +132,23 @@
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Paint</mat-label>
-                        <mat-select formControlName="paintId">
-                            <mat-option [value]="null">None</mat-option>
-                            @for (p of paints(); track p.id) {
+                        <input matInput
+                            [matAutocomplete]="paintAuto"
+                            [value]="displayPaintName(stepsArray.at(i).get('paintId')?.value)"
+                            (input)="onPaintInput($any($event.target).value)"
+                            placeholder="Search paints...">
+                        @if (stepsArray.at(i).get('paintId')?.value) {
+                        <button matSuffix mat-icon-button (click)="clearPaint(i)" type="button">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                        }
+                        <mat-autocomplete #paintAuto="matAutocomplete"
+                            [displayWith]="displayPaintName"
+                            (optionSelected)="onPaintSelected($event.option.value, i)">
+                            @for (p of displayedPaints(); track p.id) {
                             <mat-option [value]="p.id">{{ p.name }}</mat-option>
                             }
-                        </mat-select>
+                        </mat-autocomplete>
                     </mat-form-field>
                 </div>
                 <mat-form-field appearance="outline" class="full-width">
@@ -153,7 +164,7 @@
         <button mat-button (click)="cancelEdit()">Cancel</button>
         <button mat-raised-button color="primary" (click)="save()"
             [disabled]="form.invalid || stepsArray.length === 0 || saving()">
-            Save
+            {{ createMode() ? 'Create' : 'Save' }}
         </button>
     </div>
 </div>

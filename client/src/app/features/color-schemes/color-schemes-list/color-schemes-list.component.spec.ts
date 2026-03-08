@@ -1,7 +1,7 @@
 import { ColorSchemesListComponent } from './color-schemes-list.component';
 import { ApiService } from '../../../core/services/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ColorScheme } from '../../../classes/color-scheme';
 import { of, throwError } from 'rxjs';
@@ -10,7 +10,7 @@ describe('ColorSchemesListComponent', () => {
   let component: ColorSchemesListComponent;
   let fixture: ComponentFixture<ColorSchemesListComponent>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
-  let dialogSpy: jasmine.SpyObj<MatDialog>;
+  let routerSpy: jasmine.SpyObj<Router>;
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
 
   const mockColorSchemes: ColorScheme[] = [
@@ -19,22 +19,22 @@ describe('ColorSchemesListComponent', () => {
   ];
 
   beforeEach(() => {
-    apiServiceSpy = jasmine.createSpyObj('ApiService', ['getColorSchemes', 'getColorScheme', 'deleteColorScheme']);
-    dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
+    apiServiceSpy = jasmine.createSpyObj('ApiService', ['getColorSchemes', 'deleteColorScheme']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     TestBed.configureTestingModule({
       imports: [ColorSchemesListComponent],
       providers: [
         { provide: ApiService, useValue: apiServiceSpy },
-        { provide: MatDialog, useValue: dialogSpy },
+        { provide: Router, useValue: routerSpy },
         { provide: MatSnackBar, useValue: snackBarSpy },
       ]
     }).overrideComponent(ColorSchemesListComponent, {
       set: {
         providers: [
           { provide: ApiService, useValue: apiServiceSpy },
-          { provide: MatDialog, useValue: dialogSpy },
+          { provide: Router, useValue: routerSpy },
           { provide: MatSnackBar, useValue: snackBarSpy },
         ]
       }
@@ -82,101 +82,20 @@ describe('ColorSchemesListComponent', () => {
       expect(apiServiceSpy.getColorSchemes).toHaveBeenCalled();
       expect(component.schemes()).toEqual([]);
     });
-  })
+  });
 
-  describe('Open Create Dialog', () => {
-    it('should open the create dialog', () => {
-      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(true) });
-      dialogSpy.open.and.returnValue(dialogRefSpyObj);
-      component.openCreateDialog();
-      expect(dialogSpy.open).toHaveBeenCalled();
-      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
-    });
-
-    it('should close the create dialog', () => {
-    const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(true) });
-    dialogSpy.open.and.returnValue(dialogRefSpyObj);
-    component.openCreateDialog();
-    expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
-    });
-
-    it('should not call loadSchemes if API result is false', () => {
-      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(false) });
-      dialogSpy.open.and.returnValue(dialogRefSpyObj);
-      component.openCreateDialog();
-      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
-    });
-
-    it('should not call loadSchemes if API result is undefined', () => {
-      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(undefined) });
-      dialogSpy.open.and.returnValue(dialogRefSpyObj);
-      component.openCreateDialog();
-      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+  describe('Create Scheme', () => {
+    it('should navigate to the new scheme page', () => {
+      component.createScheme();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/color-schemes', 'new']);
     });
   });
 
-  describe('Open Edit Dialog', () => {
-    it('should open the edit dialog with full scheme data', () => {
-      const scheme = mockColorSchemes[0];
-      const fullScheme = { ...scheme, steps: [] };
-      apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
-      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(true) });
-      dialogSpy.open.and.returnValue(dialogRefSpyObj);
-
-      component.openEditDialog(scheme);
-
-      expect(apiServiceSpy.getColorScheme).toHaveBeenCalledWith(scheme.id);
-      expect(dialogSpy.open).toHaveBeenCalled();
-      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
-    });
-
-    it('should close the edit dialog', () => {
-      const scheme = mockColorSchemes[0];
-      const fullScheme = { ...scheme, steps: [] };
-      apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
-      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(true) });
-      dialogSpy.open.and.returnValue(dialogRefSpyObj);
-
-      component.openEditDialog(scheme);
-
-      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
-    });
-
-    it('should reload schemes after edit dialog closes with result', () => {
-      const scheme = mockColorSchemes[0];
-      const fullScheme = { ...scheme, steps: [] };
-      apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
-      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(true) });
-      dialogSpy.open.and.returnValue(dialogRefSpyObj);
-
-      apiServiceSpy.getColorSchemes.calls.reset();
-      component.openEditDialog(scheme);
-
-      expect(apiServiceSpy.getColorSchemes).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not reload schemes if edit dialog result is false', () => {
-      const scheme = mockColorSchemes[0];
-      const fullScheme = { ...scheme, steps: [] };
-      apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
-      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(false) });
-      dialogSpy.open.and.returnValue(dialogRefSpyObj);
-
-      component.openEditDialog(scheme);
-
-      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
-    });
-
-    it('should not call loadSchemes if API result is undefined', () => {
-      const scheme = mockColorSchemes[0];
-      const fullScheme = { ...scheme, steps: [] };
-      apiServiceSpy.getColorScheme.and.returnValue(of(fullScheme));
-      const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(undefined) });
-      dialogSpy.open.and.returnValue(dialogRefSpyObj);
-
-      component.openEditDialog(scheme);
-
-      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+  describe('Edit Scheme', () => {
+    it('should navigate to the scheme detail page on edit mode', () => {
+        const scheme = mockColorSchemes[0];
+        component.editScheme(scheme);
+        expect(routerSpy.navigate).toHaveBeenCalledWith(['/color-schemes', 'edit', scheme.id]);
     });
   });
 
@@ -223,7 +142,7 @@ describe('ColorSchemesListComponent', () => {
 
       expect(window.confirm).toHaveBeenCalledWith(`Delete "${scheme.name}"?`);
       expect(apiServiceSpy.deleteColorScheme).not.toHaveBeenCalled();
-    })
+    });
   });
 
   describe('Error Handling', () => {
@@ -231,13 +150,6 @@ describe('ColorSchemesListComponent', () => {
       apiServiceSpy.getColorSchemes.and.returnValue(throwError(() => new Error('fail')));
       component.loadSchemes();
       expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load color schemes', 'OK', { duration: 3000 });
-    });
-
-    it('should show error snackbar when getColorScheme fails in openEditDialog', () => {
-      const scheme = mockColorSchemes[0];
-      apiServiceSpy.getColorScheme.and.returnValue(throwError(() => new Error('fail')));
-      component.openEditDialog(scheme);
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load scheme details', 'OK', { duration: 3000 });
     });
 
     it('should show error snackbar when deleteColorScheme fails', () => {

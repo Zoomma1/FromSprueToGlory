@@ -2,7 +2,7 @@
 // 🎨 Scheme Detail Component — View/Edit Color Scheme
 // ──────────────────────────────────────────────────────────
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +12,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkDragDrop, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
@@ -26,24 +27,28 @@ import { Paint } from '../../../classes/paint';
     imports: [
         CommonModule, ReactiveFormsModule,
         MatCardModule, MatButtonModule, MatIconModule, MatChipsModule,
-        MatFormFieldModule, MatInputModule, MatSelectModule,
+        MatFormFieldModule, MatInputModule, MatSelectModule, MatAutocompleteModule,
         MatSnackBarModule, MatTooltipModule, CdkDrag, CdkDropList,
     ],
     templateUrl: './scheme-detail.component.html',
     styleUrl: './scheme-detail.component.scss',
 })
+
 export class SchemeDetailComponent implements OnInit {
     private api = inject(ApiService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private fb = inject(FormBuilder);
     private snackBar = inject(MatSnackBar);
+    private location = inject(Location);
 
     scheme = signal<ColorSchemeFull | null>(null);
+    createMode = signal(false);
     editMode = signal(false);
     showDetails = signal(false);
     saving = signal(false);
     areaFilter = signal<string>('');
+    paintFilter = signal<string>('');
 
     filteredSteps = computed(() => {
         const steps = this.scheme()?.steps || [];
@@ -54,6 +59,12 @@ export class SchemeDetailComponent implements OnInit {
 
     techniques = signal<Technique[]>([]);
     paints = signal<Paint[]>([]);
+    displayedPaints = computed(() => {
+        const filter = this.paintFilter().toLowerCase();
+        const all = this.paints();
+        if (!filter) return all;
+        return all.filter(p => p.name.toLowerCase().includes(filter));
+    });
 
     form: FormGroup = this.fb.group({
         name: ['', Validators.required],
@@ -66,8 +77,33 @@ export class SchemeDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        const id = this.route.snapshot.paramMap.get('id')!;
-        this.loadScheme(id);
+        const mode = this.route.snapshot.paramMap.get('mode');
+        const id = this.route.snapshot.paramMap.get('id');
+        const url = this.route.snapshot.url.map(s => s.path);
+        const isNew = url.includes('new');
+
+        if (isNew) {
+            this.createMode.set(true);
+            this.editMode.set(true);
+            this.scheme.set({
+                id: '', name: '', description: '', steps: [],
+                userId: '', referencePhotoKey: '',
+                createdAt: '', updatedAt: '',
+            });
+            this.loadReferenceData();
+        } else if (mode === 'edit' && id) {
+            this.api.getColorScheme(id).subscribe({
+                next: (s) => {
+                    this.scheme.set(s);
+                    this.enterEditMode();
+                },
+                error: () => {
+                    this.snackBar.open('Failed to load scheme', 'OK', { duration: 3000 });
+                },
+            });
+        } else if (id) {
+            this.loadScheme(id);
+        }
     }
 
     loadScheme(id?: string) {
@@ -104,7 +140,17 @@ export class SchemeDetailComponent implements OnInit {
         const s = this.scheme();
         if (!s) return;
 
-        // Load reference data
+        this.loadReferenceData();
+
+        this.form.patchValue({ name: s.name, description: s.description });
+        this.stepsArray.clear();
+        for (const step of s.steps || []) {
+            this.stepsArray.push(this.createStepGroup(step));
+        }
+        this.editMode.set(true);
+    }
+
+    private loadReferenceData() {
         this.api.getTechniques().subscribe({
             next: (t) => this.techniques.set(t),
             error: () => {
@@ -117,18 +163,34 @@ export class SchemeDetailComponent implements OnInit {
                 this.snackBar.open('Failed to load paints', 'OK', { duration: 3000 });
             },
         });
-
-        // Populate form
-        this.form.patchValue({ name: s.name, description: s.description });
-        this.stepsArray.clear();
-        for (const step of s.steps || []) {
-            this.stepsArray.push(this.createStepGroup(step));
-        }
-        this.editMode.set(true);
     }
 
     cancelEdit() {
-        this.editMode.set(false);
+        if (this.createMode()) {
+            this.router.navigate(['/color-schemes']);
+        } else {
+            this.editMode.set(false);
+        }
+    }
+
+    displayPaintName = (paintId: string | null): string => {
+        if (!paintId) return '';
+        const paint = this.paints().find(p => p.id === paintId);
+        return paint ? paint.name : '';
+    };
+
+    onPaintSelected(paintId: string | null, stepIndex: number) {
+        this.stepsArray.at(stepIndex).patchValue({ paintId });
+        this.paintFilter.set('');
+    }
+
+    onPaintInput(value: string) {
+        this.paintFilter.set(value);
+    }
+
+    clearPaint(stepIndex: number) {
+        this.stepsArray.at(stepIndex).patchValue({ paintId: null });
+        this.paintFilter.set('');
     }
 
     addStep() {
@@ -174,12 +236,20 @@ export class SchemeDetailComponent implements OnInit {
             })),
         };
 
-        this.api.updateColorScheme(this.scheme()!.id, value).subscribe({
-            next: () => {
+        const obs = this.createMode()
+            ? this.api.createColorScheme(value)
+            : this.api.updateColorScheme(this.scheme()!.id, value);
+
+        obs.subscribe({
+            next: (result) => {
                 this.snackBar.open('Saved!', 'OK', { duration: 3000 });
-                this.editMode.set(false);
-                this.saving.set(false);
-                this.loadScheme();
+                if (this.createMode()) {
+                    this.router.navigate(['/color-schemes', 'view', result.id]);
+                } else {
+                    this.editMode.set(false);
+                    this.saving.set(false);
+                    this.loadScheme();
+                }
             },
             error: (err) => {
                 this.snackBar.open(err?.error?.error || 'Failed', 'OK', { duration: 5000 });
@@ -208,7 +278,7 @@ export class SchemeDetailComponent implements OnInit {
         this.api.createColorScheme(data).subscribe({
             next: (created) => {
                 this.snackBar.open('Duplicated!', 'OK', { duration: 3000 });
-                this.router.navigate(['/color-schemes', created.id]);
+                this.router.navigate(['/color-schemes', 'view', created.id]);
             },
             error: (err) => {
                 this.snackBar.open(err?.error?.error || 'Failed', 'OK', { duration: 5000 });
@@ -224,7 +294,15 @@ export class SchemeDetailComponent implements OnInit {
         });
     }
 
+    hasUnsavedChanges(): boolean {
+        if (!this.editMode()) return false;
+        return this.form.dirty;
+    }
+
     goBack() {
-        this.router.navigate(['/color-schemes']);
+        if (this.hasUnsavedChanges() && !confirm('You have unsaved changes. Leave without saving?')) {
+            return;
+        }
+        this.location.back();
     }
 }
