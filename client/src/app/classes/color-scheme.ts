@@ -1,5 +1,6 @@
 import { Technique } from './technique';
 import { Paint } from './paint';
+import { UserCustomPaint } from './user-custom-paint';
 
 export class ColorSchemes {
     colorSchemes: ColorScheme[] = [];
@@ -21,6 +22,7 @@ export interface ColorSchemeStepPayload {
     area: string;
     techniqueId: string;
     paintId?: string | null;
+    userCustomPaintId?: string | null;
     notes?: string | null;
 }
 
@@ -36,9 +38,11 @@ export interface ColorSchemeStepFull {
     area: string;
     techniqueId: string;
     paintId?: string | null;
+    userCustomPaintId?: string | null;
     notes?: string | null;
     technique?: Technique;
     paint?: Paint | null;
+    userCustomPaint?: UserCustomPaint | null;
 }
 
 export type ColorSchemeFull = ColorScheme & {

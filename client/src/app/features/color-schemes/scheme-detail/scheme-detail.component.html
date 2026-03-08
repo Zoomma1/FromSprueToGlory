@@ -62,14 +62,19 @@
                     <span class="step-area">{{ step.area }}</span>
                     <span class="step-technique">{{ step.technique?.name }}</span>
                 </div>
-                @if (step.paint) {
-                <span class="step-paint">🎨 {{ step.paint.name }}</span>
+                @if (step.paint || step.userCustomPaint) {
+                <span class="step-paint">
+                    🎨 {{ step.paint?.name || step.userCustomPaint?.name }}
+                </span>
                 }
                 @if (showDetails() && step.notes) {
                 <p class="step-notes">{{ step.notes }}</p>
                 }
                 @if (showDetails() && step.paint?.brand) {
                 <span class="step-brand">Brand: {{ step!.paint!.brand.name }}</span>
+                }
+                @if (showDetails() && step.userCustomPaint) {
+                <span class="step-brand">Brand: Other (custom)</span>
                 }
             </div>
         </mat-card>
@@ -155,11 +160,51 @@
                             [displayWith]="displayPaintName"
                             (optionSelected)="onPaintSelected($event.option.value, i)">
                             @for (p of getDisplayedPaints(i); track p.id) {
-                            <mat-option [value]="p.id">{{ p.brand.name ? p.brand.name + ' — ' : '' }}{{ p.name }}</mat-option>
+                            <mat-option [value]="p.id">
+                                {{ p.brand.name ? p.brand.name + ' — ' : '' }}{{ p.name }}
+                            </mat-option>
                             }
+                            <mat-option [value]="ADD_PAINT_SENTINEL" class="add-paint-option">
+                                <mat-icon>add_circle_outline</mat-icon>
+                                Add paint
+                            </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
                 </div>
+
+                @if (addingPaintForStep() === i) {
+                <div class="add-paint-form" [formGroup]="addPaintForm">
+                    <h4 class="add-paint-title">New custom paint</h4>
+                    <div class="add-paint-fields">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Name</mat-label>
+                            <input matInput formControlName="name" placeholder="e.g. My Custom Red">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Type (optional)</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option [value]="null">— None —</mat-option>
+                                @for (t of paintTypes; track t) {
+                                <mat-option [value]="t">{{ t }}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Notes (optional)</mat-label>
+                            <input matInput formControlName="notes" placeholder="e.g. Slightly orange-tinted">
+                        </mat-form-field>
+                    </div>
+                    <div class="add-paint-actions">
+                        <button mat-button type="button" (click)="cancelAddPaint()">Cancel</button>
+                        <button mat-raised-button color="primary" type="button"
+                            (click)="submitCustomPaint(i)"
+                            [disabled]="addPaintForm.invalid">
+                            Add
+                        </button>
+                    </div>
+                </div>
+                }
+
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Notes</mat-label>
                     <input matInput formControlName="notes">

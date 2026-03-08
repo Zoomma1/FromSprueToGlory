@@ -13,4 +13,5 @@ export class Paint {
         name: string;
         slug: string;
     };
+    isCustom?: boolean;
 }

@@ -40,10 +40,11 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations: a user "owns" items, color schemes, projects, and refresh tokens
-  items         Item[]
-  colorSchemes  ColorScheme[]
-  projects      Project[]
-  refreshTokens RefreshToken[]
+  items            Item[]
+  colorSchemes     ColorScheme[]
+  projects         Project[]
+  refreshTokens    RefreshToken[]
+  userCustomPaints UserCustomPaint[]
 
   @@map("users") // table name in PostgreSQL
 }
@@ -184,6 +185,22 @@ model Technique {
   @@map("techniques")
 }
 
+// ─── User Custom Paints (private, per-user paints not in the reference catalog) ─
+model UserCustomPaint {
+  id        String     @id @default(uuid())
+  userId    String
+  name      String
+  type      PaintType?
+  notes     String?
+  createdAt DateTime   @default(now())
+
+  user  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  steps ColorSchemeStep[]
+
+  @@index([userId])
+  @@map("user_custom_paints")
+}
+
 // ═══════════════════════════════════════════════════════
 // 📦 ITEMS — The Pile of Shame
 // ═══════════════════════════════════════════════════════
@@ -289,17 +306,19 @@ model ColorSchemeStep {
   orderIndex     Int     // 1-based, unique per scheme
   area           String  // "Armor", "Trim", "Weapon", "Base", etc.
   techniqueId    String
-  paintId        String? // optional: some steps don't use a specific paint
-  mix            String? // e.g., "2:1 Paint:Medium" or JSON
-  dilution       String? // e.g., "thin", "heavy", "milk consistency"
-  tools          String? // e.g., "size 1 brush", "sponge", "airbrush"
-  notes          String?
-  expectedResult String? // e.g., "smooth dark blue base"
+  paintId           String? // optional: reference paint from shared catalog
+  userCustomPaintId String? // optional: user's own custom paint
+  mix               String? // e.g., "2:1 Paint:Medium" or JSON
+  dilution          String? // e.g., "thin", "heavy", "milk consistency"
+  tools             String? // e.g., "size 1 brush", "sponge", "airbrush"
+  notes             String?
+  expectedResult    String? // e.g., "smooth dark blue base"
 
   // Relations
-  colorScheme ColorScheme @relation(fields: [colorSchemeId], references: [id], onDelete: Cascade)
-  technique   Technique   @relation(fields: [techniqueId], references: [id])
-  paint       Paint?      @relation(fields: [paintId], references: [id])
+  colorScheme     ColorScheme      @relation(fields: [colorSchemeId], references: [id], onDelete: Cascade)
+  technique       Technique        @relation(fields: [techniqueId], references: [id])
+  paint           Paint?           @relation(fields: [paintId], references: [id])
+  userCustomPaint UserCustomPaint? @relation(fields: [userCustomPaintId], references: [id])
 
   @@unique([colorSchemeId, orderIndex]) // enforce unique order within a scheme
   @@index([colorSchemeId])
