@@ -29,7 +29,7 @@ describe('Health Check', () => {
     });
 
     it('should return 200 with database: ok when DB is reachable', async () => {
-        (prisma.$queryRawUnsafe as any).mockResolvedValue([{ '?column?': 1 }]);
+        (prisma.$queryRawUnsafe as ReturnType<typeof vi.fn>).mockResolvedValue([{ '?column?': 1 }]);
 
         const res = await request(app).get('/api/health');
 
@@ -41,7 +41,7 @@ describe('Health Check', () => {
     });
 
     it('should return 503 with database: unreachable when DB is down', async () => {
-        (prisma.$queryRawUnsafe as any).mockRejectedValue(
+        (prisma.$queryRawUnsafe as ReturnType<typeof vi.fn>).mockRejectedValue(
             new Error("Can't reach database server at `localhost:5432`"),
         );
 
@@ -54,7 +54,7 @@ describe('Health Check', () => {
     });
 
     it('should return 503 with database: unreachable on auth errors', async () => {
-        (prisma.$queryRawUnsafe as any).mockRejectedValue(
+        (prisma.$queryRawUnsafe as ReturnType<typeof vi.fn>).mockRejectedValue(
             new Error('password authentication failed for user "sprue"'),
         );
 
