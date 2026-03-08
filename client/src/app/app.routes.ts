@@ -34,7 +34,15 @@ export const routes: Routes = [
         canActivate: [authGuard],
     },
     {
-        path: 'color-schemes/:id',
+        path: 'color-schemes/new',
+        loadComponent: () =>
+            import('./features/color-schemes/scheme-detail/scheme-detail.component').then(
+                (m) => m.SchemeDetailComponent,
+            ),
+        canActivate: [authGuard],
+    },
+    {
+        path: 'color-schemes/:mode/:id',
         loadComponent: () =>
             import('./features/color-schemes/scheme-detail/scheme-detail.component').then(
                 (m) => m.SchemeDetailComponent,
