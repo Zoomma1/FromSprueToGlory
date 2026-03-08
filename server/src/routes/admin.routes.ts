@@ -68,7 +68,7 @@ router.get('/paints/export', async (req, res) => {
   const paints = await prisma.paint.findMany({
     include: { brand: true }
   });
-  res.json(paints.map(p => ({
+  res.json(paints.map((p: (typeof paints)[number]) => ({
     name: p.name,
     code: p.code,
     type: p.type,
