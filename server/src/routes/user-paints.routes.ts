@@ -10,15 +10,21 @@ import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { authMiddleware } from '../middleware/auth.middleware';
-import { PaintType } from '@prisma/client';
 
 const router = Router();
 router.use(authMiddleware);
 
+// Mirror of Prisma's PaintType enum — avoids importing from @prisma/client
+// so tests don't require `prisma generate` to have run.
+const PAINT_TYPES = [
+    'BASE', 'LAYER', 'SHADE', 'DRY', 'CONTRAST', 'TECHNICAL',
+    'AIR', 'METALLIC', 'INK', 'PRIMER', 'VARNISH', 'TEXTURE', 'OTHER',
+] as const;
+
 // ─── Zod Schema ───────────────────────────────────────────
 const createPaintSchema = z.object({
     name: z.string().min(1, 'Name is required'),
-    type: z.nativeEnum(PaintType).optional().nullable(),
+    type: z.enum(PAINT_TYPES).optional().nullable(),
     notes: z.string().optional().nullable(),
 });
 
