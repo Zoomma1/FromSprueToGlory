@@ -593,6 +593,71 @@ describe('SchemeDetailComponent', () => {
     });
   });
 
+  describe('Brand Filter', () => {
+    const mockPaintsWithBrands = [
+      { id: 'p1', name: 'Abaddon Black', brand: { name: 'Citadel', slug: 'citadel' } },
+      { id: 'p2', name: 'White Scar', brand: { name: 'Citadel', slug: 'citadel' } },
+      { id: 'p3', name: 'Mournfang Brown', brand: { name: 'Vallejo', slug: 'vallejo' } },
+    ] as Paint[];
+
+    it('should compute available brands sorted and deduplicated', () => {
+      component.paints.set(mockPaintsWithBrands);
+      expect(component.availableBrands()).toEqual(['Citadel', 'Vallejo']);
+    });
+
+    it('should return empty brands when no paints are loaded', () => {
+      component.paints.set([]);
+      expect(component.availableBrands()).toEqual([]);
+    });
+
+    it('should return empty string for brand filter when not set on a step', () => {
+      expect(component.getBrandFilter(0)).toBe('');
+    });
+
+    it('should filter displayed paints by brand for a specific step', () => {
+      component.paints.set(mockPaintsWithBrands);
+      component.onBrandFilterChange('Vallejo', 0);
+      expect(component.getDisplayedPaints(0).length).toBe(1);
+      expect(component.getDisplayedPaints(0)[0].name).toBe('Mournfang Brown');
+    });
+
+    it('should not affect another step when brand filter is set on one step', () => {
+      component.paints.set(mockPaintsWithBrands);
+      component.onBrandFilterChange('Vallejo', 0);
+      expect(component.getDisplayedPaints(1).length).toBe(3);
+    });
+
+    it('should show all paints when brand filter is empty for a step', () => {
+      component.paints.set(mockPaintsWithBrands);
+      component.onBrandFilterChange('', 0);
+      expect(component.getDisplayedPaints(0).length).toBe(3);
+    });
+
+    it('should combine brand filter and name filter for a step', () => {
+      component.paints.set(mockPaintsWithBrands);
+      component.onBrandFilterChange('Citadel', 1);
+      component.onPaintInput('black');
+      expect(component.getDisplayedPaints(1).length).toBe(1);
+      expect(component.getDisplayedPaints(1)[0].name).toBe('Abaddon Black');
+    });
+
+    it('should return empty list when brand filter matches no paints', () => {
+      component.paints.set(mockPaintsWithBrands);
+      component.onBrandFilterChange('NonExistentBrand', 0);
+      expect(component.getDisplayedPaints(0)).toEqual([]);
+    });
+
+    it('should track brand filter independently per step', () => {
+      component.paints.set(mockPaintsWithBrands);
+      component.onBrandFilterChange('Citadel', 0);
+      component.onBrandFilterChange('Vallejo', 1);
+      expect(component.getBrandFilter(0)).toBe('Citadel');
+      expect(component.getBrandFilter(1)).toBe('Vallejo');
+      expect(component.getDisplayedPaints(0).length).toBe(2);
+      expect(component.getDisplayedPaints(1).length).toBe(1);
+    });
+  });
+
   describe('Paint Autocomplete', () => {
     const mockPaints = [
       { id: 'p1', name: 'Abaddon Black' },
@@ -618,14 +683,14 @@ describe('SchemeDetailComponent', () => {
     it('should filter displayed paints by input', () => {
       component.paints.set(mockPaints);
       component.onPaintInput('black');
-      expect(component.displayedPaints().length).toBe(1);
-      expect(component.displayedPaints()[0].name).toBe('Abaddon Black');
+      expect(component.getDisplayedPaints(0).length).toBe(1);
+      expect(component.getDisplayedPaints(0)[0].name).toBe('Abaddon Black');
     });
 
     it('should show all paints when filter is empty', () => {
       component.paints.set(mockPaints);
       component.paintFilter.set('');
-      expect(component.displayedPaints().length).toBe(3);
+      expect(component.getDisplayedPaints(0).length).toBe(3);
     });
 
     it('should set paintId on step when paint is selected', () => {

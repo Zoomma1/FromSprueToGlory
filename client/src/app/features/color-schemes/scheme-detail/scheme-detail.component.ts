@@ -49,6 +49,7 @@ export class SchemeDetailComponent implements OnInit {
     saving = signal(false);
     areaFilter = signal<string>('');
     paintFilter = signal<string>('');
+    brandFilters = signal<Record<number, string>>({});
 
     filteredSteps = computed(() => {
         const steps = this.scheme()?.steps || [];
@@ -59,12 +60,24 @@ export class SchemeDetailComponent implements OnInit {
 
     techniques = signal<Technique[]>([]);
     paints = signal<Paint[]>([]);
-    displayedPaints = computed(() => {
-        const filter = this.paintFilter().toLowerCase();
-        const all = this.paints();
-        if (!filter) return all;
-        return all.filter(p => p.name.toLowerCase().includes(filter));
+    availableBrands = computed(() => {
+        const brands = this.paints().map(p => p.brand?.name).filter(Boolean) as string[];
+        return Array.from(new Set(brands)).sort();
     });
+
+    getDisplayedPaints(stepIndex: number): Paint[] {
+        const nameFilter = this.paintFilter().toLowerCase();
+        const brand = this.brandFilters()[stepIndex] ?? '';
+        return this.paints().filter(p => {
+            const matchesBrand = !brand || p.brand?.name === brand;
+            const matchesName = !nameFilter || p.name.toLowerCase().includes(nameFilter);
+            return matchesBrand && matchesName;
+        });
+    }
+
+    getBrandFilter(stepIndex: number): string {
+        return this.brandFilters()[stepIndex] ?? '';
+    }
 
     form: FormGroup = this.fb.group({
         name: ['', Validators.required],
@@ -186,6 +199,10 @@ export class SchemeDetailComponent implements OnInit {
 
     onPaintInput(value: string) {
         this.paintFilter.set(value);
+    }
+
+    onBrandFilterChange(brand: string, stepIndex: number) {
+        this.brandFilters.update(filters => ({ ...filters, [stepIndex]: brand }));
     }
 
     clearPaint(stepIndex: number) {

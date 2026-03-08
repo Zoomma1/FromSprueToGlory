@@ -130,6 +130,15 @@
                             }
                         </mat-select>
                     </mat-form-field>
+                    <mat-form-field appearance="outline" class="brand-filter">
+                      <mat-label>Filter paints by brand</mat-label>
+                      <mat-select [value]="getBrandFilter(i)" (selectionChange)="onBrandFilterChange($event.value, i)">
+                        <mat-option value="">All brands</mat-option>
+                        @for (brand of availableBrands(); track brand) {
+                          <mat-option [value]="brand">{{ brand }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Paint</mat-label>
                         <input matInput
@@ -145,8 +154,8 @@
                         <mat-autocomplete #paintAuto="matAutocomplete"
                             [displayWith]="displayPaintName"
                             (optionSelected)="onPaintSelected($event.option.value, i)">
-                            @for (p of displayedPaints(); track p.id) {
-                            <mat-option [value]="p.id">{{ p.name }}</mat-option>
+                            @for (p of getDisplayedPaints(i); track p.id) {
+                            <mat-option [value]="p.id">{{ p.brand.name ? p.brand.name + ' — ' : '' }}{{ p.name }}</mat-option>
                             }
                         </mat-autocomplete>
                     </mat-form-field>
