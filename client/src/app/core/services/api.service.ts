@@ -10,6 +10,7 @@ import { Paint } from '../../classes/paint';
 import { Technique } from '../../classes/technique';
 import { Item, ItemPayload, ItemStatusHistory } from '../../classes/items';
 import { ColorScheme, ColorSchemePayload, ColorSchemeFull } from '../../classes/color-scheme';
+import { UserCustomPaint, UserCustomPaintPayload } from '../../classes/user-custom-paint';
 import { Project } from '../../classes/project';
 
 @Injectable({ providedIn: 'root' })
@@ -81,6 +82,19 @@ export class ApiService {
 
     getItemHistory(id: string): Observable<ItemStatusHistory[]> {
         return this.http.get<ItemStatusHistory[]>(`${this.baseUrl}/items/${id}/history`);
+    }
+
+    //  User Custom Paints
+    getUserCustomPaints(): Observable<UserCustomPaint[]> {
+        return this.http.get<UserCustomPaint[]>(`${this.baseUrl}/user-paints`);
+    }
+
+    createUserCustomPaint(data: UserCustomPaintPayload): Observable<UserCustomPaint> {
+        return this.http.post<UserCustomPaint>(`${this.baseUrl}/user-paints`, data);
+    }
+
+    deleteUserCustomPaint(id: string): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/user-paints/${id}`);
     }
 
     //  Color Schemes

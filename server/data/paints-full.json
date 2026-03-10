@@ -1,0 +1,8486 @@
+[
+  {
+    "name": "Abaddon Black",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-abaddon-black"
+  },
+  {
+    "name": "Averland Sunset",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-averland-sunset"
+  },
+  {
+    "name": "Balthasar Gold",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-balthasar-gold"
+  },
+  {
+    "name": "Caledor Sky",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-caledor-sky"
+  },
+  {
+    "name": "Caliban Green",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-caliban-green"
+  },
+  {
+    "name": "Castellan Green",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-castellan-green"
+  },
+  {
+    "name": "Celestra Grey",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-celestra-grey"
+  },
+  {
+    "name": "Chaos Black",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-chaos-black"
+  },
+  {
+    "name": "Corax White",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-corax-white"
+  },
+  {
+    "name": "Corvus Black",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-corvus-black"
+  },
+  {
+    "name": "Dawnstone",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-dawnstone"
+  },
+  {
+    "name": "Death Guard Green",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-death-guard-green"
+  },
+  {
+    "name": "Deathworld Forest",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-deathworld-forest"
+  },
+  {
+    "name": "Fenrisian Grey",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-fenrisian-grey"
+  },
+  {
+    "name": "Grey Seer",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-grey-seer"
+  },
+  {
+    "name": "Hobgrot Hide",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-hobgrot-hide"
+  },
+  {
+    "name": "Incubi Darkness",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-incubi-darkness"
+  },
+  {
+    "name": "Iron Warriors",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-iron-warriors"
+  },
+  {
+    "name": "Jokaero Orange",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-jokaero-orange"
+  },
+  {
+    "name": "Kantor Blue",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-kantor-blue"
+  },
+  {
+    "name": "Khorne Red",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-khorne-red"
+  },
+  {
+    "name": "Lupercal Green",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-lupercal-green"
+  },
+  {
+    "name": "Macragge Blue",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-macragge-blue"
+  },
+  {
+    "name": "Mechanicus Standard Grey",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-mechanicus-standard-grey"
+  },
+  {
+    "name": "Mephiston Red",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-mephiston-red"
+  },
+  {
+    "name": "Mournfang Brown",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-mournfang-brown"
+  },
+  {
+    "name": "Naggaroth Night",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-naggaroth-night"
+  },
+  {
+    "name": "Night Lords Blue",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-night-lords-blue"
+  },
+  {
+    "name": "Orruk Flesh",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-orruk-flesh"
+  },
+  {
+    "name": "Painted hide",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-painted-hide"
+  },
+  {
+    "name": "Phoenician Purple",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-phoenician-purple"
+  },
+  {
+    "name": "Rakarth Flesh",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-rakarth-flesh"
+  },
+  {
+    "name": "Raptor Brown",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-raptor-brown"
+  },
+  {
+    "name": "Retributor Armour",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-retributor-armour"
+  },
+  {
+    "name": "Rhinox Hide",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-rhinox-hide"
+  },
+  {
+    "name": "Screamer Pink",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-screamer-pink"
+  },
+  {
+    "name": "Skavenblight Dinge",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-skavenblight-dinge"
+  },
+  {
+    "name": "Sons of Horus Green",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-sons-of-horus-green"
+  },
+  {
+    "name": "Steel Legion Drab",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-steel-legion-drab"
+  },
+  {
+    "name": "Stormvermin Fur",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-stormvermin-fur"
+  },
+  {
+    "name": "Thousand Sons Blue",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-thousand-sons-blue"
+  },
+  {
+    "name": "Wraithbone",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-wraithbone"
+  },
+  {
+    "name": "Waaagh! Flesh",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-waaagh-flesh"
+  },
+  {
+    "name": "Zandri Dust",
+    "brandSlug": "citadel",
+    "range": "Base",
+    "type": "BASE",
+    "code": "CT-zandri-dust"
+  },
+  {
+    "name": "Angron Red Clear",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-angron-red-clear"
+  },
+  {
+    "name": "Apothecary White",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-apothecary-white"
+  },
+  {
+    "name": "Aethermatic Blue",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-aethermatic-blue"
+  },
+  {
+    "name": "Bad Moon Yellow",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-bad-moon-yellow"
+  },
+  {
+    "name": "Black Legionnaire",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-black-legionnaire"
+  },
+  {
+    "name": "Black Templars",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-black-templars"
+  },
+  {
+    "name": "Blood Angels Red",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-blood-angels-red"
+  },
+  {
+    "name": "Blisterskin",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-blisterskin"
+  },
+  {
+    "name": "Briar Queen Chill",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-briar-queen-chill"
+  },
+  {
+    "name": "Celestium Blue",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-celestium-blue"
+  },
+  {
+    "name": "Creed Camo",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-creed-camo"
+  },
+  {
+    "name": "Dark Angels Green",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-dark-angels-green"
+  },
+  {
+    "name": "Darkoath Flesh",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-darkoath-flesh"
+  },
+  {
+    "name": "Death Korps Drab",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-death-korps-drab"
+  },
+  {
+    "name": "Doomfire Magenta",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-doomfire-magenta"
+  },
+  {
+    "name": "Flesh Tearers Red",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-flesh-tearers-red"
+  },
+  {
+    "name": "Garaghak's Sewer",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-garaghak-s-sewer"
+  },
+  {
+    "name": "Gore-Grunta Fur",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-gore-grunta-fur"
+  },
+  {
+    "name": "Gryph-Charger Grey",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-gryph-charger-grey"
+  },
+  {
+    "name": "Gryph-Hound Orange",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-gryph-hound-orange"
+  },
+  {
+    "name": "Guilliman Flesh",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-guilliman-flesh"
+  },
+  {
+    "name": "Gutrippa Flesh",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-gutrippa-flesh"
+  },
+  {
+    "name": "Hammerhal Gold",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-hammerhal-gold"
+  },
+  {
+    "name": "Imperial Fist",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-imperial-fist"
+  },
+  {
+    "name": "Ironjawz Yellow",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-ironjawz-yellow"
+  },
+  {
+    "name": "Leviathan Purple",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-leviathan-purple"
+  },
+  {
+    "name": "Luxion Purple",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-luxion-purple"
+  },
+  {
+    "name": "Magmadroth Flame",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-magmadroth-flame"
+  },
+  {
+    "name": "Mantis Warriors Green",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-mantis-warriors-green"
+  },
+  {
+    "name": "Militarum Green",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-militarum-green"
+  },
+  {
+    "name": "Mordian Blue",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-mordian-blue"
+  },
+  {
+    "name": "Nazdreg Yellow",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-nazdreg-yellow"
+  },
+  {
+    "name": "Nighthaunt Gloom",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-nighthaunt-gloom"
+  },
+  {
+    "name": "Ork Flesh",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-ork-flesh"
+  },
+  {
+    "name": "Plaguebearer Flesh",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-plaguebearer-flesh"
+  },
+  {
+    "name": "Pylar Glacier",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-pylar-glacier"
+  },
+  {
+    "name": "Ratling Grime",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-ratling-grime"
+  },
+  {
+    "name": "Screaming Bell",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-screaming-bell"
+  },
+  {
+    "name": "Shyish Purple",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-shyish-purple"
+  },
+  {
+    "name": "Sigvald Burgundy",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-sigvald-burgundy"
+  },
+  {
+    "name": "Sisters of Battle Crimson",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-sisters-of-battle-crimson"
+  },
+  {
+    "name": "Skeleton Horde",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-skeleton-horde"
+  },
+  {
+    "name": "Space Wolves Grey",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-space-wolves-grey"
+  },
+  {
+    "name": "Sparkling Undergrowth",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-sparkling-undergrowth"
+  },
+  {
+    "name": "Striking Scorpion Green",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-striking-scorpion-green"
+  },
+  {
+    "name": "Talassar Blue",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-talassar-blue"
+  },
+  {
+    "name": "Terradon Turquoise",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-terradon-turquoise"
+  },
+  {
+    "name": "Tyranid Flesh",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-tyranid-flesh"
+  },
+  {
+    "name": "Ultramarine Blue",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-ultramarine-blue"
+  },
+  {
+    "name": "Warp Lightning",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-warp-lightning"
+  },
+  {
+    "name": "Wyldwood",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "CT-wyldwood"
+  },
+  {
+    "name": "Agrax Earthshade",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-agrax-earthshade"
+  },
+  {
+    "name": "Athonian Camoshade",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-athonian-camoshade"
+  },
+  {
+    "name": "Biel-Tan Green",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-biel-tan-green"
+  },
+  {
+    "name": "Carroburg Crimson",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-carroburg-crimson"
+  },
+  {
+    "name": "Casandora Yellow",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-casandora-yellow"
+  },
+  {
+    "name": "Coelia Greenshade",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-coelia-greenshade"
+  },
+  {
+    "name": "Drakenhof Nightshade",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-drakenhof-nightshade"
+  },
+  {
+    "name": "Druchii Violet",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-druchii-violet"
+  },
+  {
+    "name": "Fuegan Orange",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-fuegan-orange"
+  },
+  {
+    "name": "Nuln Oil",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-nuln-oil"
+  },
+  {
+    "name": "Nuln Oil Gloss",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-nuln-oil-gloss"
+  },
+  {
+    "name": "Poxwalker",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-poxwalker"
+  },
+  {
+    "name": "Reikland Fleshshade",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-reikland-fleshshade"
+  },
+  {
+    "name": "Reikland Fleshshade Gloss",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-reikland-fleshshade-gloss"
+  },
+  {
+    "name": "Seraphim Sepia",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-seraphim-sepia"
+  },
+  {
+    "name": "Targor Rageshade",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-targor-rageshade"
+  },
+  {
+    "name": "Tyran Blue",
+    "brandSlug": "citadel",
+    "range": "Shade",
+    "type": "SHADE",
+    "code": "CT-tyran-blue"
+  },
+  {
+    "name": "Administratum Grey",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-administratum-grey"
+  },
+  {
+    "name": "Alaitoc Blue",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-alaitoc-blue"
+  },
+  {
+    "name": "Altdorf Guard Blue",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-altdorf-guard-blue"
+  },
+  {
+    "name": "Anita Carmine",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-anita-carmine"
+  },
+  {
+    "name": "Ahriman Blue",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-ahriman-blue"
+  },
+  {
+    "name": "Auric Armour Gold",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-auric-armour-gold"
+  },
+  {
+    "name": "Balor Brown",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-balor-brown"
+  },
+  {
+    "name": "Bestigor Flesh",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-bestigor-flesh"
+  },
+  {
+    "name": "Bloodreaver Flesh",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-bloodreaver-flesh"
+  },
+  {
+    "name": "Blue Horror",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-blue-horror"
+  },
+  {
+    "name": "Brass Scorpion",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-brass-scorpion"
+  },
+  {
+    "name": "Cadian Fleshtone",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-cadian-fleshtone"
+  },
+  {
+    "name": "Castellax Bronze",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-castellax-bronze"
+  },
+  {
+    "name": "Catachan Fleshtone",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-catachan-fleshtone"
+  },
+  {
+    "name": "Champion Copper",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-champion-copper"
+  },
+  {
+    "name": "Darkstrider Uniform",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-darkstrider-uniform"
+  },
+  {
+    "name": "Deathclaw Brown",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-deathclaw-brown"
+  },
+  {
+    "name": "Dorn Yellow",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-dorn-yellow"
+  },
+  {
+    "name": "Elysian Green",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-elysian-green"
+  },
+  {
+    "name": "Emperor's Children",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-emperor-s-children"
+  },
+  {
+    "name": "Eshin Grey",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-eshin-grey"
+  },
+  {
+    "name": "Evil Sunz Scarlet",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-evil-sunz-scarlet"
+  },
+  {
+    "name": "Falsehood Purple",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-falsehood-purple"
+  },
+  {
+    "name": "Fire Dragon Bright",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-fire-dragon-bright"
+  },
+  {
+    "name": "Flash Gitz Yellow",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-flash-gitz-yellow"
+  },
+  {
+    "name": "Flayed One Flesh",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-flayed-one-flesh"
+  },
+  {
+    "name": "Fulgrim Pink",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-fulgrim-pink"
+  },
+  {
+    "name": "Gauss Blaster Green",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-gauss-blaster-green"
+  },
+  {
+    "name": "Genestealer Purple",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-genestealer-purple"
+  },
+  {
+    "name": "Gloomhaven Grey",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-gloomhaven-grey"
+  },
+  {
+    "name": "Gretchin Green",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-gretchin-green"
+  },
+  {
+    "name": "Highlight Ultramarine",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-highlight-ultramarine"
+  },
+  {
+    "name": "Hoeth Blue",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-hoeth-blue"
+  },
+  {
+    "name": "Ironbreaker",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-ironbreaker"
+  },
+  {
+    "name": "Kislev Flesh",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-kislev-flesh"
+  },
+  {
+    "name": "Knight-Questor Flesh",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-knight-questor-flesh"
+  },
+  {
+    "name": "Krieg Khaki",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-krieg-khaki"
+  },
+  {
+    "name": "Leadbelcher",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-leadbelcher"
+  },
+  {
+    "name": "Liberator Gold",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-liberator-gold"
+  },
+  {
+    "name": "Longbeard Grey",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-longbeard-grey"
+  },
+  {
+    "name": "Lothern Blue",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-lothern-blue"
+  },
+  {
+    "name": "Lugganath Orange",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-lugganath-orange"
+  },
+  {
+    "name": "Moot Green",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-moot-green"
+  },
+  {
+    "name": "Nurgling Green",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-nurgling-green"
+  },
+  {
+    "name": "Ogryn Camo",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-ogryn-camo"
+  },
+  {
+    "name": "Pink Horror",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-pink-horror"
+  },
+  {
+    "name": "Runefang Steel",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-runefang-steel"
+  },
+  {
+    "name": "Screaming Skull",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-screaming-skull"
+  },
+  {
+    "name": "Skink Blue",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-skink-blue"
+  },
+  {
+    "name": "Skullcrusher Brass",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-skullcrusher-brass"
+  },
+  {
+    "name": "Stormhost Silver",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-stormhost-silver"
+  },
+  {
+    "name": "Sybarite Green",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-sybarite-green"
+  },
+  {
+    "name": "Tallarn Sand",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-tallarn-sand"
+  },
+  {
+    "name": "Tau Light Ochre",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-tau-light-ochre"
+  },
+  {
+    "name": "Troll Slayer Orange",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-troll-slayer-orange"
+  },
+  {
+    "name": "Ulthuan Grey",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-ulthuan-grey"
+  },
+  {
+    "name": "Ushabti Bone",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-ushabti-bone"
+  },
+  {
+    "name": "Warboss Green",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-warboss-green"
+  },
+  {
+    "name": "White Scar",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-white-scar"
+  },
+  {
+    "name": "Wild Rider Red",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-wild-rider-red"
+  },
+  {
+    "name": "Wych Flesh",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-wych-flesh"
+  },
+  {
+    "name": "Yriel Yellow",
+    "brandSlug": "citadel",
+    "range": "Layer",
+    "type": "LAYER",
+    "code": "CT-yriel-yellow"
+  },
+  {
+    "name": "Baneblade Brown",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-baneblade-brown"
+  },
+  {
+    "name": "Chronus Blue",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-chronus-blue"
+  },
+  {
+    "name": "Etherium Blue",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-etherium-blue"
+  },
+  {
+    "name": "Hexos Palesun",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-hexos-palesun"
+  },
+  {
+    "name": "Ichor Yellow",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-ichor-yellow"
+  },
+  {
+    "name": "Lucius Lilac",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-lucius-lilac"
+  },
+  {
+    "name": "Necron Compound",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-necron-compound"
+  },
+  {
+    "name": "Nihilakh Oxide",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-nihilakh-oxide"
+  },
+  {
+    "name": "Praxeti White",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-praxeti-white"
+  },
+  {
+    "name": "Ryza Rust",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-ryza-rust"
+  },
+  {
+    "name": "Sigmarite",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-sigmarite"
+  },
+  {
+    "name": "Terminatus Stone",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-terminatus-stone"
+  },
+  {
+    "name": "Tyrant Skull",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-tyrant-skull"
+  },
+  {
+    "name": "Underhive Ash",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-underhive-ash"
+  },
+  {
+    "name": "Wrack White",
+    "brandSlug": "citadel",
+    "range": "Dry",
+    "type": "DRY",
+    "code": "CT-wrack-white"
+  },
+  {
+    "name": "Agrellan Badland",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-agrellan-badland"
+  },
+  {
+    "name": "Agrellan Earth",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-agrellan-earth"
+  },
+  {
+    "name": "Ardcoat",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-ardcoat"
+  },
+  {
+    "name": "Armageddon Dust",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-armageddon-dust"
+  },
+  {
+    "name": "Armageddon Dunes",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-armageddon-dunes"
+  },
+  {
+    "name": "Blood for the Blood God",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-blood-for-the-blood-god"
+  },
+  {
+    "name": "Contrast Medium",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-contrast-medium"
+  },
+  {
+    "name": "Crackle Medium",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-crackle-medium"
+  },
+  {
+    "name": "Drakenhof Mud",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-drakenhof-mud"
+  },
+  {
+    "name": "Lahmian Medium",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-lahmian-medium"
+  },
+  {
+    "name": "Lustrian Undergrowth",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-lustrian-undergrowth"
+  },
+  {
+    "name": "Mordant Earth",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-mordant-earth"
+  },
+  {
+    "name": "Nurgles Rot",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-nurgles-rot"
+  },
+  {
+    "name": "Shades Medium",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-shades-medium"
+  },
+  {
+    "name": "Soulstone Blue",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-soulstone-blue"
+  },
+  {
+    "name": "Spiritstone Red",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-spiritstone-red"
+  },
+  {
+    "name": "Stormshield",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-stormshield"
+  },
+  {
+    "name": "Typhus Corrosion",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-typhus-corrosion"
+  },
+  {
+    "name": "Valhallan Blizzard",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-valhallan-blizzard"
+  },
+  {
+    "name": "Waystone Green",
+    "brandSlug": "citadel",
+    "range": "Technical",
+    "type": "TECHNICAL",
+    "code": "CT-waystone-green"
+  },
+  {
+    "name": "Chaos Black Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-chaos-black-spray"
+  },
+  {
+    "name": "Corax White Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-corax-white-spray"
+  },
+  {
+    "name": "Death Guard Green Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-death-guard-green-spray"
+  },
+  {
+    "name": "Grey Seer Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-grey-seer-spray"
+  },
+  {
+    "name": "Iron Warriors Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-iron-warriors-spray"
+  },
+  {
+    "name": "Leadbelcher Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-leadbelcher-spray"
+  },
+  {
+    "name": "Macragge Blue Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-macragge-blue-spray"
+  },
+  {
+    "name": "Mechanicus Standard Grey Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-mechanicus-standard-grey-spray"
+  },
+  {
+    "name": "Mephiston Red Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-mephiston-red-spray"
+  },
+  {
+    "name": "Retributor Armour Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-retributor-armour-spray"
+  },
+  {
+    "name": "Wraithbone Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-wraithbone-spray"
+  },
+  {
+    "name": "Zandri Dust Spray",
+    "brandSlug": "citadel",
+    "range": "Spray",
+    "type": "PRIMER",
+    "code": "CT-zandri-dust-spray"
+  },
+  {
+    "name": "Model Color White",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.951"
+  },
+  {
+    "name": "Model Color Black",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.950"
+  },
+  {
+    "name": "Model Color German Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.995"
+  },
+  {
+    "name": "Model Color Flat Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.984"
+  },
+  {
+    "name": "Model Color Burnt Umber",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.941"
+  },
+  {
+    "name": "Model Color Scarlet",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.817"
+  },
+  {
+    "name": "Model Color Vermillion",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.909"
+  },
+  {
+    "name": "Model Color Red",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.926"
+  },
+  {
+    "name": "Model Color Deep Red",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.946"
+  },
+  {
+    "name": "Model Color Orange",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.851"
+  },
+  {
+    "name": "Model Color Orange Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.981"
+  },
+  {
+    "name": "Model Color Ochre Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.856"
+  },
+  {
+    "name": "Model Color Yellow Ochre",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.913"
+  },
+  {
+    "name": "Model Color Flat Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.953"
+  },
+  {
+    "name": "Model Color Golden Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.948"
+  },
+  {
+    "name": "Model Color Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.939"
+  },
+  {
+    "name": "Model Color Flat Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.968"
+  },
+  {
+    "name": "Model Color Medium Olive",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.850"
+  },
+  {
+    "name": "Model Color Dark Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.893"
+  },
+  {
+    "name": "Model Color Russian Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.894"
+  },
+  {
+    "name": "Model Color Luftwaffe Uniform",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.816"
+  },
+  {
+    "name": "Model Color Prussian Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.965"
+  },
+  {
+    "name": "Model Color Royal Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.809"
+  },
+  {
+    "name": "Model Color Ultramarine",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.839"
+  },
+  {
+    "name": "Model Color Sky Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.961"
+  },
+  {
+    "name": "Model Color Flat Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.962"
+  },
+  {
+    "name": "Model Color Dark Prussian Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.899"
+  },
+  {
+    "name": "Model Color Purple",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.959"
+  },
+  {
+    "name": "Model Color Violet",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.960"
+  },
+  {
+    "name": "Model Color Dark Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.994"
+  },
+  {
+    "name": "Model Color Neutral Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.992"
+  },
+  {
+    "name": "Model Color Light Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.990"
+  },
+  {
+    "name": "Model Color Medium Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.987"
+  },
+  {
+    "name": "Model Color Pale Grey Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.907"
+  },
+  {
+    "name": "Model Color Basalt Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.869"
+  },
+  {
+    "name": "Model Color Beige",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.917"
+  },
+  {
+    "name": "Model Color Buff",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.976"
+  },
+  {
+    "name": "Model Color Ivory",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.918"
+  },
+  {
+    "name": "Model Color Flat Flesh",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.955"
+  },
+  {
+    "name": "Model Color Dark Flesh",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.927"
+  },
+  {
+    "name": "Model Color Bronze Flesh",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.875"
+  },
+  {
+    "name": "Model Color Sunny Skin Tone",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.845"
+  },
+  {
+    "name": "Model Color Medium Fleshtone",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.860"
+  },
+  {
+    "name": "Model Color Dark Sand",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.847"
+  },
+  {
+    "name": "Model Color Iraqi Sand",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.819"
+  },
+  {
+    "name": "Model Color Khaki",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.988"
+  },
+  {
+    "name": "Model Color Stone Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE",
+    "code": "70.884"
+  },
+  {
+    "name": "Model Color Silver",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "METALLIC",
+    "code": "70.997"
+  },
+  {
+    "name": "Model Color Gold",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "METALLIC",
+    "code": "70.996"
+  },
+  {
+    "name": "Model Color Copper",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "METALLIC",
+    "code": "70.999"
+  },
+  {
+    "name": "Model Color Gunmetal",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "METALLIC",
+    "code": "70.863"
+  },
+  {
+    "name": "Model Color Bright Bronze",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "METALLIC",
+    "code": "70.998"
+  },
+  {
+    "name": "Model Color Natural Steel",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "METALLIC",
+    "code": "70.864"
+  },
+  {
+    "name": "Model Color Oily Steel",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "METALLIC",
+    "code": "70.865"
+  },
+  {
+    "name": "Game Color Bloody Red",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.010"
+  },
+  {
+    "name": "Game Color Electric Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.023"
+  },
+  {
+    "name": "Game Color Goblin Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.030"
+  },
+  {
+    "name": "Game Color Chaos Black",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.051"
+  },
+  {
+    "name": "Game Color Dead White",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.001"
+  },
+  {
+    "name": "Game Color Ultramarine Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.022"
+  },
+  {
+    "name": "Game Color Sun Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.006"
+  },
+  {
+    "name": "Game Color Orange Fire",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.008"
+  },
+  {
+    "name": "Game Color Gory Red",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.011"
+  },
+  {
+    "name": "Game Color Bone White",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.034"
+  },
+  {
+    "name": "Game Color Plague Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.039"
+  },
+  {
+    "name": "Game Color Charred Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.045"
+  },
+  {
+    "name": "Game Color Heavy Warmgrey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.147"
+  },
+  {
+    "name": "Game Color Stonewall Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.049"
+  },
+  {
+    "name": "Game Color Sombre Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.048"
+  },
+  {
+    "name": "Game Color Midnight Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.020"
+  },
+  {
+    "name": "Game Color Dark Fleshtone",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.044"
+  },
+  {
+    "name": "Game Color Dwarf Skin",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.041"
+  },
+  {
+    "name": "Game Color Tan",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.066"
+  },
+  {
+    "name": "Game Color Desert Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.063"
+  },
+  {
+    "name": "Game Color Khaki",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.061"
+  },
+  {
+    "name": "Game Color Silver",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "METALLIC",
+    "code": "72.052"
+  },
+  {
+    "name": "Game Color Polished Gold",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "METALLIC",
+    "code": "72.057"
+  },
+  {
+    "name": "Game Color Glorious Gold",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "METALLIC",
+    "code": "72.056"
+  },
+  {
+    "name": "Game Color Bright Bronze",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "METALLIC",
+    "code": "72.059"
+  },
+  {
+    "name": "Game Color Gunmetal Metal",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "METALLIC",
+    "code": "72.054"
+  },
+  {
+    "name": "Mecha Color White",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.001"
+  },
+  {
+    "name": "Mecha Color Black",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.526"
+  },
+  {
+    "name": "Mecha Color Red",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.003"
+  },
+  {
+    "name": "Mecha Color Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.016"
+  },
+  {
+    "name": "Mecha Color Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.008"
+  },
+  {
+    "name": "Mecha Color Green",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.027"
+  },
+  {
+    "name": "Mecha Color Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.006"
+  },
+  {
+    "name": "Mecha Color Orange",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.004"
+  },
+  {
+    "name": "Mecha Color Gun Metal",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.063"
+  },
+  {
+    "name": "Mecha Color Steel",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "69.064"
+  },
+  {
+    "name": "Xpress Color Speed White",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-speed-white"
+  },
+  {
+    "name": "Xpress Color Brutal Red",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-brutal-red"
+  },
+  {
+    "name": "Xpress Color Templar Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-templar-blue"
+  },
+  {
+    "name": "Xpress Color Orc Skin",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-orc-skin"
+  },
+  {
+    "name": "Xpress Color Golden Skin",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-golden-skin"
+  },
+  {
+    "name": "Xpress Color Desert Skin",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-desert-skin"
+  },
+  {
+    "name": "Xpress Color Haze Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-haze-grey"
+  },
+  {
+    "name": "Xpress Color Plague Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-plague-green"
+  },
+  {
+    "name": "Xpress Color Forest Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-forest-green"
+  },
+  {
+    "name": "Xpress Color Volcanic Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-volcanic-yellow"
+  },
+  {
+    "name": "Xpress Color Deep Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-deep-blue"
+  },
+  {
+    "name": "Xpress Color Psychic Pink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-psychic-pink"
+  },
+  {
+    "name": "Xpress Color Alien Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-alien-flesh"
+  },
+  {
+    "name": "Xpress Color Tyrant Orange",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "CONTRAST",
+    "code": "VJ-xpress-color-tyrant-orange"
+  },
+  {
+    "name": "Matt White",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1101"
+  },
+  {
+    "name": "Matt Black",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1102"
+  },
+  {
+    "name": "Matte Black",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1470"
+  },
+  {
+    "name": "Dragon Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1104"
+  },
+  {
+    "name": "Pure Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1105"
+  },
+  {
+    "name": "Bright Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1106"
+  },
+  {
+    "name": "Lava Orange",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1107"
+  },
+  {
+    "name": "Sun Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1108"
+  },
+  {
+    "name": "Daemonic Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1109"
+  },
+  {
+    "name": "Grass Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1110"
+  },
+  {
+    "name": "Army Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1111"
+  },
+  {
+    "name": "Goblin Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1112"
+  },
+  {
+    "name": "Jungle Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1113"
+  },
+  {
+    "name": "Dark Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1114"
+  },
+  {
+    "name": "Angel Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1115"
+  },
+  {
+    "name": "Crystal Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1116"
+  },
+  {
+    "name": "Electric Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1117"
+  },
+  {
+    "name": "Ice Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1118"
+  },
+  {
+    "name": "Ultramarine Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1119"
+  },
+  {
+    "name": "Deep Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1120"
+  },
+  {
+    "name": "Dark Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1121"
+  },
+  {
+    "name": "Night Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1122"
+  },
+  {
+    "name": "Alien Purple",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1123"
+  },
+  {
+    "name": "Genestealer Purple",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1124"
+  },
+  {
+    "name": "Warlock Purple",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1125"
+  },
+  {
+    "name": "Wolf Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1126"
+  },
+  {
+    "name": "Space Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1127"
+  },
+  {
+    "name": "Uniform Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1128"
+  },
+  {
+    "name": "Dark Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1129"
+  },
+  {
+    "name": "Gun Metal",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "METALLIC",
+    "code": "WP1130"
+  },
+  {
+    "name": "Shining Silver",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "METALLIC",
+    "code": "WP1131"
+  },
+  {
+    "name": "Greedy Gold",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "METALLIC",
+    "code": "WP1132"
+  },
+  {
+    "name": "Rough Iron",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "METALLIC",
+    "code": "WP1133"
+  },
+  {
+    "name": "Weapon Bronze",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "METALLIC",
+    "code": "WP1134"
+  },
+  {
+    "name": "Leather Brown",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1135"
+  },
+  {
+    "name": "Oak Brown",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1136"
+  },
+  {
+    "name": "Dirt Spatter",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1137"
+  },
+  {
+    "name": "Desert Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1138"
+  },
+  {
+    "name": "Skeleton Bone",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1139"
+  },
+  {
+    "name": "Barbarian Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1140"
+  },
+  {
+    "name": "Tanned Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1141"
+  },
+  {
+    "name": "Elven Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1142"
+  },
+  {
+    "name": "Ash Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1143"
+  },
+  {
+    "name": "Necrotic Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1144"
+  },
+  {
+    "name": "Toxic Mist",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "BASE",
+    "code": "WP1145"
+  },
+  {
+    "name": "Plate Mail Metal",
+    "brandSlug": "army-painter",
+    "range": "Warpaints",
+    "type": "METALLIC",
+    "code": "WP1415"
+  },
+  {
+    "name": "Speedpaint Gravelord Grey",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2000"
+  },
+  {
+    "name": "Speedpaint Coral Lips",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2001"
+  },
+  {
+    "name": "Speedpaint Lava Orange",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2002"
+  },
+  {
+    "name": "Speedpaint Warpaint Grey",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2003"
+  },
+  {
+    "name": "Speedpaint Crusader Skin",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2004"
+  },
+  {
+    "name": "Speedpaint Pallid Bone",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2005"
+  },
+  {
+    "name": "Speedpaint Dark Wood",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2006"
+  },
+  {
+    "name": "Speedpaint Kobold Skin",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2007"
+  },
+  {
+    "name": "Speedpaint Runic Grey",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2008"
+  },
+  {
+    "name": "Speedpaint Space Grey",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2009"
+  },
+  {
+    "name": "Speedpaint Slaughter Red",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2010"
+  },
+  {
+    "name": "Speedpaint Wizard Purple",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2011"
+  },
+  {
+    "name": "Speedpaint Oozing Purple",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2012"
+  },
+  {
+    "name": "Speedpaint Moss Green",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2013"
+  },
+  {
+    "name": "Speedpaint Forest Green",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2014"
+  },
+  {
+    "name": "Speedpaint Absolution Green",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2015"
+  },
+  {
+    "name": "Speedpaint Blue Tone",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2016"
+  },
+  {
+    "name": "Speedpaint Celestial Blue",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2017"
+  },
+  {
+    "name": "Speedpaint Frostbite Blue",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2018"
+  },
+  {
+    "name": "Speedpaint Oil Stains",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2019"
+  },
+  {
+    "name": "Speedpaint Rust and Bone",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2020"
+  },
+  {
+    "name": "Speedpaint Plagued Flesh",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2021"
+  },
+  {
+    "name": "Speedpaint Shining Gold",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2022"
+  },
+  {
+    "name": "Speedpaint Cloudy Grey",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2023"
+  },
+  {
+    "name": "Speedpaint Berserker Flesh",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2024"
+  },
+  {
+    "name": "Speedpaint Dungeon Grey",
+    "brandSlug": "army-painter",
+    "range": "Speedpaint 2.0",
+    "type": "CONTRAST",
+    "code": "WP2025"
+  },
+  {
+    "name": "AK Real Colors White",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC001"
+  },
+  {
+    "name": "AK Real Colors Black",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC002"
+  },
+  {
+    "name": "AK Real Colors Flat Red",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC003"
+  },
+  {
+    "name": "AK Real Colors Flat Blue",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC004"
+  },
+  {
+    "name": "AK Real Colors Flat Yellow",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC005"
+  },
+  {
+    "name": "AK Real Colors Flat Green",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC006"
+  },
+  {
+    "name": "AK Real Colors Flat Brown",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC007"
+  },
+  {
+    "name": "AK Real Colors Light Grey",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC008"
+  },
+  {
+    "name": "AK Real Colors Dark Grey",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC009"
+  },
+  {
+    "name": "AK Real Colors Olive Green",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC010"
+  },
+  {
+    "name": "AK Real Colors Desert Yellow",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC011"
+  },
+  {
+    "name": "AK Real Colors Sand",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC012"
+  },
+  {
+    "name": "AK Real Colors Khaki",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC013"
+  },
+  {
+    "name": "AK Real Colors Rust",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC014"
+  },
+  {
+    "name": "AK Real Colors Dark Brown",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC015"
+  },
+  {
+    "name": "AK Real Colors NATO Black",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC016"
+  },
+  {
+    "name": "AK Real Colors NATO Green",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC017"
+  },
+  {
+    "name": "AK Real Colors NATO Brown",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC018"
+  },
+  {
+    "name": "AK Real Colors Panzer Dark Yellow",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC019"
+  },
+  {
+    "name": "AK Real Colors German Dark Yellow",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC020"
+  },
+  {
+    "name": "AK Real Colors Fieldgrau",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC021"
+  },
+  {
+    "name": "AK Real Colors Luftwaffe Grey",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC022"
+  },
+  {
+    "name": "AK Real Colors RLM 65 Light Blue",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC023"
+  },
+  {
+    "name": "AK Real Colors RLM 70 Black Green",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC024"
+  },
+  {
+    "name": "AK Real Colors RLM 71 Dark Green",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC025"
+  },
+  {
+    "name": "AK Real Colors RLM 74 Grey Green",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC026"
+  },
+  {
+    "name": "AK Real Colors RLM 75 Grey Violet",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC027"
+  },
+  {
+    "name": "AK Real Colors RLM 76 Light Blue",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC028"
+  },
+  {
+    "name": "AK Real Colors US Dark Green",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC029"
+  },
+  {
+    "name": "AK Real Colors US Olive Drab",
+    "brandSlug": "ak-interactive",
+    "range": "Real Colors",
+    "type": "BASE",
+    "code": "RC030"
+  },
+  {
+    "name": "AK Interactive Earth Effects",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK023"
+  },
+  {
+    "name": "AK Interactive Dark Mud",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK016"
+  },
+  {
+    "name": "AK Interactive Light Mud",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK017"
+  },
+  {
+    "name": "AK Interactive Wet Mud",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK018"
+  },
+  {
+    "name": "AK Interactive Dry Ground",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK019"
+  },
+  {
+    "name": "AK Interactive Track Wash",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "SHADE",
+    "code": "AK083"
+  },
+  {
+    "name": "AK Interactive Dark Brown Wash",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "SHADE",
+    "code": "AK065"
+  },
+  {
+    "name": "AK Interactive Paneliner Blue/Grey",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "SHADE",
+    "code": "AK2072"
+  },
+  {
+    "name": "AK Interactive Paneliner Black",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "SHADE",
+    "code": "AK2073"
+  },
+  {
+    "name": "AK Interactive Paneliner Brown",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "SHADE",
+    "code": "AK2074"
+  },
+  {
+    "name": "AK Interactive Paneliner Sand/Desert",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "SHADE",
+    "code": "AK2075"
+  },
+  {
+    "name": "AK Interactive Rust Streaks",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK013"
+  },
+  {
+    "name": "AK Interactive Fuel Stains",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK025"
+  },
+  {
+    "name": "AK Interactive Kerosene Stains",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK026"
+  },
+  {
+    "name": "AK Interactive Dust Effects",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "TECHNICAL",
+    "code": "AK022"
+  },
+  {
+    "name": "AK Interactive True Metal Iron",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "METALLIC",
+    "code": "AK471"
+  },
+  {
+    "name": "AK Interactive True Metal Steel",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "METALLIC",
+    "code": "AK472"
+  },
+  {
+    "name": "AK Interactive True Metal Gold",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "METALLIC",
+    "code": "AK473"
+  },
+  {
+    "name": "AK Interactive True Metal Bronze",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "METALLIC",
+    "code": "AK474"
+  },
+  {
+    "name": "AK Interactive True Metal Copper",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "METALLIC",
+    "code": "AK475"
+  },
+  {
+    "name": "AK Interactive True Metal Aluminum",
+    "brandSlug": "ak-interactive",
+    "range": "AK Interactive",
+    "type": "METALLIC",
+    "code": "AK476"
+  },
+  {
+    "name": "Bold Titanium White",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-001"
+  },
+  {
+    "name": "Warm White",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-002"
+  },
+  {
+    "name": "Off White",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-003"
+  },
+  {
+    "name": "Bold Titanium Black",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-004"
+  },
+  {
+    "name": "Warm Black",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-005"
+  },
+  {
+    "name": "Cool Black",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-006"
+  },
+  {
+    "name": "Soft Black",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-007"
+  },
+  {
+    "name": "Red",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-008"
+  },
+  {
+    "name": "Coral Red",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-009"
+  },
+  {
+    "name": "Scarlet",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-010"
+  },
+  {
+    "name": "Maroon",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-011"
+  },
+  {
+    "name": "Deep Red",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-012"
+  },
+  {
+    "name": "Bright Orange",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-013"
+  },
+  {
+    "name": "Orange",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-014"
+  },
+  {
+    "name": "Burnt Orange",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-015"
+  },
+  {
+    "name": "Bright Yellow",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-016"
+  },
+  {
+    "name": "Yellow",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-017"
+  },
+  {
+    "name": "Warm Yellow",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-018"
+  },
+  {
+    "name": "Pale Yellow",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-019"
+  },
+  {
+    "name": "Fluorescent Yellow",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-020"
+  },
+  {
+    "name": "Fluorescent Orange",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-021"
+  },
+  {
+    "name": "Fluorescent Red",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-022"
+  },
+  {
+    "name": "Fluorescent Pink",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-023"
+  },
+  {
+    "name": "Fluorescent Green",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-024"
+  },
+  {
+    "name": "Bright Green",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-025"
+  },
+  {
+    "name": "Green",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-026"
+  },
+  {
+    "name": "Olive Green",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-027"
+  },
+  {
+    "name": "Dark Green",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-028"
+  },
+  {
+    "name": "Deep Green",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-029"
+  },
+  {
+    "name": "Forest Green",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-030"
+  },
+  {
+    "name": "Teal",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-031"
+  },
+  {
+    "name": "Blue Green",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-032"
+  },
+  {
+    "name": "Sky Blue",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-033"
+  },
+  {
+    "name": "Bright Blue",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-034"
+  },
+  {
+    "name": "Blue",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-035"
+  },
+  {
+    "name": "Deep Blue",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-036"
+  },
+  {
+    "name": "Navy Blue",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-037"
+  },
+  {
+    "name": "Cobalt Blue",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-038"
+  },
+  {
+    "name": "Ultramarine Blue",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-039"
+  },
+  {
+    "name": "Violet",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-040"
+  },
+  {
+    "name": "Purple",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-041"
+  },
+  {
+    "name": "Deep Purple",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-042"
+  },
+  {
+    "name": "Magenta",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-043"
+  },
+  {
+    "name": "Pink",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-044"
+  },
+  {
+    "name": "Pale Pink",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-045"
+  },
+  {
+    "name": "Tan",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-046"
+  },
+  {
+    "name": "Warm Tan",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-047"
+  },
+  {
+    "name": "Khaki",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-048"
+  },
+  {
+    "name": "Sand",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-049"
+  },
+  {
+    "name": "Pale Sand",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-050"
+  },
+  {
+    "name": "Bone",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-051"
+  },
+  {
+    "name": "Warm Bone",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-052"
+  },
+  {
+    "name": "Light Flesh",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-053"
+  },
+  {
+    "name": "Flesh",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-054"
+  },
+  {
+    "name": "Dark Flesh",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-055"
+  },
+  {
+    "name": "Deep Flesh",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-056"
+  },
+  {
+    "name": "Brown",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-057"
+  },
+  {
+    "name": "Warm Brown",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-058"
+  },
+  {
+    "name": "Dark Brown",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-059"
+  },
+  {
+    "name": "Deep Brown",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-060"
+  },
+  {
+    "name": "Light Grey",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-061"
+  },
+  {
+    "name": "Medium Grey",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-062"
+  },
+  {
+    "name": "Dark Grey",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-063"
+  },
+  {
+    "name": "Warm Grey",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-064"
+  },
+  {
+    "name": "Cool Grey",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-065"
+  },
+  {
+    "name": "Blue Grey",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-066"
+  },
+  {
+    "name": "Stone",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-067"
+  },
+  {
+    "name": "Warm Stone",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "BASE",
+    "code": "PA-068"
+  },
+  {
+    "name": "Transparent Medium",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "TECHNICAL",
+    "code": "PA-M01"
+  },
+  {
+    "name": "Matte Medium",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "TECHNICAL",
+    "code": "PA-M02"
+  },
+  {
+    "name": "Gloss Medium",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "TECHNICAL",
+    "code": "PA-M03"
+  },
+  {
+    "name": "Flow Improver",
+    "brandSlug": "pro-acryl",
+    "range": "Pro Acryl",
+    "type": "TECHNICAL",
+    "code": "PA-M04"
+  },
+  {
+    "name": "Inktense Black",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-00"
+  },
+  {
+    "name": "Inktense White",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-01"
+  },
+  {
+    "name": "Inktense Red",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-02"
+  },
+  {
+    "name": "Inktense Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-03"
+  },
+  {
+    "name": "Inktense Yellow",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-04"
+  },
+  {
+    "name": "Inktense Green",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-05"
+  },
+  {
+    "name": "Inktense Brown",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-06"
+  },
+  {
+    "name": "Inktense Orange",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-07"
+  },
+  {
+    "name": "Inktense Violet",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-08"
+  },
+  {
+    "name": "Inktense Purple",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-09"
+  },
+  {
+    "name": "Inktense Magenta",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-10"
+  },
+  {
+    "name": "Inktense Sepia",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "INK",
+    "code": "SC-11"
+  },
+  {
+    "name": "Black",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-12"
+  },
+  {
+    "name": "White",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-13"
+  },
+  {
+    "name": "Vampiric Shade",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-14"
+  },
+  {
+    "name": "Red",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-15"
+  },
+  {
+    "name": "Blood Red",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-16"
+  },
+  {
+    "name": "Coral Red",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-17"
+  },
+  {
+    "name": "Antares Red",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-18"
+  },
+  {
+    "name": "Aldebaran Red",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-19"
+  },
+  {
+    "name": "Terracotta",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-20"
+  },
+  {
+    "name": "Hot Orange",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-21"
+  },
+  {
+    "name": "Orange Fire",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-22"
+  },
+  {
+    "name": "Dwarven Gold",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-23"
+  },
+  {
+    "name": "Sunset Yellow",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-24"
+  },
+  {
+    "name": "Yellow",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-25"
+  },
+  {
+    "name": "Acid Yellow",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-26"
+  },
+  {
+    "name": "Elven Green",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-27"
+  },
+  {
+    "name": "Forest Green",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-28"
+  },
+  {
+    "name": "Hydra Green",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-29"
+  },
+  {
+    "name": "Goblin Green",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-30"
+  },
+  {
+    "name": "Leaf Green",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-31"
+  },
+  {
+    "name": "Moss Green",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-32"
+  },
+  {
+    "name": "Dark Green",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-33"
+  },
+  {
+    "name": "Phthalo Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-34"
+  },
+  {
+    "name": "Cobalt Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-35"
+  },
+  {
+    "name": "Mediterranean Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-36"
+  },
+  {
+    "name": "Azul Basic",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-37"
+  },
+  {
+    "name": "Blue Plague",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-38"
+  },
+  {
+    "name": "Antares Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-39"
+  },
+  {
+    "name": "Electric Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-40"
+  },
+  {
+    "name": "Pale Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-41"
+  },
+  {
+    "name": "Blue Stone",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-42"
+  },
+  {
+    "name": "Night Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-43"
+  },
+  {
+    "name": "Icy Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-44"
+  },
+  {
+    "name": "Purple",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-45"
+  },
+  {
+    "name": "Violet",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-46"
+  },
+  {
+    "name": "Warlord Purple",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-47"
+  },
+  {
+    "name": "Haze Violet",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-48"
+  },
+  {
+    "name": "Magenta",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-49"
+  },
+  {
+    "name": "Pink",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-50"
+  },
+  {
+    "name": "Dead Flesh",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-51"
+  },
+  {
+    "name": "Pale Flesh",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-52"
+  },
+  {
+    "name": "Basic Flesh",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-53"
+  },
+  {
+    "name": "Dark Flesh",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-54"
+  },
+  {
+    "name": "Ebony Flesh",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-55"
+  },
+  {
+    "name": "Brown Basic",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-56"
+  },
+  {
+    "name": "Tan Earth",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-57"
+  },
+  {
+    "name": "Sepia",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-58"
+  },
+  {
+    "name": "Citadel Earth",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-59"
+  },
+  {
+    "name": "Dark Earth",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-60"
+  },
+  {
+    "name": "Rawhide",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-61"
+  },
+  {
+    "name": "Khaki",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-62"
+  },
+  {
+    "name": "Boneyard",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-63"
+  },
+  {
+    "name": "Ivory",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-64"
+  },
+  {
+    "name": "Pale Sand",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-65"
+  },
+  {
+    "name": "Graphene Grey",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-66"
+  },
+  {
+    "name": "Wolf Grey",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-67"
+  },
+  {
+    "name": "Silver Grey",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-68"
+  },
+  {
+    "name": "Pale Grey Blue",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-69"
+  },
+  {
+    "name": "Stonewall Grey",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-70"
+  },
+  {
+    "name": "Titan Grey",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-71"
+  },
+  {
+    "name": "Birch Wood",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-72"
+  },
+  {
+    "name": "Pine Wood",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-73"
+  },
+  {
+    "name": "Old Wood",
+    "brandSlug": "scale75",
+    "range": "Scale Color",
+    "type": "BASE",
+    "code": "SC-74"
+  },
+  {
+    "name": "Steel",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-01"
+  },
+  {
+    "name": "Black Metal",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-02"
+  },
+  {
+    "name": "Necro Gold",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-03"
+  },
+  {
+    "name": "Dwarven Gold",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-04"
+  },
+  {
+    "name": "Elven Gold",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-05"
+  },
+  {
+    "name": "Citrine Alchemy",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-06"
+  },
+  {
+    "name": "Mojave Gold",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-07"
+  },
+  {
+    "name": "Viking Gold",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-08"
+  },
+  {
+    "name": "Thrash Metal",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-09"
+  },
+  {
+    "name": "Speed Metal",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-10"
+  },
+  {
+    "name": "White Alchemy",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-11"
+  },
+  {
+    "name": "Deep Bronze",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-12"
+  },
+  {
+    "name": "Cobalt Alchemy",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-13"
+  },
+  {
+    "name": "Emerald Alchemy",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-14"
+  },
+  {
+    "name": "Ruby Alchemy",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-15"
+  },
+  {
+    "name": "Antique Gold",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-16"
+  },
+  {
+    "name": "Bronze Alchemy",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-17"
+  },
+  {
+    "name": "Copper Alchemy",
+    "brandSlug": "scale75",
+    "range": "Fantasy & Games",
+    "type": "METALLIC",
+    "code": "SFG-18"
+  },
+  {
+    "name": "Metal Color Aluminium",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.701"
+  },
+  {
+    "name": "Metal Color Duraluminium",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.702"
+  },
+  {
+    "name": "Metal Color Dark Aluminium",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.703"
+  },
+  {
+    "name": "Metal Color Pale Burnt Metal",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.704"
+  },
+  {
+    "name": "Metal Color White Aluminium",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.706"
+  },
+  {
+    "name": "Metal Color Chrome",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.707"
+  },
+  {
+    "name": "Metal Color Copper",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.710"
+  },
+  {
+    "name": "Metal Color Magnesium",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.711"
+  },
+  {
+    "name": "Metal Color Steel",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.712"
+  },
+  {
+    "name": "Metal Color Jet Exhaust",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.713"
+  },
+  {
+    "name": "Metal Color Semi Matt Aluminium",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.716"
+  },
+  {
+    "name": "Metal Color Dull Aluminium",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.717"
+  },
+  {
+    "name": "Metal Color Gunmetal Grey",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.720"
+  },
+  {
+    "name": "Metal Color Burnt Iron",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.721"
+  },
+  {
+    "name": "Metal Color Exhaust Manifold",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.723"
+  },
+  {
+    "name": "Metal Color Silver",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.724"
+  },
+  {
+    "name": "Metal Color Gold",
+    "brandSlug": "vallejo",
+    "range": "Metal Color",
+    "type": "METALLIC",
+    "code": "77.725"
+  },
+  {
+    "name": "Game Wash Sepia",
+    "brandSlug": "vallejo",
+    "range": "Game Wash",
+    "type": "SHADE",
+    "code": "73.200"
+  },
+  {
+    "name": "Game Wash Black",
+    "brandSlug": "vallejo",
+    "range": "Game Wash",
+    "type": "SHADE",
+    "code": "73.201"
+  },
+  {
+    "name": "Game Wash Pale Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Wash",
+    "type": "SHADE",
+    "code": "73.202"
+  },
+  {
+    "name": "Game Wash Umber",
+    "brandSlug": "vallejo",
+    "range": "Game Wash",
+    "type": "SHADE",
+    "code": "73.203"
+  },
+  {
+    "name": "Game Wash Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Wash",
+    "type": "SHADE",
+    "code": "73.204"
+  },
+  {
+    "name": "Game Wash Green",
+    "brandSlug": "vallejo",
+    "range": "Game Wash",
+    "type": "SHADE",
+    "code": "73.205"
+  },
+  {
+    "name": "Game Wash Red",
+    "brandSlug": "vallejo",
+    "range": "Game Wash",
+    "type": "SHADE",
+    "code": "73.206"
+  },
+  {
+    "name": "Game Wash Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Wash",
+    "type": "SHADE",
+    "code": "73.207"
+  },
+  {
+    "name": "Model Wash Dark Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.514"
+  },
+  {
+    "name": "Model Wash Dark Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.515"
+  },
+  {
+    "name": "Model Wash Light Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.516"
+  },
+  {
+    "name": "Model Wash Black",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.517"
+  },
+  {
+    "name": "Model Wash Sepia",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.518"
+  },
+  {
+    "name": "Model Wash Rust",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.519"
+  },
+  {
+    "name": "Model Wash Olive Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.520"
+  },
+  {
+    "name": "Model Wash Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.521"
+  },
+  {
+    "name": "Model Wash Oily Steel",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.522"
+  },
+  {
+    "name": "Model Wash Pale Grey Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.523"
+  },
+  {
+    "name": "Model Wash Green Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.524"
+  },
+  {
+    "name": "Model Wash Dark Khaki Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "SHADE",
+    "code": "76.525"
+  },
+  {
+    "name": "Surface Primer Black",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "PRIMER",
+    "code": "70.601"
+  },
+  {
+    "name": "Surface Primer Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "PRIMER",
+    "code": "70.613"
+  },
+  {
+    "name": "Surface Primer Rust",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "PRIMER",
+    "code": "70.608"
+  },
+  {
+    "name": "Surface Primer German Panzer Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "PRIMER",
+    "code": "70.609"
+  },
+  {
+    "name": "Surface Primer Panzer Dark Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "PRIMER",
+    "code": "70.610"
+  },
+  {
+    "name": "Surface Primer US Dark Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "PRIMER",
+    "code": "70.611"
+  },
+  {
+    "name": "Surface Primer Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "PRIMER",
+    "code": "70.612"
+  },
+  {
+    "name": "Surface Primer Black (spray)",
+    "brandSlug": "vallejo",
+    "range": "Hobby Spray",
+    "type": "PRIMER",
+    "code": "28.011"
+  },
+  {
+    "name": "Surface Primer White (spray)",
+    "brandSlug": "vallejo",
+    "range": "Hobby Spray",
+    "type": "PRIMER",
+    "code": "28.010"
+  },
+  {
+    "name": "Surface Primer Grey (spray)",
+    "brandSlug": "vallejo",
+    "range": "Hobby Spray",
+    "type": "PRIMER",
+    "code": "28.013"
+  },
+  {
+    "name": "Surface Primer Brown (spray)",
+    "brandSlug": "vallejo",
+    "range": "Hobby Spray",
+    "type": "PRIMER",
+    "code": "28.015"
+  },
+  {
+    "name": "Model Air Aluminium",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.062"
+  },
+  {
+    "name": "Model Air Steel",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.063"
+  },
+  {
+    "name": "Model Air Black",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.057"
+  },
+  {
+    "name": "Model Air White",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.001"
+  },
+  {
+    "name": "Model Air Red",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.003"
+  },
+  {
+    "name": "Model Air Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.004"
+  },
+  {
+    "name": "Model Air Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.002"
+  },
+  {
+    "name": "Model Air Green",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.005"
+  },
+  {
+    "name": "Model Air Medium Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.051"
+  },
+  {
+    "name": "Model Air Dark Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.054"
+  },
+  {
+    "name": "Model Air Light Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.050"
+  },
+  {
+    "name": "Model Air Tan",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.076"
+  },
+  {
+    "name": "Model Air Sand",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.077"
+  },
+  {
+    "name": "Model Air Olive Green",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.010"
+  },
+  {
+    "name": "Model Air Dark Green",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.015"
+  },
+  {
+    "name": "Model Air US Dark Green",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.016"
+  },
+  {
+    "name": "Model Air Intermediate Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.025"
+  },
+  {
+    "name": "Model Air Light Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.027"
+  },
+  {
+    "name": "Model Air Orange",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.008"
+  },
+  {
+    "name": "Model Air Dark Rust",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.080"
+  },
+  {
+    "name": "Model Air Gold",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.065"
+  },
+  {
+    "name": "Model Air Copper",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.066"
+  },
+  {
+    "name": "Model Air Gunship Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.109"
+  },
+  {
+    "name": "Model Air Panzer Dark Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.006"
+  },
+  {
+    "name": "Model Air Dark Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Air",
+    "type": "AIR",
+    "code": "71.040"
+  },
+  {
+    "name": "Matt Black",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3001P"
+  },
+  {
+    "name": "Deep Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3002P"
+  },
+  {
+    "name": "Uniform Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3003P"
+  },
+  {
+    "name": "Ash Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3004P"
+  },
+  {
+    "name": "Company Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3005P"
+  },
+  {
+    "name": "Brigade Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3006P"
+  },
+  {
+    "name": "Grey Castle",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3007P"
+  },
+  {
+    "name": "Gargoyle Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3008P"
+  },
+  {
+    "name": "Great Hall Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3009P"
+  },
+  {
+    "name": "Worn Stone",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3010P"
+  },
+  {
+    "name": "Brainmatter Beige",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3011P"
+  },
+  {
+    "name": "Matt White",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3012P"
+  },
+  {
+    "name": "Night Sky",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3013P"
+  },
+  {
+    "name": "Thunderous Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3014P"
+  },
+  {
+    "name": "Stratos Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3015P"
+  },
+  {
+    "name": "Wolf Grey",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3016P"
+  },
+  {
+    "name": "Runic Cobalt",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3017P"
+  },
+  {
+    "name": "Frost Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3018P"
+  },
+  {
+    "name": "Triumphant Navy",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3019P"
+  },
+  {
+    "name": "Gothic Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3020P"
+  },
+  {
+    "name": "Ultramarine Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3021P"
+  },
+  {
+    "name": "Alpha Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3022P"
+  },
+  {
+    "name": "Baron Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3023P"
+  },
+  {
+    "name": "Augur Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3024P"
+  },
+  {
+    "name": "Imperial Navy",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3025P"
+  },
+  {
+    "name": "Regal Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3026P"
+  },
+  {
+    "name": "Royal Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3027P"
+  },
+  {
+    "name": "Crystal Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3028P"
+  },
+  {
+    "name": "Arctic Gem",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3029P"
+  },
+  {
+    "name": "Bright Sapphire",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3030P"
+  },
+  {
+    "name": "Deep Ocean Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3031P"
+  },
+  {
+    "name": "Abyssal Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3032P"
+  },
+  {
+    "name": "Tidal Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3033P"
+  },
+  {
+    "name": "Phalanx Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3034P"
+  },
+  {
+    "name": "Shieldwall Blue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3035P"
+  },
+  {
+    "name": "Aegis Aqua",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3036P"
+  },
+  {
+    "name": "Deep Azure",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3037P"
+  },
+  {
+    "name": "Hydra Turquoise",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3038P"
+  },
+  {
+    "name": "Turquoise Siren",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3039P"
+  },
+  {
+    "name": "Aquamarine",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3040P"
+  },
+  {
+    "name": "Neptune Glow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3041P"
+  },
+  {
+    "name": "Marine Mist",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3042P"
+  },
+  {
+    "name": "Scarab Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3043P"
+  },
+  {
+    "name": "Temple Gate Teal",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3044P"
+  },
+  {
+    "name": "Pharaoh Guard",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3045P"
+  },
+  {
+    "name": "Talisman Teal",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3046P"
+  },
+  {
+    "name": "Aqua Alchemy",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3047P"
+  },
+  {
+    "name": "Amulet Aqua",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3048P"
+  },
+  {
+    "name": "Angel Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3049P"
+  },
+  {
+    "name": "Guardian Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3050P"
+  },
+  {
+    "name": "Greenskin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3051P"
+  },
+  {
+    "name": "Eternal Hunt",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3052P"
+  },
+  {
+    "name": "Wild Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3053P"
+  },
+  {
+    "name": "Ferocious Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3054P"
+  },
+  {
+    "name": "Emerald Forest",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3055P"
+  },
+  {
+    "name": "Leafy Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3056P"
+  },
+  {
+    "name": "Rainforest",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3057P"
+  },
+  {
+    "name": "Electric Lime",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3058P"
+  },
+  {
+    "name": "Vivid Volt",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3059P"
+  },
+  {
+    "name": "Afterglow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3060P"
+  },
+  {
+    "name": "Evergreen Fog",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3061P"
+  },
+  {
+    "name": "Medieval Forest",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3062P"
+  },
+  {
+    "name": "Patagon Pine",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3063P"
+  },
+  {
+    "name": "Autumn Sage",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3064P"
+  },
+  {
+    "name": "Forest Faun",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3065P"
+  },
+  {
+    "name": "Mossy Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3066P"
+  },
+  {
+    "name": "Woodland Camo",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3067P"
+  },
+  {
+    "name": "Army Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3068P"
+  },
+  {
+    "name": "Camouflage Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3069P"
+  },
+  {
+    "name": "Olive Drab",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3070P"
+  },
+  {
+    "name": "Necrotic Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3071P"
+  },
+  {
+    "name": "Grotesque Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3072P"
+  },
+  {
+    "name": "Brigandine Brown",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3073P"
+  },
+  {
+    "name": "Bootstrap Brown",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3074P"
+  },
+  {
+    "name": "Leather Brown",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3075P"
+  },
+  {
+    "name": "Paratrooper Tan",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3076P"
+  },
+  {
+    "name": "Command Khaki",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3077P"
+  },
+  {
+    "name": "Urban Buff",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3078P"
+  },
+  {
+    "name": "Tundra Taupe",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3079P"
+  },
+  {
+    "name": "Prairie Ochre",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3080P"
+  },
+  {
+    "name": "Desert Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3081P"
+  },
+  {
+    "name": "Wasteland Clay",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3082P"
+  },
+  {
+    "name": "Burnt Turf",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3083P"
+  },
+  {
+    "name": "Barren Dune",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3084P"
+  },
+  {
+    "name": "Dusty Skull",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3085P"
+  },
+  {
+    "name": "Tomb King Tan",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3086P"
+  },
+  {
+    "name": "Skeleton Bone",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3087P"
+  },
+  {
+    "name": "Ancient Stone",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3088P"
+  },
+  {
+    "name": "Bony Spikes",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3089P"
+  },
+  {
+    "name": "Pale Sand",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3090P"
+  },
+  {
+    "name": "Demigod Flames",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3091P"
+  },
+  {
+    "name": "Fiendish Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3092P"
+  },
+  {
+    "name": "Daemonic Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3093P"
+  },
+  {
+    "name": "Warped Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3094P"
+  },
+  {
+    "name": "Space Dust",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3095P"
+  },
+  {
+    "name": "Ice Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3096P"
+  },
+  {
+    "name": "Molten Lava",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3097P"
+  },
+  {
+    "name": "Burning Ore",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3098P"
+  },
+  {
+    "name": "Lava Orange",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3099P"
+  },
+  {
+    "name": "Flickering Flame",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3100P"
+  },
+  {
+    "name": "Glowing Inferno",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3101P"
+  },
+  {
+    "name": "Inner Light",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3102P"
+  },
+  {
+    "name": "Resplendent Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3103P"
+  },
+  {
+    "name": "Angelic Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3104P"
+  },
+  {
+    "name": "Legendary Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3105P"
+  },
+  {
+    "name": "Sacred Scarlet",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3106P"
+  },
+  {
+    "name": "Violent Vermilion",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3107P"
+  },
+  {
+    "name": "Raging Rouge",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3108P"
+  },
+  {
+    "name": "Oak Brown",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3109P"
+  },
+  {
+    "name": "Tree Ancient",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3110P"
+  },
+  {
+    "name": "Dryad Brown",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3111P"
+  },
+  {
+    "name": "Fur Brown",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3112P"
+  },
+  {
+    "name": "Ruddy Umber",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3113P"
+  },
+  {
+    "name": "Buffed Hide",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3114P"
+  },
+  {
+    "name": "Basilisk Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3115P"
+  },
+  {
+    "name": "Vile Violet",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3116P"
+  },
+  {
+    "name": "Warplock Purple",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3117P"
+  },
+  {
+    "name": "Arcane Grape",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3118P"
+  },
+  {
+    "name": "Foulblood Purple",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3119P"
+  },
+  {
+    "name": "Grim Lavender",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3120P"
+  },
+  {
+    "name": "Bright Amethyst",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3121P"
+  },
+  {
+    "name": "Witch Robes",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3122P"
+  },
+  {
+    "name": "Shimmering Violet",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3123P"
+  },
+  {
+    "name": "Pale Wisteria",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3124P"
+  },
+  {
+    "name": "Ghostly Mauve",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3125P"
+  },
+  {
+    "name": "Doomfire Magenta",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3126P"
+  },
+  {
+    "name": "Tempest Rose",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3127P"
+  },
+  {
+    "name": "Blazing Rose",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3128P"
+  },
+  {
+    "name": "Deathworld Pink",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3129P"
+  },
+  {
+    "name": "Siren Pink",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3130P"
+  },
+  {
+    "name": "Candy Floss Pink",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3131P"
+  },
+  {
+    "name": "Ashen Warrior",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3132P"
+  },
+  {
+    "name": "Dusky Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3133P"
+  },
+  {
+    "name": "Warrior Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3134P"
+  },
+  {
+    "name": "Scar Tissue",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3135P"
+  },
+  {
+    "name": "Wraith Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3136P"
+  },
+  {
+    "name": "Pallid Flesh",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3137P"
+  },
+  {
+    "name": "Deep Brown Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3138P"
+  },
+  {
+    "name": "Shade Brown Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3139P"
+  },
+  {
+    "name": "Mid Brown Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3140P"
+  },
+  {
+    "name": "Sun-Kissed Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3141P"
+  },
+  {
+    "name": "Honey Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3142P"
+  },
+  {
+    "name": "Pale Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3143P"
+  },
+  {
+    "name": "Dark Elf Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3144P"
+  },
+  {
+    "name": "Mid Elf Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3145P"
+  },
+  {
+    "name": "Fair Elf Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3146P"
+  },
+  {
+    "name": "Tiger Eye Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3147P"
+  },
+  {
+    "name": "Weathered Skin",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3148P"
+  },
+  {
+    "name": "Rosy Cheeks",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3149P"
+  },
+  {
+    "name": "Gore Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3150P"
+  },
+  {
+    "name": "Pure Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3151P"
+  },
+  {
+    "name": "Bright Red",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3152P"
+  },
+  {
+    "name": "Dark Tone",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3153P"
+  },
+  {
+    "name": "Weapon Bronze",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3154P"
+  },
+  {
+    "name": "Strong Tone",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3155P"
+  },
+  {
+    "name": "Soft Tone",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3156P"
+  },
+  {
+    "name": "Enchanted Cyan",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3157P"
+  },
+  {
+    "name": "Abyss Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3158P"
+  },
+  {
+    "name": "Wilderness Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3159P"
+  },
+  {
+    "name": "Plague Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "BASE",
+    "code": "WP3160P"
+  },
+  {
+    "name": "Pus Yellow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3161P"
+  },
+  {
+    "name": "Warp Fire Green",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "LAYER",
+    "code": "WP3162P"
+  },
+  {
+    "name": "Plate Mail Metal",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3201P"
+  },
+  {
+    "name": "Dark Stone",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3202P"
+  },
+  {
+    "name": "Tarnished Silver",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3203P"
+  },
+  {
+    "name": "Glinting Steel",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3204P"
+  },
+  {
+    "name": "Shining Silver",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3205P"
+  },
+  {
+    "name": "Mithril",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3206P"
+  },
+  {
+    "name": "Weapon Bronze",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3207P"
+  },
+  {
+    "name": "Dragon Bronze",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3208P"
+  },
+  {
+    "name": "Sorcerers Gold",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3209P"
+  },
+  {
+    "name": "Bright Gold",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3210P"
+  },
+  {
+    "name": "Goblin Gold",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3211P"
+  },
+  {
+    "name": "Angelic Gold",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3212P"
+  },
+  {
+    "name": "Cobalt Metal",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3213P"
+  },
+  {
+    "name": "Necromancer Cloak",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3214P"
+  },
+  {
+    "name": "Dark Emerald",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3215P"
+  },
+  {
+    "name": "Royal Burgundy",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3216P"
+  },
+  {
+    "name": "Gehenna's Gold",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3217P"
+  },
+  {
+    "name": "Bone Metal",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "METALLIC",
+    "code": "WP3218P"
+  },
+  {
+    "name": "Brush-On Primer",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3301P"
+  },
+  {
+    "name": "Hardened Carapace",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3302P"
+  },
+  {
+    "name": "Plague Rust",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3303P"
+  },
+  {
+    "name": "Astral Shimmer",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3304P"
+  },
+  {
+    "name": "Power Surge Glow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3305P"
+  },
+  {
+    "name": "Gloss Black",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3306P"
+  },
+  {
+    "name": "Gloss White",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3307P"
+  },
+  {
+    "name": "Wet Blood",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3308P"
+  },
+  {
+    "name": "Dry Blood",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3309P"
+  },
+  {
+    "name": "Disgusting Slime",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3310P"
+  },
+  {
+    "name": "Brown Battleground",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3311P"
+  },
+  {
+    "name": "Lava & Magma",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3312P"
+  },
+  {
+    "name": "Snow",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3313P"
+  },
+  {
+    "name": "Swamp Mud",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3314P"
+  },
+  {
+    "name": "Warpaints Varnish Matt",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3315P"
+  },
+  {
+    "name": "Warpaints Varnish Gloss",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3316P"
+  },
+  {
+    "name": "Mixing Medium",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3317P"
+  },
+  {
+    "name": "Wash Medium",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "TECHNICAL",
+    "code": "WP3318P"
+  },
+  {
+    "name": "Dark Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3401P"
+  },
+  {
+    "name": "Strong Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3402P"
+  },
+  {
+    "name": "Soft Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3403P"
+  },
+  {
+    "name": "Military Shader",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3404P"
+  },
+  {
+    "name": "Red Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3405P"
+  },
+  {
+    "name": "Blue Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3406P"
+  },
+  {
+    "name": "Green Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3407P"
+  },
+  {
+    "name": "Purple Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3408P"
+  },
+  {
+    "name": "Flesh Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3409P"
+  },
+  {
+    "name": "Skeleton Bone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3410P"
+  },
+  {
+    "name": "Strong Skin Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3411P"
+  },
+  {
+    "name": "Deep Brown Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3412P"
+  },
+  {
+    "name": "Crimson Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3413P"
+  },
+  {
+    "name": "Ultramarine Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3414P"
+  },
+  {
+    "name": "Seraphim Sepia Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3415P"
+  },
+  {
+    "name": "Turquoise Tone Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3416P"
+  },
+  {
+    "name": "Agrax Brown Wash",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3417P"
+  },
+  {
+    "name": "Wash Medium",
+    "brandSlug": "army-painter",
+    "range": "Warpaints Fanatic",
+    "type": "SHADE",
+    "code": "WP3418P"
+  },
+  {
+    "name": "Cobra Leather",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.040"
+  },
+  {
+    "name": "Scurvy Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.067"
+  },
+  {
+    "name": "Gold Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.007"
+  },
+  {
+    "name": "Moon Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.005"
+  },
+  {
+    "name": "Bronze Fleshtone",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.036"
+  },
+  {
+    "name": "Parasite Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.042"
+  },
+  {
+    "name": "Filthy Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.053"
+  },
+  {
+    "name": "Beasty Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.043"
+  },
+  {
+    "name": "Khaki Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.062"
+  },
+  {
+    "name": "Yellow Sand",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.065"
+  },
+  {
+    "name": "Hexed Lichen",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.015"
+  },
+  {
+    "name": "Royal Purple",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.016"
+  },
+  {
+    "name": "Warlord Purple",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.014"
+  },
+  {
+    "name": "Warlock Purple",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.017"
+  },
+  {
+    "name": "Squid Pink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.013"
+  },
+  {
+    "name": "Slaanesh Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.064"
+  },
+  {
+    "name": "Pale Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.003"
+  },
+  {
+    "name": "Elf Skintone",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.004"
+  },
+  {
+    "name": "Light Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.002"
+  },
+  {
+    "name": "Orkhide Shade",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.118"
+  },
+  {
+    "name": "Vermin Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.047"
+  },
+  {
+    "name": "Charadon Granite",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.116"
+  },
+  {
+    "name": "Thunderhawk Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.107"
+  },
+  {
+    "name": "Glacier Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.024"
+  },
+  {
+    "name": "Storm Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.095"
+  },
+  {
+    "name": "Magic Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.021"
+  },
+  {
+    "name": "Foul Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.026"
+  },
+  {
+    "name": "Sick Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.029"
+  },
+  {
+    "name": "Jade Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.028"
+  },
+  {
+    "name": "Livery Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.031"
+  },
+  {
+    "name": "Cayman Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.032"
+  },
+  {
+    "name": "Escorpena Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "LAYER",
+    "code": "72.033"
+  },
+  {
+    "name": "Orange Fire",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.009"
+  },
+  {
+    "name": "Heavy Red",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.141"
+  },
+  {
+    "name": "Evil Sunz Scarlet",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.012"
+  },
+  {
+    "name": "Mechrite Red",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.046"
+  },
+  {
+    "name": "Cold Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE",
+    "code": "72.050"
+  },
+  {
+    "name": "Red Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.085"
+  },
+  {
+    "name": "Orange Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.086"
+  },
+  {
+    "name": "Yellow Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.087"
+  },
+  {
+    "name": "Green Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.088"
+  },
+  {
+    "name": "Dark Green Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.089"
+  },
+  {
+    "name": "Blue Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.090"
+  },
+  {
+    "name": "Dark Blue Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.091"
+  },
+  {
+    "name": "Violet Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.092"
+  },
+  {
+    "name": "Black Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.093"
+  },
+  {
+    "name": "Brown Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.094"
+  },
+  {
+    "name": "Skin Wash Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.096"
+  },
+  {
+    "name": "Flesh Wash Ink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "INK",
+    "code": "72.097"
+  },
+  {
+    "name": "Fluorescent Red",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "TECHNICAL",
+    "code": "72.100"
+  },
+  {
+    "name": "Fluorescent Orange",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "TECHNICAL",
+    "code": "72.101"
+  },
+  {
+    "name": "Fluorescent Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "TECHNICAL",
+    "code": "72.102"
+  },
+  {
+    "name": "Fluorescent Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "TECHNICAL",
+    "code": "72.103"
+  },
+  {
+    "name": "Fluorescent Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "TECHNICAL",
+    "code": "72.104"
+  },
+  {
+    "name": "Fluorescent Cyan",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "TECHNICAL",
+    "code": "72.105"
+  },
+  {
+    "name": "Fluorescent Magenta",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "TECHNICAL",
+    "code": "72.106"
+  },
+  {
+    "name": "Seraphim Sepia",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "SHADE",
+    "code": "72.121"
+  },
+  {
+    "name": "Athonian Camoshade",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "SHADE",
+    "code": "72.122"
+  },
+  {
+    "name": "Druchii Violet",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "SHADE",
+    "code": "72.123"
+  },
+  {
+    "name": "Biel-Tan Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "SHADE",
+    "code": "72.124"
+  },
+  {
+    "name": "Agrax Earthshade",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "SHADE",
+    "code": "72.125"
+  },
+  {
+    "name": "Nuln Oil",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "SHADE",
+    "code": "72.126"
+  },
+  {
+    "name": "Carroburg Crimson",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "SHADE",
+    "code": "72.127"
+  },
+  {
+    "name": "Drakenhof Nightshade",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "SHADE",
+    "code": "72.128"
+  },
+  {
+    "name": "Brassy Brass",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "METALLIC",
+    "code": "72.055"
+  },
+  {
+    "name": "Shining Silver",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "METALLIC",
+    "code": "72.058"
+  },
+  {
+    "name": "Antique Gold",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "METALLIC",
+    "code": "72.060"
+  },
+  {
+    "name": "Genestealer Purple",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.401"
+  },
+  {
+    "name": "Alien Plasma",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.402"
+  },
+  {
+    "name": "Troll Claws",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.403"
+  },
+  {
+    "name": "Plague Bearer Flesh",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.404"
+  },
+  {
+    "name": "Mantis Warrior Green",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.405"
+  },
+  {
+    "name": "Orc Skin",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.406"
+  },
+  {
+    "name": "Bood Angels Red",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.407"
+  },
+  {
+    "name": "Fireslayer Orange",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.408"
+  },
+  {
+    "name": "Martian Ironearth",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.409"
+  },
+  {
+    "name": "Talassar Blue",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.410"
+  },
+  {
+    "name": "Stormlord Blue",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.411"
+  },
+  {
+    "name": "Sapphire Blue",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.412"
+  },
+  {
+    "name": "Iyanden Yellow",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.413"
+  },
+  {
+    "name": "Ultramarines Blue",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.414"
+  },
+  {
+    "name": "Biel-Tan Green",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.415"
+  },
+  {
+    "name": "Hexwraith Flame",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.416"
+  },
+  {
+    "name": "Skeleton Horde",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.417"
+  },
+  {
+    "name": "Flesh Tearers Red",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.418"
+  },
+  {
+    "name": "Skeleton Desert",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.419"
+  },
+  {
+    "name": "Warp Lightning",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.420"
+  },
+  {
+    "name": "Ratling Grime",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.421"
+  },
+  {
+    "name": "Ork Flesh",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.422"
+  },
+  {
+    "name": "Contrast Medium",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "TECHNICAL",
+    "code": "72.423"
+  },
+  {
+    "name": "Striking Scorpion Green",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.430"
+  },
+  {
+    "name": "Aeldari Emerald",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.431"
+  },
+  {
+    "name": "Doomfire Magenta",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.432"
+  },
+  {
+    "name": "Dreadful Visage",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.433"
+  },
+  {
+    "name": "Briar Queen Chill",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.434"
+  },
+  {
+    "name": "Bad Moon Yellow",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.435"
+  },
+  {
+    "name": "Magmadroth Flame",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.436"
+  },
+  {
+    "name": "Baal Red",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.437"
+  },
+  {
+    "name": "Ratling Grime Dark",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.438"
+  },
+  {
+    "name": "Intense Blue",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.441"
+  },
+  {
+    "name": "Intense Red",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.442"
+  },
+  {
+    "name": "Intense Green",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.443"
+  },
+  {
+    "name": "Intense Yellow",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.444"
+  },
+  {
+    "name": "Intense Purple",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.445"
+  },
+  {
+    "name": "Intense Orange",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.446"
+  },
+  {
+    "name": "Intense Black",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.447"
+  },
+  {
+    "name": "Intense White",
+    "brandSlug": "vallejo",
+    "range": "Xpress Color",
+    "type": "CONTRAST",
+    "code": "72.448"
+  },
+  {
+    "name": "Game Air Dead White",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.001"
+  },
+  {
+    "name": "Game Air Dead Black",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.051"
+  },
+  {
+    "name": "Game Air Cold Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.050"
+  },
+  {
+    "name": "Game Air Stonewall Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.049"
+  },
+  {
+    "name": "Game Air Wolf Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.063"
+  },
+  {
+    "name": "Game Air Slaanesh Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.064"
+  },
+  {
+    "name": "Game Air Night Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.020"
+  },
+  {
+    "name": "Game Air Magic Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.021"
+  },
+  {
+    "name": "Game Air Enchanted Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.022"
+  },
+  {
+    "name": "Game Air Ice Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.023"
+  },
+  {
+    "name": "Game Air Electric Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.024"
+  },
+  {
+    "name": "Game Air Ultramarine Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.017"
+  },
+  {
+    "name": "Game Air Hexed Lichen",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.015"
+  },
+  {
+    "name": "Game Air Royal Purple",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.016"
+  },
+  {
+    "name": "Game Air Warlord Purple",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.014"
+  },
+  {
+    "name": "Game Air Squid Pink",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.013"
+  },
+  {
+    "name": "Game Air Pale Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.003"
+  },
+  {
+    "name": "Game Air Dark Fleshtone",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.044"
+  },
+  {
+    "name": "Game Air Dwarf Skin",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.041"
+  },
+  {
+    "name": "Game Air Light Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.002"
+  },
+  {
+    "name": "Game Air Elf Skintone",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.004"
+  },
+  {
+    "name": "Game Air Bronze Fleshtone",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.036"
+  },
+  {
+    "name": "Game Air Beasty Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.043"
+  },
+  {
+    "name": "Game Air Parasite Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.042"
+  },
+  {
+    "name": "Game Air Charred Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.045"
+  },
+  {
+    "name": "Game Air Filthy Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.053"
+  },
+  {
+    "name": "Game Air Goblin Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.030"
+  },
+  {
+    "name": "Game Air Sick Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.029"
+  },
+  {
+    "name": "Game Air Foul Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.026"
+  },
+  {
+    "name": "Game Air Jade Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.028"
+  },
+  {
+    "name": "Game Air Livery Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.031"
+  },
+  {
+    "name": "Game Air Cayman Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.032"
+  },
+  {
+    "name": "Game Air Escorpena Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.033"
+  },
+  {
+    "name": "Game Air Scurvy Green",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.067"
+  },
+  {
+    "name": "Game Air Hot Orange",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.008"
+  },
+  {
+    "name": "Game Air Orange Fire",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.009"
+  },
+  {
+    "name": "Game Air Lava Orange",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.066"
+  },
+  {
+    "name": "Game Air Bloody Red",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.010"
+  },
+  {
+    "name": "Game Air Evil Sunz Scarlet",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.012"
+  },
+  {
+    "name": "Game Air Gory Red",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.011"
+  },
+  {
+    "name": "Game Air Moon Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.005"
+  },
+  {
+    "name": "Game Air Sun Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.006"
+  },
+  {
+    "name": "Game Air Gold Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.007"
+  },
+  {
+    "name": "Game Air Cobra Leather",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.040"
+  },
+  {
+    "name": "Game Air Khaki",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.061"
+  },
+  {
+    "name": "Game Air Khaki Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.062"
+  },
+  {
+    "name": "Game Air Yellow Sand",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.065"
+  },
+  {
+    "name": "Game Air Bone White",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.034"
+  },
+  {
+    "name": "Game Air Vermin Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.047"
+  },
+  {
+    "name": "Game Air Umbral Umber",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.048"
+  },
+  {
+    "name": "Game Air Chainmail Silver",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.052"
+  },
+  {
+    "name": "Game Air Polished Gold",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.056"
+  },
+  {
+    "name": "Game Air Gunmetal",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.057"
+  },
+  {
+    "name": "Game Air Shining Silver",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.058"
+  },
+  {
+    "name": "Game Air Bright Bronze",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.059"
+  },
+  {
+    "name": "Game Air Tinny Tin",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.054"
+  },
+  {
+    "name": "Game Air Brassy Brass",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.055"
+  },
+  {
+    "name": "Game Air Antique Gold",
+    "brandSlug": "vallejo",
+    "range": "Game Air",
+    "type": "AIR",
+    "code": "76.060"
+  },
+  {
+    "name": "Striking Scorpion Green",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-SSG"
+  },
+  {
+    "name": "Aeldari Emerald",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-AE"
+  },
+  {
+    "name": "Doomfire Magenta",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-DM"
+  },
+  {
+    "name": "Dreadful Visage",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-DV"
+  },
+  {
+    "name": "Briar Queen Chill",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-BQC"
+  },
+  {
+    "name": "Bad Moon Yellow",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-BMY"
+  },
+  {
+    "name": "Magmadroth Flame",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-MF"
+  },
+  {
+    "name": "Baal Red",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-BR"
+  },
+  {
+    "name": "Ratling Grime Dark",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-RGD"
+  },
+  {
+    "name": "Orruk Flesh",
+    "brandSlug": "citadel",
+    "range": "Contrast",
+    "type": "CONTRAST",
+    "code": "C-OF"
+  },
+  {
+    "name": "AK White",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11001"
+  },
+  {
+    "name": "AK Black",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11002"
+  },
+  {
+    "name": "Medium Grey",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11003"
+  },
+  {
+    "name": "Dark Grey",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11004"
+  },
+  {
+    "name": "Light Grey",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11005"
+  },
+  {
+    "name": "Off White",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11006"
+  },
+  {
+    "name": "Pale Grey",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11007"
+  },
+  {
+    "name": "IDF Blue",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11015"
+  },
+  {
+    "name": "Bright Blue",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11016"
+  },
+  {
+    "name": "Cobalt Blue",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11017"
+  },
+  {
+    "name": "Sky Blue",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11018"
+  },
+  {
+    "name": "Ice Blue",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11019"
+  },
+  {
+    "name": "Electric Blue",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11020"
+  },
+  {
+    "name": "Navy Blue",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11021"
+  },
+  {
+    "name": "Dark Blue",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11022"
+  },
+  {
+    "name": "Olive Green",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11030"
+  },
+  {
+    "name": "Dark Green",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11031"
+  },
+  {
+    "name": "Bright Green",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11032"
+  },
+  {
+    "name": "Lime Green",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11033"
+  },
+  {
+    "name": "Emerald Green",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11034"
+  },
+  {
+    "name": "Forest Green",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11035"
+  },
+  {
+    "name": "Camo Green",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11036"
+  },
+  {
+    "name": "Khaki Green",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11037"
+  },
+  {
+    "name": "Bright Red",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11045"
+  },
+  {
+    "name": "Dark Red",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11046"
+  },
+  {
+    "name": "Crimson Red",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11047"
+  },
+  {
+    "name": "Orange",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11048"
+  },
+  {
+    "name": "Burnt Orange",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11049"
+  },
+  {
+    "name": "Magenta",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11050"
+  },
+  {
+    "name": "Yellow",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11060"
+  },
+  {
+    "name": "Warm Yellow",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11061"
+  },
+  {
+    "name": "Dark Yellow",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11062"
+  },
+  {
+    "name": "Tan",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11063"
+  },
+  {
+    "name": "Khaki",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11064"
+  },
+  {
+    "name": "Sand",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11065"
+  },
+  {
+    "name": "Leather Brown",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11070"
+  },
+  {
+    "name": "Dark Brown",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11071"
+  },
+  {
+    "name": "Flesh",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11072"
+  },
+  {
+    "name": "Light Flesh",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11073"
+  },
+  {
+    "name": "Dark Flesh",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11074"
+  },
+  {
+    "name": "Purple",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11080"
+  },
+  {
+    "name": "Dark Purple",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "BASE",
+    "code": "AK11081"
+  },
+  {
+    "name": "Lilac",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "LAYER",
+    "code": "AK11082"
+  },
+  {
+    "name": "Chrome",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "METALLIC",
+    "code": "AK11200"
+  },
+  {
+    "name": "Gunmetal Grey",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "METALLIC",
+    "code": "AK11201"
+  },
+  {
+    "name": "Dark Steel",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "METALLIC",
+    "code": "AK11202"
+  },
+  {
+    "name": "Gold",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "METALLIC",
+    "code": "AK11210"
+  },
+  {
+    "name": "Pale Gold",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "METALLIC",
+    "code": "AK11211"
+  },
+  {
+    "name": "Bronze",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "METALLIC",
+    "code": "AK11212"
+  },
+  {
+    "name": "Copper",
+    "brandSlug": "ak-interactive",
+    "range": "AK 3rd Gen",
+    "type": "METALLIC",
+    "code": "AK11213"
+  },
+  {
+    "name": "Quick Gen Black",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12001"
+  },
+  {
+    "name": "Quick Gen White",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12002"
+  },
+  {
+    "name": "Quick Gen Dark Grey",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12003"
+  },
+  {
+    "name": "Quick Gen Grey",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12004"
+  },
+  {
+    "name": "Quick Gen Pale Grey",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12005"
+  },
+  {
+    "name": "Quick Gen Navy Blue",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12010"
+  },
+  {
+    "name": "Quick Gen Dark Blue",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12011"
+  },
+  {
+    "name": "Quick Gen Blue",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12012"
+  },
+  {
+    "name": "Quick Gen Sky Blue",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12013"
+  },
+  {
+    "name": "Quick Gen Turquoise",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12014"
+  },
+  {
+    "name": "Quick Gen Dark Green",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12020"
+  },
+  {
+    "name": "Quick Gen Forest Green",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12021"
+  },
+  {
+    "name": "Quick Gen Green",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12022"
+  },
+  {
+    "name": "Quick Gen Lime",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12023"
+  },
+  {
+    "name": "Quick Gen Olive",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12024"
+  },
+  {
+    "name": "Quick Gen Dark Brown",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12030"
+  },
+  {
+    "name": "Quick Gen Brown",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12031"
+  },
+  {
+    "name": "Quick Gen Tan",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12032"
+  },
+  {
+    "name": "Quick Gen Sand",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12033"
+  },
+  {
+    "name": "Quick Gen Bone",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12034"
+  },
+  {
+    "name": "Quick Gen Dark Red",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12040"
+  },
+  {
+    "name": "Quick Gen Red",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12041"
+  },
+  {
+    "name": "Quick Gen Orange Red",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12042"
+  },
+  {
+    "name": "Quick Gen Orange",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12043"
+  },
+  {
+    "name": "Quick Gen Yellow",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12044"
+  },
+  {
+    "name": "Quick Gen Dark Purple",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12050"
+  },
+  {
+    "name": "Quick Gen Purple",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12051"
+  },
+  {
+    "name": "Quick Gen Pink",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12052"
+  },
+  {
+    "name": "Quick Gen Dark Flesh",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12060"
+  },
+  {
+    "name": "Quick Gen Flesh",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12061"
+  },
+  {
+    "name": "Quick Gen Light Flesh",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12062"
+  },
+  {
+    "name": "Quick Gen Gold",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12070"
+  },
+  {
+    "name": "Quick Gen Bronze",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12071"
+  },
+  {
+    "name": "Quick Gen Silver",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12072"
+  },
+  {
+    "name": "Quick Gen Rust",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12080"
+  },
+  {
+    "name": "Quick Gen Verdigris",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "CONTRAST",
+    "code": "AK12081"
+  },
+  {
+    "name": "Quick Gen Quick Gen Medium",
+    "brandSlug": "ak-interactive",
+    "range": "Quick Gen",
+    "type": "TECHNICAL",
+    "code": "AK12090"
+  },
+  {
+    "name": "Black Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-01"
+  },
+  {
+    "name": "Dark Blue Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-02"
+  },
+  {
+    "name": "Blue Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-03"
+  },
+  {
+    "name": "Turquoise Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-04"
+  },
+  {
+    "name": "Dark Green Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-05"
+  },
+  {
+    "name": "Green Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-06"
+  },
+  {
+    "name": "Light Green Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-07"
+  },
+  {
+    "name": "Yellow Green Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-08"
+  },
+  {
+    "name": "Yellow Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-09"
+  },
+  {
+    "name": "Orange Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-10"
+  },
+  {
+    "name": "Red Orange Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-11"
+  },
+  {
+    "name": "Red Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-12"
+  },
+  {
+    "name": "Dark Red Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-13"
+  },
+  {
+    "name": "Purple Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-14"
+  },
+  {
+    "name": "Violet Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-15"
+  },
+  {
+    "name": "Pink Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-16"
+  },
+  {
+    "name": "Skin Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-17"
+  },
+  {
+    "name": "Dark Skin Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-18"
+  },
+  {
+    "name": "Brown Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-19"
+  },
+  {
+    "name": "Leather Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-20"
+  },
+  {
+    "name": "Sepia Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-21"
+  },
+  {
+    "name": "Skin Wash",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-22"
+  },
+  {
+    "name": "Brown Wash",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-23"
+  },
+  {
+    "name": "Grey Wash",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-24"
+  },
+  {
+    "name": "Black Wash",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-25"
+  },
+  {
+    "name": "Blood Red Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-26"
+  },
+  {
+    "name": "Crimson Red Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-27"
+  },
+  {
+    "name": "Bone Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-28"
+  },
+  {
+    "name": "Pale Flesh Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-29"
+  },
+  {
+    "name": "Ghost Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-30"
+  },
+  {
+    "name": "Mint Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-31"
+  },
+  {
+    "name": "Aqua Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-32"
+  },
+  {
+    "name": "Cobalt Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-33"
+  },
+  {
+    "name": "Navy Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-34"
+  },
+  {
+    "name": "Khaki Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-35"
+  },
+  {
+    "name": "Desert Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-36"
+  },
+  {
+    "name": "Swamp Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-37"
+  },
+  {
+    "name": "Forest Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-38"
+  },
+  {
+    "name": "Gold Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-39"
+  },
+  {
+    "name": "Bronze Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-40"
+  },
+  {
+    "name": "Silver Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-41"
+  },
+  {
+    "name": "Copper Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-42"
+  },
+  {
+    "name": "Rust Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-43"
+  },
+  {
+    "name": "Plague Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-44"
+  },
+  {
+    "name": "Acid Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-45"
+  },
+  {
+    "name": "Warp Ink",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "CONTRAST",
+    "code": "SI-46"
+  },
+  {
+    "name": "Instant Medium",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "TECHNICAL",
+    "code": "SI-47"
+  },
+  {
+    "name": "Gloss Medium",
+    "brandSlug": "scale75",
+    "range": "Instant Color",
+    "type": "TECHNICAL",
+    "code": "SI-48"
+  }
+]

@@ -31,6 +31,7 @@ const stepSchema = z.object({
     area: z.string().min(1),
     techniqueId: z.string().uuid(),
     paintId: z.string().uuid().optional().nullable(),
+    userCustomPaintId: z.string().uuid().optional().nullable(),
     mix: z.string().optional().nullable(),
     dilution: z.string().optional().nullable(),
     tools: z.string().optional().nullable(),
@@ -94,6 +95,7 @@ router.get('/:id', async (req: Request, res: Response) => {
                 include: {
                     technique: true,
                     paint: { include: { brand: { select: { name: true } } } },
+                    userCustomPaint: true,
                 },
             },
             items: { select: { id: true, name: true, status: true } },

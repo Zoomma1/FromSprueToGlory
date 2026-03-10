@@ -13,6 +13,8 @@ import mediaRoutes from './routes/media.routes';
 import exportRoutes from './routes/export.routes';
 import accountRoutes from './routes/account.routes';
 import projectsRoutes from './routes/projects.routes';
+import adminRoutes from './routes/admin.routes';
+import userPaintsRoutes from './routes/user-paints.routes';
 
 // ──────────────────────────────────────────────
 // 🏭 App Factory
@@ -84,6 +86,8 @@ export function createApp() {
     app.use('/api/export', exportRoutes);
     app.use('/api/account', accountRoutes);
     app.use('/api/projects', projectsRoutes);
+    app.use('/api/admin', adminRoutes);
+    app.use('/api/user-paints', userPaintsRoutes);
 
     return app;
 }
