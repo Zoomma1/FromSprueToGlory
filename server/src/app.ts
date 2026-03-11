@@ -50,7 +50,11 @@ const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 // ALTERNATIVE: export app directly (simpler, but harder to test)
 // ──────────────────────────────────────────────
 
-export function createApp() {
+interface AppOptions {
+    skipAuthRateLimit?: boolean;
+}
+
+export function createApp(options: AppOptions = {}) {
     const app = express();
 
     // ─── Security middleware ───────────────────
@@ -102,6 +106,17 @@ export function createApp() {
     });
 
     // ─── API Routes ───────────────────────────
+    if (!options.skipAuthRateLimit && process.env.NODE_ENV !== 'test') {
+        app.use(
+            '/api/auth',
+            rateLimit({
+                windowMs: 15 * 60 * 1000,
+                max: 10,
+                standardHeaders: true,
+                legacyHeaders: false,
+            }),
+        );
+    }
     app.use('/api/auth', authRoutes);
     app.use('/api/reference', referenceRoutes);
     app.use('/api/items', itemsRoutes);
