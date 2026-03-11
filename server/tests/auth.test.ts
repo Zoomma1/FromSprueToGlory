@@ -341,3 +341,13 @@ describe('Auth Routes', () => {
         });
     });
 });
+
+// ─── Auth Rate Limiting (ARL-01/02/03) ───────────────────
+// Wave 0: Using it.todo() so stubs compile and are visible without blocking the suite.
+// Full ARL tests require createApp({ skipAuthRateLimit: false }) which is not available
+// until Plan 03 adds the flag to app.ts.
+describe('Auth Rate Limiting (ARL-01/02/03)', () => {
+    it.todo('POST /api/auth/login — 11th request returns 429 (ARL-01)');
+    it.todo('POST /api/auth/signup — 11th request returns 429 (ARL-02)');
+    it.todo('POST /api/auth/refresh — 11th request returns 429 (ARL-03)');
+});

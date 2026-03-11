@@ -397,4 +397,39 @@ describe('Color Schemes Routes', () => {
             expect(res.status).toBe(401);
         });
     });
+
+    // ─── Ownership enforcement (OWN-02) ──────────────────
+    // Wave 0: These tests are RED until Plan 02 fixes the service.
+    // Currently the service returns 404 because findFirst({ where: { id, userId } })
+    // returns null for both not-found AND wrong-owner cases.
+    describe('Ownership enforcement (OWN-02)', () => {
+        it('PUT /api/color-schemes/:id — returns 403 when scheme belongs to another user', async () => {
+            (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'cs-1',
+                userId: 'other-user',
+                steps: [],
+            });
+
+            const res = await request(app)
+                .put('/api/color-schemes/cs-1')
+                .set('Authorization', AUTH)
+                .send({ name: 'Updated' });
+
+            expect(res.status).toBe(403);
+        });
+
+        it('DELETE /api/color-schemes/:id — returns 403 when scheme belongs to another user', async () => {
+            (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'cs-1',
+                userId: 'other-user',
+                steps: [],
+            });
+
+            const res = await request(app)
+                .delete('/api/color-schemes/cs-1')
+                .set('Authorization', AUTH);
+
+            expect(res.status).toBe(403);
+        });
+    });
 });

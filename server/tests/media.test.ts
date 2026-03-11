@@ -127,3 +127,13 @@ describe('GET /api/export/items — Zod validation (ZOD-07)', () => {
     expect(res.status).toBe(200);
   });
 });
+
+// ─── S3 Singleton (S3S-01/02) ────────────────────────────
+// Wave 0: Using it.todo() so stubs compile and are visible without blocking the suite.
+// Full S3S tests require lib/s3.ts to exist (Plan 04) and mocking lib/s3 instead of
+// @aws-sdk/client-s3 directly.
+describe('S3 Singleton (S3S-01/02)', () => {
+  it.todo('presignUpload uses getS3Client() singleton not per-request new S3Client() (S3S-01)');
+  it.todo('presignRead uses getS3Client() singleton not per-request new S3Client() (S3S-01)');
+  it.todo('presignUpload does not log AWS credentials on error (S3S-02)');
+});
