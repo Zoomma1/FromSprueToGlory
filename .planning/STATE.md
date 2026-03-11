@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
+stopped_at: Completed 01-service-layer/01-02-PLAN.md
+last_updated: "2026-03-11T10:50:24.563Z"
+last_activity: 2026-03-11 — Plan 01-01 complete (service layer foundation)
+progress:
+  total_phases: 4
+  completed_phases: 1
+  total_plans: 2
+  completed_plans: 2
+  percent: 100
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: in-progress
 stopped_at: Completed 01-service-layer/01-01-PLAN.md
 last_updated: "2026-03-11T09:48:42Z"
 last_activity: 2026-03-11 — Completed plan 01-01 (service layer foundation)
 progress:
-  total_phases: 4
+  [██████████] 100%
   completed_phases: 0
   total_plans: 4
   completed_plans: 1
@@ -50,6 +66,7 @@ Progress: [██░░░░░░░░] 25%
 - Trend: baseline established
 
 *Updated after each plan completion*
+| Phase 01-service-layer P02 | 26 min | 2 tasks | 20 files |
 
 ## Accumulated Context
 
@@ -65,6 +82,9 @@ Recent decisions affecting current work:
 - [01-01]: Zod schemas moved to service layer — validation is business logic, not HTTP concern
 - [01-01]: Object.setPrototypeOf in AppError constructor — required for correct instanceof at runtime in TypeScript ES5 output
 - [01-01]: ValidationError carries optional details field — preserves Zod flatten() shape expected by existing tests
+- [Phase 01-02]: auth.service.ts uses unified 'Invalid or expired refresh token' message for both JWT verification failures and DB-not-found — consistent error surface
+- [Phase 01-02]: export.service.ts returns discriminated union { type: 'csv' | 'json' } — route sets headers without containing CSV formatting logic
+- [Phase 01-02]: admin.service.ts PaintSyncItem interface replaces any — type safety enforced at service boundary
 
 ### Pending Todos
 
@@ -76,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-11T09:48:42Z
-Stopped at: Completed 01-service-layer/01-01-PLAN.md
-Resume file: .planning/phases/01-service-layer/01-02-PLAN.md (next plan)
+Last session: 2026-03-11T10:50:24.560Z
+Stopped at: Completed 01-service-layer/01-02-PLAN.md
+Resume file: None

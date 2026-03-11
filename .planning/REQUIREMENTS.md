@@ -87,9 +87,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SVC-01 | Phase 1 | Pending |
-| SVC-02 | Phase 1 | Pending |
-| SVC-03 | Phase 1 | Pending |
+| SVC-01 | Phase 1 | Complete |
+| SVC-02 | Phase 1 | Complete |
+| SVC-03 | Phase 1 | Complete |
 | PAG-01 | Phase 2 | Pending |
 | PAG-02 | Phase 2 | Pending |
 | PAG-03 | Phase 2 | Pending |
