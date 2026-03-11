@@ -1,5 +1,5 @@
 // ──────────────────────────────────────────────────────────
-// 📸 Media Routes — S3 Pre-signed URLs
+// Media Routes — Thin HTTP adapter
 // ──────────────────────────────────────────────────────────
 // Generates pre-signed URLs for direct upload/read from S3.
 //
@@ -17,121 +17,51 @@
 //
 // NOTE: S3 must be configured in .env. If not, these endpoints
 //       return 503 with a helpful message.
+//
+// All business logic lives in media.service.ts.
 // ──────────────────────────────────────────────────────────
 
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { authMiddleware } from '../middleware/auth.middleware';
+import { asyncHandler } from '../lib/async-handler';
+import * as mediaService from '../services/media.service';
 
 const router = Router();
 router.use(authMiddleware);
 
-// Check if S3 is configured
-function isS3Configured(): boolean {
-    return !!(
-        process.env.AWS_ACCESS_KEY_ID &&
-        process.env.AWS_SECRET_ACCESS_KEY &&
-        process.env.S3_BUCKET
-    );
-}
-
 // ─── POST /api/media/presign-upload ──────────────────────
-router.post('/presign-upload', async (req: Request, res: Response) => {
-    if (!isS3Configured()) {
-        res.status(503).json({
-            error: 'S3 not configured',
-            message: 'Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and S3_BUCKET in .env',
-        });
-        return;
-    }
 
-    const { fileName, contentType } = req.body;
-    if (!fileName || !contentType) {
-        res.status(400).json({ error: 'fileName and contentType are required' });
-        return;
-    }
+router.post(
+    '/presign-upload',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const { fileName, contentType } = req.body as { fileName?: string; contentType?: string };
 
-    // Build a unique key: users/{userId}/{timestamp}-{fileName}
-    const userId = req.userId;
-    const key = `users/${userId}/${Date.now()}-${fileName}`;
+        if (!fileName || !contentType) {
+            res.status(400).json({ error: 'fileName and contentType are required' });
+            return;
+        }
 
-    try {
-        // Dynamic import to avoid crash if aws-sdk not installed
-        const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3');
-        const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
-
-        const s3 = new S3Client({
-            region: process.env.S3_REGION || 'us-east-1',
-            ...(process.env.S3_ENDPOINT
-                ? {
-                    endpoint: process.env.S3_ENDPOINT,
-                    forcePathStyle: true, // needed for MinIO
-                }
-                : {}),
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-            },
-        });
-
-        const command = new PutObjectCommand({
-            Bucket: process.env.S3_BUCKET,
-            Key: key,
-            ContentType: contentType,
-        });
-
-        const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 300 }); // 5 min
-
-        res.json({ uploadUrl, key });
-    } catch (err) {
-        console.error('S3 presign-upload error:', err);
-        res.status(500).json({ error: 'Failed to generate upload URL' });
-    }
-});
+        const result = await mediaService.presignUpload(userId, fileName, contentType);
+        res.json(result);
+    }),
+);
 
 // ─── GET /api/media/presign-read/:key ────────────────────
-router.get('/presign-read/*', async (req: Request, res: Response) => {
-    if (!isS3Configured()) {
-        res.status(503).json({
-            error: 'S3 not configured',
-            message: 'Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and S3_BUCKET in .env',
-        });
-        return;
-    }
 
-    // Key is everything after /presign-read/
-    const key = req.params[0];
-    if (!key) {
-        res.status(400).json({ error: 'File key is required' });
-        return;
-    }
+router.get(
+    '/presign-read/*',
+    asyncHandler(async (req, res) => {
+        const key = req.params[0];
 
-    try {
-        const { S3Client, GetObjectCommand } = await import('@aws-sdk/client-s3');
-        const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
+        if (!key) {
+            res.status(400).json({ error: 'File key is required' });
+            return;
+        }
 
-        const s3 = new S3Client({
-            region: process.env.S3_REGION || 'us-east-1',
-            ...(process.env.S3_ENDPOINT
-                ? { endpoint: process.env.S3_ENDPOINT, forcePathStyle: true }
-                : {}),
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-            },
-        });
-
-        const command = new GetObjectCommand({
-            Bucket: process.env.S3_BUCKET,
-            Key: key,
-        });
-
-        const readUrl = await getSignedUrl(s3, command, { expiresIn: 3600 }); // 1 hour
-
-        res.json({ readUrl, key });
-    } catch (err) {
-        console.error('S3 presign-read error:', err);
-        res.status(500).json({ error: 'Failed to generate read URL' });
-    }
-});
+        const result = await mediaService.presignRead(key);
+        res.json(result);
+    }),
+);
 
 export default router;

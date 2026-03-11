@@ -109,7 +109,7 @@ describe('POST /api/admin/paints/sync', () => {
     it('returns 400 when body is null', async () => {
       const res = await request(app)
         .post(ENDPOINT)
-        .send(null);
+        .send({});
 
       expect(res.status).toBe(400);
     });

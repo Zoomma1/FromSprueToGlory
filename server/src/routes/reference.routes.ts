@@ -1,5 +1,5 @@
 // ──────────────────────────────────────────────────────────
-// 📚 Reference Routes — Read-only reference data
+// Reference Routes — Thin HTTP adapter
 // ──────────────────────────────────────────────────────────
 // These are public endpoints (no auth required) for reference data.
 // Frontend loads these to populate dropdowns, filters, etc.
@@ -9,73 +9,72 @@
 //   - Read-only: simpler endpoints, no mutations
 //   - Easy to cache (CDN or service-worker)
 //   - ALTERNATIVE: embed reference data in the frontend bundle (fast but rigid)
+//
+// All business logic lives in reference.service.ts.
 // ──────────────────────────────────────────────────────────
 
 import { Router } from 'express';
-import { prisma } from '../lib/prisma';
+import { asyncHandler } from '../lib/async-handler';
+import * as referenceService from '../services/reference.service';
 
 const router = Router();
 
 // GET /api/reference/game-systems
-router.get('/game-systems', async (_req, res) => {
-    const systems = await prisma.gameSystem.findMany({
-        orderBy: { name: 'asc' },
-        include: { _count: { select: { factions: true } } },
-    });
-    res.json(systems);
-});
+router.get(
+    '/game-systems',
+    asyncHandler(async (_req, res) => {
+        const systems = await referenceService.getGameSystems();
+        res.json(systems);
+    }),
+);
 
 // GET /api/reference/factions?gameSystemId=xxx
-router.get('/factions', async (req, res) => {
-    const { gameSystemId } = req.query;
-    const factions = await prisma.faction.findMany({
-        where: gameSystemId ? { gameSystemId: gameSystemId as string } : {},
-        orderBy: { name: 'asc' },
-        include: { gameSystem: { select: { name: true, slug: true } } },
-    });
-    res.json(factions);
-});
+router.get(
+    '/factions',
+    asyncHandler(async (req, res) => {
+        const gameSystemId = req.query.gameSystemId as string | undefined;
+        const factions = await referenceService.getFactions(gameSystemId);
+        res.json(factions);
+    }),
+);
 
 // GET /api/reference/models?factionId=xxx
-router.get('/models', async (req, res) => {
-    const { factionId } = req.query;
-    const models = await prisma.model.findMany({
-        where: factionId ? { factionId: factionId as string } : {},
-        orderBy: { name: 'asc' },
-        include: { faction: { select: { name: true } } },
-    });
-    res.json(models);
-});
+router.get(
+    '/models',
+    asyncHandler(async (req, res) => {
+        const factionId = req.query.factionId as string | undefined;
+        const models = await referenceService.getModels(factionId);
+        res.json(models);
+    }),
+);
 
 // GET /api/reference/paint-brands
-router.get('/paint-brands', async (_req, res) => {
-    const brands = await prisma.paintBrand.findMany({
-        orderBy: { name: 'asc' },
-        include: { _count: { select: { paints: true } } },
-    });
-    res.json(brands);
-});
+router.get(
+    '/paint-brands',
+    asyncHandler(async (_req, res) => {
+        const brands = await referenceService.getPaintBrands();
+        res.json(brands);
+    }),
+);
 
 // GET /api/reference/paints?brandId=xxx
-router.get('/paints', async (req, res) => {
-    const { brandId, type } = req.query;
-    const paints = await prisma.paint.findMany({
-        where: {
-            ...(brandId ? { brandId: brandId as string } : {}),
-            ...(type ? { type: type as never } : {}),
-        },
-        orderBy: { name: 'asc' },
-        include: { brand: { select: { name: true, slug: true } } },
-    });
-    res.json(paints);
-});
+router.get(
+    '/paints',
+    asyncHandler(async (req, res) => {
+        const brandId = req.query.brandId as string | undefined;
+        const type = req.query.type as string | undefined;
+        const paints = await referenceService.getPaints(brandId, type);
+        res.json(paints);
+    }),
+);
 
 // GET /api/reference/techniques
-router.get('/techniques', async (_req, res) => {
-    const techniques = await prisma.technique.findMany({
-        orderBy: { name: 'asc' },
-    });
-    res.json(techniques);
-});
+router.get(
+    '/techniques',
+    asyncHandler(async (_req, res) => {
+        const techniques = await referenceService.getTechniques();
+        res.json(techniques);
+    }),
+);
 
 export default router;
