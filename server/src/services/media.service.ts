@@ -1,22 +1,14 @@
 // ──────────────────────────────────────────────────────────
 // Media Service — Business Logic Layer
 // ──────────────────────────────────────────────────────────
-// S3 pre-signed URL generation.
-// Dynamic imports avoid crash if aws-sdk is not installed.
+// S3 pre-signed URL generation using the shared S3 singleton.
 // ──────────────────────────────────────────────────────────
 
 import z from 'zod';
+import { PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { AppError, ValidationError } from '../lib/errors';
-
-// ─── isS3Configured ───────────────────────────────────────
-
-function isS3Configured(): boolean {
-    return !!(
-        process.env.AWS_ACCESS_KEY_ID &&
-        process.env.AWS_SECRET_ACCESS_KEY &&
-        process.env.S3_BUCKET
-    );
-}
+import { getS3Client } from '../lib/s3';
 
 // ─── presignUploadSchema ──────────────────────────────────
 
@@ -37,30 +29,14 @@ export async function presignUpload(
     }
     const { fileName, fileType } = parsed.data;
 
-    if (!isS3Configured()) {
+    const s3 = getS3Client();
+    if (!s3) {
         throw new AppError(503, 'S3 not configured');
     }
 
     const key = `users/${userId}/${Date.now()}-${fileName}`;
 
     try {
-        const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3');
-        const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
-
-        const s3 = new S3Client({
-            region: process.env.S3_REGION || 'us-east-1',
-            ...(process.env.S3_ENDPOINT
-                ? {
-                    endpoint: process.env.S3_ENDPOINT,
-                    forcePathStyle: true,
-                }
-                : {}),
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-            },
-        });
-
         const command = new PutObjectCommand({
             Bucket: process.env.S3_BUCKET,
             Key: key,
@@ -79,25 +55,12 @@ export async function presignUpload(
 // ─── presignRead ──────────────────────────────────────────
 
 export async function presignRead(key: string): Promise<{ readUrl: string; key: string }> {
-    if (!isS3Configured()) {
+    const s3 = getS3Client();
+    if (!s3) {
         throw new AppError(503, 'S3 not configured');
     }
 
     try {
-        const { S3Client, GetObjectCommand } = await import('@aws-sdk/client-s3');
-        const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
-
-        const s3 = new S3Client({
-            region: process.env.S3_REGION || 'us-east-1',
-            ...(process.env.S3_ENDPOINT
-                ? { endpoint: process.env.S3_ENDPOINT, forcePathStyle: true }
-                : {}),
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-            },
-        });
-
         const command = new GetObjectCommand({
             Bucket: process.env.S3_BUCKET,
             Key: key,

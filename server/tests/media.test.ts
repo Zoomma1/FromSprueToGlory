@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
+import { getS3Client } from '../src/lib/s3';
 
-// Mock S3 libraries so presignUpload doesn't hit real S3 but the real schema still runs
+// Mock @aws-sdk/client-s3 for PutObjectCommand and GetObjectCommand only.
+// S3Client is no longer constructed in media.service.ts — it comes from lib/s3.
 vi.mock('@aws-sdk/client-s3', () => ({
-  S3Client: vi.fn().mockImplementation(() => ({})),
   PutObjectCommand: vi.fn(),
   GetObjectCommand: vi.fn(),
 }));
@@ -13,7 +14,12 @@ vi.mock('@aws-sdk/s3-request-presigner', () => ({
   getSignedUrl: vi.fn().mockResolvedValue('https://s3/mock-presigned-url'),
 }));
 
-// Ensure S3 env vars are set so isS3Configured() returns true
+// Mock lib/s3 — the service calls getS3Client() from here
+vi.mock('../src/lib/s3', () => ({
+  getS3Client: vi.fn().mockReturnValue({}),
+}));
+
+// Ensure S3 env vars are set so tests that need a configured S3 work
 process.env.AWS_ACCESS_KEY_ID = 'test-key';
 process.env.AWS_SECRET_ACCESS_KEY = 'test-secret';
 process.env.S3_BUCKET = 'test-bucket';
@@ -46,6 +52,8 @@ const AUTH_HEADER = { Authorization: 'Bearer valid-token' };
 describe('POST /api/media/presign-upload — Zod validation (ZOD-05)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Restore default: S3 is configured
+    (getS3Client as ReturnType<typeof vi.fn>).mockReturnValue({});
   });
 
   it('returns 400 with details when body is missing', async () => {
@@ -96,6 +104,7 @@ describe('POST /api/media/presign-upload — Zod validation (ZOD-05)', () => {
 describe('GET /api/export/items — Zod validation (ZOD-07)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    (getS3Client as ReturnType<typeof vi.fn>).mockReturnValue({});
   });
 
   it('returns 400 with details when format is invalid', async () => {
@@ -129,11 +138,45 @@ describe('GET /api/export/items — Zod validation (ZOD-07)', () => {
 });
 
 // ─── S3 Singleton (S3S-01/02) ────────────────────────────
-// Wave 0: Using it.todo() so stubs compile and are visible without blocking the suite.
-// Full S3S tests require lib/s3.ts to exist (Plan 04) and mocking lib/s3 instead of
-// @aws-sdk/client-s3 directly.
 describe('S3 Singleton (S3S-01/02)', () => {
-  it.todo('presignUpload uses getS3Client() singleton not per-request new S3Client() (S3S-01)');
-  it.todo('presignRead uses getS3Client() singleton not per-request new S3Client() (S3S-01)');
-  it.todo('presignUpload does not log AWS credentials on error (S3S-02)');
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Restore default: S3 is configured
+    (getS3Client as ReturnType<typeof vi.fn>).mockReturnValue({});
+  });
+
+  it('presignUpload calls getS3Client() instead of constructing new S3Client (S3S-01)', async () => {
+    const res = await request(app)
+      .post('/api/media/presign-upload')
+      .set(AUTH_HEADER)
+      .send({ fileName: 'test.jpg', fileType: 'image/jpeg' });
+    expect(res.status).toBe(200);
+    expect(getS3Client).toHaveBeenCalled();
+  });
+
+  it('presignUpload returns 503 when getS3Client returns null (S3S-01)', async () => {
+    (getS3Client as ReturnType<typeof vi.fn>).mockReturnValueOnce(null);
+    const res = await request(app)
+      .post('/api/media/presign-upload')
+      .set(AUTH_HEADER)
+      .send({ fileName: 'test.jpg', fileType: 'image/jpeg' });
+    expect(res.status).toBe(503);
+  });
+
+  it('presignUpload catch block does not log client or credentials (S3S-02)', async () => {
+    const consoleSpy = vi.spyOn(console, 'error');
+    (getS3Client as ReturnType<typeof vi.fn>).mockReturnValueOnce({});
+    // getSignedUrl is mocked to throw
+    const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
+    (getSignedUrl as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error('S3 error'));
+    await request(app)
+      .post('/api/media/presign-upload')
+      .set(AUTH_HEADER)
+      .send({ fileName: 'test.jpg', fileType: 'image/jpeg' });
+    // Error should be logged but not contain credential strings
+    const loggedArgs = consoleSpy.mock.calls.flat().join(' ');
+    expect(loggedArgs).not.toContain('test-key');
+    expect(loggedArgs).not.toContain('test-secret');
+    consoleSpy.mockRestore();
+  });
 });
