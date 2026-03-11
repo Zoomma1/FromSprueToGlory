@@ -5,7 +5,7 @@
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma';
-import { NotFoundError, ValidationError } from '../lib/errors';
+import { NotFoundError, ValidationError, ForbiddenError } from '../lib/errors';
 
 // ─── Zod Schemas ──────────────────────────────────────────
 
@@ -125,9 +125,12 @@ export async function updateScheme(userId: string, id: string, body: unknown) {
         throw new ValidationError('Validation failed', parsed.error.flatten());
     }
 
-    const existing = await prisma.colorScheme.findFirst({ where: { id, userId } });
+    const existing = await prisma.colorScheme.findFirst({ where: { id } });
     if (!existing) {
         throw new NotFoundError('Color scheme not found');
+    }
+    if (existing.userId !== userId) {
+        throw new ForbiddenError();
     }
 
     const { steps, ...schemeData } = parsed.data;
@@ -161,9 +164,12 @@ export async function updateScheme(userId: string, id: string, body: unknown) {
 // ─── deleteScheme ─────────────────────────────────────────
 
 export async function deleteScheme(userId: string, id: string): Promise<void> {
-    const existing = await prisma.colorScheme.findFirst({ where: { id, userId } });
+    const existing = await prisma.colorScheme.findFirst({ where: { id } });
     if (!existing) {
         throw new NotFoundError('Color scheme not found');
+    }
+    if (existing.userId !== userId) {
+        throw new ForbiddenError();
     }
 
     await prisma.colorScheme.delete({ where: { id } });
