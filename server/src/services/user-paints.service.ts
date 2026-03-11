@@ -15,11 +15,11 @@ const PAINT_TYPES = [
 
 // ─── Zod Schema ───────────────────────────────────────────
 
-const createPaintSchema = z.object({
+export const createPaintSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     type: z.enum(PAINT_TYPES).optional().nullable(),
     notes: z.string().optional().nullable(),
-});
+}).strict();
 
 // ─── listPaints ───────────────────────────────────────────
 

@@ -179,6 +179,15 @@ describe('POST /api/user-paints', () => {
     expect(res.body.name).toBe('My Custom Red');
   });
 
+  it('should return 400 when body has an unknown field', async () => {
+    const app = createApp();
+    const res = await request(app)
+      .post('/api/user-paints')
+      .set(AUTH_HEADER)
+      .send({ name: 'My Paint', extraField: 'x' });
+    expect(res.status).toBe(400);
+  });
+
   it('should create a custom paint with null type when type is omitted', async () => {
     vi.mocked(prisma.userCustomPaint.create).mockResolvedValue(
       { ...mockCustomPaint, type: null } as never,
