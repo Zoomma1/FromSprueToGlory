@@ -1,8 +1,11 @@
 import express from 'express';
+import type { ErrorRequestHandler } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { prisma } from './lib/prisma';
+import { AppError } from './lib/errors';
+import { ValidationError } from './lib/errors';
 
 // Route imports
 import authRoutes from './routes/auth.routes';
@@ -15,6 +18,27 @@ import accountRoutes from './routes/account.routes';
 import projectsRoutes from './routes/projects.routes';
 import adminRoutes from './routes/admin.routes';
 import userPaintsRoutes from './routes/user-paints.routes';
+
+// ──────────────────────────────────────────────
+// Centralized Error Handler
+// ──────────────────────────────────────────────
+// WHY four-argument signature?
+//   Express identifies error-handling middleware by its arity (4 args).
+//   The eslint rule @typescript-eslint/no-unused-vars is suppressed for
+//   _next which must be declared even though it is never called.
+// ──────────────────────────────────────────────
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+    if (err instanceof AppError) {
+        const body: Record<string, unknown> = { error: err.message };
+        if (err instanceof ValidationError && err.details !== undefined) {
+            body.details = err.details;
+        }
+        res.status(err.statusCode).json(body);
+        return;
+    }
+    console.error('Unhandled error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+};
 
 // ──────────────────────────────────────────────
 // 🏭 App Factory
@@ -88,6 +112,9 @@ export function createApp() {
     app.use('/api/projects', projectsRoutes);
     app.use('/api/admin', adminRoutes);
     app.use('/api/user-paints', userPaintsRoutes);
+
+    // Error handler must be mounted after all routes
+    app.use(errorHandler);
 
     return app;
 }
