@@ -2,18 +2,23 @@
 // Admin Service — Business Logic Layer
 // ──────────────────────────────────────────────────────────
 
+import z from 'zod';
 import type { PaintType } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 import { ValidationError } from '../lib/errors';
 
-// ─── Types ────────────────────────────────────────────────
+// ─── syncPaintsBodySchema ─────────────────────────────────
 
-interface PaintSyncItem {
-    name: string;
-    brandSlug: string;
-    type: string;
-    code?: string | null;
-}
+export const syncPaintsBodySchema = z.array(
+    z.object({
+        name: z.string().min(1),
+        brandSlug: z.string().min(1),
+        type: z.string().min(1),
+        code: z.string().optional(),
+    }).strict(),
+).min(1);
+
+// ─── Types ────────────────────────────────────────────────
 
 interface SyncResult {
     created: number;
@@ -24,27 +29,16 @@ interface SyncResult {
 // ─── syncPaints ───────────────────────────────────────────
 
 export async function syncPaints(body: unknown): Promise<SyncResult> {
-    const rawBody = body;
-    const rawArray = Array.isArray(rawBody)
-        ? rawBody.map((item: unknown) => {
-            const record = item as Record<string, unknown>;
-            return record.json ? (record.json as PaintSyncItem) : (record as unknown as PaintSyncItem);
-        })
-        : [];
-
-    if (rawArray.length === 0) {
-        throw new ValidationError('Expected a non-empty array of paints');
+    const parsed = syncPaintsBodySchema.safeParse(body);
+    if (!parsed.success) {
+        throw new ValidationError('Expected a non-empty array of paints', parsed.error.flatten());
     }
+    const rawArray = parsed.data;
 
     const results: SyncResult = { created: 0, skipped: 0, errors: [] };
 
     for (const paint of rawArray) {
         const { name, brandSlug, type, code } = paint;
-
-        if (!name || !brandSlug || !type) {
-            results.errors.push(`Missing fields for paint: ${JSON.stringify(paint)}`);
-            continue;
-        }
 
         try {
             const brand = await prisma.paintBrand.findUnique({

@@ -56,7 +56,6 @@ const mockBrand = { id: 'brand-citadel', slug: 'citadel', name: 'Citadel' };
 const validPaint = {
   name: 'Abaddon Black',
   brandSlug: 'citadel',
-  range: 'Base',
   type: 'BASE',
   code: 'CT-abaddon-black',
 };
@@ -113,21 +112,27 @@ describe('POST /api/admin/paints/sync', () => {
 
       expect(res.status).toBe(400);
     });
+
+    it('returns 400 with a details field when body is not an array', async () => {
+      const res = await request(app)
+        .post(ENDPOINT)
+        .send({ name: 'Abaddon Black' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBeDefined();
+      expect(res.body.details).toBeDefined(); // ZOD-08: consistent shape with details
+    });
   });
 
   //  Champs manquants
   describe('Missing required fields', () => {
     it('records an error when name is missing', async () => {
-      mockBrandFound();
-      mockPaintNotFound();
-
       const res = await request(app)
         .post(ENDPOINT)
         .send([{ brandSlug: 'citadel', type: 'BASE', code: 'REF-001' }]);
 
-      expect(res.status).toBe(200);
-      expect(res.body.errors).toHaveLength(1);
-      expect(res.body.created).toBe(0);
+      expect(res.status).toBe(400);
+      expect(res.body.details).toBeDefined();
     });
 
     it('records an error when brandSlug is missing', async () => {
@@ -135,9 +140,8 @@ describe('POST /api/admin/paints/sync', () => {
         .post(ENDPOINT)
         .send([{ name: 'Abaddon Black', type: 'BASE', code: 'REF-001' }]);
 
-      expect(res.status).toBe(200);
-      expect(res.body.errors).toHaveLength(1);
-      expect(res.body.created).toBe(0);
+      expect(res.status).toBe(400);
+      expect(res.body.details).toBeDefined();
     });
 
     it('records an error when type is missing', async () => {
@@ -145,9 +149,8 @@ describe('POST /api/admin/paints/sync', () => {
         .post(ENDPOINT)
         .send([{ name: 'Abaddon Black', brandSlug: 'citadel', code: 'REF-001' }]);
 
-      expect(res.status).toBe(200);
-      expect(res.body.errors).toHaveLength(1);
-      expect(res.body.created).toBe(0);
+      expect(res.status).toBe(400);
+      expect(res.body.details).toBeDefined();
     });
   });
 
