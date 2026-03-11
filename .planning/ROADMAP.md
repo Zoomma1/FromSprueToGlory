@@ -13,7 +13,7 @@ This milestone eliminates accumulated technical debt across the Express/TypeScri
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Service Layer** - Extract business logic from all route handlers into dedicated, independently testable service modules (completed 2026-03-11)
-- [x] **Phase 2: Validation and Pagination** - Apply uniform Zod validation across all routes and add limit/offset pagination to list endpoints (completed 2026-03-11)
+- [x] **Phase 2: Validation and Pagination** - Apply uniform Zod validation across all routes and add limit/offset pagination to list endpoints (completed 2026-03-11)
 - [ ] **Phase 3: Security and Atomicity** - Wrap color scheme step mutations in transactions, tighten auth rate limits, enforce ownership checks, and convert S3 client to singleton
 - [ ] **Phase 4: Test Coverage** - Add comprehensive Vitest tests for media, export, and admin routes plus unit tests for extracted service modules
 
@@ -55,7 +55,13 @@ Plans:
   2. Sending more than the configured threshold of requests to `/api/auth/login`, `/api/auth/signup`, or `/api/auth/refresh` within 15 minutes triggers a 429 response before the global limit is reached
   3. Attempting to mutate another user's color scheme steps returns 403 (not 404, not 500, not silent success)
   4. The S3/MinIO client is instantiated once at module load; no per-request constructor calls occur and credentials are not emitted in logs
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Wave 0 test stubs (color-schemes.service.test.ts, 403 cases, 429 todos, S3S todos)
+- [ ] 03-02-PLAN.md — TXN verification + OWN two-step ownership fix in color-schemes.service.ts
+- [ ] 03-03-PLAN.md — ARL: auth rate limiter in app.ts + 429 integration tests
+- [ ] 03-04-PLAN.md — S3S: lib/s3.ts singleton + media.service.ts refactor + S3S passing tests
 
 ### Phase 4: Test Coverage
 **Goal**: Media, export, and admin routes have comprehensive Vitest test suites, and extracted service modules have unit tests for core logic paths
@@ -76,5 +82,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Service Layer | 2/2 | Complete   | 2026-03-11 |
 | 2. Validation and Pagination | 4/4 | Complete   | 2026-03-11 |
-| 3. Security and Atomicity | 0/TBD | Not started | - |
+| 3. Security and Atomicity | 1/4 | In Progress|  |
 | 4. Test Coverage | 0/TBD | Not started | - |
