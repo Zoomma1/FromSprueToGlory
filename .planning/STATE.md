@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 03-security-and-atomicity/03-03-PLAN.md
-last_updated: "2026-03-11T20:42:36.900Z"
+stopped_at: Completed 03-security-and-atomicity/03-04-PLAN.md
+last_updated: "2026-03-11T20:46:17.819Z"
 last_activity: 2026-03-11 — Plan 01-01 complete (service layer foundation)
 progress:
   total_phases: 4
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
   percent: 100
 ---
 
@@ -74,6 +74,7 @@ Progress: [██░░░░░░░░] 25%
 | Phase 03-security-and-atomicity P01 | 2 | 2 tasks | 4 files |
 | Phase 03-security-and-atomicity P02 | 1 | 2 tasks | 1 files |
 | Phase 03-security-and-atomicity P03 | 5 | 2 tasks | 2 files |
+| Phase 03-security-and-atomicity P04 | 5 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,10 @@ Recent decisions affecting current work:
 - [Phase 03-02]: TXN-01/TXN-02 confirmed already satisfied by existing prisma.$transaction() — no code changes required
 - [Phase 03-03]: skipAuthRateLimit===false overrides NODE_ENV check — explicit false enables limiter regardless of environment, enabling integration testing of the rate limiter itself
 - [Phase 03-03]: Per-test createApp({ skipAuthRateLimit: false }) instances prevent in-memory rate limit state leaking between ARL tests
+- [Phase 03-04]: S3Client singleton uses module-level variable (not globalThis) — no connection pool, hot-reload resilience not needed
+- [Phase 03-04]: getS3Client() returns null (not throws) when env missing — callers decide error semantics (503)
+- [Phase 03-04]: Static imports replace dynamic import workaround in media.service.ts — aws-sdk is always installed
+- [Phase 03-04]: media.test.ts mocks lib/s3 (not @aws-sdk/client-s3) for S3S tests — service boundary is getS3Client()
 
 ### Pending Todos
 
@@ -117,6 +122,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-11T20:42:36.898Z
-Stopped at: Completed 03-security-and-atomicity/03-03-PLAN.md
+Last session: 2026-03-11T20:46:17.817Z
+Stopped at: Completed 03-security-and-atomicity/03-04-PLAN.md
 Resume file: None
