@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 02-validation-and-pagination/02-01-PLAN.md
-last_updated: "2026-03-11T15:20:31.905Z"
+stopped_at: Completed 02-validation-and-pagination/02-04-PLAN.md
+last_updated: "2026-03-11T15:52:28.455Z"
 last_activity: 2026-03-11 — Plan 01-01 complete (service layer foundation)
 progress:
   total_phases: 4
-  completed_phases: 1
-  total_plans: 5
-  completed_plans: 3
+  completed_phases: 2
+  total_plans: 6
+  completed_plans: 6
   percent: 100
 ---
 
@@ -68,6 +68,9 @@ Progress: [██░░░░░░░░] 25%
 *Updated after each plan completion*
 | Phase 01-service-layer P02 | 26 min | 2 tasks | 20 files |
 | Phase 02-validation-and-pagination P01 | 2 | 1 tasks | 2 files |
+| Phase 02-validation-and-pagination P02 | 5 | 2 tasks | 6 files |
+| Phase 02-validation-and-pagination P03 | 4 | 2 tasks | 4 files |
+| Phase 02-validation-and-pagination P04 | 8 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -88,6 +91,12 @@ Recent decisions affecting current work:
 - [Phase 01-02]: admin.service.ts PaintSyncItem interface replaces any — type safety enforced at service boundary
 - [Phase 02-01]: z.coerce.number() chosen over parseInt — Zod 3 documented pattern for query string coercion
 - [Phase 02-01]: paginationSchema placed in server/src/lib/ as shared single source of truth for limit/offset across all paginated endpoints
+- [Phase 02-02]: prisma.$transaction([findMany, count]) for atomic list+count — same WHERE prevents count drift
+- [Phase 02-02]: Pagination validation in service layer (not route) — ValidationError keeps routes thin
+- [Phase 02-03]: .strict() applied to all color-scheme and user-paint Zod schemas — unknown fields return 400 uniformly
+- [Phase 02-03]: All service Zod schemas exported as named constants — testable without HTTP layer
+- [Phase 02-04]: presignUploadSchema uses fileType (not contentType) — CONTEXT.md locked field name
+- [Phase 02-04]: syncPaintsBodySchema rejects entire batch on any invalid item — boundary rejection replaces per-item error collection, consistent with Phase 02 .strict() decision
 
 ### Pending Todos
 
@@ -99,6 +108,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-11T15:20:31.902Z
-Stopped at: Completed 02-validation-and-pagination/02-01-PLAN.md
+Last session: 2026-03-11T15:52:28.452Z
+Stopped at: Completed 02-validation-and-pagination/02-04-PLAN.md
 Resume file: None

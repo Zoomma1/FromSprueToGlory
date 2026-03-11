@@ -12,8 +12,8 @@ This milestone eliminates accumulated technical debt across the Express/TypeScri
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Service Layer** - Extract business logic from all route handlers into dedicated, independently testable service modules (completed 2026-03-11)
-- [ ] **Phase 2: Validation and Pagination** - Apply uniform Zod validation across all routes and add limit/offset pagination to list endpoints
+- [x] **Phase 1: Service Layer** - Extract business logic from all route handlers into dedicated, independently testable service modules (completed 2026-03-11)
+- [x] **Phase 2: Validation and Pagination** - Apply uniform Zod validation across all routes and add limit/offset pagination to list endpoints (completed 2026-03-11)
 - [ ] **Phase 3: Security and Atomicity** - Wrap color scheme step mutations in transactions, tighten auth rate limits, enforce ownership checks, and convert S3 client to singleton
 - [ ] **Phase 4: Test Coverage** - Add comprehensive Vitest tests for media, export, and admin routes plus unit tests for extracted service modules
 
@@ -38,7 +38,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. `GET /api/items` and `GET /api/projects` accept `limit` and `offset` query parameters and return paginated results alongside a total count
   3. Omitting `limit` and `offset` from list requests uses sensible defaults (limit=20, offset=0) without error
   4. Every route that previously lacked Zod validation now rejects malformed input with a consistent 400 shape
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Shared pagination schema (paginationSchema in lib/pagination.ts)
+- [ ] 02-02-PLAN.md — Items and projects pagination + strict schemas
+- [ ] 02-03-PLAN.md — Color-schemes and user-paints strict schemas
+- [ ] 02-04-PLAN.md — Zod validation for media, admin, and export routes (gap closure)
 
 ### Phase 3: Security and Atomicity
 **Goal**: Color scheme step mutations are atomic, auth endpoints are rate-limited, ownership is enforced, and the S3 client is a singleton
@@ -69,6 +75,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Service Layer | 2/2 | Complete   | 2026-03-11 |
-| 2. Validation and Pagination | 1/3 | In Progress|  |
+| 2. Validation and Pagination | 4/4 | Complete   | 2026-03-11 |
 | 3. Security and Atomicity | 0/TBD | Not started | - |
 | 4. Test Coverage | 0/TBD | Not started | - |

@@ -13,8 +13,8 @@
 
 ### Pagination
 
-- [ ] **PAG-01**: Item list endpoint (`GET /api/items`) accepts `limit` and `offset` query parameters and returns paginated results with total count
-- [ ] **PAG-02**: Project list endpoint (`GET /api/projects`) accepts `limit` and `offset` query parameters and returns paginated results with total count
+- [x] **PAG-01**: Item list endpoint (`GET /api/items`) accepts `limit` and `offset` query parameters and returns paginated results with total count
+- [x] **PAG-02**: Project list endpoint (`GET /api/projects`) accepts `limit` and `offset` query parameters and returns paginated results with total count
 - [x] **PAG-03**: Pagination parameters have sensible defaults (e.g., limit=20, offset=0) and are validated via Zod
 
 ### Transactions
@@ -35,14 +35,14 @@
 
 ### Zod Validation
 
-- [ ] **ZOD-01**: All item routes have Zod validation on request body and query parameters
-- [ ] **ZOD-02**: All project routes have Zod validation on request body and query parameters
-- [ ] **ZOD-03**: All color-scheme routes have Zod validation on request body and query parameters
-- [ ] **ZOD-04**: All user-paints routes have Zod validation on request body
-- [ ] **ZOD-05**: All media routes have Zod validation on request body
-- [ ] **ZOD-06**: All admin routes have Zod validation on request body and query parameters
-- [ ] **ZOD-07**: All export routes have Zod validation on query parameters
-- [ ] **ZOD-08**: Zod validation errors return a consistent response shape (400 with structured error detail)
+- [x] **ZOD-01**: All item routes have Zod validation on request body and query parameters
+- [x] **ZOD-02**: All project routes have Zod validation on request body and query parameters
+- [x] **ZOD-03**: All color-scheme routes have Zod validation on request body and query parameters
+- [x] **ZOD-04**: All user-paints routes have Zod validation on request body
+- [x] **ZOD-05**: All media routes have Zod validation on request body
+- [x] **ZOD-06**: All admin routes have Zod validation on request body and query parameters
+- [x] **ZOD-07**: All export routes have Zod validation on query parameters
+- [x] **ZOD-08**: Zod validation errors return a consistent response shape (400 with structured error detail)
 
 ### S3 Singleton
 
@@ -90,8 +90,8 @@
 | SVC-01 | Phase 1 | Complete |
 | SVC-02 | Phase 1 | Complete |
 | SVC-03 | Phase 1 | Complete |
-| PAG-01 | Phase 2 | Pending |
-| PAG-02 | Phase 2 | Pending |
+| PAG-01 | Phase 2 | Complete |
+| PAG-02 | Phase 2 | Complete |
 | PAG-03 | Phase 2 | Complete |
 | TXN-01 | Phase 3 | Pending |
 | TXN-02 | Phase 3 | Pending |
@@ -100,14 +100,14 @@
 | ARL-03 | Phase 3 | Pending |
 | OWN-01 | Phase 3 | Pending |
 | OWN-02 | Phase 3 | Pending |
-| ZOD-01 | Phase 2 | Pending |
-| ZOD-02 | Phase 2 | Pending |
-| ZOD-03 | Phase 2 | Pending |
-| ZOD-04 | Phase 2 | Pending |
-| ZOD-05 | Phase 2 | Pending |
-| ZOD-06 | Phase 2 | Pending |
-| ZOD-07 | Phase 2 | Pending |
-| ZOD-08 | Phase 2 | Pending |
+| ZOD-01 | Phase 2 | Complete |
+| ZOD-02 | Phase 2 | Complete |
+| ZOD-03 | Phase 2 | Complete |
+| ZOD-04 | Phase 2 | Complete |
+| ZOD-05 | Phase 2 | Complete |
+| ZOD-06 | Phase 2 | Complete |
+| ZOD-07 | Phase 2 | Complete |
+| ZOD-08 | Phase 2 | Complete |
 | S3S-01 | Phase 3 | Pending |
 | S3S-02 | Phase 3 | Pending |
 | TST-01 | Phase 4 | Pending |
