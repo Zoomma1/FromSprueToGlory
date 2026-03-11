@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 03-security-and-atomicity/03-02-PLAN.md
-last_updated: "2026-03-11T20:38:38.010Z"
+stopped_at: Completed 03-security-and-atomicity/03-03-PLAN.md
+last_updated: "2026-03-11T20:42:36.900Z"
 last_activity: 2026-03-11 — Plan 01-01 complete (service layer foundation)
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 10
-  completed_plans: 8
+  completed_plans: 9
   percent: 100
 ---
 
@@ -73,6 +73,7 @@ Progress: [██░░░░░░░░] 25%
 | Phase 02-validation-and-pagination P04 | 8 | 2 tasks | 7 files |
 | Phase 03-security-and-atomicity P01 | 2 | 2 tasks | 4 files |
 | Phase 03-security-and-atomicity P02 | 1 | 2 tasks | 1 files |
+| Phase 03-security-and-atomicity P03 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -103,6 +104,8 @@ Recent decisions affecting current work:
 - [Phase 03-02]: Two-step ownership lookup chosen over combined findFirst: enables 403 vs 404 distinction for wrong-owner vs missing scheme
 - [Phase 03-02]: getScheme intentionally left with combined query — read operations returning 404 for both cases is acceptable
 - [Phase 03-02]: TXN-01/TXN-02 confirmed already satisfied by existing prisma.$transaction() — no code changes required
+- [Phase 03-03]: skipAuthRateLimit===false overrides NODE_ENV check — explicit false enables limiter regardless of environment, enabling integration testing of the rate limiter itself
+- [Phase 03-03]: Per-test createApp({ skipAuthRateLimit: false }) instances prevent in-memory rate limit state leaking between ARL tests
 
 ### Pending Todos
 
@@ -114,6 +117,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-11T20:38:38.007Z
-Stopped at: Completed 03-security-and-atomicity/03-02-PLAN.md
+Last session: 2026-03-11T20:42:36.898Z
+Stopped at: Completed 03-security-and-atomicity/03-03-PLAN.md
 Resume file: None
