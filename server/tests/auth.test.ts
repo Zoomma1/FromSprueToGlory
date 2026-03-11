@@ -277,7 +277,7 @@ describe('Auth Routes', () => {
                 .send({ refreshToken: 'tampered-token' });
 
             expect(res.status).toBe(401);
-            expect(res.body.error).toBe('Invalid refresh token');
+            expect(res.body.error).toBe('Invalid or expired refresh token');
         });
 
         it('returns 401 when the token is not found in the database', async () => {

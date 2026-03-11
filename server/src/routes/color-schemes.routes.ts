@@ -1,5 +1,5 @@
 // ──────────────────────────────────────────────────────────
-// 🎨 Color Schemes Routes — Painting recipes CRUD
+// Color Schemes Routes — Thin HTTP adapter
 // ──────────────────────────────────────────────────────────
 // Color schemes include ordered steps (the painting recipe).
 // Steps are managed as a nested array: when creating/updating
@@ -14,198 +14,74 @@
 //
 // 🎯 MINI-EXERCISE: What happens if you send steps with duplicate
 //    orderIndex values? Try it and check the error response.
+//
+// All business logic lives in color-schemes.service.ts.
 // ──────────────────────────────────────────────────────────
 
-import { Router, Request, Response } from 'express';
-import { z } from 'zod';
-import { prisma } from '../lib/prisma';
+import { Router } from 'express';
 import { authMiddleware } from '../middleware/auth.middleware';
-import type { Prisma } from '@prisma/client';
+import { asyncHandler } from '../lib/async-handler';
+import * as colorSchemesService from '../services/color-schemes.service';
 
 const router = Router();
 router.use(authMiddleware);
 
-// ─── Zod Schemas ─────────────────────────────────────────
-const stepSchema = z.object({
-    orderIndex: z.number().int().positive(),
-    area: z.string().min(1),
-    techniqueId: z.string().uuid(),
-    paintId: z.string().uuid().optional().nullable(),
-    userCustomPaintId: z.string().uuid().optional().nullable(),
-    mix: z.string().optional().nullable(),
-    dilution: z.string().optional().nullable(),
-    tools: z.string().optional().nullable(),
-    notes: z.string().optional().nullable(),
-    expectedResult: z.string().optional().nullable(),
-});
-
-const createSchemeSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    gameSystemId: z.string().uuid().optional().nullable(),
-    factionId: z.string().uuid().optional().nullable(),
-    description: z.string().optional().nullable(),
-    referencePhotoKey: z.string().optional().nullable(),
-    steps: z.array(stepSchema).min(1, 'At least one step is required'),
-});
-
-const updateSchemeSchema = createSchemeSchema.partial().extend({
-    steps: z.array(stepSchema).min(1).optional(),
-});
-
-// Validate steps have contiguous, unique orderIndex values
-function validateStepOrder(steps: z.infer<typeof stepSchema>[]): string | null {
-    const indices = steps.map((s) => s.orderIndex).sort((a, b) => a - b);
-    const unique = new Set(indices);
-    if (unique.size !== indices.length) return 'Duplicate orderIndex values found';
-    for (let i = 0; i < indices.length; i++) {
-        if (indices[i] !== i + 1) return `orderIndex must be contiguous starting from 1 (gap at ${i + 1})`;
-    }
-    return null;
-}
-
 // ─── GET /api/color-schemes ──────────────────────────────
-router.get('/', async (req: Request, res: Response) => {
-    const userId = req.userId as string;
 
-    const schemes = await prisma.colorScheme.findMany({
-        where: { userId },
-        orderBy: { updatedAt: 'desc' },
-        include: {
-            gameSystem: { select: { name: true } },
-            faction: { select: { name: true } },
-            _count: { select: { steps: true, items: true } },
-        },
-    });
-
-    res.json(schemes);
-});
+router.get(
+    '/',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const schemes = await colorSchemesService.listSchemes(userId);
+        res.json(schemes);
+    }),
+);
 
 // ─── GET /api/color-schemes/:id ──────────────────────────
-router.get('/:id', async (req: Request, res: Response) => {
-    const userId = req.userId as string;
-    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
-    const scheme = await prisma.colorScheme.findFirst({
-        where: { id, userId },
-        include: {
-            gameSystem: true,
-            faction: true,
-            steps: {
-                orderBy: { orderIndex: 'asc' },
-                include: {
-                    technique: true,
-                    paint: { include: { brand: { select: { name: true } } } },
-                    userCustomPaint: true,
-                },
-            },
-            items: { select: { id: true, name: true, status: true } },
-        },
-    });
-
-    if (!scheme) {
-        res.status(404).json({ error: 'Color scheme not found' });
-        return;
-    }
-    res.json(scheme);
-});
+router.get(
+    '/:id',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+        const scheme = await colorSchemesService.getScheme(userId, id);
+        res.json(scheme);
+    }),
+);
 
 // ─── POST /api/color-schemes ─────────────────────────────
-router.post('/', async (req: Request, res: Response) => {
-    const userId = req.userId as string;
-    const parsed = createSchemeSchema.safeParse(req.body);
 
-    if (!parsed.success) {
-        res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
-        return;
-    }
-
-    const orderError = validateStepOrder(parsed.data.steps);
-    if (orderError) {
-        res.status(400).json({ error: orderError });
-        return;
-    }
-
-    const { steps, ...schemeData } = parsed.data;
-
-    const scheme = await prisma.colorScheme.create({
-        data: {
-            ...schemeData,
-            userId,
-            steps: {
-                create: steps,
-            },
-        },
-        include: {
-            steps: { orderBy: { orderIndex: 'asc' } },
-        },
-    });
-
-    res.status(201).json(scheme);
-});
+router.post(
+    '/',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const scheme = await colorSchemesService.createScheme(userId, req.body);
+        res.status(201).json(scheme);
+    }),
+);
 
 // ─── PUT /api/color-schemes/:id ──────────────────────────
-router.put('/:id', async (req: Request, res: Response) => {
-    const userId = req.userId as string;
-    const parsed = updateSchemeSchema.safeParse(req.body);
-    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
-    if (!parsed.success) {
-        res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
-        return;
-    }
-
-    const existing = await prisma.colorScheme.findFirst({ where: { id, userId } });
-    if (!existing) {
-        res.status(404).json({ error: 'Color scheme not found' });
-        return;
-    }
-
-    const { steps, ...schemeData } = parsed.data;
-
-    if (steps) {
-        const orderError = validateStepOrder(steps);
-        if (orderError) {
-            res.status(400).json({ error: orderError });
-            return;
-        }
-
-        // Transaction: delete old steps, update scheme, create new steps
-      const scheme = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-            await tx.colorSchemeStep.deleteMany({ where: { colorSchemeId: id } });
-            return tx.colorScheme.update({
-                where: { id },
-                data: {
-                    ...schemeData,
-                    steps: { create: steps },
-                },
-                include: { steps: { orderBy: { orderIndex: 'asc' } } },
-            });
-        });
-
+router.put(
+    '/:id',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+        const scheme = await colorSchemesService.updateScheme(userId, id, req.body);
         res.json(scheme);
-    } else {
-        const scheme = await prisma.colorScheme.update({
-            where: { id },
-            data: schemeData,
-            include: { steps: { orderBy: { orderIndex: 'asc' } } },
-        });
-        res.json(scheme);
-    }
-});
+    }),
+);
 
 // ─── DELETE /api/color-schemes/:id ───────────────────────
-router.delete('/:id', async (req: Request, res: Response) => {
-    const userId = req.userId as string;
-    const id = Array.isArray(req.params.id) ? req.params.id[0] : (req.params.id as string);
 
-    const existing = await prisma.colorScheme.findFirst({ where: { id, userId } });
-    if (!existing) {
-        res.status(404).json({ error: 'Color scheme not found' });
-        return;
-    }
-
-    await prisma.colorScheme.delete({ where: { id } });
-    res.status(204).send();
-});
+router.delete(
+    '/:id',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+        await colorSchemesService.deleteScheme(userId, id);
+        res.status(204).send();
+    }),
+);
 
 export default router;
