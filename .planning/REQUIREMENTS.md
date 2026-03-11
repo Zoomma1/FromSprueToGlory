@@ -15,7 +15,7 @@
 
 - [ ] **PAG-01**: Item list endpoint (`GET /api/items`) accepts `limit` and `offset` query parameters and returns paginated results with total count
 - [ ] **PAG-02**: Project list endpoint (`GET /api/projects`) accepts `limit` and `offset` query parameters and returns paginated results with total count
-- [ ] **PAG-03**: Pagination parameters have sensible defaults (e.g., limit=20, offset=0) and are validated via Zod
+- [x] **PAG-03**: Pagination parameters have sensible defaults (e.g., limit=20, offset=0) and are validated via Zod
 
 ### Transactions
 
@@ -92,7 +92,7 @@
 | SVC-03 | Phase 1 | Complete |
 | PAG-01 | Phase 2 | Pending |
 | PAG-02 | Phase 2 | Pending |
-| PAG-03 | Phase 2 | Pending |
+| PAG-03 | Phase 2 | Complete |
 | TXN-01 | Phase 3 | Pending |
 | TXN-02 | Phase 3 | Pending |
 | ARL-01 | Phase 3 | Pending |
