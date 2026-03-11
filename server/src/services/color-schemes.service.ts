@@ -9,7 +9,7 @@ import { NotFoundError, ValidationError } from '../lib/errors';
 
 // ─── Zod Schemas ──────────────────────────────────────────
 
-const stepSchema = z.object({
+export const stepSchema = z.object({
     orderIndex: z.number().int().positive(),
     area: z.string().min(1),
     techniqueId: z.string().uuid(),
@@ -20,20 +20,20 @@ const stepSchema = z.object({
     tools: z.string().optional().nullable(),
     notes: z.string().optional().nullable(),
     expectedResult: z.string().optional().nullable(),
-});
+}).strict();
 
-const createSchemeSchema = z.object({
+export const createSchemeSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     gameSystemId: z.string().uuid().optional().nullable(),
     factionId: z.string().uuid().optional().nullable(),
     description: z.string().optional().nullable(),
     referencePhotoKey: z.string().optional().nullable(),
     steps: z.array(stepSchema).min(1, 'At least one step is required'),
-});
+}).strict();
 
-const updateSchemeSchema = createSchemeSchema.partial().extend({
+export const updateSchemeSchema = createSchemeSchema.partial().extend({
     steps: z.array(stepSchema).min(1).optional(),
-});
+}).strict();
 
 // ─── Helpers ──────────────────────────────────────────────
 

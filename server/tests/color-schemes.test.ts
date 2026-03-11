@@ -256,6 +256,30 @@ describe('Color Schemes Routes', () => {
         });
     });
 
+    // ─── POST /api/color-schemes — strict mode ────────────
+    describe('POST /api/color-schemes — strict mode', () => {
+        it('returns 400 when body has an unknown field', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({ ...validSchemePayload, extraField: 'x' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when a step has an unknown field', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'Test scheme',
+                    steps: [{ ...validStep1, unknownStepField: 'y' }],
+                });
+
+            expect(res.status).toBe(400);
+        });
+    });
+
     // ─── PUT /api/color-schemes/:id ───────────────────────
     describe('PUT /api/color-schemes/:id', () => {
         it('updates name only (no steps) and returns the scheme', async () => {
@@ -331,6 +355,15 @@ describe('Color Schemes Routes', () => {
 
             expect(res.status).toBe(400);
             expect(res.body.error).toContain('contiguous');
+        });
+
+        it('returns 400 when body has an unknown field', async () => {
+            const res = await request(app)
+                .put('/api/color-schemes/cs-1')
+                .set('Authorization', AUTH)
+                .send({ name: 'Updated', extraField: 'x' });
+
+            expect(res.status).toBe(400);
         });
     });
 
