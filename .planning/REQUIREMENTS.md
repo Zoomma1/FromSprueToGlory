@@ -19,19 +19,19 @@
 
 ### Transactions
 
-- [ ] **TXN-01**: Color scheme step replace-all operation (delete + insert) is wrapped in a single Prisma transaction
-- [ ] **TXN-02**: If any step insert fails, the transaction rolls back and the original steps are preserved
+- [x] **TXN-01**: Color scheme step replace-all operation (delete + insert) is wrapped in a single Prisma transaction
+- [x] **TXN-02**: If any step insert fails, the transaction rolls back and the original steps are preserved
 
 ### Auth Rate Limiting
 
-- [ ] **ARL-01**: `/api/auth/login` has a dedicated rate limit stricter than the global limit (e.g., 10 req/15min per IP)
-- [ ] **ARL-02**: `/api/auth/signup` has a dedicated rate limit stricter than the global limit
-- [ ] **ARL-03**: `/api/auth/refresh` has a dedicated rate limit stricter than the global limit
+- [x] **ARL-01**: `/api/auth/login` has a dedicated rate limit stricter than the global limit (e.g., 10 req/15min per IP)
+- [x] **ARL-02**: `/api/auth/signup` has a dedicated rate limit stricter than the global limit
+- [x] **ARL-03**: `/api/auth/refresh` has a dedicated rate limit stricter than the global limit
 
 ### Ownership Validation
 
-- [ ] **OWN-01**: All color scheme step mutation endpoints verify the `colorSchemeId` belongs to the authenticated user before executing
-- [ ] **OWN-02**: Unauthorized access to another user's color scheme steps returns 403 (not 404 or 500)
+- [x] **OWN-01**: All color scheme step mutation endpoints verify the `colorSchemeId` belongs to the authenticated user before executing
+- [x] **OWN-02**: Unauthorized access to another user's color scheme steps returns 403 (not 404 or 500)
 
 ### Zod Validation
 
@@ -46,8 +46,8 @@
 
 ### S3 Singleton
 
-- [ ] **S3S-01**: S3/MinIO client is instantiated once at module load (singleton) and reused across all requests
-- [ ] **S3S-02**: S3 client credentials are never logged (no full config object logging)
+- [x] **S3S-01**: S3/MinIO client is instantiated once at module load (singleton) and reused across all requests
+- [x] **S3S-02**: S3 client credentials are never logged (no full config object logging)
 
 ### Test Coverage
 
@@ -93,13 +93,13 @@
 | PAG-01 | Phase 2 | Complete |
 | PAG-02 | Phase 2 | Complete |
 | PAG-03 | Phase 2 | Complete |
-| TXN-01 | Phase 3 | Pending |
-| TXN-02 | Phase 3 | Pending |
-| ARL-01 | Phase 3 | Pending |
-| ARL-02 | Phase 3 | Pending |
-| ARL-03 | Phase 3 | Pending |
-| OWN-01 | Phase 3 | Pending |
-| OWN-02 | Phase 3 | Pending |
+| TXN-01 | Phase 3 | Complete |
+| TXN-02 | Phase 3 | Complete |
+| ARL-01 | Phase 3 | Complete |
+| ARL-02 | Phase 3 | Complete |
+| ARL-03 | Phase 3 | Complete |
+| OWN-01 | Phase 3 | Complete |
+| OWN-02 | Phase 3 | Complete |
 | ZOD-01 | Phase 2 | Complete |
 | ZOD-02 | Phase 2 | Complete |
 | ZOD-03 | Phase 2 | Complete |
@@ -108,8 +108,8 @@
 | ZOD-06 | Phase 2 | Complete |
 | ZOD-07 | Phase 2 | Complete |
 | ZOD-08 | Phase 2 | Complete |
-| S3S-01 | Phase 3 | Pending |
-| S3S-02 | Phase 3 | Pending |
+| S3S-01 | Phase 3 | Complete |
+| S3S-02 | Phase 3 | Complete |
 | TST-01 | Phase 4 | Pending |
 | TST-02 | Phase 4 | Pending |
 | TST-03 | Phase 4 | Pending |
