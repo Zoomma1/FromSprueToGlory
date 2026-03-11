@@ -2,14 +2,28 @@
 // Export Service — Business Logic Layer
 // ──────────────────────────────────────────────────────────
 
+import z from 'zod';
 import { prisma } from '../lib/prisma';
+import { ValidationError } from '../lib/errors';
+
+// ─── exportQuerySchema ────────────────────────────────────
+
+export const exportQuerySchema = z.object({
+    format: z.enum(['json', 'csv']).default('json'),
+}).strict();
 
 // ─── exportItems ──────────────────────────────────────────
 
 export async function exportItems(
     userId: string,
-    format: string,
+    query: unknown,
 ): Promise<{ type: 'json'; items: unknown[] } | { type: 'csv'; csv: string; filename: string }> {
+    const parsed = exportQuerySchema.safeParse(query);
+    if (!parsed.success) {
+        throw new ValidationError('Validation failed', parsed.error.flatten());
+    }
+    const { format } = parsed.data;
+
     const items = await prisma.item.findMany({
         where: { userId },
         include: {

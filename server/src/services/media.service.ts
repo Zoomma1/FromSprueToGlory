@@ -5,7 +5,8 @@
 // Dynamic imports avoid crash if aws-sdk is not installed.
 // ──────────────────────────────────────────────────────────
 
-import { AppError } from '../lib/errors';
+import z from 'zod';
+import { AppError, ValidationError } from '../lib/errors';
 
 // ─── isS3Configured ───────────────────────────────────────
 
@@ -17,13 +18,25 @@ function isS3Configured(): boolean {
     );
 }
 
+// ─── presignUploadSchema ──────────────────────────────────
+
+export const presignUploadSchema = z.object({
+    fileName: z.string().min(1),
+    fileType: z.enum(['image/jpeg', 'image/png', 'image/webp']),
+}).strict();
+
 // ─── presignUpload ────────────────────────────────────────
 
 export async function presignUpload(
     userId: string,
-    fileName: string,
-    contentType: string,
+    body: unknown,
 ): Promise<{ uploadUrl: string; key: string }> {
+    const parsed = presignUploadSchema.safeParse(body);
+    if (!parsed.success) {
+        throw new ValidationError('Validation failed', parsed.error.flatten());
+    }
+    const { fileName, fileType } = parsed.data;
+
     if (!isS3Configured()) {
         throw new AppError(503, 'S3 not configured');
     }
@@ -51,7 +64,7 @@ export async function presignUpload(
         const command = new PutObjectCommand({
             Bucket: process.env.S3_BUCKET,
             Key: key,
-            ContentType: contentType,
+            ContentType: fileType,
         });
 
         const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 300 });

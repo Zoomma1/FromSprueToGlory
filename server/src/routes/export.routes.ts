@@ -18,9 +18,7 @@ router.get(
     '/items',
     asyncHandler(async (req, res) => {
         const userId = req.userId as string;
-        const format = (req.query.format as string) || 'json';
-
-        const result = await exportService.exportItems(userId, format);
+        const result = await exportService.exportItems(userId, req.query);
 
         if (result.type === 'csv') {
             res.setHeader('Content-Type', 'text/csv');

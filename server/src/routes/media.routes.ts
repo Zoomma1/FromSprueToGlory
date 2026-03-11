@@ -35,14 +35,7 @@ router.post(
     '/presign-upload',
     asyncHandler(async (req, res) => {
         const userId = req.userId as string;
-        const { fileName, contentType } = req.body as { fileName?: string; contentType?: string };
-
-        if (!fileName || !contentType) {
-            res.status(400).json({ error: 'fileName and contentType are required' });
-            return;
-        }
-
-        const result = await mediaService.presignUpload(userId, fileName, contentType);
+        const result = await mediaService.presignUpload(userId, req.body);
         res.json(result);
     }),
 );
