@@ -343,11 +343,34 @@ describe('Auth Routes', () => {
 });
 
 // ─── Auth Rate Limiting (ARL-01/02/03) ───────────────────
-// Wave 0: Using it.todo() so stubs compile and are visible without blocking the suite.
-// Full ARL tests require createApp({ skipAuthRateLimit: false }) which is not available
-// until Plan 03 adds the flag to app.ts.
+// Each test creates its own app instance so limiter state does not
+// leak between tests. NODE_ENV is 'test' by default, so we pass
+// skipAuthRateLimit: false to explicitly enable the limiter.
 describe('Auth Rate Limiting (ARL-01/02/03)', () => {
-    it.todo('POST /api/auth/login — 11th request returns 429 (ARL-01)');
-    it.todo('POST /api/auth/signup — 11th request returns 429 (ARL-02)');
-    it.todo('POST /api/auth/refresh — 11th request returns 429 (ARL-03)');
+    it('POST /api/auth/login — 11th request returns 429 (ARL-01)', async () => {
+        const localApp = createApp({ skipAuthRateLimit: false });
+        for (let i = 0; i < 10; i++) {
+            await request(localApp).post('/api/auth/login').send({});
+        }
+        const res = await request(localApp).post('/api/auth/login').send({});
+        expect(res.status).toBe(429);
+    });
+
+    it('POST /api/auth/signup — 11th request returns 429 (ARL-02)', async () => {
+        const localApp = createApp({ skipAuthRateLimit: false });
+        for (let i = 0; i < 10; i++) {
+            await request(localApp).post('/api/auth/signup').send({});
+        }
+        const res = await request(localApp).post('/api/auth/signup').send({});
+        expect(res.status).toBe(429);
+    });
+
+    it('POST /api/auth/refresh — 11th request returns 429 (ARL-03)', async () => {
+        const localApp = createApp({ skipAuthRateLimit: false });
+        for (let i = 0; i < 10; i++) {
+            await request(localApp).post('/api/auth/refresh').send({});
+        }
+        const res = await request(localApp).post('/api/auth/refresh').send({});
+        expect(res.status).toBe(429);
+    });
 });
