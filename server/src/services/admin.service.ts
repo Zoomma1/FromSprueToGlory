@@ -3,7 +3,7 @@
 // ──────────────────────────────────────────────────────────
 
 import z from 'zod';
-import type { PaintType } from '@prisma/client';
+import { PaintType } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 import { ValidationError } from '../lib/errors';
 
