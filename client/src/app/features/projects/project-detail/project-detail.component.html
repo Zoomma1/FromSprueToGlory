@@ -21,6 +21,18 @@
     </mat-progress-bar>
 </div>
 
+@if (toSpendSummary(); as summary) {
+<div class="to-spend-banner">
+    <mat-icon>shopping_cart</mat-icon>
+    <span>To spend : <strong>{{ summary.total | currency:'EUR':'symbol':'1.0-2' }}</strong></span>
+    @if (summary.missing > 0) {
+    <span class="missing-hint">
+        ({{ summary.missing }} item{{ summary.missing > 1 ? 's' : '' }} without price)
+    </span>
+    }
+</div>
+}
+
 <div class="section-header">
     <h2>Items ({{ proj.items?.length || 0 }})</h2>
     <button mat-stroked-button (click)="toggleAssignPanel()">

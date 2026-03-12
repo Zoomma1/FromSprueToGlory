@@ -1,8 +1,8 @@
 // ──────────────────────────────────────────────────────────
 // 📁 Project Detail Component — View project with items
 // ──────────────────────────────────────────────────────────
-import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +27,7 @@ const STATUS_LABELS: Record<string, string> = {
     selector: 'app-project-detail',
     standalone: true,
     imports: [
-        CommonModule,
+        CommonModule, CurrencyPipe,
         MatCardModule, MatButtonModule, MatIconModule, MatProgressBarModule,
         MatMenuModule, MatSnackBarModule, MatDialogModule, MatTooltipModule,
         MatChipsModule,
@@ -45,6 +45,15 @@ export class ProjectDetailComponent implements OnInit {
     project = signal<Project | null>(null);
     unassignedItems = signal<Item[]>([]);
     showAssignPanel = signal(false);
+
+    toSpendSummary = computed(() => {
+        const wantItems = this.project()?.items?.filter((i) => i.status === 'WANT') ?? [];
+        if (!wantItems.length) return null;
+        const withPrice = wantItems.filter((i) => i.price != null);
+        const total = withPrice.reduce((sum, i) => sum + i.price!, 0);
+        const missing = wantItems.length - withPrice.length;
+        return { total, missing };
+    });
 
     readonly statuses = STATUS_ORDER;
     readonly statusLabels = STATUS_LABELS;
