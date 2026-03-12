@@ -56,27 +56,29 @@
     <div class="steps-list">
         @for (step of filteredSteps(); track $index; let i = $index) {
         <mat-card class="step-card">
-            <div class="step-number">{{ step.orderIndex }}</div>
-            <div class="step-body">
-                <div class="step-main">
-                    <span class="step-area">{{ step.area }}</span>
-                    <span class="step-technique">{{ step.technique?.name }}</span>
-                </div>
-                @if (step.paint || step.userCustomPaint) {
-                <span class="step-paint">
-                    🎨 {{ step.paint?.name || step.userCustomPaint?.name }}
-                </span>
-                }
-                @if (showDetails() && step.notes) {
-                <p class="step-notes">{{ step.notes }}</p>
-                }
-                @if (showDetails() && step.paint?.brand) {
-                <span class="step-brand">Brand: {{ step!.paint!.brand.name }}</span>
-                }
-                @if (showDetails() && step.userCustomPaint) {
-                <span class="step-brand">Brand: Other (custom)</span>
-                }
-            </div>
+              <div class="step-body-left" [class.no-notes]="!step.notes">
+                  <div class="step-number">{{ step.orderIndex }}</div>
+                  <div class="step-main">
+                      <span class="step-area">{{ step.area }}</span>
+                      <span class="step-technique">{{ step.technique?.name }}</span>
+                  </div>
+                  @if (step.paint || step.userCustomPaint) {
+                  <span class="step-paint">
+                      🎨 {{ step.paint?.name || step.userCustomPaint?.name }}
+                  </span>
+                  }
+                  @if (showDetails() && step.paint?.brand) {
+                  <span class="step-brand">Brand: {{ step!.paint!.brand.name }}</span>
+                  }
+                  @if (showDetails() && step.userCustomPaint) {
+                  <span class="step-brand">Brand: Other (custom)</span>
+                  }
+              </div>
+              @if (step.notes) {
+              <div class="step-body-right" >
+                  <span class="step-notes">Notes :<br> {{step.notes || ""}} </span>
+              </div>
+              }
         </mat-card>
         }
     </div>
