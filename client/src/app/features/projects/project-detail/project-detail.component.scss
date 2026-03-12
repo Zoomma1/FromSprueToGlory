@@ -38,6 +38,35 @@
     color: #d4a34a;
 }
 
+.to-spend-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1a2a1a;
+    border: 1px solid #2a4a2a;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    color: #ccc;
+    font-size: 0.95rem;
+
+    mat-icon {
+        color: #4caf50;
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
+    }
+
+    strong {
+        color: #4caf50;
+    }
+
+    .missing-hint {
+        color: #888;
+        font-size: 0.8rem;
+    }
+}
+
 .section-header {
     display: flex;
     justify-content: space-between;

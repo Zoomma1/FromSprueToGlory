@@ -299,6 +299,73 @@ describe(ProjectDetailComponent.name, () => {
         }));
     });
 
+    describe('toSpendSummary - WANT items budget', () => {
+        it('should return null when project has no items', () => {
+            component.project.set({ ...mockProject, items: [] } as never);
+            expect(component.toSpendSummary()).toBeNull();
+        });
+
+        it('should return null when no items have WANT status', () => {
+            component.project.set({
+                ...mockProject,
+                items: [
+                    { id: 'item-1', status: 'WIP', price: 20 },
+                    { id: 'item-2', status: 'FINISHED', price: 10 },
+                ],
+            } as never);
+            expect(component.toSpendSummary()).toBeNull();
+        });
+
+        it('should calculate total from WANT items with price', () => {
+            component.project.set({
+                ...mockProject,
+                items: [
+                    { id: 'item-1', status: 'WANT', price: 30 },
+                    { id: 'item-2', status: 'WANT', price: 20 },
+                    { id: 'item-3', status: 'WIP', price: 50 },
+                ],
+            } as never);
+            expect(component.toSpendSummary()?.total).toBe(50);
+        });
+
+        it('should exclude WANT items without price from total', () => {
+            component.project.set({
+                ...mockProject,
+                items: [
+                    { id: 'item-1', status: 'WANT', price: 30 },
+                    { id: 'item-2', status: 'WANT', price: null },
+                ],
+            } as never);
+            expect(component.toSpendSummary()?.total).toBe(30);
+        });
+
+        it('should count WANT items without price', () => {
+            component.project.set({
+                ...mockProject,
+                items: [
+                    { id: 'item-1', status: 'WANT', price: 30 },
+                    { id: 'item-2', status: 'WANT', price: null },
+                    { id: 'item-3', status: 'WANT', price: null },
+                ],
+            } as never);
+            expect(component.toSpendSummary()?.missing).toBe(2);
+        });
+
+        it('should return total 0 and missing equal to all when all WANT items have no price', () => {
+            component.project.set({
+                ...mockProject,
+                items: [
+                    { id: 'item-1', status: 'WANT', price: null },
+                    { id: 'item-2', status: 'WANT', price: null },
+                ],
+            } as never);
+            const summary = component.toSpendSummary();
+            expect(summary).not.toBeNull();
+            expect(summary?.total).toBe(0);
+            expect(summary?.missing).toBe(2);
+        });
+    });
+
     describe('Navigation', () => {
         it('should navigate back to projects list', () => {
             const router = TestBed.inject(Router);
