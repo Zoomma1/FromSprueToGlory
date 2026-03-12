@@ -1,7 +1,15 @@
 //
 // Admin Route Tests
 //
-// Covers every branch of POST /api/admin/paints/sync :
+// Covers the three-tier auth model (401 / 403 / 200) plus all business logic
+// branches of POST /api/admin/paints/sync and GET /api/admin/paints/export:
+//
+//   Auth tier
+//   - 401 when no Authorization header is provided
+//   - 403 when the user exists but isAdmin=false
+//   - 200 when the user exists and isAdmin=true
+//
+//   POST /api/admin/paints/sync — business logic
 //   - 400 when body is not an array
 //   - 400 when body is an empty array
 //   - 400 when required fields are missing
@@ -9,7 +17,7 @@
 //   - skips paint when it already exists (idempotence)
 //   - creates paint when it is new
 //   - handles mixed batch (create + skip + error)
-//   - returns 500 on unexpected Prisma error
+//   - returns error entry on unexpected Prisma error
 //
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -60,10 +68,21 @@ const validPaint = {
   code: 'CT-abaddon-black',
 };
 
+const ADMIN_USER = { id: 'user-1', email: 'a@b.com', isAdmin: true };
+const NON_ADMIN_USER = { id: 'user-1', email: 'a@b.com', isAdmin: false };
+
 const app = createApp();
-const ENDPOINT = '/api/admin/paints/sync';
+const SYNC_ENDPOINT = '/api/admin/paints/sync';
+const EXPORT_ENDPOINT = '/api/admin/paints/export';
+const AUTH_HEADER = 'Bearer valid-token';
 
 //  Helpers
+const mockAdminUser = () =>
+  (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(ADMIN_USER);
+
+const mockNonAdminUser = () =>
+  (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(NON_ADMIN_USER);
+
 const mockBrandFound = () =>
   (prisma.paintBrand.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(mockBrand);
 
@@ -79,17 +98,76 @@ const mockPaintFound = () =>
 const mockPaintCreated = () =>
   (prisma.paint.create as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 'paint-new', ...validPaint });
 
-//  Tests
+//  ─────────────────────────────────────────────────────────
+//  Auth tier — three-tier model
+//  ─────────────────────────────────────────────────────────
+describe('Admin routes — auth tier', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('POST /paints/sync returns 401 when no Authorization header is provided', async () => {
+    const res = await request(app)
+      .post(SYNC_ENDPOINT)
+      .send([validPaint]);
+
+    expect(res.status).toBe(401);
+  });
+
+  it('POST /paints/sync returns 403 when user has isAdmin=false', async () => {
+    mockNonAdminUser();
+
+    const res = await request(app)
+      .post(SYNC_ENDPOINT)
+      .set('Authorization', AUTH_HEADER)
+      .send([validPaint]);
+
+    expect(res.status).toBe(403);
+  });
+
+  it('GET /paints/export returns 401 when no Authorization header is provided', async () => {
+    const res = await request(app).get(EXPORT_ENDPOINT);
+
+    expect(res.status).toBe(401);
+  });
+
+  it('GET /paints/export returns 403 when user has isAdmin=false', async () => {
+    mockNonAdminUser();
+
+    const res = await request(app)
+      .get(EXPORT_ENDPOINT)
+      .set('Authorization', AUTH_HEADER);
+
+    expect(res.status).toBe(403);
+  });
+
+  it('GET /paints/export returns 200 when user has isAdmin=true', async () => {
+    mockAdminUser();
+    (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+    const res = await request(app)
+      .get(EXPORT_ENDPOINT)
+      .set('Authorization', AUTH_HEADER);
+
+    expect(res.status).toBe(200);
+  });
+});
+
+//  ─────────────────────────────────────────────────────────
+//  POST /api/admin/paints/sync — business logic
+//  ─────────────────────────────────────────────────────────
 describe('POST /api/admin/paints/sync', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockAdminUser();
   });
 
   //  Validation du body
   describe('Body validation', () => {
     it('returns 400 when body is not an array', async () => {
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send({ name: 'Abaddon Black' });
 
       expect(res.status).toBe(400);
@@ -98,7 +176,8 @@ describe('POST /api/admin/paints/sync', () => {
 
     it('returns 400 when body is an empty array', async () => {
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send([]);
 
       expect(res.status).toBe(400);
@@ -107,7 +186,8 @@ describe('POST /api/admin/paints/sync', () => {
 
     it('returns 400 when body is null', async () => {
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send({});
 
       expect(res.status).toBe(400);
@@ -115,12 +195,13 @@ describe('POST /api/admin/paints/sync', () => {
 
     it('returns 400 with a details field when body is not an array', async () => {
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send({ name: 'Abaddon Black' });
 
       expect(res.status).toBe(400);
       expect(res.body.error).toBeDefined();
-      expect(res.body.details).toBeDefined(); // ZOD-08: consistent shape with details
+      expect(res.body.details).toBeDefined();
     });
   });
 
@@ -128,7 +209,8 @@ describe('POST /api/admin/paints/sync', () => {
   describe('Missing required fields', () => {
     it('records an error when name is missing', async () => {
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send([{ brandSlug: 'citadel', type: 'BASE', code: 'REF-001' }]);
 
       expect(res.status).toBe(400);
@@ -137,7 +219,8 @@ describe('POST /api/admin/paints/sync', () => {
 
     it('records an error when brandSlug is missing', async () => {
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send([{ name: 'Abaddon Black', type: 'BASE', code: 'REF-001' }]);
 
       expect(res.status).toBe(400);
@@ -146,7 +229,8 @@ describe('POST /api/admin/paints/sync', () => {
 
     it('records an error when type is missing', async () => {
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send([{ name: 'Abaddon Black', brandSlug: 'citadel', code: 'REF-001' }]);
 
       expect(res.status).toBe(400);
@@ -160,7 +244,8 @@ describe('POST /api/admin/paints/sync', () => {
       mockBrandNotFound();
 
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
 
       expect(res.status).toBe(200);
@@ -178,7 +263,8 @@ describe('POST /api/admin/paints/sync', () => {
       mockPaintFound();
 
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
 
       expect(res.status).toBe(200);
@@ -192,7 +278,8 @@ describe('POST /api/admin/paints/sync', () => {
       mockPaintFound();
 
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send([validPaint, validPaint]);
 
       expect(res.status).toBe(200);
@@ -209,7 +296,8 @@ describe('POST /api/admin/paints/sync', () => {
       mockPaintCreated();
 
       const res = await request(app)
-        .post(ENDPOINT)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
 
       expect(res.status).toBe(200);
@@ -224,7 +312,10 @@ describe('POST /api/admin/paints/sync', () => {
       mockPaintNotFound();
       mockPaintCreated();
 
-      await request(app).post(ENDPOINT).send([validPaint]);
+      await request(app)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
+        .send([validPaint]);
 
       expect(prisma.paint.create).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -245,7 +336,10 @@ describe('POST /api/admin/paints/sync', () => {
 
       const paintWithoutRef = { name: 'Abaddon Black', brandSlug: 'citadel', type: 'BASE' };
 
-      const res = await request(app).post(ENDPOINT).send([paintWithoutRef]);
+      const res = await request(app)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
+        .send([paintWithoutRef]);
 
       expect(res.status).toBe(200);
       expect(res.body.created).toBe(1);
@@ -255,10 +349,6 @@ describe('POST /api/admin/paints/sync', () => {
   //  Batch mixte
   describe('Mixed batch', () => {
     it('handles create + skip + error in a single call', async () => {
-      // Paint 1 : nouveau → create
-      // Paint 2 : déjà existant → skip
-      // Paint 3 : brand inconnue → error
-
       (prisma.paintBrand.findUnique as ReturnType<typeof vi.fn>)
         .mockResolvedValueOnce(mockBrand)   // paint 1
         .mockResolvedValueOnce(mockBrand)   // paint 2
@@ -276,7 +366,10 @@ describe('POST /api/admin/paints/sync', () => {
         { name: 'Unknown Paint', brandSlug: 'unknown-brand', type: 'BASE', code: 'REF-3' },
       ];
 
-      const res = await request(app).post(ENDPOINT).send(batch);
+      const res = await request(app)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
+        .send(batch);
 
       expect(res.status).toBe(200);
       expect(res.body.created).toBe(1);
@@ -294,7 +387,10 @@ describe('POST /api/admin/paints/sync', () => {
         new Error('DB connection lost'),
       );
 
-      const res = await request(app).post(ENDPOINT).send([validPaint]);
+      const res = await request(app)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
+        .send([validPaint]);
 
       expect(res.status).toBe(200);
       expect(res.body.errors).toHaveLength(1);
@@ -307,7 +403,10 @@ describe('POST /api/admin/paints/sync', () => {
         new Error('Timeout'),
       );
 
-      const res = await request(app).post(ENDPOINT).send([validPaint]);
+      const res = await request(app)
+        .post(SYNC_ENDPOINT)
+        .set('Authorization', AUTH_HEADER)
+        .send([validPaint]);
 
       expect(res.status).toBe(200);
       expect(res.body.errors).toHaveLength(1);
@@ -315,25 +414,28 @@ describe('POST /api/admin/paints/sync', () => {
     });
   });
 
-  describe('Json export', () => {
-      it('exports paints in correct format', async () => {
-        (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([
-          {
-            id: 'paint-1',
-            name: 'Abaddon Black',
-            code: 'CT-abaddon-black',
-            type: 'BASE',
-            brandId: mockBrand.id,
-            brand: mockBrand,
-          },
-        ]);
+  //  JSON export
+  describe('GET /api/admin/paints/export', () => {
+    it('exports paints in correct format', async () => {
+      (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([
+        {
+          id: 'paint-1',
+          name: 'Abaddon Black',
+          code: 'CT-abaddon-black',
+          type: 'BASE',
+          brandId: mockBrand.id,
+          brand: mockBrand,
+        },
+      ]);
 
-        const res = await request(app).get('/api/admin/paints/export');
+      const res = await request(app)
+        .get(EXPORT_ENDPOINT)
+        .set('Authorization', AUTH_HEADER);
 
-        expect(res.status).toBe(200);
-        expect(res.body).toEqual([
-          { name: 'Abaddon Black', code: 'CT-abaddon-black', type: 'BASE', brandSlug: 'citadel' },
-        ]);
-      });
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual([
+        { name: 'Abaddon Black', code: 'CT-abaddon-black', type: 'BASE', brandSlug: 'citadel' },
+      ]);
+    });
   });
 });

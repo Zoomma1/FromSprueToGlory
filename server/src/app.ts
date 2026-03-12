@@ -19,6 +19,11 @@ import projectsRoutes from './routes/projects.routes';
 import adminRoutes from './routes/admin.routes';
 import userPaintsRoutes from './routes/user-paints.routes';
 
+// Middleware imports
+import { authMiddleware } from './middleware/auth.middleware';
+import { adminMiddleware } from './middleware/admin.middleware';
+import { asyncHandler } from './lib/async-handler';
+
 // ──────────────────────────────────────────────
 // Centralized Error Handler
 // ──────────────────────────────────────────────
@@ -106,7 +111,7 @@ export function createApp(options: AppOptions = {}) {
     });
 
     // ─── API Routes ───────────────────────────
-    if (!options.skipAuthRateLimit && process.env.NODE_ENV !== 'test') {
+    if (options.skipAuthRateLimit !== true && (options.skipAuthRateLimit === false || process.env.NODE_ENV !== 'test')) {
         app.use(
             '/api/auth',
             rateLimit({
@@ -125,7 +130,7 @@ export function createApp(options: AppOptions = {}) {
     app.use('/api/export', exportRoutes);
     app.use('/api/account', accountRoutes);
     app.use('/api/projects', projectsRoutes);
-    app.use('/api/admin', adminRoutes);
+    app.use('/api/admin', authMiddleware, asyncHandler(adminMiddleware), adminRoutes);
     app.use('/api/user-paints', userPaintsRoutes);
 
     // Error handler must be mounted after all routes
