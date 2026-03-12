@@ -137,6 +137,40 @@ describe('GET /api/export/items — Zod validation (ZOD-07)', () => {
   });
 });
 
+// ─── presignRead (TST-01) ────────────────────────────────
+describe('GET /api/media/presign-read/:key', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (getS3Client as ReturnType<typeof vi.fn>).mockReturnValue({});
+  });
+
+  it('returns 200 with readUrl on happy path', async () => {
+    const res = await request(app)
+      .get('/api/media/presign-read/users/user-1/photo.jpg')
+      .set(AUTH_HEADER);
+    expect(res.status).toBe(200);
+    expect(res.body.readUrl).toBeDefined();
+  });
+
+  it('returns 401 when no auth header is provided', async () => {
+    const res = await request(app).get('/api/media/presign-read/users/user-1/photo.jpg');
+    expect(res.status).toBe(401);
+  });
+
+  it('returns 503 when getS3Client returns null', async () => {
+    (getS3Client as ReturnType<typeof vi.fn>).mockReturnValueOnce(null);
+    const res = await request(app)
+      .get('/api/media/presign-read/users/user-1/photo.jpg')
+      .set(AUTH_HEADER);
+    expect(res.status).toBe(503);
+  });
+
+  it('returns 400 when the key path is missing', async () => {
+    const res = await request(app).get('/api/media/presign-read/').set(AUTH_HEADER);
+    expect(res.status).toBe(400);
+  });
+});
+
 // ─── S3 Singleton (S3S-01/02) ────────────────────────────
 describe('S3 Singleton (S3S-01/02)', () => {
   beforeEach(() => {
