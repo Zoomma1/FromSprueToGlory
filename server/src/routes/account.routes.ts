@@ -1,5 +1,5 @@
 // ──────────────────────────────────────────────────────────
-// 🗑️ Account Routes — Delete account
+// Account Routes — Thin HTTP adapter
 // ──────────────────────────────────────────────────────────
 // Cascading deletion of user and all associated data.
 // This is required by GDPR and good practice.
@@ -8,23 +8,27 @@
 //   - The Prisma schema uses onDelete: Cascade on relations
 //   - Deleting the user automatically deletes items, schemes, tokens, etc.
 //   - ALTERNATIVE: soft delete (mark as deleted, keep data) — more complex
+//
+// All business logic lives in account.service.ts.
 // ──────────────────────────────────────────────────────────
 
-import { Router, Request, Response } from 'express';
-import { prisma } from '../lib/prisma';
+import { Router } from 'express';
 import { authMiddleware } from '../middleware/auth.middleware';
+import { asyncHandler } from '../lib/async-handler';
+import * as accountService from '../services/account.service';
 
 const router = Router();
 router.use(authMiddleware);
 
 // ─── DELETE /api/account ─────────────────────────────────
-router.delete('/', async (req: Request, res: Response) => {
-    const userId = req.userId as string;
 
-    // Delete the user — all related data cascades
-    await prisma.user.delete({ where: { id: userId } });
-
-    res.json({ message: 'Account and all associated data deleted' });
-});
+router.delete(
+    '/',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        await accountService.deleteAccount(userId);
+        res.json({ message: 'Account and all associated data deleted' });
+    }),
+);
 
 export default router;

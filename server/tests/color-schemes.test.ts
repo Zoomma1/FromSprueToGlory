@@ -256,6 +256,30 @@ describe('Color Schemes Routes', () => {
         });
     });
 
+    // ─── POST /api/color-schemes — strict mode ────────────
+    describe('POST /api/color-schemes — strict mode', () => {
+        it('returns 400 when body has an unknown field', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({ ...validSchemePayload, extraField: 'x' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when a step has an unknown field', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'Test scheme',
+                    steps: [{ ...validStep1, unknownStepField: 'y' }],
+                });
+
+            expect(res.status).toBe(400);
+        });
+    });
+
     // ─── PUT /api/color-schemes/:id ───────────────────────
     describe('PUT /api/color-schemes/:id', () => {
         it('updates name only (no steps) and returns the scheme', async () => {
@@ -332,6 +356,15 @@ describe('Color Schemes Routes', () => {
             expect(res.status).toBe(400);
             expect(res.body.error).toContain('contiguous');
         });
+
+        it('returns 400 when body has an unknown field', async () => {
+            const res = await request(app)
+                .put('/api/color-schemes/cs-1')
+                .set('Authorization', AUTH)
+                .send({ name: 'Updated', extraField: 'x' });
+
+            expect(res.status).toBe(400);
+        });
     });
 
     // ─── DELETE /api/color-schemes/:id ───────────────────
@@ -362,6 +395,41 @@ describe('Color Schemes Routes', () => {
         it('returns 401 without an Authorization header', async () => {
             const res = await request(app).delete('/api/color-schemes/cs-1');
             expect(res.status).toBe(401);
+        });
+    });
+
+    // ─── Ownership enforcement (OWN-02) ──────────────────
+    // Wave 0: These tests are RED until Plan 02 fixes the service.
+    // Currently the service returns 404 because findFirst({ where: { id, userId } })
+    // returns null for both not-found AND wrong-owner cases.
+    describe('Ownership enforcement (OWN-02)', () => {
+        it('PUT /api/color-schemes/:id — returns 403 when scheme belongs to another user', async () => {
+            (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'cs-1',
+                userId: 'other-user',
+                steps: [],
+            });
+
+            const res = await request(app)
+                .put('/api/color-schemes/cs-1')
+                .set('Authorization', AUTH)
+                .send({ name: 'Updated' });
+
+            expect(res.status).toBe(403);
+        });
+
+        it('DELETE /api/color-schemes/:id — returns 403 when scheme belongs to another user', async () => {
+            (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'cs-1',
+                userId: 'other-user',
+                steps: [],
+            });
+
+            const res = await request(app)
+                .delete('/api/color-schemes/cs-1')
+                .set('Authorization', AUTH);
+
+            expect(res.status).toBe(403);
         });
     });
 });

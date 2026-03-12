@@ -1,8 +1,11 @@
 import express from 'express';
+import type { ErrorRequestHandler } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { prisma } from './lib/prisma';
+import { AppError } from './lib/errors';
+import { ValidationError } from './lib/errors';
 
 // Route imports
 import authRoutes from './routes/auth.routes';
@@ -16,6 +19,32 @@ import projectsRoutes from './routes/projects.routes';
 import adminRoutes from './routes/admin.routes';
 import userPaintsRoutes from './routes/user-paints.routes';
 
+// Middleware imports
+import { authMiddleware } from './middleware/auth.middleware';
+import { adminMiddleware } from './middleware/admin.middleware';
+import { asyncHandler } from './lib/async-handler';
+
+// ──────────────────────────────────────────────
+// Centralized Error Handler
+// ──────────────────────────────────────────────
+// WHY four-argument signature?
+//   Express identifies error-handling middleware by its arity (4 args).
+//   The eslint rule @typescript-eslint/no-unused-vars is suppressed for
+//   _next which must be declared even though it is never called.
+// ──────────────────────────────────────────────
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+    if (err instanceof AppError) {
+        const body: Record<string, unknown> = { error: err.message };
+        if (err instanceof ValidationError && err.details !== undefined) {
+            body.details = err.details;
+        }
+        res.status(err.statusCode).json(body);
+        return;
+    }
+    console.error('Unhandled error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+};
+
 // ──────────────────────────────────────────────
 // 🏭 App Factory
 // ──────────────────────────────────────────────
@@ -26,7 +55,11 @@ import userPaintsRoutes from './routes/user-paints.routes';
 // ALTERNATIVE: export app directly (simpler, but harder to test)
 // ──────────────────────────────────────────────
 
-export function createApp() {
+interface AppOptions {
+    skipAuthRateLimit?: boolean;
+}
+
+export function createApp(options: AppOptions = {}) {
     const app = express();
 
     // ─── Security middleware ───────────────────
@@ -78,6 +111,17 @@ export function createApp() {
     });
 
     // ─── API Routes ───────────────────────────
+    if (options.skipAuthRateLimit !== true && (options.skipAuthRateLimit === false || process.env.NODE_ENV !== 'test')) {
+        app.use(
+            '/api/auth',
+            rateLimit({
+                windowMs: 15 * 60 * 1000,
+                max: 10,
+                standardHeaders: true,
+                legacyHeaders: false,
+            }),
+        );
+    }
     app.use('/api/auth', authRoutes);
     app.use('/api/reference', referenceRoutes);
     app.use('/api/items', itemsRoutes);
@@ -86,8 +130,11 @@ export function createApp() {
     app.use('/api/export', exportRoutes);
     app.use('/api/account', accountRoutes);
     app.use('/api/projects', projectsRoutes);
-    app.use('/api/admin', adminRoutes);
+    app.use('/api/admin', authMiddleware, asyncHandler(adminMiddleware), adminRoutes);
     app.use('/api/user-paints', userPaintsRoutes);
+
+    // Error handler must be mounted after all routes
+    app.use(errorHandler);
 
     return app;
 }

@@ -17,6 +17,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Create .env file
+        run: echo "DATABASE_URL=postgresql://user:password@localhost:5432/db" > .env
+        working-directory: ./server
       - name: Run backend test and build
         uses: actions/setup-node@v4
         with:
@@ -24,6 +27,8 @@ jobs:
           cache: 'npm'
           cache-dependency-path: ./server/package-lock.json
       - run: npm ci
+        working-directory: ./server
+      - run: npx prisma generate
         working-directory: ./server
       - name: Run lint
         run: npm run lint

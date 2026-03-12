@@ -2,7 +2,7 @@
 // Projects Route Tests
 // ──────────────────────────────────────────────────────────
 // Covers every branch of the projects routes:
-//   GET  /api/projects             — list with completion %
+//   GET  /api/projects             — list with completion % and pagination
 //   POST /api/projects             — create
 //   GET  /api/projects/:id         — single project
 //   PUT  /api/projects/:id         — update
@@ -25,6 +25,7 @@ vi.mock('../src/lib/prisma', () => ({
             create: vi.fn(),
             update: vi.fn(),
             delete: vi.fn(),
+            count: vi.fn(),
         },
         item: {
             findMany: vi.fn(),
@@ -100,12 +101,13 @@ describe('Projects Routes', () => {
 
     // ─── GET /api/projects ────────────────────────────────
     describe('GET /api/projects', () => {
-        it('returns a list of projects with completion and status counts', async () => {
-            (prisma.project.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleProjectWithItems]);
+        it('returns a flat array of projects with completion and status counts', async () => {
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleProjectWithItems], 1]);
 
             const res = await request(app).get('/api/projects').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
+            expect(Array.isArray(res.body)).toBe(true);
             expect(res.body).toHaveLength(1);
             expect(res.body[0]).toHaveProperty('completion');
             expect(res.body[0]).toHaveProperty('itemCount', 2);
@@ -113,7 +115,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 0% completion for a project with no items', async () => {
-            (prisma.project.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleProject]);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleProject], 1]);
 
             const res = await request(app).get('/api/projects').set('Authorization', AUTH);
 
@@ -127,7 +129,7 @@ describe('Projects Routes', () => {
                 ...sampleProject,
                 items: [{ id: 'item-1', status: 'FINISHED', quantity: 1 }],
             };
-            (prisma.project.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([finished]);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[finished], 1]);
 
             const res = await request(app).get('/api/projects').set('Authorization', AUTH);
 
@@ -135,13 +137,18 @@ describe('Projects Routes', () => {
             expect(res.body[0].completion).toBe(100);
         });
 
-        it('returns an empty list when the user has no projects', async () => {
-            (prisma.project.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        it('returns [] when the user has no projects', async () => {
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             const res = await request(app).get('/api/projects').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
+        });
+
+        it('returns 400 when limit=0 (below min=1)', async () => {
+            const res = await request(app).get('/api/projects?limit=0').set('Authorization', AUTH);
+            expect(res.status).toBe(400);
         });
     });
 
@@ -185,6 +192,15 @@ describe('Projects Routes', () => {
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: '' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when body contains an unknown field (.strict())', async () => {
+            const res = await request(app)
+                .post('/api/projects')
+                .set('Authorization', AUTH)
+                .send({ name: 'My Project', extraField: 'x' });
 
             expect(res.status).toBe(400);
         });
