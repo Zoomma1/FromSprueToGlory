@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe((result) => { this.isMobile.set(result.matches); });
 
-    this.matIconRegistry.addSvgIcon('app-icon', this.sanitizer.bypassSecurityTrustResourceUrl('assets/app-icon.svg'));
+    this.matIconRegistry.addSvgIcon('app_icon', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/app-icon.svg'));
   }
 
   onNavClick(): void {
