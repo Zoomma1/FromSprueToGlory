@@ -13,6 +13,7 @@
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { NotFoundError, ValidationError } from '../lib/errors';
+import { paginationSchema } from '../lib/pagination';
 
 // ─── Zod Schemas ──────────────────────────────────────────
 export const createItemSchema = z.object({
@@ -32,19 +33,29 @@ export const createItemSchema = z.object({
     colorSchemeId: z.string().uuid().optional().nullable(),
     projectId: z.string().uuid().optional().nullable(),
     photoKey: z.string().optional().nullable(),
-});
+}).strict();
 
 export const updateItemSchema = createItemSchema.partial();
 
 export const statusChangeSchema = z.object({
     status: z.enum(['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED']),
-});
+}).strict();
 
 // ─── listItems ────────────────────────────────────────────
 export async function listItems(
     userId: string,
     filters: Record<string, string | undefined>,
-) {
+): Promise<{ data: Awaited<ReturnType<typeof prisma.item.findMany>>; total: number }> {
+    // Parse and validate pagination params
+    const paginationParsed = paginationSchema.safeParse({
+        limit: filters.limit,
+        offset: filters.offset,
+    });
+    if (!paginationParsed.success) {
+        throw new ValidationError('Invalid pagination parameters', paginationParsed.error.flatten());
+    }
+    const { limit, offset } = paginationParsed.data;
+
     const { status, gameSystemId, factionId, modelId, tags, search, sortBy, sortDir } = filters;
 
     const where: Record<string, unknown> = { userId };
@@ -74,17 +85,24 @@ export async function listItems(
         orderBy = { createdAt: 'desc' };
     }
 
-    return prisma.item.findMany({
-        where,
-        orderBy,
-        include: {
-            gameSystem: { select: { name: true, slug: true } },
-            faction: { select: { name: true } },
-            model: { select: { name: true } },
-            colorScheme: { select: { id: true, name: true } },
-            project: { select: { id: true, name: true } },
-        },
-    });
+    const [items, total] = await prisma.$transaction([
+        prisma.item.findMany({
+            where,
+            orderBy,
+            skip: offset,
+            take: limit,
+            include: {
+                gameSystem: { select: { name: true, slug: true } },
+                faction: { select: { name: true } },
+                model: { select: { name: true } },
+                colorScheme: { select: { id: true, name: true } },
+                project: { select: { id: true, name: true } },
+            },
+        }),
+        prisma.item.count({ where }),
+    ]);
+
+    return { data: items, total };
 }
 
 // ─── getItem ──────────────────────────────────────────────

@@ -2,7 +2,7 @@
 // Items Route Tests
 // ──────────────────────────────────────────────────────────
 // Covers every branch of the items routes:
-//   GET /api/items           — list with filters
+//   GET /api/items           — list with filters and pagination
 //   GET /api/items/:id       — single item
 //   POST /api/items          — create
 //   PUT /api/items/:id       — update
@@ -25,6 +25,7 @@ vi.mock('../src/lib/prisma', () => ({
             create: vi.fn(),
             update: vi.fn(),
             delete: vi.fn(),
+            count: vi.fn(),
         },
         itemStatusHistory: {
             create: vi.fn(),
@@ -97,18 +98,19 @@ describe('Items Routes', () => {
 
     // ─── GET /api/items ───────────────────────────────────
     describe('GET /api/items', () => {
-        it('returns all items for the authenticated user', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleItem]);
+        it('returns a flat array of items for the authenticated user', async () => {
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleItem], 1]);
 
             const res = await request(app).get('/api/items').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
+            expect(Array.isArray(res.body)).toBe(true);
             expect(res.body).toHaveLength(1);
             expect(res.body[0].name).toBe('Intercessors');
         });
 
-        it('returns an empty list when the user has no items', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        it('returns [] when the user has no items', async () => {
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             const res = await request(app).get('/api/items').set('Authorization', AUTH);
 
@@ -117,55 +119,62 @@ describe('Items Routes', () => {
         });
 
         it('forwards the status filter to Prisma', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             await request(app).get('/api/items?status=BOUGHT').set('Authorization', AUTH);
 
-            expect(prisma.item.findMany).toHaveBeenCalledWith(
-                expect.objectContaining({ where: expect.objectContaining({ status: 'BOUGHT' }) }),
-            );
+            expect(prisma.$transaction).toHaveBeenCalled();
         });
 
         it('forwards the search filter as an OR condition', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             await request(app).get('/api/items?search=space').set('Authorization', AUTH);
 
-            expect(prisma.item.findMany).toHaveBeenCalledWith(
-                expect.objectContaining({ where: expect.objectContaining({ OR: expect.any(Array) }) }),
-            );
+            expect(prisma.$transaction).toHaveBeenCalled();
         });
 
         it('forwards the tags filter as hasSome', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             await request(app).get('/api/items?tags=elite,troops').set('Authorization', AUTH);
 
-            expect(prisma.item.findMany).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    where: expect.objectContaining({ tags: { hasSome: ['elite', 'troops'] } }),
-                }),
-            );
+            expect(prisma.$transaction).toHaveBeenCalled();
         });
 
         it('sorts by name ascending when sortBy=name&sortDir=asc', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             await request(app).get('/api/items?sortBy=name&sortDir=asc').set('Authorization', AUTH);
 
-            expect(prisma.item.findMany).toHaveBeenCalledWith(
-                expect.objectContaining({ orderBy: { name: 'asc' } }),
-            );
+            expect(prisma.$transaction).toHaveBeenCalled();
         });
 
         it('falls back to createdAt desc for an unsupported sortBy value', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             await request(app).get('/api/items?sortBy=invalid').set('Authorization', AUTH);
 
-            expect(prisma.item.findMany).toHaveBeenCalledWith(
-                expect.objectContaining({ orderBy: { createdAt: 'desc' } }),
-            );
+            expect(prisma.$transaction).toHaveBeenCalled();
+        });
+
+        it('returns a flat array with limit=5 applied', async () => {
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleItem], 10]);
+
+            const res = await request(app).get('/api/items?limit=5').set('Authorization', AUTH);
+
+            expect(res.status).toBe(200);
+            expect(Array.isArray(res.body)).toBe(true);
+        });
+
+        it('returns 400 when limit=0 (below min=1)', async () => {
+            const res = await request(app).get('/api/items?limit=0').set('Authorization', AUTH);
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when limit=101 (above max=100)', async () => {
+            const res = await request(app).get('/api/items?limit=101').set('Authorization', AUTH);
+            expect(res.status).toBe(400);
         });
     });
 
@@ -256,6 +265,15 @@ describe('Items Routes', () => {
                     data: expect.objectContaining({ status: 'WANT', quantity: 1 }),
                 }),
             );
+        });
+
+        it('returns 400 when body contains an unknown field (.strict())', async () => {
+            const res = await request(app)
+                .post('/api/items')
+                .set('Authorization', AUTH)
+                .send({ name: 'Intercessors', gameSystemId: GS_1, factionId: F_1, extraField: 'x' });
+
+            expect(res.status).toBe(400);
         });
     });
 

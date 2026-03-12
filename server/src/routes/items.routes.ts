@@ -29,7 +29,7 @@ router.get(
             userId,
             req.query as Record<string, string | undefined>,
         );
-        res.json(items);
+        res.json(items.data);
     }),
 );
 

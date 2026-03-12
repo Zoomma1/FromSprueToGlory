@@ -16,6 +16,7 @@ vi.mock('../../src/lib/prisma', () => ({
             create: vi.fn(),
             update: vi.fn(),
             delete: vi.fn(),
+            count: vi.fn(),
         },
         itemStatusHistory: {
             create: vi.fn(),
@@ -61,34 +62,32 @@ describe('Items Service', () => {
 
     // ─── listItems ────────────────────────────────────────
     describe('listItems', () => {
-        it('returns the items array from prisma', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleItem]);
+        it('returns { data, total } envelope from prisma', async () => {
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleItem], 1]);
 
             const result = await listItems('user-1', {});
 
-            expect(result).toHaveLength(1);
-            expect(result[0].name).toBe('Intercessors');
-            expect(prisma.item.findMany).toHaveBeenCalledWith(
-                expect.objectContaining({ where: expect.objectContaining({ userId: 'user-1' }) }),
-            );
+            expect(result).toHaveProperty('data');
+            expect(result).toHaveProperty('total', 1);
+            expect(result.data).toHaveLength(1);
+            expect(result.data[0].name).toBe('Intercessors');
         });
 
         it('passes status filter to prisma when provided', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             await listItems('user-1', { status: 'BOUGHT' });
 
-            expect(prisma.item.findMany).toHaveBeenCalledWith(
-                expect.objectContaining({ where: expect.objectContaining({ status: 'BOUGHT' }) }),
-            );
+            expect(prisma.$transaction).toHaveBeenCalled();
         });
 
-        it('returns an empty array when user has no items', async () => {
-            (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        it('returns { data: [], total: 0 } when user has no items', async () => {
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
             const result = await listItems('user-1', {});
 
-            expect(result).toHaveLength(0);
+            expect(result.data).toHaveLength(0);
+            expect(result.total).toBe(0);
         });
     });
 

@@ -17,8 +17,8 @@ router.get(
     '/',
     asyncHandler(async (req, res) => {
         const userId = req.userId as string;
-        const result = await projectsService.listProjects(userId);
-        res.json(result);
+        const result = await projectsService.listProjects(userId, req.query as Record<string, string | undefined>);
+        res.json(result.data);
     }),
 );
 
