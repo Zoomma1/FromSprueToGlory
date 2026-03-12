@@ -16,6 +16,9 @@ jobs:
         node-version: [ 20.x, 22.x ]
 
     steps:
+      - name: Create .env file
+        run: echo "DATABASE_URL=postgresql://user:password@localhost:5432/db" > .env
+        working-directory: ./server
       - uses: actions/checkout@v4
       - name: Run backend test and build
         uses: actions/setup-node@v4
