@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Service Layer** - Extract business logic from all route handlers into dedicated, independently testable service modules (completed 2026-03-11)
 - [x] **Phase 2: Validation and Pagination** - Apply uniform Zod validation across all routes and add limit/offset pagination to list endpoints (completed 2026-03-11)
-- [x] **Phase 3: Security and Atomicity** - Wrap color scheme step mutations in transactions, tighten auth rate limits, enforce ownership checks, and convert S3 client to singleton (completed 2026-03-11)
+- [x] **Phase 3: Security and Atomicity** - Wrap color scheme step mutations in transactions, tighten auth rate limits, enforce ownership checks, and convert S3 client to singleton (completed 2026-03-11)
 - [ ] **Phase 4: Test Coverage** - Add comprehensive Vitest tests for media, export, and admin routes plus unit tests for extracted service modules
 
 ## Phase Details
@@ -71,7 +71,13 @@ Plans:
   1. `npm run test` in `server/` passes with test files covering media routes (pre-signed URL generation, invalid input, unauthorized, S3 error), export routes (happy path, unauthorized, invalid params, empty dataset), and admin routes (each operation, unauthorized, forbidden non-admin, invalid input)
   2. Zod validation 400 responses are asserted in tests for every route newly validated in Phase 2 (correct status code and error shape)
   3. Service modules extracted in Phase 1 have unit tests exercising core business logic without HTTP or Prisma (mocked at the service boundary)
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Admin middleware (schema migration, adminMiddleware, app.ts wiring, admin.test.ts rewire)
+- [ ] 04-02-PLAN.md — Media presignRead tests + new export.test.ts (parallel with 04-01)
+- [ ] 04-03-PLAN.md — Service unit tests: projects, auth, account, reference, user-paints (parallel with 04-01)
+- [ ] 04-04-PLAN.md — Service unit tests: export, media, admin (after 04-01 for isAdmin types)
 
 ## Progress
 
@@ -83,4 +89,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Service Layer | 2/2 | Complete   | 2026-03-11 |
 | 2. Validation and Pagination | 4/4 | Complete   | 2026-03-11 |
 | 3. Security and Atomicity | 4/4 | Complete   | 2026-03-11 |
-| 4. Test Coverage | 0/TBD | Not started | - |
+| 4. Test Coverage | 1/4 | In Progress|  |

@@ -51,8 +51,8 @@
 
 ### Test Coverage
 
-- [ ] **TST-01**: `media.routes.ts` has comprehensive tests: pre-signed URL generation (happy path), invalid input (400), unauthorized (401), S3 error simulation
-- [ ] **TST-02**: `export.routes.ts` has comprehensive tests: successful export (happy path), unauthorized (401), invalid query params (400), empty dataset edge case
+- [x] **TST-01**: `media.routes.ts` has comprehensive tests: pre-signed URL generation (happy path), invalid input (400), unauthorized (401), S3 error simulation
+- [x] **TST-02**: `export.routes.ts` has comprehensive tests: successful export (happy path), unauthorized (401), invalid query params (400), empty dataset edge case
 - [ ] **TST-03**: `admin.routes.ts` has comprehensive tests: each admin operation (happy path), unauthorized (401), forbidden non-admin (403), invalid input (400)
 - [ ] **TST-04**: Zod validation error responses are tested for all newly validated routes (confirm 400 shape)
 - [ ] **TST-05**: Service modules extracted in SVC-01 have unit tests for core business logic paths
@@ -110,8 +110,8 @@
 | ZOD-08 | Phase 2 | Complete |
 | S3S-01 | Phase 3 | Complete |
 | S3S-02 | Phase 3 | Complete |
-| TST-01 | Phase 4 | Pending |
-| TST-02 | Phase 4 | Pending |
+| TST-01 | Phase 4 | Complete |
+| TST-02 | Phase 4 | Complete |
 | TST-03 | Phase 4 | Pending |
 | TST-04 | Phase 4 | Pending |
 | TST-05 | Phase 4 | Pending |
