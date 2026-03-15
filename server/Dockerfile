@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build && npx prisma generate
+RUN npx prisma generate && npm run build
 
 # ── Runtime stage ─────────────────────────────────────────
 FROM node:22-alpine AS runner
