@@ -19,6 +19,7 @@ import { Faction } from '../../../classes/factions';
 import { Model } from '../../../classes/model';
 import { Project } from '../../../classes/project';
 import { ItemPayload } from '../../../classes/items';
+import {ITEM_STATUSES, CURRENCIES} from '../../../classes/item.constants';
 
 @Component({
     selector: 'app-item-form-dialog',
@@ -203,4 +204,7 @@ export class ItemFormDialogComponent implements OnInit {
             },
         });
     }
+
+  protected readonly ITEM_STATUSES = ITEM_STATUSES;
+  protected readonly CURRENCIES = CURRENCIES;
 }

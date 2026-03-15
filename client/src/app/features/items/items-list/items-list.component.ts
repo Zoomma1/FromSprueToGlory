@@ -19,11 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
 import { Item } from '../../../classes/items';
 import { ItemFormDialogComponent } from '../item-form/item-form-dialog.component';
-
-const STATUS_ORDER = ['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED'] as const;
-const STATUS_LABELS: Record<string, string> = {
-    WANT: 'Want', BOUGHT: 'Bought', ASSEMBLED: 'Assembled', WIP: 'WIP', FINISHED: 'Finished',
-};
+import {STATUS_ORDER, STATUS_LABELS} from '../../../classes/item.constants';
 
 @Component({
     selector: 'app-items-list',
