@@ -1,0 +1,11 @@
+[variables]
+NODE_ENV = "production"
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build", "npx prisma generate"]
+
+[start]
+cmd = "npm run migrate:prod && npm start"
