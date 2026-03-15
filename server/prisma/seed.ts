@@ -19,7 +19,7 @@
 //    Run `npm run seed` and verify it appears in pgAdmin.
 // ──────────────────────────────────────────────────────────
 
-import { PrismaClient, PaintType } from '@prisma/client';
+import { PrismaClient, PaintType, ItemStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -301,6 +301,302 @@ async function main() {
         techCount++;
     }
     console.log(`✅ Techniques: ${techCount} created`);
+
+    // ═══════════════════════════════════════════════════════
+    // 👤 Test User + User Data
+    // ═══════════════════════════════════════════════════════
+
+    const passwordHash = await bcrypt.hash('Test1234!', 10);
+    const testUser = await prisma.user.upsert({
+        where: { email: 'test@fstg.dev' },
+        update: {},
+        create: { email: 'test@fstg.dev', passwordHash },
+    });
+    console.log(`✅ Test user: ${testUser.email} (password: Test1234!)`);
+
+    // ─── Projects ────────────────────────────────────────────
+
+    const [projectUltramarines, projectPileOfShame] = await Promise.all([
+        prisma.project.upsert({
+            where: { id: 'seed-project-ultramarines' },
+            update: {},
+            create: {
+                id: 'seed-project-ultramarines',
+                userId: testUser.id,
+                name: 'Ultramarines 10th Company',
+                description: 'Building and painting a full 10th edition Ultramarines army.',
+            },
+        }),
+        prisma.project.upsert({
+            where: { id: 'seed-project-pile-of-shame' },
+            update: {},
+            create: {
+                id: 'seed-project-pile-of-shame',
+                userId: testUser.id,
+                name: 'Pile of Shame',
+                description: 'All the boxes I bought and never opened. The struggle is real.',
+            },
+        }),
+    ]);
+    console.log(`✅ Projects: 2 created`);
+
+    // ─── Fetch seeded reference data for items ────────────────
+
+    const [intercessors, hellblasters, captainGravis, redemptorDread] = await Promise.all([
+        prisma.model.findFirst({ where: { name: 'Intercessors', factionId: smFaction!.id } }),
+        prisma.model.findFirst({ where: { name: 'Hellblasters', factionId: smFaction!.id } }),
+        prisma.model.findFirst({ where: { name: 'Captain in Gravis Armour', factionId: smFaction!.id } }),
+        prisma.model.findFirst({ where: { name: 'Redemptor Dreadnought', factionId: smFaction!.id } }),
+    ]);
+
+    const [orkBoyz, orkWarboss] = await Promise.all([
+        prisma.model.findFirst({ where: { name: 'Boyz', factionId: orkFaction!.id } }),
+        prisma.model.findFirst({ where: { name: 'Warboss', factionId: orkFaction!.id } }),
+    ]);
+
+    const necronWarriors = await prisma.model.findFirst({
+        where: { name: 'Warriors', factionId: necronFaction!.id },
+    });
+
+    // ─── Color Scheme — Classic Ultramarines ─────────────────
+
+    const [techBasecoat, techShade, techLayer, techEdge, techDrybrush] = await Promise.all([
+        prisma.technique.findFirst({ where: { name: 'Basecoat' } }),
+        prisma.technique.findFirst({ where: { name: 'Shade' } }),
+        prisma.technique.findFirst({ where: { name: 'Layer' } }),
+        prisma.technique.findFirst({ where: { name: 'Edge highlight' } }),
+        prisma.technique.findFirst({ where: { name: 'Drybrush' } }),
+    ]);
+
+    const [paintMacraggeBlue, paintNulnOil, paintCalgarBlue, paintLeadbelcher, paintRunefangSteel, paintAbaddonBlack, paintRetributorArmour, paintReiklandFleshshade] = await Promise.all([
+        prisma.paint.findFirst({ where: { name: 'Macragge Blue', brandId: citadel.id } }),
+        prisma.paint.findFirst({ where: { name: 'Nuln Oil', brandId: citadel.id } }),
+        prisma.paint.findFirst({ where: { name: 'Calgar Blue', brandId: citadel.id } }),
+        prisma.paint.findFirst({ where: { name: 'Leadbelcher', brandId: citadel.id } }),
+        prisma.paint.findFirst({ where: { name: 'Runefang Steel', brandId: citadel.id } }),
+        prisma.paint.findFirst({ where: { name: 'Abaddon Black', brandId: citadel.id } }),
+        prisma.paint.findFirst({ where: { name: 'Retributor Armour', brandId: citadel.id } }),
+        prisma.paint.findFirst({ where: { name: 'Reikland Fleshshade', brandId: citadel.id } }),
+    ]);
+
+    const ultramarinesScheme = await prisma.colorScheme.upsert({
+        where: { id: 'seed-scheme-ultramarines' },
+        update: {},
+        create: {
+            id: 'seed-scheme-ultramarines',
+            userId: testUser.id,
+            name: 'Classic Ultramarines',
+            gameSystemId: wh40k.id,
+            factionId: smFaction!.id,
+            description: 'Tabletop-ready Ultramarines with Macragge Blue base, shading and highlights.',
+            steps: {
+                create: [
+                    {
+                        orderIndex: 1,
+                        area: 'Armor',
+                        techniqueId: techBasecoat!.id,
+                        paintId: paintMacraggeBlue!.id,
+                        dilution: 'normal',
+                        expectedResult: 'Even, opaque blue coverage',
+                    },
+                    {
+                        orderIndex: 2,
+                        area: 'Armor',
+                        techniqueId: techShade!.id,
+                        paintId: paintNulnOil!.id,
+                        dilution: 'normal',
+                        expectedResult: 'Deep shadows in recesses',
+                    },
+                    {
+                        orderIndex: 3,
+                        area: 'Armor',
+                        techniqueId: techLayer!.id,
+                        paintId: paintCalgarBlue!.id,
+                        dilution: 'thin',
+                        expectedResult: 'Raised surfaces brightened, leaving shade in recesses',
+                    },
+                    {
+                        orderIndex: 4,
+                        area: 'Armor',
+                        techniqueId: techEdge!.id,
+                        paintId: paintCalgarBlue!.id,
+                        dilution: 'thin',
+                        tools: 'Size 0 brush',
+                        expectedResult: 'Crisp edge highlights on all armor plates',
+                    },
+                    {
+                        orderIndex: 5,
+                        area: 'Metal (weapons, trim)',
+                        techniqueId: techBasecoat!.id,
+                        paintId: paintLeadbelcher!.id,
+                        dilution: 'normal',
+                        expectedResult: 'Solid metallic base',
+                    },
+                    {
+                        orderIndex: 6,
+                        area: 'Metal (weapons, trim)',
+                        techniqueId: techShade!.id,
+                        paintId: paintNulnOil!.id,
+                        dilution: 'normal',
+                        expectedResult: 'Darkened metallic recesses',
+                    },
+                    {
+                        orderIndex: 7,
+                        area: 'Metal (weapons, trim)',
+                        techniqueId: techDrybrush!.id,
+                        paintId: paintRunefangSteel!.id,
+                        dilution: 'dry',
+                        expectedResult: 'Bright metallic sheen on raised edges',
+                    },
+                    {
+                        orderIndex: 8,
+                        area: 'Gold details',
+                        techniqueId: techBasecoat!.id,
+                        paintId: paintRetributorArmour!.id,
+                        dilution: 'normal',
+                        expectedResult: 'Rich gold on shoulder pad rims and icons',
+                    },
+                    {
+                        orderIndex: 9,
+                        area: 'Gold details',
+                        techniqueId: techShade!.id,
+                        paintId: paintReiklandFleshshade!.id,
+                        dilution: 'normal',
+                        expectedResult: 'Warm shaded gold',
+                    },
+                    {
+                        orderIndex: 10,
+                        area: 'Trim & joints',
+                        techniqueId: techBasecoat!.id,
+                        paintId: paintAbaddonBlack!.id,
+                        dilution: 'normal',
+                        expectedResult: 'Clean black on knee pads, eye lenses and chest eagle base',
+                    },
+                ],
+            },
+        },
+    });
+    console.log(`✅ Color scheme: "${ultramarinesScheme.name}" (10 steps)`);
+
+    // ─── Items ────────────────────────────────────────────────
+    // Only seed if the test user has no items yet (avoid duplicates on re-run)
+
+    const existingItemCount = await prisma.item.count({ where: { userId: testUser.id } });
+
+    if (existingItemCount === 0) {
+        const itemsData = [
+            // Project: Ultramarines
+            {
+                userId: testUser.id,
+                name: 'Intercessors Squad',
+                gameSystemId: wh40k.id,
+                factionId: smFaction!.id,
+                modelId: intercessors?.id,
+                quantity: 10,
+                status: ItemStatus.WIP,
+                price: 42.5,
+                currency: 'EUR',
+                store: 'Games Workshop',
+                colorSchemeId: ultramarinesScheme.id,
+                projectId: projectUltramarines.id,
+                notes: 'Main battleline unit. Armor basecoated, working on shading.',
+                tags: ['battleline', 'infantry', 'priority'],
+            },
+            {
+                userId: testUser.id,
+                name: 'Hellblasters Squad',
+                gameSystemId: wh40k.id,
+                factionId: smFaction!.id,
+                modelId: hellblasters?.id,
+                quantity: 5,
+                status: ItemStatus.ASSEMBLED,
+                price: 37.5,
+                currency: 'EUR',
+                store: 'Games Workshop',
+                projectId: projectUltramarines.id,
+                notes: 'Assembled and primed grey seer. Ready for paint.',
+                tags: ['elite', 'infantry'],
+            },
+            {
+                userId: testUser.id,
+                name: 'Captain in Gravis Armour',
+                gameSystemId: wh40k.id,
+                factionId: smFaction!.id,
+                modelId: captainGravis?.id,
+                quantity: 1,
+                status: ItemStatus.FINISHED,
+                price: 27.5,
+                currency: 'EUR',
+                store: 'Games Workshop',
+                colorSchemeId: ultramarinesScheme.id,
+                projectId: projectUltramarines.id,
+                notes: 'Done! Used as painting reference for the rest of the army.',
+                tags: ['character', 'painted'],
+            },
+            {
+                userId: testUser.id,
+                name: 'Redemptor Dreadnought',
+                gameSystemId: wh40k.id,
+                factionId: smFaction!.id,
+                modelId: redemptorDread?.id,
+                quantity: 1,
+                status: ItemStatus.BOUGHT,
+                price: 55.0,
+                currency: 'EUR',
+                store: 'Amazon',
+                projectId: projectUltramarines.id,
+                notes: 'Still in box. Assembly will be a project.',
+                tags: ['vehicle', 'big-kit'],
+            },
+            // Project: Pile of Shame
+            {
+                userId: testUser.id,
+                name: 'Boyz Mob',
+                gameSystemId: wh40k.id,
+                factionId: orkFaction!.id,
+                modelId: orkBoyz?.id,
+                quantity: 20,
+                status: ItemStatus.WANT,
+                tags: ['battleline', 'orks', 'wishlist'],
+                notes: 'I keep telling myself I\'ll start Orks one day.',
+            },
+            {
+                userId: testUser.id,
+                name: 'Warboss',
+                gameSystemId: wh40k.id,
+                factionId: orkFaction!.id,
+                modelId: orkWarboss?.id,
+                quantity: 1,
+                status: ItemStatus.BOUGHT,
+                price: 28.0,
+                currency: 'EUR',
+                store: 'eBay',
+                projectId: projectPileOfShame.id,
+                notes: 'Got it second hand. Already cleaned the flash, that\'s it.',
+                tags: ['character', 'orks'],
+            },
+            {
+                userId: testUser.id,
+                name: 'Necron Warriors',
+                gameSystemId: wh40k.id,
+                factionId: necronFaction!.id,
+                modelId: necronWarriors?.id,
+                quantity: 10,
+                status: ItemStatus.ASSEMBLED,
+                price: 38.0,
+                currency: 'EUR',
+                store: 'Games Workshop',
+                projectId: projectPileOfShame.id,
+                notes: 'Assembled but no idea what color scheme to do.',
+                tags: ['battleline', 'necrons'],
+            },
+        ];
+
+        await prisma.item.createMany({ data: itemsData });
+        console.log(`✅ Items: ${itemsData.length} created`);
+    } else {
+        console.log(`⏭️  Items: skipped (test user already has ${existingItemCount} items)`);
+    }
 
     console.log('\n🎉 Seed complete!');
 }
