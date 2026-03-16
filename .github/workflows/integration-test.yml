@@ -2,9 +2,9 @@ name: From Sprue To Glory integration tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "production", "staging" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "production", "staging" ]
 
 jobs:
   build_backend:
