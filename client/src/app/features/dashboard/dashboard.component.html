@@ -30,6 +30,43 @@
     </mat-card>
 </div>
 
+@if (wastedMoney(); as wasted) {
+<div class="wasted-money-section">
+    <h2 class="section-title">
+        Pile of Shame — Money Wasted
+        @if (wasted.breakdown.length > 1) {
+            <mat-icon
+                class="currency-warning-icon"
+                [matTooltip]="'Multiple currencies detected. Currency conversion is not supported yet.'"
+                matTooltipPosition="right"
+            >info_outline</mat-icon>
+        }
+    </h2>
+
+    <div class="wasted-total">
+        @for (entry of wasted.breakdown; track entry.currency; let last = $last) {
+            <span class="wasted-amount">{{ entry.amount | number: '1.2-2' }} {{ entry.currency }}</span>
+            @if (!last) { <span class="currency-separator">·</span> }
+        }
+    </div>
+
+    @if (wasted.projectBreakdown.length > 0) {
+    <div class="project-breakdown">
+        @for (proj of wasted.projectBreakdown; track proj.project) {
+        <div class="project-row">
+            <span class="project-name">{{ proj.project }}</span>
+            <span class="project-amount">
+                @for (entry of proj.wastedMoneyBreakdown.breakdown; track entry.currency; let last = $last) {
+                    {{ entry.amount | number: '1.2-2' }} {{ entry.currency }}@if (!last) { · }
+                }
+            </span>
+        </div>
+        }
+    </div>
+    }
+</div>
+}
+
 <div class="quick-actions">
     <h2>Quick Actions</h2>
     <div class="actions-row">

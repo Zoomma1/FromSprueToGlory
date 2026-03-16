@@ -62,6 +62,77 @@
     border: 1px solid #d4a34a33;
 }
 
+.wasted-money-section {
+    margin-bottom: 32px;
+    background: #1e1e2e;
+    border: 1px solid #d4a34a33;
+    border-radius: 8px;
+    padding: 20px 24px;
+}
+
+.section-title {
+    color: #d4a34a;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.currency-warning-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    color: #999;
+    cursor: help;
+}
+
+.wasted-total {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.wasted-amount {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #d4a34a;
+}
+
+.currency-separator {
+    color: #555;
+    font-size: 1.2rem;
+}
+
+.project-breakdown {
+    border-top: 1px solid #2a2a3e;
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.project-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-name {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.project-amount {
+    font-size: 0.9rem;
+    color: #d4a34a;
+    font-weight: 500;
+}
+
 .quick-actions {
     h2 {
         color: #d4a34a;
