@@ -151,8 +151,12 @@ async function importPaints(records: Record<string, string>[]) {
     for (const r of records) {
         const brand = await prisma.paintBrand.findUnique({ where: { slug: r.brandSlug } });
         if (!brand) {
-            console.warn(`  ⚠️  Skipping "${r.name}": brand "${r.brandSlug}" not found`);
-            continue;
+            console.error(
+                `\n❌ Brand "${r.brandSlug}" not found in the database.\n` +
+                `   To add a new brand, add it to the paintBrands list in prisma/seed.ts\n` +
+                `   and run "npm run seed" before importing paints.\n`,
+            );
+            process.exit(1);
         }
 
         const paintType = (r.type as PaintType) || PaintType.OTHER;

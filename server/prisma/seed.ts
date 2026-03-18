@@ -13,7 +13,9 @@
 //   - Reference data rarely changes (read-mostly tables)
 //   - ALTERNATIVE: manual insertion via pgAdmin (error-prone, not repeatable)
 //
-// HOW TO RUN: `npm run seed` (or `npx prisma db seed`)
+// HOW TO RUN:
+//   npm run seed              → reference data only (safe for prod / Railway)
+//   npm run seed -- --test-data → reference data + test user + sample items
 //
 // 🎯 MINI-EXERCISE: Add a new faction to one of the game systems below.
 //    Run `npm run seed` and verify it appears in pgAdmin.
@@ -21,15 +23,19 @@
 
 import { PrismaClient, PaintType, ItemStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import fs from 'fs';
+import path from 'path';
 
 const prisma = new PrismaClient();
 
-async function main() {
-    console.log('🌱 Seeding database...\n');
+// ═══════════════════════════════════════════════════════════
+// 📚 Reference Data (safe for prod — fully idempotent)
+// ═══════════════════════════════════════════════════════════
 
-    // ═══════════════════════════════════════════════════════
-    // 🎮 Game Systems
-    // ═══════════════════════════════════════════════════════
+async function seedReferenceData() {
+    console.log('📚 Seeding reference data...\n');
+
+    // ─── Game Systems ─────────────────────────────────────
     const gameSystems = await Promise.all([
         prisma.gameSystem.upsert({
             where: { slug: '40k' },
@@ -51,11 +57,8 @@ async function main() {
     const [wh40k, aos, killTeam] = gameSystems;
     console.log(`✅ Game Systems: ${gameSystems.length} created`);
 
-    // ═══════════════════════════════════════════════════════
-    // ⚔️ Factions — Major factions per game system
-    // ═══════════════════════════════════════════════════════
+    // ─── Factions ─────────────────────────────────────────
 
-    // --- Warhammer 40K Factions ---
     const factions40k = [
         'Space Marines', 'Adepta Sororitas', 'Adeptus Mechanicus',
         'Astra Militarum', 'Custodes', 'Grey Knights',
@@ -66,7 +69,6 @@ async function main() {
         'Leagues of Votann', 'Agents of the Imperium',
     ];
 
-    // --- Age of Sigmar Factions ---
     const factionsAoS = [
         'Stormcast Eternals', 'Cities of Sigmar', 'Fyreslayers',
         'Idoneth Deepkin', 'Kharadron Overlords', 'Lumineth Realm-lords',
@@ -78,7 +80,6 @@ async function main() {
         'Ogor Mawtribes', 'Sons of Behemat',
     ];
 
-    // --- Kill Team Factions (subset, shares with 40K) ---
     const factionsKT = [
         'Space Marines', 'Adepta Sororitas', 'Astra Militarum',
         'Adeptus Mechanicus', 'Chaos Space Marines', 'Death Guard',
@@ -104,11 +105,8 @@ async function main() {
     }
     console.log(`✅ Factions: ${factionCount} created`);
 
-    // ═══════════════════════════════════════════════════════
-    // 🖌️ Models/Units — Sample entries per faction (MVP)
-    // ═══════════════════════════════════════════════════════
+    // ─── Models ───────────────────────────────────────────
 
-    // Get some factions to link models to
     const smFaction = await prisma.faction.findFirst({ where: { name: 'Space Marines', gameSystemId: wh40k.id } });
     const orkFaction = await prisma.faction.findFirst({ where: { name: 'Orks', gameSystemId: wh40k.id } });
     const sceFaction = await prisma.faction.findFirst({ where: { name: 'Stormcast Eternals', gameSystemId: aos.id } });
@@ -154,9 +152,7 @@ async function main() {
     }
     console.log(`✅ Models: ${modelCount} created`);
 
-    // ═══════════════════════════════════════════════════════
-    // 🎨 Paint Brands
-    // ═══════════════════════════════════════════════════════
+    // ─── Paint Brands ─────────────────────────────────────
 
     const brands = await Promise.all([
         prisma.paintBrand.upsert({ where: { slug: 'citadel' }, update: {}, create: { name: 'Citadel', slug: 'citadel' } }),
@@ -166,102 +162,34 @@ async function main() {
         prisma.paintBrand.upsert({ where: { slug: 'pro-acryl' }, update: {}, create: { name: 'Pro Acryl', slug: 'pro-acryl' } }),
         prisma.paintBrand.upsert({ where: { slug: 'scale75' }, update: {}, create: { name: 'Scale75', slug: 'scale75' } }),
     ]);
-    const [citadel] = brands;
     console.log(`✅ Paint Brands: ${brands.length} created`);
 
-    // ═══════════════════════════════════════════════════════
-    // 🖌️ Paints — Citadel Common Set (MVP)
-    // ═══════════════════════════════════════════════════════
+    // ─── Paints — Full dataset from paints-full.json ─────
 
-    const citadelPaints: { name: string; type: PaintType; code?: string }[] = [
-        // --- BASE ---
-        { name: 'Abaddon Black', type: PaintType.BASE },
-        { name: 'Averland Sunset', type: PaintType.BASE },
-        { name: 'Caliban Green', type: PaintType.BASE },
-        { name: 'Ceramite White', type: PaintType.BASE },
-        { name: 'Kantor Blue', type: PaintType.BASE },
-        { name: 'Khorne Red', type: PaintType.BASE },
-        { name: 'Leadbelcher', type: PaintType.BASE },
-        { name: 'Macragge Blue', type: PaintType.BASE },
-        { name: 'Mephiston Red', type: PaintType.BASE },
-        { name: 'Mournfang Brown', type: PaintType.BASE },
-        { name: 'Naggaroth Night', type: PaintType.BASE },
-        { name: 'Rakarth Flesh', type: PaintType.BASE },
-        { name: 'Retributor Armour', type: PaintType.BASE },
-        { name: 'Rhinox Hide', type: PaintType.BASE },
-        { name: 'Wraithbone', type: PaintType.BASE },
-        { name: 'Mechanicus Standard Grey', type: PaintType.BASE },
-        { name: 'Zandri Dust', type: PaintType.BASE },
-        { name: 'Corax White', type: PaintType.BASE },
-        { name: 'Death Guard Green', type: PaintType.BASE },
-        { name: 'Grey Seer', type: PaintType.BASE },
-        // --- LAYER ---
-        { name: 'Evil Sunz Scarlet', type: PaintType.LAYER },
-        { name: 'Ushabti Bone', type: PaintType.LAYER },
-        { name: 'Wild Rider Red', type: PaintType.LAYER },
-        { name: 'Lothern Blue', type: PaintType.LAYER },
-        { name: 'Ironbreaker', type: PaintType.LAYER },
-        { name: 'Runefang Steel', type: PaintType.LAYER },
-        { name: 'Liberator Gold', type: PaintType.LAYER },
-        { name: 'Kislev Flesh', type: PaintType.LAYER },
-        { name: 'Calgar Blue', type: PaintType.LAYER },
-        { name: 'Warpstone Glow', type: PaintType.LAYER },
-        { name: 'Pallid Wych Flesh', type: PaintType.LAYER },
-        { name: 'Screaming Skull', type: PaintType.LAYER },
-        { name: 'White Scar', type: PaintType.LAYER },
-        { name: 'Auric Armour Gold', type: PaintType.LAYER },
-        { name: 'Dawnstone', type: PaintType.LAYER },
-        // --- SHADE (washes) ---
-        { name: 'Nuln Oil', type: PaintType.SHADE },
-        { name: 'Agrax Earthshade', type: PaintType.SHADE },
-        { name: 'Reikland Fleshshade', type: PaintType.SHADE },
-        { name: 'Druchii Violet', type: PaintType.SHADE },
-        { name: 'Biel-Tan Green', type: PaintType.SHADE },
-        { name: 'Drakenhof Nightshade', type: PaintType.SHADE },
-        { name: 'Carroburg Crimson', type: PaintType.SHADE },
-        { name: 'Seraphim Sepia', type: PaintType.SHADE },
-        // --- DRY ---
-        { name: 'Necron Compound', type: PaintType.DRY },
-        { name: 'Ryza Rust', type: PaintType.DRY },
-        { name: 'Tyrant Skull', type: PaintType.DRY },
-        { name: 'Longbeard Grey', type: PaintType.DRY },
-        { name: 'Sigmarite', type: PaintType.DRY },
-        // --- CONTRAST ---
-        { name: 'Black Templar', type: PaintType.CONTRAST },
-        { name: 'Blood Angels Red', type: PaintType.CONTRAST },
-        { name: 'Skeleton Horde', type: PaintType.CONTRAST },
-        { name: 'Apothecary White', type: PaintType.CONTRAST },
-        { name: 'Ultramarines Blue', type: PaintType.CONTRAST },
-        { name: 'Snakebite Leather', type: PaintType.CONTRAST },
-        { name: 'Plaguebearer Flesh', type: PaintType.CONTRAST },
-        { name: 'Gore-grunta Fur', type: PaintType.CONTRAST },
-        // --- TECHNICAL ---
-        { name: 'Astrogranite', type: PaintType.TECHNICAL },
-        { name: 'Stirland Mud', type: PaintType.TECHNICAL },
-        { name: 'Blood for the Blood God', type: PaintType.TECHNICAL },
-        { name: 'Nihilakh Oxide', type: PaintType.TECHNICAL },
-        { name: 'Ardcoat', type: PaintType.TECHNICAL },
-        { name: 'Lahmian Medium', type: PaintType.TECHNICAL },
-        // --- METALLIC ---
-        { name: 'Stormhost Silver', type: PaintType.METALLIC },
-        { name: 'Balthasar Gold', type: PaintType.METALLIC },
-        { name: 'Brass Scorpion', type: PaintType.METALLIC },
-    ];
+    type PaintEntry = { name: string; brandSlug: string; type: string; code?: string };
+    const paintsData: PaintEntry[] = JSON.parse(
+        fs.readFileSync(path.resolve(__dirname, '../data/paints-full.json'), 'utf-8'),
+    );
+
+    const brandMap = new Map(brands.map((b) => [b.slug, b]));
 
     let paintCount = 0;
-    for (const p of citadelPaints) {
+    for (const p of paintsData) {
+        const brand = brandMap.get(p.brandSlug);
+        if (!brand) {
+            console.warn(`  ⚠️  Skipping paint "${p.name}": brand "${p.brandSlug}" not in seed — add it to the paintBrands list first`);
+            continue;
+        }
         await prisma.paint.upsert({
-            where: { name_brandId: { name: p.name, brandId: citadel.id } },
+            where: { name_brandId: { name: p.name, brandId: brand.id } },
             update: {},
-            create: { name: p.name, type: p.type, brandId: citadel.id, code: p.code || null },
+            create: { name: p.name, type: p.type as PaintType, brandId: brand.id, code: p.code || null },
         });
         paintCount++;
     }
-    console.log(`✅ Paints: ${paintCount} created (Citadel set)`);
+    console.log(`✅ Paints: ${paintCount} created (${brands.length} brands)`);
 
-    // ═══════════════════════════════════════════════════════
-    // 🔧 Techniques
-    // ═══════════════════════════════════════════════════════
+    // ─── Techniques ───────────────────────────────────────
 
     const techniques = [
         { name: 'Basecoat', description: 'Apply an even, opaque layer of paint as the foundation color' },
@@ -302,10 +230,24 @@ async function main() {
         techCount++;
     }
     console.log(`✅ Techniques: ${techCount} created`);
+}
 
-    // ═══════════════════════════════════════════════════════
-    // 👤 Test User + User Data
-    // ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// 🧪 Test Data (local dev only — never run in prod)
+// ═══════════════════════════════════════════════════════════
+
+async function seedTestData() {
+    console.log('\n🧪 Seeding test data...\n');
+
+    // Re-fetch reference data needed to build test entities
+    const wh40k = await prisma.gameSystem.findUniqueOrThrow({ where: { slug: '40k' } });
+    const citadel = await prisma.paintBrand.findUniqueOrThrow({ where: { slug: 'citadel' } });
+
+    const smFaction = await prisma.faction.findFirstOrThrow({ where: { name: 'Space Marines', gameSystemId: wh40k.id } });
+    const orkFaction = await prisma.faction.findFirstOrThrow({ where: { name: 'Orks', gameSystemId: wh40k.id } });
+    const necronFaction = await prisma.faction.findFirstOrThrow({ where: { name: 'Necrons', gameSystemId: wh40k.id } });
+
+    // ─── Test User ────────────────────────────────────────
 
     const passwordHash = await bcrypt.hash('Test1234!', 10);
     const testUser = await prisma.user.upsert({
@@ -315,7 +257,7 @@ async function main() {
     });
     console.log(`✅ Test user: ${testUser.email} (password: Test1234!)`);
 
-    // ─── Projects ────────────────────────────────────────────
+    // ─── Projects ─────────────────────────────────────────
 
     const [projectUltramarines, projectPileOfShame] = await Promise.all([
         prisma.project.upsert({
@@ -341,25 +283,25 @@ async function main() {
     ]);
     console.log(`✅ Projects: 2 created`);
 
-    // ─── Fetch seeded reference data for items ────────────────
+    // ─── Models (re-fetch) ────────────────────────────────
 
     const [intercessors, hellblasters, captainGravis, redemptorDread] = await Promise.all([
-        prisma.model.findFirst({ where: { name: 'Intercessors', factionId: smFaction!.id } }),
-        prisma.model.findFirst({ where: { name: 'Hellblasters', factionId: smFaction!.id } }),
-        prisma.model.findFirst({ where: { name: 'Captain in Gravis Armour', factionId: smFaction!.id } }),
-        prisma.model.findFirst({ where: { name: 'Redemptor Dreadnought', factionId: smFaction!.id } }),
+        prisma.model.findFirst({ where: { name: 'Intercessors', factionId: smFaction.id } }),
+        prisma.model.findFirst({ where: { name: 'Hellblasters', factionId: smFaction.id } }),
+        prisma.model.findFirst({ where: { name: 'Captain in Gravis Armour', factionId: smFaction.id } }),
+        prisma.model.findFirst({ where: { name: 'Redemptor Dreadnought', factionId: smFaction.id } }),
     ]);
 
     const [orkBoyz, orkWarboss] = await Promise.all([
-        prisma.model.findFirst({ where: { name: 'Boyz', factionId: orkFaction!.id } }),
-        prisma.model.findFirst({ where: { name: 'Warboss', factionId: orkFaction!.id } }),
+        prisma.model.findFirst({ where: { name: 'Boyz', factionId: orkFaction.id } }),
+        prisma.model.findFirst({ where: { name: 'Warboss', factionId: orkFaction.id } }),
     ]);
 
     const necronWarriors = await prisma.model.findFirst({
-        where: { name: 'Warriors', factionId: necronFaction!.id },
+        where: { name: 'Warriors', factionId: necronFaction.id },
     });
 
-    // ─── Color Scheme — Classic Ultramarines ─────────────────
+    // ─── Color Scheme — Classic Ultramarines ─────────────
 
     const [techBasecoat, techShade, techLayer, techEdge, techDrybrush] = await Promise.all([
         prisma.technique.findFirst({ where: { name: 'Basecoat' } }),
@@ -369,7 +311,11 @@ async function main() {
         prisma.technique.findFirst({ where: { name: 'Drybrush' } }),
     ]);
 
-    const [paintMacraggeBlue, paintNulnOil, paintCalgarBlue, paintLeadbelcher, paintRunefangSteel, paintAbaddonBlack, paintRetributorArmour, paintReiklandFleshshade] = await Promise.all([
+    const [
+        paintMacraggeBlue, paintNulnOil, paintCalgarBlue,
+        paintLeadbelcher, paintRunefangSteel, paintAbaddonBlack,
+        paintRetributorArmour, paintReiklandFleshshade,
+    ] = await Promise.all([
         prisma.paint.findFirst({ where: { name: 'Macragge Blue', brandId: citadel.id } }),
         prisma.paint.findFirst({ where: { name: 'Nuln Oil', brandId: citadel.id } }),
         prisma.paint.findFirst({ where: { name: 'Calgar Blue', brandId: citadel.id } }),
@@ -388,7 +334,7 @@ async function main() {
             userId: testUser.id,
             name: 'Classic Ultramarines',
             gameSystemId: wh40k.id,
-            factionId: smFaction!.id,
+            factionId: smFaction.id,
             description: 'Tabletop-ready Ultramarines with Macragge Blue base, shading and highlights.',
             steps: {
                 create: [
@@ -479,7 +425,7 @@ async function main() {
     });
     console.log(`✅ Color scheme: "${ultramarinesScheme.name}" (10 steps)`);
 
-    // ─── Items ────────────────────────────────────────────────
+    // ─── Items ────────────────────────────────────────────
     // Only seed if the test user has no items yet (avoid duplicates on re-run)
 
     const existingItemCount = await prisma.item.count({ where: { userId: testUser.id } });
@@ -491,7 +437,7 @@ async function main() {
                 userId: testUser.id,
                 name: 'Intercessors Squad',
                 gameSystemId: wh40k.id,
-                factionId: smFaction!.id,
+                factionId: smFaction.id,
                 modelId: intercessors?.id,
                 quantity: 10,
                 status: ItemStatus.WIP,
@@ -507,7 +453,7 @@ async function main() {
                 userId: testUser.id,
                 name: 'Hellblasters Squad',
                 gameSystemId: wh40k.id,
-                factionId: smFaction!.id,
+                factionId: smFaction.id,
                 modelId: hellblasters?.id,
                 quantity: 5,
                 status: ItemStatus.ASSEMBLED,
@@ -522,7 +468,7 @@ async function main() {
                 userId: testUser.id,
                 name: 'Captain in Gravis Armour',
                 gameSystemId: wh40k.id,
-                factionId: smFaction!.id,
+                factionId: smFaction.id,
                 modelId: captainGravis?.id,
                 quantity: 1,
                 status: ItemStatus.FINISHED,
@@ -538,7 +484,7 @@ async function main() {
                 userId: testUser.id,
                 name: 'Redemptor Dreadnought',
                 gameSystemId: wh40k.id,
-                factionId: smFaction!.id,
+                factionId: smFaction.id,
                 modelId: redemptorDread?.id,
                 quantity: 1,
                 status: ItemStatus.BOUGHT,
@@ -554,7 +500,7 @@ async function main() {
                 userId: testUser.id,
                 name: 'Boyz Mob',
                 gameSystemId: wh40k.id,
-                factionId: orkFaction!.id,
+                factionId: orkFaction.id,
                 modelId: orkBoyz?.id,
                 quantity: 20,
                 status: ItemStatus.WANT,
@@ -565,7 +511,7 @@ async function main() {
                 userId: testUser.id,
                 name: 'Warboss',
                 gameSystemId: wh40k.id,
-                factionId: orkFaction!.id,
+                factionId: orkFaction.id,
                 modelId: orkWarboss?.id,
                 quantity: 1,
                 status: ItemStatus.BOUGHT,
@@ -580,7 +526,7 @@ async function main() {
                 userId: testUser.id,
                 name: 'Necron Warriors',
                 gameSystemId: wh40k.id,
-                factionId: necronFaction!.id,
+                factionId: necronFaction.id,
                 modelId: necronWarriors?.id,
                 quantity: 10,
                 status: ItemStatus.ASSEMBLED,
@@ -597,6 +543,22 @@ async function main() {
         console.log(`✅ Items: ${itemsData.length} created`);
     } else {
         console.log(`⏭️  Items: skipped (test user already has ${existingItemCount} items)`);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🚀 Entry Point
+// ═══════════════════════════════════════════════════════════
+
+async function main() {
+    const addTestData = process.argv.includes('--test-data');
+
+    console.log('🌱 Seeding database...\n');
+
+    await seedReferenceData();
+
+    if (addTestData) {
+        await seedTestData();
     }
 
     console.log('\n🎉 Seed complete!');
