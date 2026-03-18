@@ -11,6 +11,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "seed": "tsx prisma/seed.ts",
+        "seed:full": "tsx prisma/seed.ts --test-data",
         "migrate": "prisma migrate dev",
         "migrate:prod": "prisma migrate deploy",
         "import": "tsx scripts/import.ts"
