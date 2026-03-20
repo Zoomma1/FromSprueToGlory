@@ -129,23 +129,22 @@
                         <mat-label>Area</mat-label>
                         <input matInput formControlName="area">
                     </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Technique</mat-label>
-                        <mat-select formControlName="techniqueId">
-                            @for (t of techniques(); track t.id) {
-                            <mat-option [value]="t.id">{{ t.name }}</mat-option>
-                            }
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="outline" class="brand-filter">
-                      <mat-label>Filter paints by brand</mat-label>
-                      <mat-select [value]="getBrandFilter(i)" (selectionChange)="onBrandFilterChange($event.value, i)">
-                        <mat-option value="">All brands</mat-option>
-                        @for (brand of availableBrands(); track brand) {
-                          <mat-option [value]="brand">{{ brand }}</mat-option>
-                        }
-                      </mat-select>
-                    </mat-form-field>
+                    <app-searchable-select
+                        [options]="techniques()"
+                        [displayFn]="techniqueDisplayFn"
+                        label="Technique"
+                        [value]="getTechniqueForStep(i)"
+                        (valueChange)="onTechniqueChange($event, i)">
+                    </app-searchable-select>
+                    <app-searchable-select
+                        class="brand-filter"
+                        [options]="availableBrands()"
+                        [displayFn]="brandDisplayFn"
+                        label="Filter paints by brand"
+                        nullOptionLabel="All brands"
+                        [value]="getBrandFilterOrNull(i)"
+                        (valueChange)="onBrandFilterChange($event, i)">
+                    </app-searchable-select>
                     <mat-form-field appearance="outline">
                         <mat-label>Paint</mat-label>
                         <input matInput

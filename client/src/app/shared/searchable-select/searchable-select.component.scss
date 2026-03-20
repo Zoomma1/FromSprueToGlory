@@ -1,0 +1,30 @@
+:host {
+    display: block;
+}
+
+.searchable-select-search {
+    padding: 8px 16px;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+
+    input {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+        outline: none;
+        padding: 4px 0;
+        font-size: 14px;
+        background: transparent;
+        color: inherit;
+
+        &:focus {
+            border-bottom-color: var(--mat-sys-primary, #6750a4);
+        }
+
+        &::placeholder {
+            color: rgba(0, 0, 0, 0.42);
+        }
+    }
+}

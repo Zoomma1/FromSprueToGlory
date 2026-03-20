@@ -21,6 +21,7 @@ import { ColorSchemeFull, ColorSchemeStepPayload, ColorSchemeStepFull } from '..
 import { Technique } from '../../../classes/technique';
 import { Paint } from '../../../classes/paint';
 import { UserCustomPaint } from '../../../classes/user-custom-paint';
+import { SearchableSelectComponent } from '../../../shared/searchable-select/searchable-select.component';
 
 export const ADD_PAINT_SENTINEL = '__ADD_PAINT__';
 
@@ -37,6 +38,7 @@ export const PAINT_TYPES = [
         MatCardModule, MatButtonModule, MatIconModule, MatChipsModule,
         MatFormFieldModule, MatInputModule, MatSelectModule, MatAutocompleteModule,
         MatSnackBarModule, MatTooltipModule, CdkDrag, CdkDropList,
+        SearchableSelectComponent,
     ],
     templateUrl: './scheme-detail.component.html',
     styleUrl: './scheme-detail.component.scss',
@@ -52,6 +54,9 @@ export class SchemeDetailComponent implements OnInit {
 
     readonly ADD_PAINT_SENTINEL = ADD_PAINT_SENTINEL;
     readonly paintTypes = PAINT_TYPES;
+
+    readonly techniqueDisplayFn = (t: Technique) => t.name;
+    readonly brandDisplayFn = (b: string) => b;
 
     scheme = signal<ColorSchemeFull | null>(null);
     createMode = signal(false);
@@ -110,6 +115,19 @@ export class SchemeDetailComponent implements OnInit {
 
     getBrandFilter(stepIndex: number): string {
         return this.brandFilters()[stepIndex] ?? '';
+    }
+
+    getBrandFilterOrNull(stepIndex: number): string | null {
+        return this.getBrandFilter(stepIndex) || null;
+    }
+
+    getTechniqueForStep(stepIndex: number): Technique | null {
+        const id = this.stepsArray.at(stepIndex).get('techniqueId')?.value;
+        return this.techniques().find(t => t.id === id) ?? null;
+    }
+
+    onTechniqueChange(technique: Technique | null, stepIndex: number): void {
+        this.stepsArray.at(stepIndex).patchValue({ techniqueId: technique?.id ?? '' });
     }
 
     form: FormGroup = this.fb.group({
@@ -251,8 +269,8 @@ export class SchemeDetailComponent implements OnInit {
         this.paintFilter.set(value);
     }
 
-    onBrandFilterChange(brand: string, stepIndex: number) {
-        this.brandFilters.update(filters => ({ ...filters, [stepIndex]: brand }));
+    onBrandFilterChange(brand: string | null, stepIndex: number) {
+        this.brandFilters.update(filters => ({ ...filters, [stepIndex]: brand ?? '' }));
     }
 
     clearPaint(stepIndex: number) {
