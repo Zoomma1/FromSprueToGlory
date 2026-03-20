@@ -14,6 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from '../../../core/services/api.service';
+import { SearchableSelectComponent } from '../../../shared/searchable-select/searchable-select.component';
 import { GameSystem } from '../../../classes/game-system';
 import { Faction } from '../../../classes/factions';
 import { Model } from '../../../classes/model';
@@ -29,6 +30,7 @@ import {ITEM_STATUSES, CURRENCIES} from '../../../classes/item.constants';
         MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule,
         MatButtonModule, MatDatepickerModule, MatNativeDateModule,
         MatChipsModule, MatIconModule, MatSnackBarModule,
+        SearchableSelectComponent,
     ],
     templateUrl: './item-form-dialog.component.html',
     styleUrl: './item-form-dialog.component.scss',
@@ -45,6 +47,10 @@ export class ItemFormDialogComponent implements OnInit {
     models = signal<Model[]>([]);
     projects = signal<Project[]>([]);
     saving = signal(false);
+
+    readonly gameSystemDisplayFn = (gs: GameSystem) => gs.name;
+    readonly factionDisplayFn = (f: Faction) => f.name;
+    readonly projectDisplayFn = (p: Project) => p.name;
 
     private editSavedIds: { gameSystemId?: string; factionId?: string; modelId?: string; projectId?: string } | null = null;
 
