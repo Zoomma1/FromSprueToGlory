@@ -35,7 +35,9 @@ export class SearchableSelectComponent<T> implements ControlValueAccessor {
     isDisabled = signal(false);
 
     private cvaMode = false;
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private onChange: (v: T | null) => void = () => {};
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private onTouched: () => void = () => {};
 
     constructor() {
