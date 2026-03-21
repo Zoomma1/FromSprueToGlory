@@ -18,6 +18,7 @@ import accountRoutes from './routes/account.routes';
 import projectsRoutes from './routes/projects.routes';
 import adminRoutes from './routes/admin.routes';
 import userPaintsRoutes from './routes/user-paints.routes';
+import usersRoutes from './routes/users.routes';
 
 // Middleware imports
 import { authMiddleware } from './middleware/auth.middleware';
@@ -132,6 +133,7 @@ export function createApp(options: AppOptions = {}) {
     app.use('/api/projects', projectsRoutes);
     app.use('/api/admin', authMiddleware, asyncHandler(adminMiddleware), adminRoutes);
     app.use('/api/user-paints', userPaintsRoutes);
+    app.use('/api/users', usersRoutes);
 
     // Error handler must be mounted after all routes
     app.use(errorHandler);

@@ -1,26 +1,59 @@
 // ──────────────────────────────────────────────────────────
 // ⚙️ Settings Component — Account, Export, Danger Zone
 // ──────────────────────────────────────────────────────────
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../core/services/auth.service';
 import { ApiService } from '../../core/services/api.service';
+import { CURRENCIES } from '../../classes/item.constants';
 
 @Component({
     selector: 'app-settings',
     standalone: true,
-    imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatSnackBarModule],
+    imports: [
+        CommonModule, FormsModule,
+        MatCardModule, MatButtonModule, MatIconModule,
+        MatSelectModule, MatFormFieldModule, MatSnackBarModule,
+    ],
     templateUrl: './settings.component.html',
     styleUrl: './settings.component.scss',
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit {
     authService = inject(AuthService);
     private api = inject(ApiService);
     private snackBar = inject(MatSnackBar);
+
+    readonly CURRENCIES = CURRENCIES;
+    selectedCurrency = signal('EUR');
+    savingCurrency = signal(false);
+
+    ngOnInit() {
+        this.api.getMe().subscribe({
+            next: (profile) => this.selectedCurrency.set(profile.currency),
+            error: () => {},
+        });
+    }
+
+    saveCurrency() {
+        this.savingCurrency.set(true);
+        this.api.updateCurrency(this.selectedCurrency()).subscribe({
+            next: () => {
+                this.snackBar.open('Currency saved', 'OK', { duration: 3000 });
+                this.savingCurrency.set(false);
+            },
+            error: () => {
+                this.snackBar.open('Failed to save currency', 'OK', { duration: 3000 });
+                this.savingCurrency.set(false);
+            },
+        });
+    }
 
     exportJSON() {
         this.api.exportItems('json').subscribe({
