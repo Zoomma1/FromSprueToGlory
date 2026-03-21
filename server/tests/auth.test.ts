@@ -132,6 +132,32 @@ describe('Auth Routes', () => {
 
             expect(res.status).toBe(400);
         });
+
+        it('does not expose password or passwordHash in the success response', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+            (prisma.user.create as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                email: 'test@example.com',
+            });
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const res = await request(app)
+                .post('/api/auth/signup')
+                .send({ email: 'test@example.com', password: 'password123' });
+
+            expect(res.body.user).not.toHaveProperty('password');
+            expect(res.body.user).not.toHaveProperty('passwordHash');
+            expect(JSON.stringify(res.body)).not.toContain('password123');
+        });
+
+        it('does not expose the password value in Zod validation error details', async () => {
+            const res = await request(app)
+                .post('/api/auth/signup')
+                .send({ email: 'test@example.com', password: 'short' });
+
+            expect(res.status).toBe(400);
+            expect(JSON.stringify(res.body)).not.toContain('short');
+        });
     });
 
     // ─── LOGIN ────────────────────────────────────────────
@@ -197,6 +223,34 @@ describe('Auth Routes', () => {
                 .send({ email: 'test@example.com', password: 'short' });
 
             expect(res.status).toBe(400);
+        });
+
+        it('does not expose password or passwordHash in the success response', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                email: 'test@example.com',
+                passwordHash: '$hashed$',
+            });
+            (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const res = await request(app)
+                .post('/api/auth/login')
+                .send({ email: 'test@example.com', password: 'password123' });
+
+            expect(res.body.user).not.toHaveProperty('password');
+            expect(res.body.user).not.toHaveProperty('passwordHash');
+            expect(JSON.stringify(res.body)).not.toContain('password123');
+            expect(JSON.stringify(res.body)).not.toContain('$hashed$');
+        });
+
+        it('does not expose the password value in Zod validation error details', async () => {
+            const res = await request(app)
+                .post('/api/auth/login')
+                .send({ email: 'test@example.com', password: 'short' });
+
+            expect(res.status).toBe(400);
+            expect(JSON.stringify(res.body)).not.toContain('short');
         });
 
         it('stores a new refresh token in the DB after login', async () => {

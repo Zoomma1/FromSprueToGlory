@@ -38,6 +38,7 @@ export async function signup(body: unknown) {
 
     const user = await prisma.user.create({
         data: { email: parsed.data.email, passwordHash },
+        select: { id: true, email: true },
     });
 
     const payload = { userId: user.id, email: user.email };
@@ -60,7 +61,10 @@ export async function login(body: unknown) {
         throw new ValidationError('Validation failed', parsed.error.flatten());
     }
 
-    const user = await prisma.user.findUnique({ where: { email: parsed.data.email } });
+    const user = await prisma.user.findUnique({
+        where: { email: parsed.data.email },
+        select: { id: true, email: true, passwordHash: true },
+    });
     if (!user) {
         throw new UnauthorizedError('Invalid email or password');
     }
