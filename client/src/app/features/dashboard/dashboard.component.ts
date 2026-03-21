@@ -84,6 +84,7 @@ export class DashboardComponent implements OnInit {
     ngOnInit() {
         this.api.getMe().subscribe({
             next: (profile) => this.preferredCurrency.set(profile.currency),
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             error: () => {},
         });
 

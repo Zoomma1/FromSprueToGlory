@@ -37,6 +37,7 @@ export class SettingsComponent implements OnInit {
     ngOnInit() {
         this.api.getMe().subscribe({
             next: (profile) => this.selectedCurrency.set(profile.currency),
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             error: () => {},
         });
     }
