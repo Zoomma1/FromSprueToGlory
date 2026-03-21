@@ -15,7 +15,7 @@ describe('SettingsComponent', () => {
   let authServiceStub: Partial<AuthService> & { logout: jasmine.Spy };
 
   beforeEach(async () => {
-    apiSpy = jasmine.createSpyObj('ApiService', ['exportItems', 'deleteAccount']);
+    apiSpy = jasmine.createSpyObj('ApiService', ['exportItems', 'deleteAccount', 'getMe', 'updateCurrency']);
     snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
     authServiceStub = {
       ...jasmine.createSpyObj('AuthService', ['logout']),
@@ -30,6 +30,8 @@ describe('SettingsComponent', () => {
     ];
     const mockData = JSON.parse(JSON.stringify(mockItems));
     apiSpy.exportItems.and.returnValue(of(mockData));
+    apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
+    apiSpy.updateCurrency.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
 
     await TestBed.configureTestingModule({
       imports: [ SettingsComponent ],
@@ -134,6 +136,50 @@ describe('SettingsComponent', () => {
       spyOn(window, 'confirm').and.returnValue(true);
       component.deleteAccount();
       expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to delete account', 'OK', { duration: 3000 });
+    });
+  });
+
+  describe('Currency preference', () => {
+    it('should call getMe on init and set selectedCurrency', () => {
+      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'GBP' }));
+      component.ngOnInit();
+      expect(apiSpy.getMe).toHaveBeenCalled();
+      expect(component.selectedCurrency()).toBe('GBP');
+    });
+
+    it('should default to EUR if getMe fails', () => {
+      apiSpy.getMe.and.returnValue(throwError(() => new Error('fail')));
+      component.ngOnInit();
+      expect(component.selectedCurrency()).toBe('EUR');
+    });
+
+    it('should call updateCurrency with selected currency on saveCurrency', () => {
+      component.selectedCurrency.set('USD');
+      apiSpy.updateCurrency.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'USD' }));
+      component.saveCurrency();
+      expect(apiSpy.updateCurrency).toHaveBeenCalledWith('USD');
+    });
+
+    it('should show success snackbar after saveCurrency', () => {
+      component.saveCurrency();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Currency saved', 'OK', { duration: 3000 });
+    });
+
+    it('should show error snackbar when saveCurrency fails', () => {
+      apiSpy.updateCurrency.and.returnValue(throwError(() => new Error('fail')));
+      component.saveCurrency();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to save currency', 'OK', { duration: 3000 });
+    });
+
+    it('should reset savingCurrency to false after success', () => {
+      component.saveCurrency();
+      expect(component.savingCurrency()).toBeFalse();
+    });
+
+    it('should reset savingCurrency to false after error', () => {
+      apiSpy.updateCurrency.and.returnValue(throwError(() => new Error('fail')));
+      component.saveCurrency();
+      expect(component.savingCurrency()).toBeFalse();
     });
   });
 

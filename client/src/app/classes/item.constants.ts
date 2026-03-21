@@ -6,7 +6,8 @@ export const ITEM_STATUSES = [
   {value: 'FINISHED', label: 'Finished'},
 ] as const;
 
-export const CURRENCIES = ['EUR', 'USD', 'GBP'] as const;
+export const CURRENCIES = ['EUR', 'GBP', 'USD', 'CHF', 'CAD', 'AUD', 'CZK'] as const;
+export type Currency = (typeof CURRENCIES)[number];
 
 export const STATUS_ORDER = ITEM_STATUSES.map(s => s.value);
 

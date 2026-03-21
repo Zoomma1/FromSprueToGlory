@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiService } from '../../core/services/api.service';
 import { Item } from '../../classes/items';
+import { EXCHANGE_RATES } from '../../classes/exchange-rates';
 
 interface StatusCount {
     status: string;
@@ -18,18 +19,10 @@ interface StatusCount {
     color: string;
 }
 
-interface WasterMoneyResultBreakdown {
-    breakdown: {
-      currency: string;
-      amount: number
-    }[];
-}
-
-interface WasterMoneyResult extends WasterMoneyResultBreakdown {
-    projectBreakdown: {
-      project: string;
-      wastedMoneyBreakdown: WasterMoneyResultBreakdown
-    }[];
+interface WastedMoneyResult {
+    total: number;
+    currency: string;
+    projectBreakdown: { project: string; total: number }[];
 }
 
 @Component({
@@ -45,42 +38,39 @@ export class DashboardComponent implements OnInit {
     stats = signal<StatusCount[]>([]);
     allItems = signal<Item[]>([]);
     totalItems = signal(0);
+    preferredCurrency = signal('EUR');
 
-    wastedMoney = computed((): WasterMoneyResult | null => {
+    wastedMoney = computed((): WastedMoneyResult | null => {
+        const currency = this.preferredCurrency();
         const eligibleItems = this.allItems().filter(
             (item) => !!item.price && item.status !== 'WANT' && item.status !== 'FINISHED',
         );
 
         if (eligibleItems.length === 0) return null;
 
-        const globalBreakdown = Array.from(
-            eligibleItems.reduce((map, item) => {
-                map.set(item.currency, (map.get(item.currency) ?? 0) + item.price!);
-                return map;
-            }, new Map<string, number>()),
-            ([currency, amount]) => ({ currency, amount }),
+        const convert = (amount: number, from: string): number => {
+            const fromRate = EXCHANGE_RATES[from] ?? 1;
+            const toRate = EXCHANGE_RATES[currency] ?? 1;
+            return amount * (toRate / fromRate);
+        };
+
+        const total = eligibleItems.reduce(
+            (sum, item) => sum + convert(item.price!, item.currency),
+            0,
         );
 
         const byProject = eligibleItems.reduce((map, item) => {
             const projectName = item.project?.name ?? 'No Project';
-            map.set(projectName, [...(map.get(projectName) ?? []), item]);
+            map.set(projectName, (map.get(projectName) ?? 0) + convert(item.price!, item.currency));
             return map;
-        }, new Map<string, Item[]>());
+        }, new Map<string, number>());
 
-        const projectBreakdown = Array.from(byProject, ([project, items]) => ({
+        const projectBreakdown = Array.from(byProject, ([project, projectTotal]) => ({
             project,
-            wastedMoneyBreakdown: {
-                breakdown: Array.from(
-                    items.reduce((map, item) => {
-                        map.set(item.currency, (map.get(item.currency) ?? 0) + item.price!);
-                        return map;
-                    }, new Map<string, number>()),
-                    ([currency, amount]) => ({ currency, amount }),
-                ),
-            },
+            total: projectTotal,
         }));
 
-        return { breakdown: globalBreakdown, projectBreakdown };
+        return { total, currency, projectBreakdown };
     });
 
     private statusConfig: Record<string, { icon: string; color: string }> = {
@@ -92,6 +82,12 @@ export class DashboardComponent implements OnInit {
     };
 
     ngOnInit() {
+        this.api.getMe().subscribe({
+            next: (profile) => this.preferredCurrency.set(profile.currency),
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            error: () => {},
+        });
+
         this.api.getItems().subscribe({
             next: (items) => {
                 this.allItems.set(items);
@@ -116,6 +112,5 @@ export class DashboardComponent implements OnInit {
                 this.totalItems.set(0);
             },
         });
-
     }
 }

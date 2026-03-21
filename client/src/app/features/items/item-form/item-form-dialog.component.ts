@@ -83,6 +83,14 @@ export class ItemFormDialogComponent implements OnInit {
             },
         });
 
+        if (this.data.mode === 'create') {
+            this.api.getMe().subscribe({
+                next: (profile) => this.form.patchValue({ currency: profile.currency }),
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                error: () => {},
+            });
+        }
+
         this.api.getProjects().subscribe({
             next: (p) => {
                 this.projects.set(p);
