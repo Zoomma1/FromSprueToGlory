@@ -61,6 +61,12 @@
         </mat-card-content>
 
         <mat-card-actions>
+            <div class="divider">
+                <span>or</span>
+            </div>
+            <button mat-stroked-button class="full-width google-btn" (click)="loginWithGoogle()">
+                Continue with Google
+            </button>
             <p class="auth-link">
                 Already have an account? <a [routerLink]="['/auth/login']">Login</a>
             </p>

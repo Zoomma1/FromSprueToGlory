@@ -15,7 +15,6 @@
 //   - Easy migrations (schema changes → SQL automatically)
 //   - ALTERNATIVE: TypeORM (more flexible but less type-safe, more boilerplate)
 //
-// 🎯 MINI-EXERCISE: Add a new field `priority` (Int, optional) to the Item model.
 //    Then run `npx prisma format` to auto-format the schema.
 // ──────────────────────────────────────────────────────────
 
@@ -35,7 +34,8 @@ datasource db {
 model User {
   id           String   @id @default(uuid())
   email        String   @unique
-  passwordHash String
+  passwordHash String?
+  googleId     String?  @unique
   isAdmin      Boolean  @default(false)
   currency     String   @default("EUR")
   createdAt    DateTime @default(now())
@@ -102,7 +102,7 @@ model Faction {
   name         String
   gameSystemId String
 
-  gameSystem   GameSystem @relation(fields: [gameSystemId], references: [id])
+  gameSystem GameSystem @relation(fields: [gameSystemId], references: [id])
 
   // Relations
   models       Model[]
@@ -118,7 +118,7 @@ model Model {
   id         String @id @default(uuid())
   name       String
   factionId  String
-  pointsCost Int?   // optional points value
+  pointsCost Int? // optional points value
 
   faction Faction @relation(fields: [factionId], references: [id])
   items   Item[]
@@ -145,7 +145,7 @@ model PaintBrand {
 enum PaintType {
   BASE
   LAYER
-  SHADE       // wash
+  SHADE // wash
   DRY
   CONTRAST
   TECHNICAL
@@ -161,7 +161,7 @@ enum PaintType {
 model Paint {
   id      String    @id @default(uuid())
   name    String
-  code    String?   // product code (e.g., "21-25")
+  code    String? // product code (e.g., "21-25")
   brandId String
   type    PaintType @default(OTHER)
   notes   String?
@@ -216,37 +216,37 @@ enum ItemStatus {
 }
 
 model Item {
-  id             String     @id @default(uuid())
-  userId         String
-  name           String
-  gameSystemId   String
-  factionId      String
-  modelId        String?    // optional: not all items map to a specific model/unit
-  points         Int?
-  quantity       Int        @default(1)
-  purchaseDate   DateTime?
-  price          Float?
-  currency       String     @default("EUR")
-  store          String?
-  notes          String?
-  tags           String[]   // PostgreSQL array — flexible tagging
-  status         ItemStatus @default(WANT)
-  colorSchemeId  String?
-  projectId      String?
-  photoKey       String?    // S3 object key (NOT a public URL)
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  id            String     @id @default(uuid())
+  userId        String
+  name          String
+  gameSystemId  String
+  factionId     String
+  modelId       String? // optional: not all items map to a specific model/unit
+  points        Int?
+  quantity      Int        @default(1)
+  purchaseDate  DateTime?
+  price         Float?
+  currency      String     @default("EUR")
+  store         String?
+  notes         String?
+  tags          String[] // PostgreSQL array — flexible tagging
+  status        ItemStatus @default(WANT)
+  colorSchemeId String?
+  projectId     String?
+  photoKey      String? // S3 object key (NOT a public URL)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   // Relations
-  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gameSystem     GameSystem  @relation(fields: [gameSystemId], references: [id])
-  faction        Faction     @relation(fields: [factionId], references: [id])
-  model          Model?      @relation(fields: [modelId], references: [id])
-  colorScheme    ColorScheme? @relation(fields: [colorSchemeId], references: [id], onDelete: SetNull)
-  project        Project?    @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameSystem  GameSystem   @relation(fields: [gameSystemId], references: [id])
+  faction     Faction      @relation(fields: [factionId], references: [id])
+  model       Model?       @relation(fields: [modelId], references: [id])
+  colorScheme ColorScheme? @relation(fields: [colorSchemeId], references: [id], onDelete: SetNull)
+  project     Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
 
   // Status change history
-  statusHistory  ItemStatusHistory[]
+  statusHistory ItemStatusHistory[]
 
   @@index([userId])
   @@index([status])
@@ -282,7 +282,7 @@ model ColorScheme {
   gameSystemId      String?
   factionId         String?
   description       String?
-  referencePhotoKey String?  // S3 object key
+  referencePhotoKey String? // S3 object key
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -303,11 +303,11 @@ model ColorScheme {
 
 // ─── Color Scheme Steps (ordered painting instructions) ──
 model ColorSchemeStep {
-  id             String  @id @default(uuid())
-  colorSchemeId  String
-  orderIndex     Int     // 1-based, unique per scheme
-  area           String  // "Armor", "Trim", "Weapon", "Base", etc.
-  techniqueId    String
+  id                String  @id @default(uuid())
+  colorSchemeId     String
+  orderIndex        Int // 1-based, unique per scheme
+  area              String // "Armor", "Trim", "Weapon", "Base", etc.
+  techniqueId       String
   paintId           String? // optional: reference paint from shared catalog
   userCustomPaintId String? // optional: user's own custom paint
   mix               String? // e.g., "2:1 Paint:Medium" or JSON

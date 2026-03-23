@@ -27,6 +27,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-login',
@@ -52,6 +53,10 @@ export class LoginComponent {
     hidePassword = signal(true);
     loading = signal(false);
     error = signal('');
+
+    loginWithGoogle(): void {
+        window.location.href = `${environment.apiUrl}/auth/google`;
+    }
 
     async onSubmit() {
         if (this.form.invalid) return;
