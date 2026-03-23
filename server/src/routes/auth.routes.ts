@@ -92,6 +92,7 @@ router.get(
         const tokens = req.user as { accessToken: string; refreshToken: string; user: object };
         res.cookie('oauth_tokens', JSON.stringify(tokens), {
             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
             maxAge: 2 * 60 * 1000, // 2 minutes — transit only
             sameSite: 'lax',
         });

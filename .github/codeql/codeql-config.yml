@@ -1,0 +1,18 @@
+# ──────────────────────────────────────────────────────────
+# CodeQL Query Filters
+# ──────────────────────────────────────────────────────────
+# js/csrf-protection-missing — false positive, intentionally excluded.
+#
+# WHY: CSRF attacks exploit cookie-based authentication (the browser sends
+# cookies automatically on cross-site requests). This API uses JWT Bearer
+# tokens in the Authorization header, which are never sent automatically
+# by the browser — making CSRF structurally impossible on protected routes.
+#
+# The only cookie in use (oauth_tokens) is a short-lived transit cookie
+# (2 min) already protected by httpOnly + sameSite=lax. Adding a CSRF
+# middleware would add complexity and require client-side changes to solve
+# a vulnerability that does not exist in this architecture.
+# ──────────────────────────────────────────────────────────
+query-filters:
+  - exclude:
+      id: js/csrf-protection-missing
