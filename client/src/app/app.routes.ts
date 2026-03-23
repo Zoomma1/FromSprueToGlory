@@ -14,6 +14,11 @@ export const routes: Routes = [
             import('./features/auth/signup/signup.component').then((m) => m.SignupComponent),
     },
     {
+        path: 'auth/callback',
+        loadComponent: () =>
+            import('./features/auth/callback/auth-callback.component').then((m) => m.AuthCallbackComponent),
+    },
+    {
         path: 'dashboard',
         loadComponent: () =>
             import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
