@@ -4,10 +4,8 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -20,7 +18,7 @@ import { ProjectFormDialogComponent } from '../project-form-dialog/project-form-
     standalone: true,
     imports: [
         CommonModule, RouterLink,
-        MatCardModule, MatButtonModule, MatIconModule, MatProgressBarModule,
+        MatButtonModule, MatIconModule,
         MatSnackBarModule, MatDialogModule, MatTooltipModule,
     ],
     templateUrl: './projects-list.component.html',
