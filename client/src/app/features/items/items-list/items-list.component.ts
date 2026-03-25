@@ -3,15 +3,10 @@
 // ──────────────────────────────────────────────────────────
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatTableModule } from '@angular/material/table';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -27,8 +22,8 @@ import {STATUS_ORDER, STATUS_LABELS} from '../../../classes/item.constants';
     standalone: true,
     imports: [
         CommonModule, FormsModule,
-        MatTableModule, MatCardModule, MatButtonModule, MatIconModule,
-        MatChipsModule, MatSelectModule, MatFormFieldModule, MatMenuModule,
+        MatButtonModule, MatIconModule,
+        MatSelectModule, MatFormFieldModule,
         MatDialogModule, MatSnackBarModule, MatTooltipModule,
         ItemCardComponent,
     ],
@@ -39,20 +34,14 @@ export class ItemsListComponent implements OnInit {
     private api = inject(ApiService);
     private dialog = inject(MatDialog);
     private snackBar = inject(MatSnackBar);
-    private breakpointObserver = inject(BreakpointObserver);
 
     items = signal<Item[]>([]);
-    isMobile = signal(false);
     statusFilter = '';
-    displayedColumns = ['name', 'faction', 'status', 'project', 'quantity', 'actions'];
 
     readonly statuses = STATUS_ORDER;
     readonly statusLabels = STATUS_LABELS;
 
     ngOnInit() {
-        this.breakpointObserver.observe([Breakpoints.Handset]).subscribe((result) => {
-            this.isMobile.set(result.matches);
-        });
         this.loadItems();
     }
 
@@ -68,18 +57,6 @@ export class ItemsListComponent implements OnInit {
     }
 
     // ─── Status helpers ───────────────────────────
-    getStatusLabel(status: string): string {
-        return STATUS_LABELS[status] || status;
-    }
-
-    canAdvance(item: Item): boolean {
-        return STATUS_ORDER.indexOf(item.status) < STATUS_ORDER.length - 1;
-    }
-
-    canRevert(item: Item): boolean {
-        return STATUS_ORDER.indexOf(item.status) > 0;
-    }
-
     nextStatus(item: Item) {
         const idx = STATUS_ORDER.indexOf(item.status);
         if (idx < STATUS_ORDER.length - 1) {

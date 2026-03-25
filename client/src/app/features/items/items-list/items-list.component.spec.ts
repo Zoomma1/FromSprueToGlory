@@ -8,7 +8,6 @@ import { ApiService } from '../../../core/services/api.service';
 import { Item } from '../../../classes/items';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { BreakpointObserver } from '@angular/cdk/layout';
 
 describe('ItemsListComponent', () => {
     let component: ItemsListComponent;
@@ -135,37 +134,10 @@ describe('ItemsListComponent', () => {
             apiSpy.getItems.and.returnValue(of([]));
             component.loadItems();
             expect(component.items().length).toBe(0);
-        })
-
-        it('should set isMobile based on BreakpointObserver', () => {
-            const breakpointObserver = TestBed.inject(BreakpointObserver);
-            spyOn(breakpointObserver, 'observe').and.returnValue(of({ matches: true, breakpoints: {} }));
-
-            component.ngOnInit();
-            expect(component.isMobile()).toBeTrue();
-        })
+        });
     });
 
     describe('Status helpers', () => {
-        it('should return correct status label', () => {
-            expect(component.getStatusLabel('WANT')).toBe('Want');
-            expect(component.getStatusLabel('BOUGHT')).toBe('Bought');
-            expect(component.getStatusLabel('ASSEMBLED')).toBe('Assembled');
-            expect(component.getStatusLabel('WIP')).toBe('WIP');
-            expect(component.getStatusLabel('FINISHED')).toBe('Finished');
-            expect(component.getStatusLabel('UNKNOWN')).toBe('UNKNOWN');
-        });
-
-        it('should determine if item can advance status', () => {
-            expect(component.canAdvance(mockItems[0])).toBeTrue();
-            expect(component.canAdvance(mockItems[1])).toBeTrue();
-        });
-
-        it('should determine if item can revert status', () => {
-            expect(component.canRevert(mockItems[0])).toBeFalse();
-            expect(component.canRevert(mockItems[1])).toBeTrue();
-        });
-
         it('should set the status with setStatus', () => {
             component.setStatus(mockItems[0], 'BOUGHT');
             expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('1', 'BOUGHT');
