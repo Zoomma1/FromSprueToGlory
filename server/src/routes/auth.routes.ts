@@ -92,9 +92,9 @@ router.get(
         const tokens = req.user as { accessToken: string; refreshToken: string; user: object };
         res.cookie('oauth_tokens', JSON.stringify(tokens), {
             httpOnly: true,
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             secure: process.env.NODE_ENV === 'production',
             maxAge: 2 * 60 * 1000, // 2 minutes — transit only
-            sameSite: 'lax',
         });
         res.redirect(`${process.env.FRONTEND_URL ?? 'http://localhost:4200'}/auth/callback`);
     },
