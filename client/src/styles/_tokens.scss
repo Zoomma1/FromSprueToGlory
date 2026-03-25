@@ -1,0 +1,33 @@
+// ─── Design Tokens — From Sprue to Glory ─────────────────────────────────────
+// Single source of truth for all color values.
+// Defined on :root — available globally, no import needed in components.
+// Update hex values here to propagate across the entire app.
+// Design system reference: The Digital Strategium (DESIGN.md)
+// ─────────────────────────────────────────────────────────────────────────────
+
+:root {
+  // ─── Surfaces ───────────────────────────────────────────────────────────────
+  --color-bg:               #131313; // Page background — "The Void"
+  --color-surface:          #201f1f; // Card background — neutral dark brown
+  --color-surface-high:     #2a2a2a; // Card hover / elevated
+  --color-surface-low:      #191919; // Image placeholder, deep bg
+  --color-surface-variant:  #2e2e2e; // Tags, icon wraps, hover buttons
+
+  // ─── Text ───────────────────────────────────────────────────────────────────
+  --color-text:             #e5e2e1; // Primary text — on_surface
+  --color-text-secondary:   #dbc2ad; // Secondary / muted text
+
+  // ─── Accents ────────────────────────────────────────────────────────────────
+  --color-gold:             #d4a34a; // Titles, faction, highlights — "Gold Standard"
+  --color-orange:           #ffc081; // Hover, links — primary light
+  --color-orange-strong:    #ff9800; // Primary actions — "Ignition"
+
+  // ─── Spacing ────────────────────────────────────────────────────────────────
+  --gap-card:               24px; // Gap between cards in any grid or list
+
+  // ─── Borders ────────────────────────────────────────────────────────────────
+  --color-border:           #554434; // Separators, tag borders — outline_variant
+
+  // ─── Semantic ───────────────────────────────────────────────────────────────
+  --color-warn:             #f44336; // Destructive actions, errors
+}
