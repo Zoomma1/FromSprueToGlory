@@ -182,6 +182,54 @@
   }
 }
 
+// ─── Divider ─────────────────────────────────────────────
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(212, 163, 74, 0.15);
+  }
+
+  span {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(219, 194, 173, 0.3);
+  }
+}
+
+// ─── Google button ────────────────────────────────────────
+.btn-google {
+  width: 100%;
+  background: none;
+  border: 1px solid rgba(212, 163, 74, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  color: rgba(219, 194, 173, 0.7);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 12px;
+  margin-bottom: 20px;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+
+  &:hover {
+    border-color: rgba(212, 163, 74, 0.5);
+    color: var(--color-text);
+    background: rgba(212, 163, 74, 0.05);
+  }
+}
+
 // ─── Footer link ─────────────────────────────────────────
 .auth-link {
   text-align: center;
