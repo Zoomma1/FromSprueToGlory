@@ -1,46 +1,50 @@
-<!-- Top toolbar -->
-<mat-toolbar class="app-toolbar" color="primary">
-  @if (isMobile() && authService.isLoggedIn()) {
-  <button mat-icon-button (click)="sidenav.toggle()" aria-label="Toggle menu">
-    <mat-icon>menu</mat-icon>
-  </button>
-  }
-
-  <mat-icon class="app-logo-icon" svgIcon="app_icon"></mat-icon>
-  <span class="app-title">{{ title }}</span>
-
-  <span class="spacer"></span>
-
-  @if (authService.isLoggedIn()) {
-  <button mat-icon-button (click)="authService.logout()" matTooltip="Logout" aria-label="Logout">
-    <mat-icon>logout</mat-icon>
-  </button>
-  }
-</mat-toolbar>
+<!-- Mobile hamburger -->
+@if (isMobile() && authService.isLoggedIn()) {
+<button class="mobile-menu-btn" (click)="toggleSidenav()" aria-label="Toggle menu">
+  <mat-icon>menu</mat-icon>
+</button>
+}
 
 @if (authService.isLoggedIn()) {
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()" [fixedInViewport]="isMobile()"
-    fixedTopGap="64" class="app-sidenav">
-    <mat-nav-list>
+<div class="app-layout">
+
+  <!-- Mobile overlay -->
+  @if (isMobile() && sidenavOpen()) {
+  <div class="sidenav-overlay" (click)="onNavClick()"></div>
+  }
+
+  <!-- Sidebar -->
+  <aside class="app-sidenav" [class.sidenav--open]="!isMobile() || sidenavOpen()">
+
+    <div class="sidenav-brand">
+      <span class="brand-name">From Sprue to Glory</span>
+    </div>
+
+    <nav class="sidenav-nav">
       @for (item of navItems; track item.route) {
-      <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link" (click)="onNavClick()">
-        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-        <span matListItemTitle>{{ item.label }}</span>
+      <a class="nav-item" [routerLink]="item.route" routerLinkActive="nav-item--active" (click)="onNavClick()">
+        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+        <span class="nav-label">{{ item.label }}</span>
       </a>
       }
-    </mat-nav-list>
-    <div class="sidenav-footer">
-      <small>⚔️ From Sprue to Glory</small>
-    </div>
-  </mat-sidenav>
+    </nav>
 
-  <mat-sidenav-content class="main-content">
+    <div class="sidenav-footer">
+      <button class="footer-btn" (click)="authService.logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content" [class.main-content--shifted]="!isMobile()">
     <div class="content-wrapper">
       <router-outlet />
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </main>
+
+</div>
 } @else {
 <div class="content-wrapper auth-page">
   <router-outlet />
