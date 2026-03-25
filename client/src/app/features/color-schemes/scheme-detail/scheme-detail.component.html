@@ -102,13 +102,13 @@
     <form [formGroup]="form">
 
         <div class="field-group">
-            <label class="field-label">Scheme Name</label>
-            <input class="field-input" formControlName="name" placeholder="e.g. Grimdark Blood Angels">
+            <label for="scheme-name" class="field-label">Scheme Name</label>
+            <input id="scheme-name" class="field-input" formControlName="name" placeholder="e.g. Grimdark Blood Angels">
         </div>
 
         <div class="field-group">
-            <label class="field-label">Description</label>
-            <textarea class="field-input field-textarea" formControlName="description" rows="2" placeholder="Describe this painting recipe..."></textarea>
+            <label for="scheme-description" class="field-label">Description</label>
+            <textarea id="scheme-description" class="field-input field-textarea" formControlName="description" rows="2" placeholder="Describe this painting recipe..."></textarea>
         </div>
 
         <div class="steps-section-header">
@@ -131,8 +131,8 @@
 
                 <div class="step-fields">
                     <div class="field-group">
-                        <label class="field-label">Area</label>
-                        <input class="field-input" formControlName="area">
+                        <label [for]="'step-area-' + i" class="field-label">Area</label>
+                        <input [id]="'step-area-' + i" class="field-input" formControlName="area">
                     </div>
                     <app-searchable-select
                         [options]="techniques()"
@@ -151,9 +151,9 @@
                         (valueChange)="onBrandFilterChange($event, i)">
                     </app-searchable-select>
                     <div class="field-group">
-                        <label class="field-label">Paint</label>
+                        <label [for]="'step-paint-' + i" class="field-label">Paint</label>
                         <div class="field-input-wrapper">
-                            <input class="field-input"
+                            <input [id]="'step-paint-' + i" class="field-input"
                                 [matAutocomplete]="paintAuto"
                                 [value]="displayPaintName(stepsArray.at(i).get('paintId')?.value)"
                                 (input)="onPaintInput($any($event.target).value)"
@@ -185,12 +185,12 @@
                     <h4 class="add-paint-title">New custom paint</h4>
                     <div class="add-paint-fields">
                         <div class="field-group">
-                            <label class="field-label">Name</label>
-                            <input class="field-input" formControlName="name" placeholder="e.g. My Custom Red">
+                            <label [for]="'paint-name-' + i" class="field-label">Name</label>
+                            <input [id]="'paint-name-' + i" class="field-input" formControlName="name" placeholder="e.g. My Custom Red">
                         </div>
                         <div class="field-group">
-                            <label class="field-label">Type (optional)</label>
-                            <select class="field-input" formControlName="type">
+                            <label [for]="'paint-type-' + i" class="field-label">Type (optional)</label>
+                            <select [id]="'paint-type-' + i" class="field-input" formControlName="type">
                                 <option [ngValue]="null">— None —</option>
                                 @for (t of paintTypes; track t) {
                                 <option [value]="t">{{ t }}</option>
@@ -198,8 +198,8 @@
                             </select>
                         </div>
                         <div class="field-group">
-                            <label class="field-label">Notes (optional)</label>
-                            <input class="field-input" formControlName="notes" placeholder="e.g. Slightly orange-tinted">
+                            <label [for]="'paint-notes-' + i" class="field-label">Notes (optional)</label>
+                            <input [id]="'paint-notes-' + i" class="field-input" formControlName="notes" placeholder="e.g. Slightly orange-tinted">
                         </div>
                     </div>
                     <div class="add-paint-actions">
@@ -214,8 +214,8 @@
                 }
 
                 <div class="field-group">
-                    <label class="field-label">Notes</label>
-                    <input class="field-input" formControlName="notes" placeholder="Step notes...">
+                    <label [for]="'step-notes-' + i" class="field-label">Notes</label>
+                    <input [id]="'step-notes-' + i" class="field-input" formControlName="notes" placeholder="Step notes...">
                 </div>
             </div>
             }

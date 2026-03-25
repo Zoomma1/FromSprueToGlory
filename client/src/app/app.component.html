@@ -10,7 +10,7 @@
 
   <!-- Mobile overlay -->
   @if (isMobile() && sidenavOpen()) {
-  <div class="sidenav-overlay" (click)="onNavClick()"></div>
+  <div class="sidenav-overlay" (click)="onNavClick()" (keyup.enter)="onNavClick()" tabindex="0" role="button" aria-label="Close menu"></div>
   }
 
   <!-- Sidebar -->

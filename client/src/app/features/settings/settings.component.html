@@ -28,8 +28,8 @@
     <div class="section-content">
       <p class="section-description">New items will use this currency by default.</p>
       <div class="field-group">
-        <label class="field-label">Currency</label>
-        <select class="field-input field-select"
+        <label for="settings-currency" class="field-label">Currency</label>
+        <select id="settings-currency" class="field-input field-select"
           [ngModel]="selectedCurrency()" (ngModelChange)="selectedCurrency.set($event)">
           @for (c of CURRENCIES; track c) {
             <option [value]="c">{{ c }}</option>

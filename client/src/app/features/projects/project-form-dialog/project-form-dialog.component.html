@@ -3,12 +3,12 @@
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
     <div class="field-group">
-      <label class="field-label">Project Name</label>
-      <input class="field-input" formControlName="name" placeholder="Enter identifier...">
+      <label for="project-name" class="field-label">Project Name</label>
+      <input id="project-name" class="field-input" formControlName="name" placeholder="Enter identifier...">
     </div>
     <div class="field-group">
-      <label class="field-label">Description</label>
-      <textarea class="field-input field-textarea" formControlName="description" rows="3"
+      <label for="project-description" class="field-label">Description</label>
+      <textarea id="project-description" class="field-input field-textarea" formControlName="description" rows="3"
                 placeholder="Mission objectives & specifications..."></textarea>
     </div>
   </form>

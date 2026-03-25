@@ -4,8 +4,8 @@
   <form [formGroup]="form" class="dialog-form">
 
     <div class="field-group">
-      <label class="field-label">Name</label>
-      <input class="field-input" formControlName="name" placeholder="Enter unit name...">
+      <label for="item-name" class="field-label">Name</label>
+      <input id="item-name" class="field-input" formControlName="name" placeholder="Enter unit name...">
     </div>
 
     <div class="form-row">
@@ -27,8 +27,8 @@
 
     <div class="form-row">
       <div class="field-group">
-        <label class="field-label">Status</label>
-        <select class="field-input field-select" formControlName="status">
+        <label for="item-status" class="field-label">Status</label>
+        <select id="item-status" class="field-input field-select" formControlName="status">
           @for (status of ITEM_STATUSES; track status) {
             <option [value]="status.value">{{ status.label }}</option>
           }
@@ -36,20 +36,20 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Quantity</label>
-        <input class="field-input" type="number" formControlName="quantity" min="1">
+        <label for="item-quantity" class="field-label">Quantity</label>
+        <input id="item-quantity" class="field-input" type="number" formControlName="quantity" min="1">
       </div>
     </div>
 
     <div class="form-row">
       <div class="field-group">
-        <label class="field-label">Price</label>
-        <input class="field-input" type="number" formControlName="price" step="0.01">
+        <label for="item-price" class="field-label">Price</label>
+        <input id="item-price" class="field-input" type="number" formControlName="price" step="0.01">
       </div>
 
       <div class="field-group">
-        <label class="field-label">Currency</label>
-        <select class="field-input field-select" formControlName="currency">
+        <label for="item-currency" class="field-label">Currency</label>
+        <select id="item-currency" class="field-input field-select" formControlName="currency">
           @for (cur of CURRENCIES; track cur) {
             <option [value]="cur">{{ cur }}</option>
           }
@@ -66,8 +66,8 @@
     </app-searchable-select>
 
     <div class="field-group">
-      <label class="field-label">Notes</label>
-      <textarea class="field-input field-textarea" formControlName="notes" rows="3"
+      <label for="item-notes" class="field-label">Notes</label>
+      <textarea id="item-notes" class="field-input field-textarea" formControlName="notes" rows="3"
                 placeholder="Painting notes, assembly tips..."></textarea>
     </div>
 

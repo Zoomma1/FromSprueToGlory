@@ -18,6 +18,9 @@ import { MatIconModule } from '@angular/material/icon';
     ],
 })
 export class SearchableSelectComponent<T> implements ControlValueAccessor {
+    private static nextId = 0;
+    readonly inputId = `searchable-input-${SearchableSelectComponent.nextId++}`;
+
     options = input.required<T[]>();
     displayFn = input.required<(option: T) => string>();
     label = input.required<string>();

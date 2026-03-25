@@ -1,7 +1,7 @@
 <div class="searchable-wrapper" [class.is-disabled]="isDisabled()">
-  <label class="field-label">{{ label() }}</label>
+  <label [for]="inputId" class="field-label">{{ label() }}</label>
   <div class="field-input-wrapper">
-    <input class="field-input"
+    <input [id]="inputId" class="field-input"
       [matAutocomplete]="auto"
       [value]="inputDisplayValue()"
       (input)="onInput($any($event.target).value)"
