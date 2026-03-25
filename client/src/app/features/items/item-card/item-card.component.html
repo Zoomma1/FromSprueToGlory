@@ -1,0 +1,70 @@
+<div class="item-card" [attr.data-status]="item().status">
+    <div class="item-card__image">
+        @if (item().photoKey) {
+            <img [src]="item().photoKey" [alt]="item().name" class="item-card__photo">
+        } @else {
+            <div class="item-card__image-placeholder">
+                <mat-icon>photo_camera</mat-icon>
+            </div>
+        }
+    </div>
+
+    <div class="item-card__content">
+        <div class="item-card__header">
+            <h3 class="item-card__name">{{ item().name }}</h3>
+            <div class="item-card__actions">
+                <button
+                    class="item-card__action-btn"
+                    (click)="edit.emit(item())"
+                    data-testid="edit-btn"
+                    aria-label="Edit">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                    class="item-card__action-btn item-card__action-btn--warn"
+                    (click)="delete.emit(item())"
+                    data-testid="delete-btn"
+                    aria-label="Delete">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <p class="item-card__meta">
+            @if (item().faction?.name) {
+                {{ item().faction?.name }} ·
+            }
+            x{{ item().quantity }}
+        </p>
+
+        <div class="item-card__status">
+            <button
+                class="item-card__status-nav"
+                [disabled]="!canRevert()"
+                (click)="onPrev()"
+                data-testid="prev-status"
+                aria-label="Previous status">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="item-card__status-badge" [attr.data-status]="item().status">
+                {{ statusLabel() }}
+            </span>
+            <button
+                class="item-card__status-nav"
+                [disabled]="!canAdvance()"
+                (click)="onNext()"
+                data-testid="next-status"
+                aria-label="Next status">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+        </div>
+
+        @if (item().tags?.length) {
+            <div class="item-card__tags">
+                @for (tag of item().tags; track tag) {
+                    <span class="item-card__tag">{{ tag }}</span>
+                }
+            </div>
+        }
+    </div>
+</div>

@@ -19,6 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
 import { Item } from '../../../classes/items';
 import { ItemFormDialogComponent } from '../item-form/item-form-dialog.component';
+import { ItemCardComponent } from '../item-card/item-card.component';
 import {STATUS_ORDER, STATUS_LABELS} from '../../../classes/item.constants';
 
 @Component({
@@ -29,6 +30,7 @@ import {STATUS_ORDER, STATUS_LABELS} from '../../../classes/item.constants';
         MatTableModule, MatCardModule, MatButtonModule, MatIconModule,
         MatChipsModule, MatSelectModule, MatFormFieldModule, MatMenuModule,
         MatDialogModule, MatSnackBarModule, MatTooltipModule,
+        ItemCardComponent,
     ],
     templateUrl: './items-list.component.html',
     styleUrl: './items-list.component.scss',
@@ -90,6 +92,11 @@ export class ItemsListComponent implements OnInit {
         if (idx > 0) {
             this.setStatus(item, STATUS_ORDER[idx - 1]);
         }
+    }
+
+    onStatusChange(event: { item: Item; direction: 'prev' | 'next' }) {
+        if (event.direction === 'next') this.nextStatus(event.item);
+        else this.prevStatus(event.item);
     }
 
     setStatus(item: Item, status: string) {
