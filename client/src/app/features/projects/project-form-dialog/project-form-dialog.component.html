@@ -1,20 +1,22 @@
-<h2 mat-dialog-title>{{ data.mode === 'create' ? 'New Project' : 'Edit Project' }}</h2>
+<h2 mat-dialog-title class="dialog-title">{{ data.mode === 'create' ? 'New Project' : 'Edit Project' }}</h2>
+
 <mat-dialog-content>
-  <form [formGroup]="form">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name">
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description" rows="3"></textarea>
-    </mat-form-field>
+  <form [formGroup]="form" class="dialog-form">
+    <div class="field-group">
+      <label class="field-label">Project Name</label>
+      <input class="field-input" formControlName="name" placeholder="Enter identifier...">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Description</label>
+      <textarea class="field-input field-textarea" formControlName="description" rows="3"
+                placeholder="Mission objectives & specifications..."></textarea>
+    </div>
   </form>
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button color="primary" (click)="save()"
-          [disabled]="form.invalid || saving()">
+  <button class="btn-cancel" mat-dialog-close>Cancel</button>
+  <button class="btn-save" (click)="save()" [disabled]="form.invalid || saving()">
     {{ data.mode === 'create' ? 'Create' : 'Save' }}
   </button>
 </mat-dialog-actions>
