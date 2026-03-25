@@ -46,9 +46,16 @@
 
     </form>
 
-    <p class="auth-link">
-      Don't have an account? <a [routerLink]="['/auth/signup']">Sign up</a>
-    </p>
-
-  </div>
+        <mat-card-actions>
+            <div class="divider">
+                <span>or</span>
+            </div>
+            <button mat-stroked-button class="full-width google-btn" (click)="loginWithGoogle()">
+                Continue with Google
+            </button>
+            <p class="auth-link">
+                Don't have an account? <a [routerLink]="['/auth/signup']">Sign up</a>
+            </p>
+        </mat-card-actions>
+    </mat-card>
 </div>

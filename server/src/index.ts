@@ -1,8 +1,7 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
+import 'dotenv/config';
 import { createApp } from './app';
 import { prisma } from './lib/prisma';
+import { configurePassport } from './lib/passport';
 
 // ──────────────────────────────────────────────
 // 🚀 Server Entry Point
@@ -16,6 +15,7 @@ import { prisma } from './lib/prisma';
 // ──────────────────────────────────────────────
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
+configurePassport();
 const app = createApp();
 
 async function start() {

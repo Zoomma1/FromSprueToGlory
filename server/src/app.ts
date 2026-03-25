@@ -24,6 +24,7 @@ import usersRoutes from './routes/users.routes';
 import { authMiddleware } from './middleware/auth.middleware';
 import { adminMiddleware } from './middleware/admin.middleware';
 import { asyncHandler } from './lib/async-handler';
+import cookieParser from 'cookie-parser';
 
 // ──────────────────────────────────────────────
 // Centralized Error Handler
@@ -85,6 +86,9 @@ export function createApp(options: AppOptions = {}) {
     // ─── Body parsing ─────────────────────────
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ extended: true }));
+
+    // ─── Cookie parser ────────────────────────
+    app.use(cookieParser());
 
     // ─── Health check ─────────────────────────
     app.get('/api/health', async (_req, res) => {
