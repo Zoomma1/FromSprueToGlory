@@ -1,69 +1,75 @@
 <div class="auth-container">
-    <mat-card class="auth-card">
-        <mat-card-header>
-            <mat-card-title>⚔️ Create Account</mat-card-title>
-            <mat-card-subtitle>Join the battle</mat-card-subtitle>
-        </mat-card-header>
+  <div class="auth-card">
 
-        <mat-card-content>
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Email</mat-label>
-                    <input matInput formControlName="email" type="email" autocomplete="email">
-                </mat-form-field>
+    <div class="auth-header">
+      <div class="auth-accent-bar"></div>
+      <h1 class="auth-title">From Sprue to Glory</h1>
+    </div>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Password</mat-label>
-                    <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
-                        autocomplete="new-password">
-                    <button mat-icon-button matSuffix (click)="hidePassword.set(!hidePassword())" type="button">
-                        <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-                    </button>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
 
-                </mat-form-field><mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Confirm password</mat-label>
-                    <input matInput formControlName="confirmPassword" [type]="hidePassword() ? 'password' : 'text'"
-                        autocomplete="new-password">
-                    <button mat-icon-button matSuffix (click)="hidePassword.set(!hidePassword())" type="button">
-                        <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-                    </button>
-                </mat-form-field>
+      <div class="field-group">
+        <p class="field-label">Email</p>
+        <input class="field-input" formControlName="email" type="email"
+               autocomplete="email" placeholder="fromsprue@toglory.io">
+        @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+          <span class="field-error">Email is required</span>
+        }
+      </div>
 
-                @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
-                  <mat-error>Email is required</mat-error>
-                }
+      <div class="field-group">
+        <p class="field-label">Password</p>
+        <div class="field-input-wrapper">
+          <input class="field-input" formControlName="password"
+                 [type]="hidePassword() ? 'password' : 'text'"
+                 autocomplete="new-password" placeholder="••••••••">
+          <button class="toggle-btn" type="button" (click)="hidePassword.set(!hidePassword())">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        @if (form.get('password')?.hasError('pattern') && form.get('password')?.touched) {
+          <span class="field-error">Min. 8 chars, uppercase, lowercase, number and special character</span>
+        }
+      </div>
 
-                @else if (form.get('password')?.hasError('pattern') && form.get('password')?.touched) {
-                  <mat-error>Password must be at least 8 characters, have at least one uppercase and one lowercase character, contain one number and a special character</mat-error>
-                }
+      <div class="field-group">
+        <p class="field-label">Confirm Password</p>
+        <div class="field-input-wrapper">
+          <input class="field-input" formControlName="confirmPassword"
+                 [type]="hidePassword() ? 'password' : 'text'"
+                 autocomplete="new-password" placeholder="••••••••">
+          <button class="toggle-btn" type="button" (click)="hidePassword.set(!hidePassword())">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        @if (form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched) {
+          <span class="field-error">Passwords do not match</span>
+        }
+      </div>
 
-                @else if (form.get('confirmPassword')?.hasError('required') && form.get('confirmPassword')?.touched) {
-                  <mat-error>Confirm password is required</mat-error>
-                }
+      @if (error()) {
+        <p class="error-message">{{ error() }}</p>
+      }
 
-                @else if (form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched) {
-                  <mat-error>Passwords do not match</mat-error>
-                }
+      <button class="btn-submit" type="submit" [disabled]="loading() || form.invalid">
+        @if (loading()) {
+          <mat-spinner diameter="18"></mat-spinner>
+        } @else {
+          Sign Up
+        }
+      </button>
 
-                @else if (form.hasError('Conflict') && form.touched) {
-                  <mat-error>An account with this email already exists, please login or create a new account</mat-error>
-                }
+    </form>
 
-                <button mat-raised-button color="primary" type="submit" [disabled]="loading() || form.invalid"
-                    class="full-width submit-btn">
-                    @if (loading()) {
-                    <mat-spinner diameter="20"></mat-spinner>
-                    } @else {
-                    Sign Up
-                    }
-                </button>
-            </form>
-        </mat-card-content>
+    <div class="divider"><span>or</span></div>
 
-        <mat-card-actions>
-            <p class="auth-link">
-                Already have an account? <a [routerLink]="['/auth/login']">Login</a>
-            </p>
-        </mat-card-actions>
-    </mat-card>
+    <button class="btn-google" type="button" (click)="loginWithGoogle()">
+      Continue with Google
+    </button>
+
+    <p class="auth-link">
+      Already have an account? <a [routerLink]="['/auth/login']">Login</a>
+    </p>
+
+  </div>
 </div>

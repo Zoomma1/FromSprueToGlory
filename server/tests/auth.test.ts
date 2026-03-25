@@ -14,6 +14,7 @@ import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { verifyRefreshToken } from '../src/utils/jwt';
+import * as authService from '../src/services/auth.service';
 
 // ─── Mock Prisma ─────────────────────────────────────────
 vi.mock('../src/lib/prisma', () => ({
@@ -21,6 +22,7 @@ vi.mock('../src/lib/prisma', () => ({
         user: {
             findUnique: vi.fn(),
             create: vi.fn(),
+            update: vi.fn(),
         },
         refreshToken: {
             create: vi.fn(),
@@ -132,6 +134,32 @@ describe('Auth Routes', () => {
 
             expect(res.status).toBe(400);
         });
+
+        it('does not expose password or passwordHash in the success response', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+            (prisma.user.create as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                email: 'test@example.com',
+            });
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const res = await request(app)
+                .post('/api/auth/signup')
+                .send({ email: 'test@example.com', password: 'password123' });
+
+            expect(res.body.user).not.toHaveProperty('password');
+            expect(res.body.user).not.toHaveProperty('passwordHash');
+            expect(JSON.stringify(res.body)).not.toContain('password123');
+        });
+
+        it('does not expose the password value in Zod validation error details', async () => {
+            const res = await request(app)
+                .post('/api/auth/signup')
+                .send({ email: 'test@example.com', password: 'short' });
+
+            expect(res.status).toBe(400);
+            expect(JSON.stringify(res.body)).not.toContain('short');
+        });
     });
 
     // ─── LOGIN ────────────────────────────────────────────
@@ -182,6 +210,22 @@ describe('Auth Routes', () => {
             expect(res.body.error).toBe('Invalid email or password');
         });
 
+        it('returns 401 with a Google-specific message for Google-only accounts', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                email: 'test@example.com',
+                passwordHash: null,
+                googleId: 'google-123',
+            });
+
+            const res = await request(app)
+                .post('/api/auth/login')
+                .send({ email: 'test@example.com', password: 'anypassword' });
+
+            expect(res.status).toBe(401);
+            expect(res.body.error).toMatch(/google/i);
+        });
+
         it('returns 400 for an invalid email format', async () => {
             const res = await request(app)
                 .post('/api/auth/login')
@@ -197,6 +241,34 @@ describe('Auth Routes', () => {
                 .send({ email: 'test@example.com', password: 'short' });
 
             expect(res.status).toBe(400);
+        });
+
+        it('does not expose password or passwordHash in the success response', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                email: 'test@example.com',
+                passwordHash: '$hashed$',
+            });
+            (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const res = await request(app)
+                .post('/api/auth/login')
+                .send({ email: 'test@example.com', password: 'password123' });
+
+            expect(res.body.user).not.toHaveProperty('password');
+            expect(res.body.user).not.toHaveProperty('passwordHash');
+            expect(JSON.stringify(res.body)).not.toContain('password123');
+            expect(JSON.stringify(res.body)).not.toContain('$hashed$');
+        });
+
+        it('does not expose the password value in Zod validation error details', async () => {
+            const res = await request(app)
+                .post('/api/auth/login')
+                .send({ email: 'test@example.com', password: 'short' });
+
+            expect(res.status).toBe(400);
+            expect(JSON.stringify(res.body)).not.toContain('short');
         });
 
         it('stores a new refresh token in the DB after login', async () => {
@@ -312,6 +384,98 @@ describe('Auth Routes', () => {
 
             expect(res.status).toBe(401);
             expect(res.body.error).toBe('Invalid or expired refresh token');
+        });
+    });
+
+    // ─── handleGoogleCallback (service) ──────────────────
+    // Tested directly (no HTTP) — the OAuth redirect can't be intercepted via supertest.
+    // We verify the 3 business cases independently of the HTTP layer.
+    describe('authService.handleGoogleCallback', () => {
+        it('creates a new account when googleId and email are both unknown', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+            (prisma.user.create as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                email: 'new@example.com',
+            });
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const result = await authService.handleGoogleCallback('google-new', 'new@example.com');
+
+            expect(prisma.user.create).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    data: expect.objectContaining({ googleId: 'google-new', email: 'new@example.com' }),
+                }),
+            );
+            expect(result).toMatchObject({ accessToken: expect.any(String), refreshToken: expect.any(String) });
+        });
+
+        it('logs in an existing Google user without creating a new account', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+                id: 'user-1',
+                email: 'test@example.com',
+                googleId: 'google-123',
+                passwordHash: null,
+            });
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const result = await authService.handleGoogleCallback('google-123', 'test@example.com');
+
+            expect(prisma.user.create).not.toHaveBeenCalled();
+            expect(result).toMatchObject({ accessToken: expect.any(String), refreshToken: expect.any(String) });
+        });
+
+        it('links googleId to an existing email-only account', async () => {
+            // first lookup by googleId → not found, second by email → found
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>)
+                .mockResolvedValueOnce(null)
+                .mockResolvedValueOnce({ id: 'user-1', email: 'test@example.com', googleId: null, passwordHash: 'hashed' });
+            (prisma.user.update as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                email: 'test@example.com',
+                googleId: 'google-new',
+            });
+            (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const result = await authService.handleGoogleCallback('google-new', 'test@example.com');
+
+            expect(prisma.user.update).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    data: expect.objectContaining({ googleId: 'google-new' }),
+                }),
+            );
+            expect(result).toMatchObject({ accessToken: expect.any(String), refreshToken: expect.any(String) });
+        });
+    });
+
+    // ─── GET /api/auth/session ────────────────────────────
+    describe('GET /api/auth/session', () => {
+        const cookiePayload = JSON.stringify({
+            accessToken: 'access-tok',
+            refreshToken: 'refresh-tok',
+            user: { id: 'user-1', email: 'test@example.com' },
+        });
+
+        it('returns 401 if no oauth_tokens cookie is present', async () => {
+            const res = await request(app).get('/api/auth/session');
+            expect(res.status).toBe(401);
+        });
+
+        it('returns tokens and clears the cookie when the cookie is valid', async () => {
+            const res = await request(app)
+                .get('/api/auth/session')
+                .set('Cookie', `oauth_tokens=${encodeURIComponent(cookiePayload)}`);
+
+            expect(res.status).toBe(200);
+            expect(res.body).toMatchObject({
+                accessToken: 'access-tok',
+                refreshToken: 'refresh-tok',
+                user: { id: 'user-1', email: 'test@example.com' },
+            });
+
+            // Cookie must be cleared in the response (value empty, expires in the past)
+            const setCookie = res.headers['set-cookie'] as string[] | string | undefined;
+            const cookies = Array.isArray(setCookie) ? setCookie : setCookie ? [setCookie] : [];
+            expect(cookies.some((c) => c.startsWith('oauth_tokens=;'))).toBe(true);
         });
     });
 

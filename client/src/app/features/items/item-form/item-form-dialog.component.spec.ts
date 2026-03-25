@@ -30,7 +30,7 @@ describe('ItemFormDialogComponent', () => {
         spySetup?: (api: jasmine.SpyObj<ApiService>) => void,
     ) {
         apiSpy = jasmine.createSpyObj('ApiService', [
-            'getGameSystems', 'getFactions', 'getProjects', 'createItem', 'updateItem'
+            'getGameSystems', 'getFactions', 'getProjects', 'createItem', 'updateItem', 'getMe'
         ]);
         snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
         dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
@@ -38,6 +38,7 @@ describe('ItemFormDialogComponent', () => {
         apiSpy.getGameSystems.and.returnValue(of([]));
         apiSpy.getProjects.and.returnValue(of([]));
         apiSpy.getFactions.and.returnValue(of([]));
+        apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
 
         if (spySetup) spySetup(apiSpy);
 

@@ -5,7 +5,7 @@
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../lib/prisma';
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt';
+import { generateAccessToken, generateRefreshToken, TokenPayload, verifyRefreshToken } from '../utils/jwt';
 import { ConflictError, UnauthorizedError, ValidationError } from '../lib/errors';
 
 // ─── Zod Schemas ──────────────────────────────────────────
@@ -38,18 +38,12 @@ export async function signup(body: unknown) {
 
     const user = await prisma.user.create({
         data: { email: parsed.data.email, passwordHash },
+        select: { id: true, email: true },
     });
 
     const payload = { userId: user.id, email: user.email };
-    const accessToken = generateAccessToken(payload);
-    const refreshToken = generateRefreshToken(payload);
 
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    await prisma.refreshToken.create({
-        data: { token: refreshToken, userId: user.id, expiresAt },
-    });
-
-    return { accessToken, refreshToken, user: { id: user.id, email: user.email } };
+    return issueToken(payload);
 }
 
 // ─── login ────────────────────────────────────────────────
@@ -60,9 +54,16 @@ export async function login(body: unknown) {
         throw new ValidationError('Validation failed', parsed.error.flatten());
     }
 
-    const user = await prisma.user.findUnique({ where: { email: parsed.data.email } });
+    const user = await prisma.user.findUnique({
+        where: { email: parsed.data.email },
+        select: { id: true, email: true, passwordHash: true },
+    });
     if (!user) {
         throw new UnauthorizedError('Invalid email or password');
+    }
+
+    if (!user.passwordHash) {
+        throw new UnauthorizedError('Please sign in with Google');
     }
 
     const validPassword = await bcrypt.compare(parsed.data.password, user.passwordHash);
@@ -71,15 +72,8 @@ export async function login(body: unknown) {
     }
 
     const payload = { userId: user.id, email: user.email };
-    const accessToken = generateAccessToken(payload);
-    const refreshToken = generateRefreshToken(payload);
 
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    await prisma.refreshToken.create({
-        data: { token: refreshToken, userId: user.id, expiresAt },
-    });
-
-    return { accessToken, refreshToken, user: { id: user.id, email: user.email } };
+    return issueToken(payload);
 }
 
 // ─── refresh ──────────────────────────────────────────────
@@ -108,15 +102,8 @@ export async function refresh(body: unknown) {
     await prisma.refreshToken.delete({ where: { id: storedToken.id } });
 
     const newPayload = { userId: payload.userId, email: payload.email };
-    const newAccessToken = generateAccessToken(newPayload);
-    const newRefreshToken = generateRefreshToken(newPayload);
 
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    await prisma.refreshToken.create({
-        data: { token: newRefreshToken, userId: payload.userId, expiresAt },
-    });
-
-    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    return issueToken(newPayload);
 }
 
 // ─── logout ───────────────────────────────────────────────
@@ -127,4 +114,54 @@ export async function logout(body: unknown) {
         await prisma.refreshToken.deleteMany({ where: { token: refreshToken } });
     }
     return { message: 'Logged out' };
+}
+
+// ─── Google callback ───────────────────────────────────────
+
+export async function handleGoogleCallback(googleId: string, email: string) {
+    const user = await prisma.user.findUnique({
+        where: { googleId: googleId },
+        select: { id: true, email: true },
+    });
+
+    if (user) {
+        const payload = {userId: user.id, email: user.email};
+        return issueToken(payload);
+    }
+
+    const userWithoutGoogleId = await prisma.user.findUnique({
+        where: {email: email},
+        select: { id: true, email: true },
+    });
+
+    if (!userWithoutGoogleId) {
+        const newUser = await prisma.user.create({
+            data: { email: email, googleId },
+            select: { id: true, email: true },
+        });
+        const payload = {userId: newUser.id, email: newUser.email};
+        return issueToken(payload);
+    }
+
+    const updatedUser = await prisma.user.update({
+        where: { id: userWithoutGoogleId.id },
+        data: { googleId: googleId },
+        select: { id: true, email: true },
+    });
+    const payload = {userId: updatedUser.id, email: updatedUser.email};
+    return issueToken(payload);
+}
+
+
+// ─── Helper function ───────────────────────────────────────────────
+
+async function issueToken(payload: TokenPayload) {
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    await prisma.refreshToken.create({
+        data: { token: refreshToken, userId: payload.userId, expiresAt },
+    });
+    return { accessToken, refreshToken, user: { id: payload.userId, email: payload.email } };
 }

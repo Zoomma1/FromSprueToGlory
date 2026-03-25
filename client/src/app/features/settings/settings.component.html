@@ -1,46 +1,78 @@
-<h1 class="page-title">Settings</h1>
+<div class="page-header">
+  <h1 class="page-title">Settings</h1>
+</div>
 
-<mat-card class="settings-card">
-    <mat-card-header>
-        <mat-card-title>Account</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <p>Email: <strong>{{ authService.user()?.email }}</strong></p>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-button (click)="authService.logout()">
-            <mat-icon>logout</mat-icon> Logout
-        </button>
-    </mat-card-actions>
-</mat-card>
+<div class="settings-container">
 
-<mat-card class="settings-card">
-    <mat-card-header>
-        <mat-card-title>Export Data</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <p>Download all your items as JSON or CSV.</p>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-button (click)="exportJSON()">
-            <mat-icon>download</mat-icon> JSON
-        </button>
-        <button mat-button (click)="exportCSV()">
-            <mat-icon>download</mat-icon> CSV
-        </button>
-    </mat-card-actions>
-</mat-card>
+  <div class="settings-section">
+    <div class="section-header">
+      <h2 class="section-title">Account</h2>
+    </div>
+    <div class="section-content">
+      <p class="section-meta">
+        <span class="meta-label">Email</span>
+        <span class="meta-value">{{ authService.user()?.email }}</span>
+      </p>
+    </div>
+    <div class="section-actions">
+      <button class="btn-action" (click)="authService.logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </div>
+  </div>
 
-<mat-card class="settings-card danger-card">
-    <mat-card-header>
-        <mat-card-title>Danger Zone</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <p>Permanently delete your account and all data.</p>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-raised-button color="warn" (click)="deleteAccount()">
-            <mat-icon>delete_forever</mat-icon> Delete Account
-        </button>
-    </mat-card-actions>
-</mat-card>
+  <div class="settings-section">
+    <div class="section-header">
+      <h2 class="section-title">Preferred Currency</h2>
+    </div>
+    <div class="section-content">
+      <p class="section-description">New items will use this currency by default.</p>
+      <div class="field-group">
+        <label for="settings-currency" class="field-label">Currency</label>
+        <select id="settings-currency" class="field-input field-select"
+          [ngModel]="selectedCurrency()" (ngModelChange)="selectedCurrency.set($event)">
+          @for (c of CURRENCIES; track c) {
+            <option [value]="c">{{ c }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="section-actions">
+      <button class="btn-primary" (click)="saveCurrency()" [disabled]="savingCurrency()">
+        <mat-icon>save</mat-icon> Save
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="section-header">
+      <h2 class="section-title">Export Data</h2>
+    </div>
+    <div class="section-content">
+      <p class="section-description">Download all your items as JSON or CSV.</p>
+    </div>
+    <div class="section-actions">
+      <button class="btn-action" (click)="exportJSON()">
+        <mat-icon>download</mat-icon> JSON
+      </button>
+      <button class="btn-action" (click)="exportCSV()">
+        <mat-icon>download</mat-icon> CSV
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-section settings-section--danger">
+    <div class="section-header">
+      <h2 class="section-title section-title--danger">Danger Zone</h2>
+    </div>
+    <div class="section-content">
+      <p class="section-description">Permanently delete your account and all data.</p>
+    </div>
+    <div class="section-actions">
+      <button class="btn-danger" (click)="deleteAccount()">
+        <mat-icon>delete_forever</mat-icon> Delete Account
+      </button>
+    </div>
+  </div>
+
+</div>

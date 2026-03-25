@@ -108,6 +108,14 @@ export class AuthService {
         this.router.navigate(['/auth/login']);
     }
 
+    async handleOAuthCallback(): Promise<void> {
+        if (this.accessTokenSignal()) return;
+        const res = await firstValueFrom(
+            this.http.get<AuthResponse>(`${environment.apiUrl}/auth/session`, { withCredentials: true })
+        );
+        this.storeTokens(res);
+    }
+
     private storeTokens(res: AuthResponse): void {
         localStorage.setItem('accessToken', res.accessToken);
         localStorage.setItem('refreshToken', res.refreshToken);

@@ -1,15 +1,12 @@
 import { Component, forwardRef, input, output, signal, computed, effect } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-searchable-select',
     standalone: true,
-    imports: [MatFormFieldModule, MatInputModule, MatAutocompleteModule, MatIconModule, MatButtonModule],
+    imports: [MatAutocompleteModule, MatIconModule],
     templateUrl: './searchable-select.component.html',
     styleUrl: './searchable-select.component.scss',
     providers: [
@@ -21,6 +18,9 @@ import { MatButtonModule } from '@angular/material/button';
     ],
 })
 export class SearchableSelectComponent<T> implements ControlValueAccessor {
+    private static nextId = 0;
+    readonly inputId = `searchable-input-${SearchableSelectComponent.nextId++}`;
+
     options = input.required<T[]>();
     displayFn = input.required<(option: T) => string>();
     label = input.required<string>();

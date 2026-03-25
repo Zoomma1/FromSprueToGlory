@@ -1,83 +1,114 @@
-<h1 class="page-title">Dashboard</h1>
+<!-- ─── Header ─────────────────────────────────────────────────────────────── -->
+<div class="page-header">
+    <h1 class="page-title">Dashboard</h1>
+</div>
 
+<!-- ─── Status grid ───────────────────────────────────────────────────────── -->
 <div class="stats-grid">
     @for (stat of stats(); track stat.status) {
-    <mat-card class="stat-card" [style.border-left-color]="stat.color">
-        <mat-card-content>
-            <div class="stat-content">
-                <div class="stat-info">
-                    <span class="stat-count">{{ stat.count }}</span>
-                    <span class="stat-label">{{ stat.status }}</span>
-                </div>
-                <mat-icon class="stat-icon" [style.color]="stat.color">{{ stat.icon }}</mat-icon>
-            </div>
-        </mat-card-content>
-    </mat-card>
+    <div class="stat-card" [class.stat-card--empty]="stat.count === 0" [style.border-left-color]="stat.color">
+        <div class="stat-card__header">
+            <span class="stat-card__label" [style.color]="stat.color">{{ stat.status }}</span>
+            <mat-icon class="stat-card__icon" [style.color]="stat.color">{{ stat.icon }}</mat-icon>
+        </div>
+        <div class="stat-card__count">{{ stat.count }}</div>
+    </div>
     }
 </div>
 
-<div class="total-card-container">
-    <mat-card class="total-card">
-        <mat-card-content>
-            <div class="stat-content">
-                <div class="stat-info">
-                    <span class="stat-count gold">{{ totalItems() }}</span>
-                    <span class="stat-label">Total Items in Pile</span>
-                </div>
-                <mat-icon class="stat-icon gold">inventory_2</mat-icon>
-            </div>
-        </mat-card-content>
-    </mat-card>
+<!-- ─── Total pile ─────────────────────────────────────────────────────────── -->
+<div class="total-card">
+    <div class="total-card__gradient"></div>
+    <div class="total-card__content">
+        <p class="total-card__label">Strategic Reserves</p>
+        <div class="total-card__info">
+            <span class="total-card__count">{{ totalItems() }}</span>
+            <span class="total-card__text">Total Items in Pile</span>
+        </div>
+    </div>
+    <mat-icon class="total-card__icon">inventory_2</mat-icon>
 </div>
 
-@if (wastedMoney(); as wasted) {
-<div class="wasted-money-section">
-    <h2 class="section-title">
-        Pile of Shame — Money Wasted
-        @if (wasted.breakdown.length > 1) {
-            <mat-icon
-                class="currency-warning-icon"
-                [matTooltip]="'Multiple currencies detected. Currency conversion is not supported yet.'"
-                matTooltipPosition="right"
-            >info_outline</mat-icon>
-        }
-    </h2>
+<!-- ─── Bottom grid: Pile of Shame + Quick Actions ────────────────────────── -->
+<div class="bottom-grid">
 
-    <div class="wasted-total">
-        @for (entry of wasted.breakdown; track entry.currency; let last = $last) {
-            <span class="wasted-amount">{{ entry.amount | number: '1.2-2' }} {{ entry.currency }}</span>
-            @if (!last) { <span class="currency-separator">·</span> }
-        }
-    </div>
+    @if (wastedMoney(); as wasted) {
+    <div class="shame-card">
+        <div class="shame-card__header">
+            <h3 class="shame-card__title">
+                Pile of Shame — Money Wasted
+                <mat-icon
+                    class="shame-card__info-icon"
+                    [matTooltip]="'Amounts converted to ' + wasted.currency + ' using estimated exchange rates. Values are approximations.'"
+                    matTooltipPosition="right"
+                >info_outline</mat-icon>
+            </h3>
+            <div class="shame-card__amount">
+                {{ wasted.total | number: '1.2-2' }}
+                <span class="shame-card__currency">{{ wasted.currency }}</span>
+            </div>
+        </div>
 
-    @if (wasted.projectBreakdown.length > 0) {
-    <div class="project-breakdown">
-        @for (proj of wasted.projectBreakdown; track proj.project) {
-        <div class="project-row">
-            <span class="project-name">{{ proj.project }}</span>
-            <span class="project-amount">
-                @for (entry of proj.wastedMoneyBreakdown.breakdown; track entry.currency; let last = $last) {
-                    {{ entry.amount | number: '1.2-2' }} {{ entry.currency }}@if (!last) { · }
-                }
-            </span>
+        @if (wasted.projectBreakdown.length > 0) {
+        <div class="shame-card__breakdown">
+            @for (proj of wasted.projectBreakdown; track proj.project; let i = $index) {
+            <div class="breakdown-row">
+                <div class="breakdown-row__left">
+                    <div class="breakdown-dot" [class]="'breakdown-dot--' + (i % 4)"></div>
+                    <span class="breakdown-row__name">{{ proj.project }}</span>
+                </div>
+                <span class="breakdown-row__amount">{{ proj.total | number: '1.2-2' }}</span>
+            </div>
+            }
+        </div>
+
+        <div class="shame-card__bar">
+            @for (proj of wasted.projectBreakdown; track proj.project; let i = $index) {
+            <div class="bar-segment" [class]="'bar-segment--' + (i % 4)" [style.width.%]="(proj.total / wasted.total) * 100"></div>
+            }
         </div>
         }
     </div>
     }
-</div>
-}
 
-<div class="quick-actions">
-    <h2>Quick Actions</h2>
-    <div class="actions-row">
-        <button mat-stroked-button [routerLink]="['/items']">
-            <mat-icon>list</mat-icon> View Items
-        </button>
-        <button mat-stroked-button [routerLink]="['/projects']">
-            <mat-icon>folder_special</mat-icon> Projects
-        </button>
-        <button mat-stroked-button [routerLink]="['/color-schemes']">
-            <mat-icon>palette</mat-icon> Color Schemes
-        </button>
+    <!-- Quick Actions -->
+    <div class="actions-card">
+        <h3 class="actions-card__title">Quick Actions</h3>
+        <div class="actions-list">
+            <button class="action-btn" [routerLink]="['/items']">
+                <div class="action-btn__left">
+                    <mat-icon class="action-btn__icon">list</mat-icon>
+                    <span class="action-btn__label">View Items</span>
+                </div>
+                <mat-icon class="action-btn__arrow">arrow_forward</mat-icon>
+            </button>
+            <button class="action-btn" [routerLink]="['/projects']">
+                <div class="action-btn__left">
+                    <mat-icon class="action-btn__icon">folder_special</mat-icon>
+                    <span class="action-btn__label">Projects</span>
+                </div>
+                <mat-icon class="action-btn__arrow">arrow_forward</mat-icon>
+            </button>
+            <button class="action-btn" [routerLink]="['/color-schemes']">
+                <div class="action-btn__left">
+                    <mat-icon class="action-btn__icon">palette</mat-icon>
+                    <span class="action-btn__label">Color Schemes</span>
+                </div>
+                <mat-icon class="action-btn__arrow">arrow_forward</mat-icon>
+            </button>
+        </div>
     </div>
+</div>
+
+<!-- ─── Featured Intel (placeholder) ─────────────────────────────────────── -->
+<div class="featured-intel">
+    <div class="featured-intel__overlay"></div>
+    <div class="featured-intel__content">
+        <span class="featured-intel__badge">Featured Intel</span>
+        <div class="featured-intel__title-row">
+            <h4 class="featured-intel__title">Level up your glazing technique</h4>
+            <div class="featured-intel__coming-soon">COMING SOON</div>
+        </div>
+    </div>
+    <mat-icon class="featured-intel__lock">lock</mat-icon>
 </div>

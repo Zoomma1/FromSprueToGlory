@@ -18,11 +18,13 @@ import accountRoutes from './routes/account.routes';
 import projectsRoutes from './routes/projects.routes';
 import adminRoutes from './routes/admin.routes';
 import userPaintsRoutes from './routes/user-paints.routes';
+import usersRoutes from './routes/users.routes';
 
 // Middleware imports
 import { authMiddleware } from './middleware/auth.middleware';
 import { adminMiddleware } from './middleware/admin.middleware';
 import { asyncHandler } from './lib/async-handler';
+import cookieParser from 'cookie-parser';
 
 // ──────────────────────────────────────────────
 // Centralized Error Handler
@@ -85,6 +87,9 @@ export function createApp(options: AppOptions = {}) {
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ extended: true }));
 
+    // ─── Cookie parser ────────────────────────
+    app.use(cookieParser());
+
     // ─── Health check ─────────────────────────
     app.get('/api/health', async (_req, res) => {
         let dbStatus = 'ok';
@@ -132,6 +137,7 @@ export function createApp(options: AppOptions = {}) {
     app.use('/api/projects', projectsRoutes);
     app.use('/api/admin', authMiddleware, asyncHandler(adminMiddleware), adminRoutes);
     app.use('/api/user-paints', userPaintsRoutes);
+    app.use('/api/users', usersRoutes);
 
     // Error handler must be mounted after all routes
     app.use(errorHandler);

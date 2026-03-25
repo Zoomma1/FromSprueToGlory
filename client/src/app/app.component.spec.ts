@@ -77,18 +77,18 @@ describe('AppComponent', () => {
 
         it('should close sidenav on nav click when mobile', () => {
             component.isMobile.set(true);
+            component.sidenavOpen.set(true);
             fixture.detectChanges();
-            spyOn(component.sidenav, 'close');
             component.onNavClick();
-            expect(component.sidenav.close).toHaveBeenCalled();
+            expect(component.sidenavOpen()).toBeFalse();
         });
 
         it('should not close sidenav on nav click when not mobile', () => {
             component.isMobile.set(false);
+            component.sidenavOpen.set(true);
             fixture.detectChanges();
-            spyOn(component.sidenav, 'close');
             component.onNavClick();
-            expect(component.sidenav.close).not.toHaveBeenCalled();
+            expect(component.sidenavOpen()).toBeTrue();
         });
     });
 

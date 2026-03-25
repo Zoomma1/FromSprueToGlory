@@ -167,6 +167,18 @@ export class ApiService {
         return this.http.get<Item[]>(`${this.baseUrl}/export/items`);
     }
 
+    //  User Profile
+    getMe(): Observable<{ id: string; email: string; currency: string }> {
+        return this.http.get<{ id: string; email: string; currency: string }>(`${this.baseUrl}/users/me`);
+    }
+
+    updateCurrency(currency: string): Observable<{ id: string; email: string; currency: string }> {
+        return this.http.patch<{ id: string; email: string; currency: string }>(
+            `${this.baseUrl}/users/me`,
+            { currency },
+        );
+    }
+
     //  Account
     deleteAccount(): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/account`);

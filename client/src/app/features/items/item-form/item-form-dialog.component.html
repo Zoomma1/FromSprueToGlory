@@ -1,78 +1,82 @@
-<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Add Item' : 'Edit Item' }}</h2>
+<h2 mat-dialog-title class="dialog-title">{{ data.mode === 'create' ? 'Add Item' : 'Edit Item' }}</h2>
+
 <mat-dialog-content>
-    <form [formGroup]="form">
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="name">
-        </mat-form-field>
+  <form [formGroup]="form" class="dialog-form">
 
-        <div class="form-row">
-            <app-searchable-select
-                formControlName="gameSystem"
-                [options]="gameSystems()"
-                [displayFn]="gameSystemDisplayFn"
-                label="Game System"
-                (valueChange)="onGameSystemChange($event?.id ?? '')">
-            </app-searchable-select>
+    <div class="field-group">
+      <label for="item-name" class="field-label">Name</label>
+      <input id="item-name" class="field-input" formControlName="name" placeholder="Enter unit name...">
+    </div>
 
-            <app-searchable-select
-                formControlName="faction"
-                [options]="factions()"
-                [displayFn]="factionDisplayFn"
-                label="Faction">
-            </app-searchable-select>
-        </div>
+    <div class="form-row">
+      <app-searchable-select
+        formControlName="gameSystem"
+        [options]="gameSystems()"
+        [displayFn]="gameSystemDisplayFn"
+        label="Game System"
+        (valueChange)="onGameSystemChange($event?.id ?? '')">
+      </app-searchable-select>
 
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Status</mat-label>
-                <mat-select formControlName="status">
-                  @for (status of ITEM_STATUSES; track status){
-                    <mat-option [value]="status.value">{{status.label}}</mat-option>
-                  }
-                </mat-select>
-            </mat-form-field>
+      <app-searchable-select
+        formControlName="faction"
+        [options]="factions()"
+        [displayFn]="factionDisplayFn"
+        label="Faction">
+      </app-searchable-select>
+    </div>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Quantity</mat-label>
-                <input matInput type="number" formControlName="quantity" min="1">
-            </mat-form-field>
-        </div>
+    <div class="form-row">
+      <div class="field-group">
+        <label for="item-status" class="field-label">Status</label>
+        <select id="item-status" class="field-input field-select" formControlName="status">
+          @for (status of ITEM_STATUSES; track status) {
+            <option [value]="status.value">{{ status.label }}</option>
+          }
+        </select>
+      </div>
 
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Price</mat-label>
-                <input matInput type="number" formControlName="price" step="0.01">
-            </mat-form-field>
+      <div class="field-group">
+        <label for="item-quantity" class="field-label">Quantity</label>
+        <input id="item-quantity" class="field-input" type="number" formControlName="quantity" min="1">
+      </div>
+    </div>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Currency</mat-label>
-                <mat-select formControlName="currency">
-                  @for (cur of CURRENCIES; track cur){
-                    <mat-option [value]="cur">{{ cur }}</mat-option>
-                  }
-                </mat-select>
-            </mat-form-field>
-        </div>
+    <div class="form-row">
+      <div class="field-group">
+        <label for="item-price" class="field-label">Price</label>
+        <input id="item-price" class="field-input" type="number" formControlName="price" step="0.01">
+      </div>
 
-        <app-searchable-select
-            formControlName="project"
-            [options]="projects()"
-            [displayFn]="projectDisplayFn"
-            label="Project (optional)"
-            nullOptionLabel="— None —">
-        </app-searchable-select>
+      <div class="field-group">
+        <label for="item-currency" class="field-label">Currency</label>
+        <select id="item-currency" class="field-input field-select" formControlName="currency">
+          @for (cur of CURRENCIES; track cur) {
+            <option [value]="cur">{{ cur }}</option>
+          }
+        </select>
+      </div>
+    </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Notes</mat-label>
-            <textarea matInput formControlName="notes" rows="3"></textarea>
-        </mat-form-field>
-    </form>
+    <app-searchable-select
+      formControlName="project"
+      [options]="projects()"
+      [displayFn]="projectDisplayFn"
+      label="Project (optional)"
+      nullOptionLabel="— None —">
+    </app-searchable-select>
+
+    <div class="field-group">
+      <label for="item-notes" class="field-label">Notes</label>
+      <textarea id="item-notes" class="field-input field-textarea" formControlName="notes" rows="3"
+                placeholder="Painting notes, assembly tips..."></textarea>
+    </div>
+
+  </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid || saving()">
-        {{ data.mode === 'create' ? 'Create' : 'Save' }}
-    </button>
+  <button class="btn-cancel" mat-dialog-close>Cancel</button>
+  <button class="btn-save" (click)="save()" [disabled]="form.invalid || saving()">
+    {{ data.mode === 'create' ? 'Create' : 'Save' }}
+  </button>
 </mat-dialog-actions>

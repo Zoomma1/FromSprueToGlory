@@ -1,15 +1,214 @@
-.page-title {
-    color: #d4a34a;
-    margin-bottom: 24px;
+.settings-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.settings-card {
-    background: #1e1e2e;
-    border: 1px solid #2a2a4a;
-    margin-bottom: 16px;
-    max-width: 600px;
+// ─── Sections ────────────────────────────────────────────
+.settings-section {
+  background: var(--color-surface);
+  padding: 24px;
+
+  &--danger {
+    background: rgba(244, 67, 54, 0.04);
+  }
 }
 
-.danger-card {
-    border-color: #f4433644;
+.section-header {
+  margin-bottom: 16px;
+}
+
+.section-title {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+
+  &--danger {
+    color: #f44336;
+  }
+}
+
+.section-content {
+  margin-bottom: 20px;
+}
+
+.section-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+
+.meta-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
+.meta-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.section-description {
+  margin: 0 0 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(219, 194, 173, 0.6);
+}
+
+// ─── Field (currency select) ──────────────────────────────
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 200px;
+}
+
+.field-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
+.field-input {
+  width: 100%;
+  background: #292020;
+  border: none;
+  border-left: 3px solid var(--color-gold);
+  border-radius: 0 4px 4px 0;
+  padding: 12px 16px;
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  outline: none;
+  transition: background 0.15s;
+
+  &:focus {
+    background: #312828;
+  }
+}
+
+.field-select {
+  appearance: none;
+  cursor: pointer;
+
+  option {
+    background: #201f1f;
+    color: var(--color-text);
+  }
+}
+
+// ─── Actions ─────────────────────────────────────────────
+.section-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ffc081, #ff9800);
+  color: #2c1600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: filter 0.15s, transform 0.15s;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.1);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.btn-danger {
+  background: none;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  color: #f44336;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: rgba(244, 67, 54, 0.1);
+  }
 }

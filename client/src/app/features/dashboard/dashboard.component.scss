@@ -1,151 +1,422 @@
-.page-title {
-    color: #d4a34a;
-    margin-bottom: 24px;
-}
+// ─── Project color rotation (for dots & bar segments) ─────────────────────────
+// Matches the Stitch design sequential palette
+$project-colors: (
+  0: var(--color-border),
+  1: var(--color-orange),
+  2: var(--color-gold),
+  3: var(--color-warn),
+);
 
+// ─── Header — uses global .page-header / .page-title ─────────────────────────
+
+// ─── Status grid ──────────────────────────────────────────────────────────────
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
     margin-bottom: 24px;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(5, 1fr);
+    }
 }
 
 .stat-card {
-    background: #1e1e2e;
-    border-left: 4px solid;
-    transition: transform 0.2s;
+    background: var(--color-surface);
+    border-left: 4px solid transparent;
+    padding: 16px;
+    transition: background 0.2s ease;
+    cursor: default;
 
     &:hover {
-        transform: translateY(-2px);
+        background: var(--color-surface-high);
+    }
+
+    &--empty {
+        opacity: 0.6;
     }
 }
 
-.stat-content {
+.stat-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.stat-card__label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.stat-card__icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.stat-card__count {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.875rem;
+    font-weight: 900;
+    color: var(--color-text);
+    line-height: 1;
+}
+
+// ─── Total pile card ──────────────────────────────────────────────────────────
+.total-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+
+    &:hover .total-card__icon {
+        opacity: 0.4;
+    }
 }
 
-.stat-count {
-    font-size: 2rem;
+.total-card__gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(255, 192, 129, 0.05), transparent);
+    pointer-events: none;
+}
+
+.total-card__content {
+    position: relative;
+    z-index: 1;
+}
+
+.total-card__label {
+    color: var(--color-gold);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.625rem;
     font-weight: 700;
-    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin: 0 0 8px;
+}
 
-    &.gold {
-        color: #d4a34a;
+.total-card__info {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.total-card__count {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3.75rem;
+    font-weight: 900;
+    color: var(--color-gold);
+    line-height: 1;
+}
+
+.total-card__text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    opacity: 0.8;
+}
+
+.total-card__icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+    color: var(--color-text);
+    opacity: 0.2;
+    transition: opacity 0.2s ease;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+// ─── Bottom grid ──────────────────────────────────────────────────────────────
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+
+    @media (min-width: 1024px) {
+        grid-template-columns: 2fr 1fr;
     }
 }
 
-.stat-label {
-    font-size: 0.85rem;
-    color: #999;
+// ─── Pile of Shame card ───────────────────────────────────────────────────────
+.shame-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.shame-card__header {
+    padding: 24px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.shame-card__title {
+    color: var(--color-gold);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 900;
     text-transform: uppercase;
-}
-
-.stat-icon {
-    font-size: 40px;
-    height: 40px;
-    width: 40px;
-    opacity: 0.6;
-
-    &.gold {
-        color: #d4a34a !important;
-    }
-}
-
-.total-card-container {
-    margin-bottom: 32px;
-}
-
-.total-card {
-    background: #1e1e2e;
-    border: 1px solid #d4a34a33;
-}
-
-.wasted-money-section {
-    margin-bottom: 32px;
-    background: #1e1e2e;
-    border: 1px solid #d4a34a33;
-    border-radius: 8px;
-    padding: 20px 24px;
-}
-
-.section-title {
-    color: #d4a34a;
-    font-size: 1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0 0 16px;
+    letter-spacing: 0.15em;
+    margin: 0 0 24px;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.currency-warning-icon {
-    font-size: 18px;
-    height: 18px;
-    width: 18px;
-    color: #999;
+.shame-card__info-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: var(--color-text-secondary);
     cursor: help;
 }
 
-.wasted-total {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 20px;
+.shame-card__amount {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--color-gold);
+    letter-spacing: -0.02em;
+    line-height: 1;
 }
 
-.wasted-amount {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #d4a34a;
+.shame-card__currency {
+    font-size: 1.25rem;
+    font-weight: 500;
+    opacity: 0.5;
 }
 
-.currency-separator {
-    color: #555;
-    font-size: 1.2rem;
-}
-
-.project-breakdown {
-    border-top: 1px solid #2a2a3e;
-    padding-top: 12px;
+.shame-card__breakdown {
+    flex: 1;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
 }
 
-.project-row {
+.breakdown-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
 
-.project-name {
-    font-size: 0.9rem;
-    color: #ccc;
-}
-
-.project-amount {
-    font-size: 0.9rem;
-    color: #d4a34a;
-    font-weight: 500;
-}
-
-.quick-actions {
-    h2 {
-        color: #d4a34a;
-        margin-bottom: 12px;
+    &:hover .breakdown-row__name {
+        color: var(--color-text);
     }
 }
 
-.actions-row {
+.breakdown-row__left {
     display: flex;
+    align-items: center;
     gap: 12px;
-    flex-wrap: wrap;
+}
 
-    button mat-icon {
-        margin-right: 4px;
+.breakdown-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+
+    @each $i, $color in $project-colors {
+        &--#{$i} { background: #{$color}; }
     }
+}
+
+.breakdown-row__name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(227, 224, 247, 0.8);
+    transition: color 0.15s ease;
+}
+
+.breakdown-row__amount {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.shame-card__bar {
+    display: flex;
+    height: 4px;
+    background: rgba(85, 68, 52, 0.2);
+    margin: 0 24px 24px;
+
+    .bar-segment {
+        height: 100%;
+        transition: width 0.3s ease;
+
+        @each $i, $color in $project-colors {
+            &--#{$i} { background: #{$color}; }
+        }
+    }
+}
+
+// ─── Quick Actions card ───────────────────────────────────────────────────────
+.actions-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.actions-card__title {
+    color: var(--color-gold);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0 0 32px;
+}
+
+.actions-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.action-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+        border-color: var(--color-orange);
+        background: var(--color-surface-high);
+
+        .action-btn__arrow { opacity: 1; }
+    }
+}
+
+.action-btn__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.action-btn__icon {
+    color: var(--color-orange);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.action-btn__label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.action-btn__arrow {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+// ─── Featured Intel (placeholder) ────────────────────────────────────────────
+.featured-intel {
+    position: relative;
+    width: 100%;
+    height: 192px;
+    overflow: hidden;
+    border: 1px dashed var(--color-border);
+    background: var(--color-surface-low);
+    display: flex;
+    align-items: flex-end;
+}
+
+.featured-intel__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--color-bg), rgba(13, 13, 28, 0.2), transparent);
+    pointer-events: none;
+}
+
+.featured-intel__content {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+    opacity: 0.35;
+    user-select: none;
+}
+
+.featured-intel__badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(255, 192, 129, 0.2);
+    color: rgba(227, 224, 247, 0.6);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.625rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+}
+
+.featured-intel__title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.featured-intel__title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.featured-intel__coming-soon {
+    padding: 2px 8px;
+    background: var(--color-surface-variant);
+    color: rgba(227, 224, 247, 0.5);
+    font-size: 0.5625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+}
+
+.featured-intel__lock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--color-border);
+    opacity: 0.2;
+    pointer-events: none;
 }
