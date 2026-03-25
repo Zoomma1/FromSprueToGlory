@@ -1,28 +1,30 @@
-<mat-form-field appearance="outline" class="full-width">
-    <mat-label>{{ label() }}</mat-label>
-    <input matInput
-        [matAutocomplete]="auto"
-        [value]="inputDisplayValue()"
-        (input)="onInput($any($event.target).value)"
-        [placeholder]="placeholder()"
-        [disabled]="isDisabled()">
+<div class="searchable-wrapper" [class.is-disabled]="isDisabled()">
+  <label [for]="inputId" class="field-label">{{ label() }}</label>
+  <div class="field-input-wrapper">
+    <input [id]="inputId" class="field-input"
+      [matAutocomplete]="auto"
+      [value]="inputDisplayValue()"
+      (input)="onInput($any($event.target).value)"
+      [placeholder]="placeholder()"
+      [disabled]="isDisabled()">
     @if (internalValue()) {
-        <button matSuffix mat-icon-button type="button" (click)="clear()">
-            <mat-icon>close</mat-icon>
-        </button>
+      <button class="clear-btn" type="button" (click)="clear()">
+        <mat-icon>close</mat-icon>
+      </button>
     }
-    <mat-autocomplete #auto="matAutocomplete"
-        [displayWith]="autocompleteDisplayFn"
-        (optionSelected)="onSelectionChange($event.option.value)"
-        (closed)="onClosed()">
-        @if (nullOptionLabel()) {
-            <mat-option [value]="null">{{ nullOptionLabel() }}</mat-option>
-        }
-        @if (filteredOptions().length === 0) {
-            <mat-option disabled>No results</mat-option>
-        }
-        @for (option of filteredOptions(); track $index) {
-            <mat-option [value]="option">{{ displayFn()(option) }}</mat-option>
-        }
-    </mat-autocomplete>
-</mat-form-field>
+  </div>
+  <mat-autocomplete #auto="matAutocomplete"
+    [displayWith]="autocompleteDisplayFn"
+    (optionSelected)="onSelectionChange($event.option.value)"
+    (closed)="onClosed()">
+    @if (nullOptionLabel()) {
+      <mat-option [value]="null">{{ nullOptionLabel() }}</mat-option>
+    }
+    @if (filteredOptions().length === 0) {
+      <mat-option disabled>No results</mat-option>
+    }
+    @for (option of filteredOptions(); track $index) {
+      <mat-option [value]="option">{{ displayFn()(option) }}</mat-option>
+    }
+  </mat-autocomplete>
+</div>

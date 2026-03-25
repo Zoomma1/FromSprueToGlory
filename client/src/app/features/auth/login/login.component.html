@@ -1,57 +1,60 @@
 <div class="auth-container">
-    <mat-card class="auth-card">
-        <mat-card-header>
-            <mat-card-title>⚔️ Login</mat-card-title>
-            <mat-card-subtitle>From Sprue to Glory</mat-card-subtitle>
-        </mat-card-header>
+  <div class="auth-card">
 
-        <mat-card-content>
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Email</mat-label>
-                    <input matInput formControlName="email" type="email" autocomplete="email">
-                    @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
-                    <mat-error>Email is required</mat-error>
-                    }
-                    @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
-                    <mat-error>Invalid email format</mat-error>
-                    }
-                </mat-form-field>
+    <div class="auth-header">
+      <div class="auth-accent-bar"></div>
+      <h1 class="auth-title">From Sprue to Glory</h1>
+    </div>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Password</mat-label>
-                    <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
-                        autocomplete="current-password">
-                    <button mat-icon-button matSuffix (click)="hidePassword.set(!hidePassword())" type="button">
-                        <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-                    </button>
-                </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
 
-                @if (error()) {
-                <p class="error-message">{{ error() }}</p>
-                }
+      <div class="field-group">
+        <p class="field-label">Email</p>
+        <input class="field-input" formControlName="email" type="email"
+               autocomplete="email" placeholder="fromsprue@toglory.io">
+        @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+          <span class="field-error">Email is required</span>
+        }
+        @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+          <span class="field-error">Invalid email format</span>
+        }
+      </div>
 
-                <button mat-raised-button color="primary" type="submit" [disabled]="loading() || form.invalid"
-                    class="full-width submit-btn">
-                    @if (loading()) {
-                    <mat-spinner diameter="20"></mat-spinner>
-                    } @else {
-                    Login
-                    }
-                </button>
-            </form>
-        </mat-card-content>
+      <div class="field-group">
+        <p class="field-label">Password</p>
+        <div class="field-input-wrapper">
+          <input class="field-input" formControlName="password"
+                 [type]="hidePassword() ? 'password' : 'text'"
+                 autocomplete="current-password" placeholder="••••••••">
+          <button class="toggle-btn" type="button" (click)="hidePassword.set(!hidePassword())">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+      </div>
 
-        <mat-card-actions>
-            <div class="divider">
-                <span>or</span>
-            </div>
-            <button mat-stroked-button class="full-width google-btn" (click)="loginWithGoogle()">
-                Continue with Google
-            </button>
-            <p class="auth-link">
-                Don't have an account? <a [routerLink]="['/auth/signup']">Sign up</a>
-            </p>
-        </mat-card-actions>
-    </mat-card>
+      @if (error()) {
+        <p class="error-message">{{ error() }}</p>
+      }
+
+      <button class="btn-submit" type="submit" [disabled]="loading() || form.invalid">
+        @if (loading()) {
+          <mat-spinner diameter="18"></mat-spinner>
+        } @else {
+          Login
+        }
+      </button>
+
+    </form>
+
+    <div class="divider"><span>or</span></div>
+
+    <button class="btn-google" type="button" (click)="loginWithGoogle()">
+      Continue with Google
+    </button>
+
+    <p class="auth-link">
+      Don't have an account? <a [routerLink]="['/auth/signup']">Sign up</a>
+    </p>
+
+  </div>
 </div>

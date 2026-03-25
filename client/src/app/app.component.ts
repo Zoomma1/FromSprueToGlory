@@ -1,11 +1,7 @@
-import { Component, OnInit, ViewChild, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatListModule } from '@angular/material/list';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from './core/services/auth.service';
 
@@ -14,7 +10,7 @@ import { AuthService } from './core/services/auth.service';
   standalone: true,
   imports: [
     RouterOutlet, RouterLink, RouterLinkActive,
-    MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule, MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -22,7 +18,7 @@ import { AuthService } from './core/services/auth.service';
 export class AppComponent implements OnInit {
   title = 'From Sprue to Glory';
   isMobile = signal(false);
-  @ViewChild('sidenav') sidenav!: MatSidenav;
+  sidenavOpen = signal(false);
   private breakpointObserver = inject(BreakpointObserver);
   authService = inject(AuthService);
   private matIconRegistry = inject(MatIconRegistry);
@@ -39,12 +35,19 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
-      .subscribe((result) => { this.isMobile.set(result.matches); });
+      .subscribe((result) => {
+        this.isMobile.set(result.matches);
+        if (!result.matches) this.sidenavOpen.set(false);
+      });
 
     this.matIconRegistry.addSvgIcon('app_icon', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/app-icon.svg'));
   }
 
+  toggleSidenav(): void {
+    this.sidenavOpen.update(v => !v);
+  }
+
   onNavClick(): void {
-    if (this.isMobile()) { this.sidenav.close(); }
+    if (this.isMobile()) this.sidenavOpen.set(false);
   }
 }

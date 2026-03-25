@@ -4,14 +4,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from '../../../core/services/api.service';
 import { SearchableSelectComponent } from '../../../shared/searchable-select/searchable-select.component';
@@ -27,9 +19,8 @@ import {ITEM_STATUSES, CURRENCIES} from '../../../classes/item.constants';
     standalone: true,
     imports: [
         ReactiveFormsModule,
-        MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule,
-        MatButtonModule, MatDatepickerModule, MatNativeDateModule,
-        MatChipsModule, MatIconModule, MatSnackBarModule,
+        MatDialogModule,
+        MatSnackBarModule,
         SearchableSelectComponent,
     ],
     templateUrl: './item-form-dialog.component.html',

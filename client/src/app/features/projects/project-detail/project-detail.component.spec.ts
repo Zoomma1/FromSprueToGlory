@@ -113,24 +113,9 @@ describe(ProjectDetailComponent.name, () => {
         }));
     });
 
-    describe('Status helpers', () => {
-        it('should return correct status label', () => {
-            expect(component.getStatusLabel('WANT')).toBe('Want');
-            expect(component.getStatusLabel('WIP')).toBe('WIP');
-            expect(component.getStatusLabel('FINISHED')).toBe('Finished');
-            expect(component.getStatusLabel('UNKNOWN_STATUS')).toBe('UNKNOWN_STATUS');
-        });
-
-        it('should determine if item can advance status', () => {
-            expect(component.canAdvance({ status: 'WANT' } as never)).toBeTrue();
-            expect(component.canAdvance({ status: 'WIP' } as never)).toBeTrue();
-            expect(component.canAdvance({ status: 'FINISHED' } as never)).toBeFalse();
-        });
-    });
-
-    describe('nextStatus - Advance item to next status', () => {
+    describe('onStatusChange - Advance or revert item status', () => {
         it('should advance item status', fakeAsync(() => {
-            component.nextStatus({ id: 'item-1', status: 'WANT' } as never);
+            component.onStatusChange({ item: { id: 'item-1', status: 'WANT' } as never, direction: 'next' });
             tick();
 
             expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('item-1', 'BOUGHT');
@@ -140,56 +125,13 @@ describe(ProjectDetailComponent.name, () => {
 
         it('should not call API if advancing from last status', () => {
             apiSpy.changeItemStatus.calls.reset();
-            component.nextStatus({ id: 'item-1', status: 'FINISHED' } as never);
-            expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
-        });
-    });
-
-    describe('setStatus - Set item to specific status', () => {
-        it('should set item status', fakeAsync(() => {
-            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'FINISHED');
-            tick();
-
-            expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('item-2', 'FINISHED');
-            expect(snackBarSpy.open).toHaveBeenCalledWith('Status → Finished', 'OK', { duration: 2000 });
-            expect(apiSpy.getProject).toHaveBeenCalledTimes(2);
-        }));
-
-        it('should set item status back to previous status', fakeAsync(() => {
-            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'WANT');
-            tick();
-
-            expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('item-2', 'WANT');
-            expect(snackBarSpy.open).toHaveBeenCalledWith('Status → Want', 'OK', { duration: 2000 });
-            expect(apiSpy.getProject).toHaveBeenCalledTimes(2);
-        }));
-
-        it('should set item status to same status', fakeAsync(() => {
-            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'WIP');
-            tick();
-
-            expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
-            expect(snackBarSpy.open).not.toHaveBeenCalled();
-        }));
-
-        it('should set item status with intermediate status', fakeAsync(() => {
-            component.setStatus({ id: 'item-1', status: 'WANT' } as never, 'FINISHED');
-            tick();
-
-            expect(apiSpy.changeItemStatus).toHaveBeenCalledWith('item-1', 'FINISHED');
-            expect(snackBarSpy.open).toHaveBeenCalledWith('Status → Finished', 'OK', { duration: 2000 });
-            expect(apiSpy.getProject).toHaveBeenCalledTimes(2);
-        }));
-
-        it('should not call API if setting to same status', () => {
-            apiSpy.changeItemStatus.calls.reset();
-            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'WIP');
+            component.onStatusChange({ item: { id: 'item-1', status: 'FINISHED' } as never, direction: 'next' });
             expect(apiSpy.changeItemStatus).not.toHaveBeenCalled();
         });
 
         it('should handle error when changing status', fakeAsync(() => {
             apiSpy.changeItemStatus.and.returnValue(throwError(() => ({ error: { error: null } })));
-            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'FINISHED');
+            component.onStatusChange({ item: { id: 'item-2', status: 'WIP' } as never, direction: 'next' });
             tick();
 
             expect(snackBarSpy.open).toHaveBeenCalledWith('Failed', 'OK', { duration: 3000 });
@@ -197,7 +139,7 @@ describe(ProjectDetailComponent.name, () => {
 
         it('should handle error with message when changing status', fakeAsync(() => {
             apiSpy.changeItemStatus.and.returnValue(throwError(() => ({ error: { error: 'Custom error' } })));
-            component.setStatus({ id: 'item-2', status: 'WIP' } as never, 'FINISHED');
+            component.onStatusChange({ item: { id: 'item-2', status: 'WIP' } as never, direction: 'next' });
             tick();
 
             expect(snackBarSpy.open).toHaveBeenCalledWith('Custom error', 'OK', { duration: 3000 });

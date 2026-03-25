@@ -2,13 +2,8 @@
 // ⚙️ Settings Component — Account, Export, Danger Zone
 // ──────────────────────────────────────────────────────────
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../core/services/auth.service';
 import { ApiService } from '../../core/services/api.service';
@@ -18,9 +13,8 @@ import { CURRENCIES } from '../../classes/item.constants';
     selector: 'app-settings',
     standalone: true,
     imports: [
-        CommonModule, FormsModule,
-        MatCardModule, MatButtonModule, MatIconModule,
-        MatSelectModule, MatFormFieldModule, MatSnackBarModule,
+        FormsModule,
+        MatIconModule, MatSnackBarModule,
     ],
     templateUrl: './settings.component.html',
     styleUrl: './settings.component.scss',

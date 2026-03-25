@@ -4,33 +4,26 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatChipsModule } from '@angular/material/chips';
 import { ApiService } from '../../../core/services/api.service';
 import { Project } from '../../../classes/project';
 import { Item } from '../../../classes/items';
+import { STATUS_ORDER, STATUS_LABELS } from '../../../classes/item.constants';
+import { ItemCardComponent } from '../../items/item-card/item-card.component';
 import { ItemFormDialogComponent } from '../../items/item-form/item-form-dialog.component';
-
-const STATUS_ORDER = ['WANT', 'BOUGHT', 'ASSEMBLED', 'WIP', 'FINISHED'] as const;
-const STATUS_LABELS: Record<string, string> = {
-    WANT: 'Want', BOUGHT: 'Bought', ASSEMBLED: 'Assembled', WIP: 'WIP', FINISHED: 'Finished',
-};
 
 @Component({
     selector: 'app-project-detail',
     standalone: true,
     imports: [
         CommonModule, CurrencyPipe,
-        MatCardModule, MatButtonModule, MatIconModule, MatProgressBarModule,
-        MatMenuModule, MatSnackBarModule, MatDialogModule, MatTooltipModule,
-        MatChipsModule,
+        MatButtonModule, MatIconModule,
+        MatSnackBarModule, MatDialogModule, MatTooltipModule,
+        ItemCardComponent,
     ],
     templateUrl: './project-detail.component.html',
     styleUrl: './project-detail.component.scss',
@@ -55,9 +48,6 @@ export class ProjectDetailComponent implements OnInit {
         return { total, missing };
     });
 
-    readonly statuses = STATUS_ORDER;
-    readonly statusLabels = STATUS_LABELS;
-
     ngOnInit() {
         const id = this.route.snapshot.paramMap.get('id')!;
         this.loadProject(id);
@@ -67,11 +57,8 @@ export class ProjectDetailComponent implements OnInit {
         const projectId = id || this.project()?.id;
         if (!projectId) return;
         this.api.getProject(projectId).subscribe({
-            next: (p: Project) => {
-                this.project.set(p);
-            },
+            next: (p: Project) => this.project.set(p),
             error: (err) => {
-                // Handle failed project load to avoid leaving the UI in a broken state
                 console.error('Failed to load project', err);
                 this.snackBar.open('Failed to load project details. Please try again.', 'Dismiss', {
                     duration: 5000,
@@ -81,27 +68,14 @@ export class ProjectDetailComponent implements OnInit {
         });
     }
 
-    // ─── Status helpers ───────────────────────────
-    getStatusLabel(status: string): string {
-        return STATUS_LABELS[status] || status;
-    }
-
-    canAdvance(item: Item): boolean {
-        return STATUS_ORDER.indexOf(item.status) < STATUS_ORDER.length - 1;
-    }
-
-    nextStatus(item: Item) {
-        const idx = STATUS_ORDER.indexOf(item.status);
-        if (idx < STATUS_ORDER.length - 1) {
-            this.setStatus(item, STATUS_ORDER[idx + 1]);
-        }
-    }
-
-    setStatus(item: Item, status: string) {
-        if (item.status === status) return;
-        this.api.changeItemStatus(item.id, status).subscribe({
+    // ─── Status ───────────────────────────────────
+    onStatusChange(event: { item: Item; direction: 'prev' | 'next' }) {
+        const idx = STATUS_ORDER.indexOf(event.item.status);
+        const newStatus = event.direction === 'next' ? STATUS_ORDER[idx + 1] : STATUS_ORDER[idx - 1];
+        if (!newStatus) return;
+        this.api.changeItemStatus(event.item.id, newStatus).subscribe({
             next: () => {
-                this.snackBar.open(`Status → ${STATUS_LABELS[status]}`, 'OK', { duration: 2000 });
+                this.snackBar.open(`Status → ${STATUS_LABELS[newStatus]}`, 'OK', { duration: 2000 });
                 this.loadProject();
             },
             error: (err) => {
@@ -158,21 +132,18 @@ export class ProjectDetailComponent implements OnInit {
         this.router.navigate(['/projects']);
     }
 
-    // Item creation
     openCreateDialog() {
-      const project = this.project();
-      const dialogRef = this.dialog.open(ItemFormDialogComponent, {
-        width: '600px', maxWidth: '95vw',
-        data: {
-          mode: 'create',
-          defaultProjectId: project?.id ?? null,
-          defaultProjectName: project?.name ?? null,
-        },
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.loadProject();
-        }
-      });
+        const project = this.project();
+        const dialogRef = this.dialog.open(ItemFormDialogComponent, {
+            width: '600px', maxWidth: '95vw',
+            data: {
+                mode: 'create',
+                defaultProjectId: project?.id ?? null,
+                defaultProjectName: project?.name ?? null,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) this.loadProject();
+        });
     }
 }

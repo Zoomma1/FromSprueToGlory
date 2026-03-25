@@ -1,0 +1,106 @@
+<div class="item-card" [class.item-card--compact]="compactMode()" [attr.data-status]="item().status">
+    <div class="item-card__image">
+        @if (item().photoKey) {
+            <img [src]="item().photoKey" [alt]="item().name" class="item-card__photo">
+        } @else {
+            <div class="item-card__image-placeholder">
+                <mat-icon>photo_camera</mat-icon>
+            </div>
+        }
+        <div class="item-card__image-gradient"></div>
+    </div>
+
+    <div class="item-card__content">
+        <div class="item-card__header">
+            <div>
+                <h3 class="item-card__name">{{ item().name }}</h3>
+                <p class="item-card__meta">
+                    <span class="item-card__meta-faction">x{{ item().quantity }}@if (item().faction?.name) { {{ item().faction!.name }}}</span>
+                    @if (item().project?.name && !compactMode()) {
+                        <span class="item-card__meta-dot"></span>
+                        <span class="item-card__meta-project">{{ item().project!.name }}</span>
+                    }
+                </p>
+            </div>
+
+            @if (compactMode()) {
+                <!-- Compact: status badge + next + delete aligned right -->
+                <div class="item-card__compact-controls">
+                    <div class="item-card__status-badge" [attr.data-status]="item().status">
+                        <span class="item-card__status-dot"></span>
+                        <span class="item-card__status-text">{{ statusLabel() }}</span>
+                    </div>
+                    <button
+                        class="item-card__status-nav"
+                        [disabled]="!canAdvance()"
+                        (click)="onNext()"
+                        data-testid="next-status"
+                        aria-label="Next status">
+                        <mat-icon>chevron_right</mat-icon>
+                    </button>
+                    <button
+                        class="item-card__action-btn item-card__action-btn--warn item-card__action-btn--lg"
+                        (click)="delete.emit(item())"
+                        data-testid="delete-btn"
+                        aria-label="Delete">
+                        <mat-icon>{{ deleteIcon() }}</mat-icon>
+                    </button>
+                </div>
+            } @else {
+                <div class="item-card__actions">
+                    @if (showEdit()) {
+                    <button
+                        class="item-card__action-btn"
+                        (click)="edit.emit(item())"
+                        data-testid="edit-btn"
+                        aria-label="Edit">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    }
+                    <button
+                        class="item-card__action-btn item-card__action-btn--warn"
+                        (click)="delete.emit(item())"
+                        data-testid="delete-btn"
+                        aria-label="Delete">
+                        <mat-icon>{{ deleteIcon() }}</mat-icon>
+                    </button>
+                </div>
+            }
+        </div>
+
+        @if (!compactMode()) {
+        <div class="item-card__footer">
+            <div class="item-card__status">
+                <button
+                    class="item-card__status-nav"
+                    [disabled]="!canRevert()"
+                    (click)="onPrev()"
+                    data-testid="prev-status"
+                    aria-label="Previous status">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <div class="item-card__status-badge" [attr.data-status]="item().status">
+                    <span class="item-card__status-dot"></span>
+                    <span class="item-card__status-text">{{ statusLabel() }}</span>
+                </div>
+                <button
+                    class="item-card__status-nav"
+                    [disabled]="!canAdvance()"
+                    (click)="onNext()"
+                    data-testid="next-status"
+                    aria-label="Next status">
+                    <mat-icon>chevron_right</mat-icon>
+                </button>
+            </div>
+
+            @if (item().tags.length) {
+                <div class="item-card__tags">
+                    @for (tag of item().tags; track tag) {
+                        <span class="item-card__tag">{{ tag }}</span>
+                    }
+                </div>
+            }
+        </div>
+        }
+    </div>
+</div>

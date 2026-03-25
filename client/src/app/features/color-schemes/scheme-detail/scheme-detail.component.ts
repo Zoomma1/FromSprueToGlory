@@ -9,9 +9,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -36,7 +33,7 @@ export const PAINT_TYPES = [
     imports: [
         CommonModule, ReactiveFormsModule,
         MatCardModule, MatButtonModule, MatIconModule, MatChipsModule,
-        MatFormFieldModule, MatInputModule, MatSelectModule, MatAutocompleteModule,
+        MatAutocompleteModule,
         MatSnackBarModule, MatTooltipModule, CdkDrag, CdkDropList,
         SearchableSelectComponent,
     ],
