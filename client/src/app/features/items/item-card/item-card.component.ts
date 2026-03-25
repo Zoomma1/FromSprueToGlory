@@ -12,6 +12,9 @@ import { STATUS_LABELS, STATUS_ORDER } from '../../../classes/item.constants';
 })
 export class ItemCardComponent {
     item = input.required<Item>();
+    showEdit = input(true);
+    deleteIcon = input('delete');
+    compactMode = input(false);
 
     statusChange = output<{ item: Item; direction: 'prev' | 'next' }>();
     edit = output<Item>();
