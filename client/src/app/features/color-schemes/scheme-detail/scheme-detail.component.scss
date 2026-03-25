@@ -1,4 +1,4 @@
-// ─── Header ──────────────────────────────────
+// Header
 .detail-header {
     display: flex;
     align-items: flex-start;
@@ -56,7 +56,7 @@
     line-height: 1;
 }
 
-// ─── Shared buttons ──────────────────────────
+// Buttons
 .btn {
     display: inline-flex;
     align-items: center;
@@ -114,7 +114,7 @@
     }
 }
 
-// ─── View Mode ───────────────────────────────
+// View mode
 .action-bar {
     display: flex;
     gap: 0.75rem;
@@ -165,7 +165,7 @@
     }
 }
 
-// ─── Steps header + filter ───────────────────
+// Steps header
 .steps-header {
     display: flex;
     align-items: center;
@@ -215,7 +215,7 @@
     }
 }
 
-// ─── Step cards (view mode) ──────────────────
+// Step cards
 .steps-list {
     display: flex;
     flex-direction: column;
@@ -351,7 +351,7 @@
     }
 }
 
-// ─── Edit Mode ───────────────────────────────
+// Edit mode
 .edit-mode {
     display: flex;
     flex-direction: column;
@@ -445,9 +445,6 @@ select.field-input {
     }
 }
 
-.full-width {
-    width: 100%;
-}
 
 .steps-section-header {
     display: flex;
@@ -564,7 +561,7 @@ select.field-input {
     gap: 0.5rem;
 }
 
-// ─── Add paint inline form ───────────────────
+// Add paint form
 .add-paint-form {
     background: var(--color-surface);
     border: 1px solid rgba(#d4a34a, 0.2);
@@ -595,7 +592,7 @@ select.field-input {
     justify-content: flex-end;
 }
 
-// ─── Edit actions ────────────────────────────
+// Edit actions
 .edit-actions {
     display: flex;
     justify-content: flex-end;
@@ -606,7 +603,7 @@ select.field-input {
 }
 
 
-// ─── Loading ─────────────────────────────────
+// Loading
 .loading-state {
     text-align: center;
     padding: 4rem;
