@@ -63,6 +63,7 @@ interface AppOptions {
 
 export function createApp(options: AppOptions = {}) {
     const app = express();
+    app.set('trust proxy', 1); // Trust first proxy, used to handle cloudflare and secure cookies in production
 
     // ─── Security middleware ───────────────────
     app.use(helmet());
