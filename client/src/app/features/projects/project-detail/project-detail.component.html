@@ -1,121 +1,117 @@
 @if (project(); as proj) {
-<div class="detail-header">
-    <button mat-icon-button (click)="goBack()" matTooltip="Back to projects">
-        <mat-icon>arrow_back</mat-icon>
+
+  <!-- Breadcrumb nav -->
+  <div class="detail-nav">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
     </button>
-    <div class="header-info">
-        <h1>{{ proj.name }}</h1>
-        @if (proj.description) {
-        <p class="project-desc">{{ proj.description }}</p>
-        }
+    <span class="detail-nav__breadcrumb">Back to projects</span>
+  </div>
+
+  <!-- Hero section -->
+  <section class="project-hero">
+    <div class="project-hero__info">
+      <h2 class="project-hero__name">{{ proj.name }}</h2>
+      @if (proj.description) {
+        <p class="project-hero__desc">{{ proj.description }}</p>
+      }
     </div>
-</div>
-
-<div class="progress-section">
-    <div class="progress-header">
-        <span class="progress-label">Overall Completion</span>
-        <span class="progress-value">{{ proj.completion }}%</span>
+    <div class="project-hero__gauge">
+      <div class="project-hero__gauge-labels">
+        <span class="project-hero__gauge-label">Overall Completion</span>
+        <span class="project-hero__gauge-value">
+          {{ proj.completion }}<span class="project-hero__gauge-unit">%</span>
+        </span>
+      </div>
+      <div class="project-hero__progress-track">
+        <div class="project-hero__progress-fill" [style.width.%]="proj.completion"></div>
+        <div class="project-hero__progress-dividers">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
     </div>
-    <mat-progress-bar mode="determinate" [value]="proj.completion"
-        [color]="proj.completion === 100 ? 'accent' : 'primary'">
-    </mat-progress-bar>
-</div>
+  </section>
 
-@if (toSpendSummary(); as summary) {
-<div class="to-spend-banner">
-    <mat-icon>shopping_cart</mat-icon>
-    <span>To spend : <strong>{{ summary.total | currency:'EUR':'symbol':'1.0-2' }}</strong></span>
-    @if (summary.missing > 0) {
-    <span class="missing-hint">
-        ({{ summary.missing }} item{{ summary.missing > 1 ? 's' : '' }} without price)
-    </span>
-    }
-</div>
-}
+  <!-- To Spend banner -->
+  @if (toSpendSummary(); as summary) {
+    <div class="to-spend-banner">
+      <mat-icon class="to-spend-banner__icon">account_balance_wallet</mat-icon>
+      <div class="to-spend-banner__body">
+        <span class="to-spend-banner__label">To Spend</span>
+        <span class="to-spend-banner__amount">{{ summary.total | currency:'EUR':'symbol':'1.0-2' }}</span>
+      </div>
+      @if (summary.missing > 0) {
+        <span class="to-spend-banner__hint">
+          {{ summary.missing }} item{{ summary.missing > 1 ? 's' : '' }} without price
+        </span>
+      }
+    </div>
+  }
 
-<div class="section-header">
-    <h2>Items ({{ proj.items?.length || 0 }})</h2>
-    <button mat-stroked-button (click)="toggleAssignPanel()">
-        <mat-icon>{{ showAssignPanel() ? 'close' : 'add' }}</mat-icon>
-        {{ showAssignPanel() ? 'Close' : 'Add Items' }}
+  <!-- Section header -->
+  <div class="section-header">
+    <h3 class="section-header__title">
+      <span class="section-header__accent"></span>
+      Items ({{ proj.items?.length || 0 }})
+    </h3>
+    <button class="btn-assign" (click)="toggleAssignPanel()" [class.btn-assign--open]="showAssignPanel()">
+      <mat-icon>{{ showAssignPanel() ? 'close' : 'add' }}</mat-icon>
+      {{ showAssignPanel() ? 'Close' : 'Add Items' }}
     </button>
-</div>
+  </div>
 
-<!-- Assign Panel -->
-@if (showAssignPanel()) {
-<mat-card class="create-and-assign-panel">
-    <mat-card-header>
-        <mat-card-title>Create a new item to add to the project !</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <button mat-stroked-button class="new-item-button" color="primary" (click)="openCreateDialog()">
-        <mat-icon>add_circle</mat-icon>
-        Create & Add New Item
-      </button>
-    </mat-card-content>
-</mat-card>
-<mat-card class="assign-panel">
-    <mat-card-header>
-        <mat-card-title>Available Items</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        @if (unassignedItems().length === 0) {
-        <p class="muted">No unassigned items available please create or buy some new ones your pile of shame shouldn't be empty you filthy heretic !</p>
-        }
-        @for (item of unassignedItems(); track item.id) {
-        <div class="assign-row">
-            <span>{{ item.name }}</span>
-            <span class="assign-meta">{{ item.faction?.name }}</span>
-            <button mat-icon-button color="primary" (click)="assignItem(item.id)" matTooltip="Add to project">
+  <!-- Assign panel -->
+  @if (showAssignPanel()) {
+    <div class="assign-panel">
+      <div class="assign-panel__create">
+        <button class="btn-create-item" (click)="openCreateDialog()">
+          <mat-icon>add_circle</mat-icon>
+          Create &amp; Add New Item
+        </button>
+      </div>
+      @if (unassignedItems().length > 0) {
+        <div class="assign-panel__list">
+          @for (item of unassignedItems(); track item.id) {
+            <div class="assign-row">
+              <span class="assign-row__name">{{ item.name }}</span>
+              <span class="assign-row__meta">{{ item.faction?.name }}</span>
+              <button mat-icon-button (click)="assignItem(item.id)" matTooltip="Add to project">
                 <mat-icon>add_circle</mat-icon>
-            </button>
+              </button>
+            </div>
+          }
         </div>
-        }
-    </mat-card-content>
-</mat-card>
-}
+      } @else {
+        <p class="assign-panel__empty">
+          No unassigned items available — create or buy some,
+          your pile of shame shouldn't be empty, you filthy heretic!
+        </p>
+      }
+    </div>
+  }
 
-<!-- Project Items -->
-<div class="items-list">
+  <!-- Items list -->
+  <div class="items-list">
     @for (item of proj.items; track item.id) {
-    <mat-card class="item-row-card">
-        <div class="item-row">
-            <div class="item-info">
-                <span class="item-name">{{ item.name }}</span>
-                <span class="item-meta">{{ item.faction?.name }} · x{{ item.quantity }}</span>
-            </div>
-            <div class="item-status-controls">
-                <span class="status-badge" [attr.data-status]="item.status" [matMenuTriggerFor]="statusMenu">
-                    {{ getStatusLabel(item.status) }}
-                </span>
-                <mat-menu #statusMenu="matMenu">
-                    @for (s of statuses; track s) {
-                    <button mat-menu-item [disabled]="item.status === s" (click)="setStatus(item, s)">
-                        {{ statusLabels[s] }}
-                    </button>
-                    }
-                </mat-menu>
-                @if (canAdvance(item)) {
-                <button mat-icon-button (click)="nextStatus(item)" matTooltip="Next status">
-                    <mat-icon>arrow_forward</mat-icon>
-                </button>
-                }
-            </div>
-            <button mat-icon-button color="warn" (click)="unassignItem(item.id)" matTooltip="Remove from project">
-                <mat-icon>remove_circle_outline</mat-icon>
-            </button>
-        </div>
-    </mat-card>
+      <app-item-card
+        [item]="item"
+        [showEdit]="false"
+        [deleteIcon]="'link_off'"
+        [compactMode]="true"
+        (statusChange)="onStatusChange($event)"
+        (delete)="unassignItem($event.id)" />
     }
-</div>
+  </div>
 
-@if (!proj.items?.length) {
-<div class="empty-state">
-    <mat-icon class="empty-icon">inventory_2</mat-icon>
-    <h3>No items in this project</h3>
-    <p>Click "Add Items" above to assign items to this project</p>
-</div>
-}
+  <!-- Empty state -->
+  @if (!proj.items?.length) {
+    <div class="empty-state">
+      <mat-icon class="empty-state__icon">inventory_2</mat-icon>
+      <h3 class="empty-state__title">No items in this project</h3>
+      <p class="empty-state__hint">Click "Add Items" above to assign items to this project</p>
+    </div>
+  }
+
 } @else {
-<div class="loading-state">Loading...</div>
+  <div class="loading-state">Loading...</div>
 }

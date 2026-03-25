@@ -1,216 +1,362 @@
-.detail-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 16px;
+// ─── Breadcrumb nav ───────────────────────────────────────────────────────────
+.detail-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 32px;
 
-    h1 {
-        margin: 0;
-        color: #d4a34a;
-        font-size: 1.5rem;
-    }
-
-    .project-desc {
-        color: #999;
-        margin: 4px 0 0;
-        font-size: 0.9rem;
-    }
+  &__breadcrumb {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-secondary);
+  }
 }
 
-.progress-section {
-    margin-bottom: 24px;
-}
+// ─── Hero section ─────────────────────────────────────────────────────────────
+.project-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  background: var(--color-surface);
+  border-radius: 4px;
+  margin-bottom: var(--gap-card);
 
-.progress-header {
-    display: flex;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 6px;
-}
+  }
 
-.progress-label {
-    font-size: 0.85rem;
-    color: #888;
-}
+  &__info {
+    flex: 1;
+  }
 
-.progress-value {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #d4a34a;
-}
+  &__name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0 0 12px;
+  }
 
-.to-spend-banner {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #1a2a1a;
-    border: 1px solid #2a4a2a;
-    border-radius: 8px;
-    padding: 10px 16px;
-    margin-bottom: 20px;
-    color: #ccc;
+  &__desc {
+    margin: 0;
+    color: var(--color-text-secondary);
     font-size: 0.95rem;
+    line-height: 1.6;
+  }
 
-    mat-icon {
-        color: #4caf50;
-        font-size: 20px;
-        height: 20px;
-        width: 20px;
+  &__gauge {
+    width: 100%;
+
+    @media (min-width: 768px) {
+      width: 280px;
+      flex-shrink: 0;
     }
+  }
 
-    strong {
-        color: #4caf50;
-    }
-
-    .missing-hint {
-        color: #888;
-        font-size: 0.8rem;
-    }
-}
-
-.section-header {
+  &__gauge-labels {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
+    align-items: flex-end;
+    margin-bottom: 8px;
+  }
 
-    h2 {
-        margin: 0;
-        color: #d4a34a;
-        font-size: 1.1rem;
+  &__gauge-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-text-secondary);
+  }
+
+  &__gauge-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 2.5rem;
+    color: var(--color-gold);
+    line-height: 1;
+  }
+
+  &__gauge-unit {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.5;
+  }
+
+  &__progress-track {
+    height: 10px;
+    background: var(--color-surface-high);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-orange), var(--color-orange-strong));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  &__progress-dividers {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-around;
+    pointer-events: none;
+
+    span {
+      display: block;
+      width: 1px;
+      height: 100%;
+      background: var(--color-bg);
+      opacity: 0.4;
     }
+  }
 }
 
-.assign-panel, .create-and-assign-panel {
-    background: #1a1a2e;
-    border: 1px solid #2a2a4a;
+// ─── To Spend banner ──────────────────────────────────────────────────────────
+.to-spend-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--color-surface-high), var(--color-surface));
+  border-left: 4px solid var(--color-orange-strong);
+  border-radius: 4px;
+  margin-bottom: var(--gap-card);
+
+  &__icon {
+    color: var(--color-orange-strong);
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  &__label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-orange-strong);
+  }
+
+  &__amount {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--color-text);
+  }
+
+  &__hint {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-left: auto;
+  }
+}
+
+// ─── Section header ───────────────────────────────────────────────────────────
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text);
+  }
+
+  &__accent {
+    display: block;
+    width: 4px;
+    height: 18px;
+    background: var(--color-orange-strong);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+}
+
+.btn-assign {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--color-orange), var(--color-orange-strong));
+  color: #1a0a00;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+
+  &:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &--open {
+    background: var(--color-surface-high);
+    color: var(--color-text-secondary);
+  }
+}
+
+// ─── Assign panel ─────────────────────────────────────────────────────────────
+.assign-panel {
+  background: var(--color-surface);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: var(--gap-card);
+
+  &__create {
     margin-bottom: 16px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__empty {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+}
+
+.btn-create-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, var(--color-orange), var(--color-orange-strong));
+  color: #1a0a00;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 .assign-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 0;
-    border-bottom: 1px solid #2a2a4a;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--color-surface-low);
+  border-radius: 4px;
+  transition: background 0.15s ease;
 
-    span:first-child {
-        flex: 1;
-    }
-}
+  &:hover {
+    background: var(--color-surface-high);
+  }
 
-.assign-meta {
-    color: #888;
-    font-size: 0.8rem;
-}
-
-.muted {
-    color: #666;
-    font-style: italic;
-}
-
-.items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.item-row-card {
-    background: #1e1e2e;
-    border: 1px solid #2a2a4a;
-}
-
-.item-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 16px;
-}
-
-.item-info {
+  &__name {
     flex: 1;
-    min-width: 0;
-}
+    font-size: 0.9rem;
+  }
 
-.item-name {
-    display: block;
-    font-weight: 500;
-}
-
-.item-meta {
-    display: block;
-    font-size: 0.8rem;
-    color: #888;
-}
-
-.item-status-controls {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 12px;
+  &__meta {
     font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    cursor: pointer;
-    user-select: none;
-
-    &:hover {
-        filter: brightness(1.15);
-    }
-
-    &[data-status="WANT"] {
-        background: #2196f3;
-        color: white;
-    }
-
-    &[data-status="BOUGHT"] {
-        background: #ff9800;
-        color: white;
-    }
-
-    &[data-status="ASSEMBLED"] {
-        background: #9c27b0;
-        color: white;
-    }
-
-    &[data-status="WIP"] {
-        background: #f44336;
-        color: white;
-    }
-
-    &[data-status="FINISHED"] {
-        background: #4caf50;
-        color: white;
-    }
+    color: var(--color-text-secondary);
+  }
 }
 
+// ─── Items list ───────────────────────────────────────────────────────────────
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-card);
+}
+
+// ─── Empty state ──────────────────────────────────────────────────────────────
 .empty-state {
-    text-align: center;
-    padding: 48px 16px;
-    color: #888;
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--color-text-secondary);
 
-    .empty-icon {
-        font-size: 48px;
-        height: 48px;
-        width: 48px;
-        opacity: 0.3;
-    }
+  &__icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    opacity: 0.3;
+    display: block;
+    margin: 0 auto 16px;
+  }
 
-    h3 {
-        color: #d4a34a;
-    }
+  &__title {
+    color: var(--color-gold);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: 0.85rem;
+  }
 }
 
+// ─── Loading state ────────────────────────────────────────────────────────────
 .loading-state {
-    text-align: center;
-    padding: 64px;
-    color: #888;
-}
-
-.new-item-button {
-  margin-top: 16px;
+  text-align: center;
+  padding: 64px;
+  color: var(--color-text-secondary);
 }
