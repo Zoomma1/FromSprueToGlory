@@ -2,10 +2,13 @@
 
 <!-- ─── Header ─────────────────────────────── -->
 <div class="detail-header">
-    <button mat-icon-button (click)="goBack()" matTooltip="Back">
+    <button class="back-btn" (click)="goBack()" matTooltip="Back">
         <mat-icon>arrow_back</mat-icon>
     </button>
-    <h1>{{ createMode() ? 'New Scheme' : editMode() ? 'Editing: ' + s.name : s.name }}</h1>
+    <div class="header-text">
+        <span class="header-subtitle">Color Scheme</span>
+        <h1 class="header-title">{{ createMode() ? 'New Scheme' : editMode() ? 'Editing: ' + s.name : s.name }}</h1>
+    </div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -13,78 +16,78 @@
 <!-- ═══════════════════════════════════════════ -->
 @if (!editMode()) {
 <div class="view-mode">
+
+    <!-- Action bar -->
     <div class="action-bar">
-        <button mat-raised-button color="primary" (click)="enterEditMode()">
+        <button class="btn btn--primary" (click)="enterEditMode()">
             <mat-icon>edit</mat-icon> Edit
         </button>
-        <button mat-stroked-button (click)="duplicate()">
+        <button class="btn btn--ghost" (click)="duplicate()">
             <mat-icon>content_copy</mat-icon> Duplicate
         </button>
-        <button mat-stroked-button color="warn" (click)="deleteScheme()">
+        <button class="btn btn--ghost btn--warn" (click)="deleteScheme()">
             <mat-icon>delete</mat-icon> Delete
         </button>
     </div>
 
+    <!-- Description + details toggle -->
     @if (s.description) {
-    <p class="scheme-description">{{ s.description }}</p>
+    <div class="description-block">
+        <p class="scheme-description">{{ s.description }}</p>
+    </div>
     }
-
-    <button mat-button class="details-toggle" (click)="toggleDetails()">
-        <mat-icon>{{ showDetails() ? 'expand_less' : 'expand_more' }}</mat-icon>
+    <button class="details-toggle" (click)="toggleDetails()">
         {{ showDetails() ? 'Hide details' : 'Show details' }}
+        <mat-icon>{{ showDetails() ? 'expand_less' : 'expand_more' }}</mat-icon>
     </button>
 
-    <h2 class="section-title">Steps ({{ filteredSteps().length }}/{{ s.steps?.length || 0 }})</h2>
-
-    @if (availableAreas.length > 1) {
-    <mat-chip-listbox class="area-filter" aria-label="Filter by area">
-        <mat-chip-option
-            [selected]="areaFilter() === ''"
-            (click)="resetAreaFilter()">
-            All
-        </mat-chip-option>
-        @for (area of availableAreas; track area) {
-        <mat-chip-option
-            [selected]="areaFilter() === area"
-            (click)="setAreaFilter(area)">
-            {{ area }}
-        </mat-chip-option>
+    <!-- Steps header + area filter -->
+    <div class="steps-header">
+        <h2 class="section-title">Steps ({{ filteredSteps().length }}/{{ s.steps?.length || 0 }})</h2>
+        @if (availableAreas.length > 1) {
+        <div class="area-filter">
+            <button class="filter-chip" [class.filter-chip--active]="areaFilter() === ''" (click)="resetAreaFilter()">All</button>
+            @for (area of availableAreas; track area) {
+            <button class="filter-chip" [class.filter-chip--active]="areaFilter() === area" (click)="setAreaFilter(area)">{{ area }}</button>
+            }
+        </div>
         }
-    </mat-chip-listbox>
-    }
+    </div>
 
+    <!-- Steps list -->
     <div class="steps-list">
-        @for (step of filteredSteps(); track $index; let i = $index) {
-        <mat-card class="step-card">
-              <div class="step-body-left" [class.no-notes]="!step.notes">
-                  <div class="step-number">{{ step.orderIndex }}</div>
-                  <div class="step-main">
-                      <span class="step-area">{{ step.area }}</span>
-                      <span class="step-technique">{{ step.technique?.name }}</span>
-                  </div>
-                  @if (step.paint || step.userCustomPaint) {
-                  <span class="step-paint">
-                      🎨 {{ step.paint?.name || step.userCustomPaint?.name }}
-                  </span>
-                  }
-                  @if (showDetails() && step.paint?.brand) {
-                  <span class="step-brand">Brand: {{ step!.paint!.brand.name }}</span>
-                  }
-                  @if (showDetails() && step.userCustomPaint) {
-                  <span class="step-brand">Brand: Other (custom)</span>
-                  }
-              </div>
-              @if (step.notes) {
-              <div class="step-body-right" >
-                  <span class="step-notes">Notes :<br> {{step.notes || ""}} </span>
-              </div>
-              }
-        </mat-card>
+        @for (step of filteredSteps(); track $index) {
+        <div class="step-card">
+            <div class="step-number">{{ step.orderIndex }}</div>
+            <div class="step-main">
+                <div class="step-line-1">
+                    <span class="step-area">{{ step.area }}</span>
+                    <span class="step-dot"></span>
+                    <span class="step-technique">{{ step.technique?.name }}</span>
+                </div>
+                @if (step.paint || step.userCustomPaint) {
+                <div class="step-paint">🎨 {{ step.paint?.name || step.userCustomPaint?.name }}</div>
+                }
+                @if (showDetails() && step.paint?.brand) {
+                <div class="step-brand">Brand: {{ step!.paint!.brand.name }}</div>
+                }
+                @if (showDetails() && step.userCustomPaint) {
+                <div class="step-brand">Brand: Other (custom)</div>
+                }
+            </div>
+            @if (step.notes) {
+            <div class="step-notes-block">
+                <span class="notes-label">Notes</span>
+                <p class="step-notes">{{ step.notes }}</p>
+            </div>
+            }
+        </div>
         }
     </div>
 
     @if (!s.steps?.length) {
     <div class="empty-steps">
+        <mat-icon>palette</mat-icon>
         <p>No steps yet. Click Edit to add painting steps.</p>
     </div>
     }
@@ -97,33 +100,39 @@
 @if (editMode()) {
 <div class="edit-mode">
     <form [formGroup]="form">
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="name">
-        </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description" rows="2"></textarea>
-        </mat-form-field>
+        <div class="form-field-group">
+            <label class="form-label">Scheme Name</label>
+            <mat-form-field appearance="outline" class="full-width">
+                <input matInput formControlName="name" placeholder="e.g. Grimdark Blood Angels">
+            </mat-form-field>
+        </div>
 
-        <h3 class="steps-title">
-            Steps
-            <button mat-mini-fab color="primary" (click)="addStep()" type="button">
+        <div class="form-field-group">
+            <label class="form-label">Description</label>
+            <mat-form-field appearance="outline" class="full-width">
+                <textarea matInput formControlName="description" rows="2" placeholder="Describe this painting recipe..."></textarea>
+            </mat-form-field>
+        </div>
+
+        <div class="steps-section-header">
+            <h3 class="steps-title">Steps</h3>
+            <button class="add-step-btn" (click)="addStep()" type="button">
                 <mat-icon>add</mat-icon>
             </button>
-        </h3>
+        </div>
 
-        <div formArrayName="steps" cdkDropList (cdkDropListDropped)="reorderStep($event)">
+        <div formArrayName="steps" cdkDropList (cdkDropListDropped)="reorderStep($event)" class="steps-form-list">
             @for (step of stepsArray.controls; track $index; let i = $index) {
             <div [formGroupName]="i" class="step-row" cdkDrag>
-                <div class="step-header">
+                <div class="step-row-header">
                     <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
                     <span class="step-num">Step {{ i + 1 }}</span>
-                    <button mat-icon-button color="warn" (click)="removeStep(i)" type="button">
+                    <button class="remove-btn" (click)="removeStep(i)" type="button">
                         <mat-icon>close</mat-icon>
                     </button>
                 </div>
+
                 <div class="step-fields">
                     <mat-form-field appearance="outline">
                         <mat-label>Area</mat-label>
@@ -140,12 +149,11 @@
                         class="brand-filter"
                         [options]="availableBrands()"
                         [displayFn]="brandDisplayFn"
-                        label="Filter paints by brand"
+                        label="Filter by brand"
                         nullOptionLabel="All brands"
                         [value]="getBrandFilterOrNull(i)"
                         (valueChange)="onBrandFilterChange($event, i)">
                     </app-searchable-select>
-<!--                  Not using the app-searchable select due to the add paint              -->
                     <mat-form-field appearance="outline">
                         <mat-label>Paint</mat-label>
                         <input matInput
@@ -197,8 +205,8 @@
                         </mat-form-field>
                     </div>
                     <div class="add-paint-actions">
-                        <button mat-button type="button" (click)="cancelAddPaint()">Cancel</button>
-                        <button mat-raised-button color="primary" type="button"
+                        <button class="btn btn--ghost" type="button" (click)="cancelAddPaint()">Cancel</button>
+                        <button class="btn btn--primary" type="button"
                             (click)="submitCustomPaint(i)"
                             [disabled]="addPaintForm.invalid">
                             Add
@@ -217,10 +225,10 @@
     </form>
 
     <div class="edit-actions">
-        <button mat-button (click)="cancelEdit()">Cancel</button>
-        <button mat-raised-button color="primary" (click)="save()"
+        <button class="btn btn--ghost" (click)="cancelEdit()">Cancel</button>
+        <button class="btn btn--primary" (click)="save()"
             [disabled]="form.invalid || stepsArray.length === 0 || saving()">
-            {{ createMode() ? 'Create' : 'Save' }}
+            {{ createMode() ? 'Create' : 'Save Changes' }}
         </button>
     </div>
 </div>

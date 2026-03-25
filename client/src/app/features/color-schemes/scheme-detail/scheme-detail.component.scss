@@ -1,204 +1,578 @@
+// ─── Header ──────────────────────────────────
 .detail-header {
     display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
 
-    h1 {
-        margin: 0;
-        color: #d4a34a;
+    &:hover {
+        background: var(--color-surface);
+    }
+
+    mat-icon {
         font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
     }
 }
 
-// ─── View Mode ──────────────────────────────
-.view-mode {
-    .action-bar {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-bottom: 16px;
-    }
+.header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
 
-    .scheme-description {
-        color: #999;
-        margin: 0 0 12px;
-    }
+.header-subtitle {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--color-text-secondary);
+    opacity: 0.6;
+}
 
-    .meta-chips {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 12px;
-    }
+.header-title {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    color: var(--color-gold);
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
 
-    .details-toggle {
-        margin-bottom: 8px;
-    }
+// ─── Shared buttons ──────────────────────────
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
 
-    .section-title {
-        color: #d4a34a;
+    mat-icon {
         font-size: 1.1rem;
-        margin: 16px 0 12px;
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
+
+    &--primary {
+        background: var(--color-orange-strong);
+        color: #131313;
+
+        &:hover {
+            filter: brightness(1.1);
+        }
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    }
+
+    &--ghost {
+        background: none;
+        color: var(--color-text);
+        border: 1px solid rgba(#554434, 0.6);
+
+        &:hover {
+            background: var(--color-surface);
+        }
+    }
+
+    &--warn {
+        color: var(--color-warn);
+        border-color: rgba(#f44336, 0.3);
+
+        &:hover {
+            background: rgba(#f44336, 0.08);
+        }
     }
 }
 
+// ─── View Mode ───────────────────────────────
+.action-bar {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.description-block {
+    margin-bottom: 0.75rem;
+    padding-left: 2rem;
+    border-left: 2px solid rgba(#d4a34a, 0.2);
+    max-width: 56rem;
+}
+
+.scheme-description {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.details-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.6;
+    margin-bottom: 2.5rem;
+    padding: 0;
+    transition: opacity 0.2s ease, color 0.2s ease;
+
+    &:hover {
+        opacity: 1;
+        color: var(--color-gold);
+    }
+
+    mat-icon {
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+    }
+}
+
+// ─── Steps header + filter ───────────────────
+.steps-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(#333344, 0.3);
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    margin: 0;
+    color: var(--color-gold);
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+
+.area-filter {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-chip {
+    padding: 0.35rem 1rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border: none;
+    cursor: pointer;
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+        background: var(--color-surface-high);
+        color: var(--color-text);
+    }
+
+    &--active {
+        background: var(--color-gold);
+        color: #131313;
+    }
+}
+
+// ─── Step cards (view mode) ──────────────────
 .steps-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 1rem;
 }
 
 .step-card {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    padding: 12px 16px;
-    background: #1e1e2e;
+    gap: 2rem;
+    padding: 1.5rem;
+    background: var(--color-surface);
     border: 1px solid #2a2a4a;
-    flex-direction: row;
-    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
 }
 
 .step-number {
-    width: 28px;
-    height: 28px;
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
-    background: #d4a34a;
-    color: #121212;
+    border: 2px solid var(--color-gold);
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--color-gold);
     font-weight: 700;
-    font-size: 0.85rem;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.step-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.step-body-left {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-self: flex-start;
-}
-
-.step-body-left.no-notes {
-  grid-template-columns: 1fr;
-}
-
-.step-body-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  text-align: left;
-  width: 75%;
+    font-size: 1.125rem;
 }
 
 .step-main {
+    flex: 1;
     display: flex;
-    gap: 8px;
-    align-items: baseline;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+.step-line-1 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
     flex-wrap: wrap;
 }
 
 .step-area {
-    font-weight: 500;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    letter-spacing: 0.02em;
+}
+
+.step-dot {
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: 50%;
+    background: var(--color-text-secondary);
+    opacity: 0.4;
+    flex-shrink: 0;
 }
 
 .step-technique {
-    color: #aaa;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
     font-style: italic;
 }
 
 .step-paint {
-    display: block;
-    font-size: 0.85rem;
-    margin-top: 4px;
-}
-
-.step-notes {
-    font-size: 0.8rem;
-    margin: 4px 0 0;
-    text-align: left;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text);
 }
 
 .step-brand {
-    display: block;
     font-size: 0.75rem;
-    color: #666;
-    margin-top: 2px;
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+}
+
+.step-notes-block {
+    flex: 1;
+    border-left: 1px solid rgba(#333344, 0.4);
+    padding-left: 2rem;
+    min-height: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    @media (max-width: 640px) {
+        border-left: none;
+        padding-left: 0;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(#333344, 0.4);
+        grid-column: 1 / -1;
+    }
+}
+
+.notes-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-text-secondary);
+    opacity: 0.6;
+}
+
+.step-notes {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
 }
 
 .empty-steps {
     text-align: center;
-    padding: 32px;
-    color: #888;
+    padding: 3rem 1rem;
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+
+    mat-icon {
+        font-size: 3rem;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    p {
+        margin: 0;
+    }
 }
 
-// ─── Edit Mode ──────────────────────────────
+// ─── Edit Mode ───────────────────────────────
 .edit-mode {
-    .full-width {
-        width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.form-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-gold);
+}
+
+.full-width {
+    width: 100%;
+}
+
+.steps-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0 1rem;
+}
+
+.steps-title {
+    margin: 0;
+    color: var(--color-gold);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.add-step-btn {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--color-orange-strong);
+    color: #131313;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(#ff9800, 0.2);
+
+    &:hover {
+        opacity: 0.9;
     }
 
-    .steps-title {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: #d4a34a;
-        margin: 16px 0 12px;
+    &:active {
+        transform: scale(0.9);
     }
 
-    .step-row {
-        background: #1a1a2e;
-        border: 1px solid #2a2a4a;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 8px;
-    }
-
-    .step-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-    }
-
-    .drag-handle {
-        cursor: move;
-        color: #666;
-    }
-
-    .step-num {
-        flex: 1;
-        font-weight: 500;
-        color: #d4a34a;
-    }
-
-    .step-fields {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 8px;
-    }
-
-    .edit-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 16px;
+    mat-icon {
+        font-size: 1.25rem;
+        width: 1.25rem;
+        height: 1.25rem;
     }
 }
 
+.steps-form-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.step-row {
+    background: #1c1b1b;
+    border: 1px solid #2a2a2a;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.step-row-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: var(--color-text-secondary);
+    opacity: 0.3;
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+.step-num {
+    flex: 1;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-gold);
+}
+
+.remove-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-warn);
+    opacity: 0.6;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    transition: opacity 0.2s ease, background 0.2s ease;
+
+    &:hover {
+        opacity: 1;
+        background: rgba(#f44336, 0.1);
+    }
+
+    mat-icon {
+        font-size: 1.25rem;
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}
+
+.step-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.5rem;
+}
+
+// ─── Add paint inline form ───────────────────
+.add-paint-form {
+    background: var(--color-surface);
+    border: 1px solid rgba(#d4a34a, 0.2);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.add-paint-title {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-gold);
+}
+
+.add-paint-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.5rem;
+}
+
+.add-paint-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+// ─── Edit actions ────────────────────────────
+.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(#554434, 0.15);
+}
+
+// ─── Mat form field overrides ────────────────
+::ng-deep .scheme-detail-scope,
+:host {
+    .mat-mdc-form-field {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+            border-color: rgba(#333344, 0.8) !important;
+        }
+
+        &:hover .mdc-notched-outline__leading,
+        &:hover .mdc-notched-outline__notch,
+        &:hover .mdc-notched-outline__trailing {
+            border-color: rgba(#d4a34a, 0.5) !important;
+        }
+
+        &.mat-focused .mdc-notched-outline__leading,
+        &.mat-focused .mdc-notched-outline__notch,
+        &.mat-focused .mdc-notched-outline__trailing {
+            border-color: var(--color-gold) !important;
+        }
+
+        .mat-mdc-form-field-label,
+        .mdc-floating-label {
+            color: var(--color-text-secondary) !important;
+        }
+
+        input, textarea {
+            color: var(--color-text) !important;
+        }
+    }
+}
+
+// ─── Loading ─────────────────────────────────
 .loading-state {
     text-align: center;
-    padding: 64px;
-    color: #888;
+    padding: 4rem;
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
 }
