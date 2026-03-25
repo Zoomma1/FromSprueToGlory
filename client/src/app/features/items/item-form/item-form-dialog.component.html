@@ -72,7 +72,7 @@
     </div>
 
     <div class="field-group">
-      <label class="field-label">Tags</label>
+      <label class="field-label" for="item-tag">Tags</label>
       <div class="field-chips">
         <mat-chip-grid #chipGrid>
           @for (tag of tags(); track tag) {
@@ -84,6 +84,7 @@
         </mat-chip-grid>
         <input
           class="chip-input"
+          id="item-tag"
           placeholder="Add a tag..."
           [matChipInputFor]="chipGrid"
           [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
