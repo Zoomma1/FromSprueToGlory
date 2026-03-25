@@ -71,6 +71,27 @@
                 placeholder="Painting notes, assembly tips..."></textarea>
     </div>
 
+    <div class="field-group">
+      <label class="field-label">Tags</label>
+      <div class="field-chips">
+        <mat-chip-grid #chipGrid>
+          @for (tag of tags(); track tag) {
+            <mat-chip-row (removed)="removeTag(tag)">
+              {{ tag }}
+              <button matChipRemove aria-label="Remove tag">✕</button>
+            </mat-chip-row>
+          }
+        </mat-chip-grid>
+        <input
+          class="chip-input"
+          placeholder="Add a tag..."
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+          (matChipInputTokenEnd)="onTagInput($event)"
+        >
+      </div>
+    </div>
+
   </form>
 </mat-dialog-content>
 
