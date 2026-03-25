@@ -358,19 +358,91 @@
     gap: 0;
 }
 
-.form-field-group {
+.field-group {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 8px;
     margin-bottom: 0.5rem;
 }
 
-.form-label {
+.field-label {
     font-size: 0.625rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: var(--color-gold);
+}
+
+.field-input {
+    background: #1c1b1b;
+    border: none;
+    border-left: 3px solid var(--color-gold);
+    color: var(--color-text);
+    font-size: 0.875rem;
+    padding: 12px 16px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    font-family: inherit;
+
+    &::placeholder {
+        color: var(--color-text-secondary);
+        opacity: 0.6;
+    }
+
+    &:focus {
+        border-left-color: var(--color-orange-strong);
+    }
+}
+
+select.field-input {
+    appearance: none;
+    cursor: pointer;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23d4a34a'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+
+    option {
+        background: #1c1b1b;
+        color: var(--color-text);
+    }
+}
+
+.field-textarea {
+    resize: vertical;
+    min-height: 4rem;
+}
+
+.field-input-wrapper {
+    position: relative;
+
+    .field-input {
+        padding-right: 2.5rem;
+    }
+}
+
+.clear-btn {
+    position: absolute;
+    right: 0.25rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+
+    &:hover {
+        color: var(--color-text);
+    }
+
+    mat-icon {
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+    }
 }
 
 .full-width {
@@ -533,38 +605,6 @@
     border-top: 1px solid rgba(#554434, 0.15);
 }
 
-// ─── Mat form field overrides ────────────────
-::ng-deep .scheme-detail-scope,
-:host {
-    .mat-mdc-form-field {
-        .mdc-notched-outline__leading,
-        .mdc-notched-outline__notch,
-        .mdc-notched-outline__trailing {
-            border-color: rgba(#333344, 0.8) !important;
-        }
-
-        &:hover .mdc-notched-outline__leading,
-        &:hover .mdc-notched-outline__notch,
-        &:hover .mdc-notched-outline__trailing {
-            border-color: rgba(#d4a34a, 0.5) !important;
-        }
-
-        &.mat-focused .mdc-notched-outline__leading,
-        &.mat-focused .mdc-notched-outline__notch,
-        &.mat-focused .mdc-notched-outline__trailing {
-            border-color: var(--color-gold) !important;
-        }
-
-        .mat-mdc-form-field-label,
-        .mdc-floating-label {
-            color: var(--color-text-secondary) !important;
-        }
-
-        input, textarea {
-            color: var(--color-text) !important;
-        }
-    }
-}
 
 // ─── Loading ─────────────────────────────────
 .loading-state {

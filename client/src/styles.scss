@@ -123,6 +123,33 @@ button, a, .mat-button, .mat-icon-button, .clickable {
   }
 }
 
+// ─── Field input state colors ────────────────────────────
+// empty + pristine : red tint  |  filled + pristine : neutral  |  dirty : orange tint
+// !important needed to override Angular's component-scoped [_ngcontent-xxx] specificity
+.field-input {
+  // empty (placeholder visible) and not yet touched → red
+  &:placeholder-shown:not(.ng-dirty) {
+    background: rgba(180, 50, 50, 0.15) !important;
+  }
+
+  // filled (no placeholder shown) and pristine → neutral, no background override
+  &:not(:placeholder-shown):not(.ng-dirty) {
+    background: transparent !important;
+  }
+
+  // user has edited the field → orange
+  &.ng-dirty {
+    background: rgba(255, 152, 0, 0.08) !important;
+  }
+}
+
+// select has no :placeholder-shown — only dirty state
+select.field-input {
+  &.ng-dirty {
+    background-color: rgba(255, 152, 0, 0.08) !important;
+  }
+}
+
 // ─── Utility classes ─────────────────────────────────────
 .container {
   width: 100%;
