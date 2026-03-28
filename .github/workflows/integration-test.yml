@@ -97,3 +97,17 @@ jobs:
       - name: Audit all dependencies (server - warning only)
         run: npm audit || true
         working-directory: ./server
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [build_backend, run_frontend_test, security_audit]
+    if: always()
+
+    steps:
+      - name: Send Telegram notification
+        run: |
+          STATUS=${{ needs.build_backend.result == 'success' && needs.run_frontend_test.result == 'success' && needs.security_audit.result == 'success' && 'success' || 'failure' }}
+          curl -X POST https://ec2c-89-29-46-248.ngrok-free.app/webhook/f5fd20f1-7cda-4ecb-ac1f-aa97fe33c352 \
+            -H "Content-Type: application/json" \
+            -d "{\"status\":\"$STATUS\",\"branch\":\"${{ github.ref_name }}\",\"commit\":\"${{ github.sha }}\",\"run_url\":\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            || true # ngrok URL is temporary and may be unavailable — notification failure must not break the CI
