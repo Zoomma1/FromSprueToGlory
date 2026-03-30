@@ -39,7 +39,7 @@ describe('ItemFormDialogComponent', () => {
         apiSpy.getGameSystems.and.returnValue(of([]));
         apiSpy.getProjects.and.returnValue(of([]));
         apiSpy.getFactions.and.returnValue(of([]));
-        apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
+        apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false }));
 
         if (spySetup) spySetup(apiSpy);
 

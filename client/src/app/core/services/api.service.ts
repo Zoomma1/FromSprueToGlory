@@ -168,8 +168,12 @@ export class ApiService {
     }
 
     //  User Profile
-    getMe(): Observable<{ id: string; email: string; currency: string }> {
-        return this.http.get<{ id: string; email: string; currency: string }>(`${this.baseUrl}/users/me`);
+    getMe(): Observable<{ id: string; email: string; currency: string, hasGoogleLinked: boolean }> {
+        return this.http.get<{ id: string; email: string; currency: string, hasGoogleLinked: boolean }>(`${this.baseUrl}/users/me`);
+    }
+
+    linkGoogle(): Observable<{ redirectUrl: string }> {
+        return this.http.post<{ redirectUrl: string }>(`${this.baseUrl}/users/me/google-link`, {  });
     }
 
     updateCurrency(currency: string): Observable<{ id: string; email: string; currency: string }> {
