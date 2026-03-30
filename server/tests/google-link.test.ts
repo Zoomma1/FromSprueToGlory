@@ -12,6 +12,7 @@ import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
 import * as authService from '../src/services/auth.service';
+import { resolveGoogleLinkIntent } from '../src/routes/users.routes';
 
 // ─── Mock Prisma ─────────────────────────────────────────
 
@@ -124,7 +125,7 @@ describe('Google Link Feature', () => {
             expect(res.body.redirectUrl).toContain('/api/auth/google');
         });
 
-        it('sets a google_link_intent cookie containing the authenticated userId', async () => {
+        it('sets a google_link_intent cookie containing an opaque token (not the userId)', async () => {
             const res = await request(app)
                 .post('/api/users/me/google-link')
                 .set('Authorization', AUTH);
@@ -132,10 +133,26 @@ describe('Google Link Feature', () => {
             const cookies = getCookies(res);
             const linkCookie = cookies.find(c => c.startsWith('google_link_intent='));
             expect(linkCookie).toBeDefined();
-            expect(linkCookie).toContain('user-1');
+            // Cookie must NOT contain the raw userId
+            expect(linkCookie).not.toContain('user-1');
+            // Token is a 64-char hex string (32 random bytes)
+            const token = linkCookie!.split(';')[0].split('=')[1];
+            expect(token).toMatch(/^[0-9a-f]{64}$/);
         });
 
-        it('uses the userId from the token — not from the request body', async () => {
+        it('resolveGoogleLinkIntent maps the token to the authenticated userId', async () => {
+            const res = await request(app)
+                .post('/api/users/me/google-link')
+                .set('Authorization', AUTH);
+
+            const cookies = getCookies(res);
+            const linkCookie = cookies.find(c => c.startsWith('google_link_intent='));
+            const token = linkCookie!.split(';')[0].split('=')[1];
+
+            expect(resolveGoogleLinkIntent(token)).toBe('user-1');
+        });
+
+        it('does not map an attacker-supplied userId — mapping is derived from the token', async () => {
             const res = await request(app)
                 .post('/api/users/me/google-link')
                 .set('Authorization', AUTH)
@@ -143,8 +160,10 @@ describe('Google Link Feature', () => {
 
             const cookies = getCookies(res);
             const linkCookie = cookies.find(c => c.startsWith('google_link_intent='));
-            expect(linkCookie).toContain('user-1');
-            expect(linkCookie).not.toContain('attacker-id');
+            const token = linkCookie!.split(';')[0].split('=')[1];
+
+            expect(resolveGoogleLinkIntent(token)).toBe('user-1');
+            expect(resolveGoogleLinkIntent(token)).not.toBe('attacker-id');
         });
 
         it('sets the cookie with a short maxAge (5 minutes)', async () => {
