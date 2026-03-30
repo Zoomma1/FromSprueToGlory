@@ -169,7 +169,9 @@ model Paint {
   brand PaintBrand @relation(fields: [brandId], references: [id])
 
   // Used in color scheme steps
-  colorSchemeSteps ColorSchemeStep[]
+  colorSchemeSteps     ColorSchemeStep[]
+  similarities         SimilarPaint[]    @relation("PaintSimilarities")
+  similarPaintBackrefs SimilarPaint[]    @relation("SimilarPaintBackref")
 
   @@unique([name, brandId]) // no duplicate paint names within a brand
   @@index([brandId])
@@ -325,4 +327,18 @@ model ColorSchemeStep {
   @@unique([colorSchemeId, orderIndex]) // enforce unique order within a scheme
   @@index([colorSchemeId])
   @@map("color_scheme_steps")
+}
+
+// ─── Similar Paints (for suggesting alternatives) ─────────
+model SimilarPaint {
+  paintId        String
+  similarPaintId String
+  source         String? // ex. "Scale75 forum", "Reddit"
+
+  paint        Paint @relation("PaintSimilarities", fields: [paintId], references: [id], onDelete: Cascade)
+  similarPaint Paint @relation("SimilarPaintBackref", fields: [similarPaintId], references: [id], onDelete: Cascade)
+
+  @@id([paintId, similarPaintId])
+  @@index([paintId])
+  @@map("similar_paints")
 }

@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
     { label: 'My Items', icon: 'inventory_2', route: '/items' },
     { label: 'Projects', icon: 'folder_special', route: '/projects' },
     { label: 'Color Schemes', icon: 'palette', route: '/color-schemes' },
+    { label: 'Paint Converter', icon: 'find_replace', route: '/paint-converter' },
     { label: 'Settings', icon: 'settings', route: '/settings' },
   ];
 

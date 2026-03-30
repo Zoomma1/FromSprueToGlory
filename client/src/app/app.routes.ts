@@ -76,5 +76,13 @@ export const routes: Routes = [
             import('./features/settings/settings.component').then((m) => m.SettingsComponent),
         canActivate: [authGuard],
     },
+    {
+        path: 'paint-converter',
+        loadComponent: () =>
+            import('./features/color-schemes/paint-converter/paint-converter.component').then(
+                (m) => m.PaintConverterComponent,
+            ),
+        canActivate: [authGuard],
+    },
     { path: '**', redirectTo: '/dashboard' },
 ];

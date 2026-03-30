@@ -6,7 +6,7 @@ import { GameSystem } from '../../classes/game-system';
 import { Faction } from '../../classes/factions';
 import { Model } from '../../classes/model';
 import { PaintBrand } from '../../classes/paint-brand';
-import { Paint } from '../../classes/paint';
+import { Paint, SimilarPaint, PaintWithEquivalents } from '../../classes/paint';
 import { Technique } from '../../classes/technique';
 import { Item, ItemPayload, ItemStatusHistory } from '../../classes/items';
 import { ColorScheme, ColorSchemePayload, ColorSchemeFull } from '../../classes/color-scheme';
@@ -47,6 +47,14 @@ export class ApiService {
 
     getTechniques(): Observable<Technique[]> {
         return this.http.get<Technique[]>(`${this.baseUrl}/reference/techniques`);
+    }
+
+    getSimilarPaints(paintId: string): Observable<SimilarPaint[]> {
+        return this.http.get<SimilarPaint[]>(`${this.baseUrl}/reference/paints/${paintId}/similar`);
+    }
+
+    getAllSimilarPaints(): Observable<PaintWithEquivalents[]> {
+        return this.http.get<PaintWithEquivalents[]>(`${this.baseUrl}/reference/similar-paints`);
     }
 
     //  Items

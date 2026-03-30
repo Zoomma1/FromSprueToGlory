@@ -68,6 +68,24 @@ router.get(
     }),
 );
 
+// GET /api/reference/similar-paints
+router.get(
+    '/similar-paints',
+    asyncHandler(async (_req, res) => {
+        const rows = await referenceService.getAllSimilarPaints();
+        res.json(rows);
+    }),
+);
+
+// GET /api/reference/paints/:id/similar
+router.get(
+    '/paints/:id/similar',
+    asyncHandler(async (req, res) => {
+        const similarPaints = await referenceService.getSimilarPaints(req.params.id);
+        res.json(similarPaints);
+    }),
+);
+
 // GET /api/reference/techniques
 router.get(
     '/techniques',
