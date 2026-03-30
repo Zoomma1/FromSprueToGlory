@@ -10,7 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { ApiService } from '../../../core/services/api.service';
-import { Paint, PaintWithEquivalents, SimilarPaint } from '../../../classes/paint';
+import { Paint, PaintWithEquivalents } from '../../../classes/paint';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
