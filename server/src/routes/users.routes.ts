@@ -40,4 +40,20 @@ router.patch(
     }),
 );
 
+// ─── POST /api/users/me/google-link ─────────────────────────────
+
+router.post(
+    '/me/google-link',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        res.cookie('google_link_intent', JSON.stringify(userId), {
+          httpOnly: true,
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 5 * 60 * 1000, // 5 minutes — transit only
+        });
+        res.json({redirectUrl: '/api/auth/google'});
+    }),
+);
+
 export default router;

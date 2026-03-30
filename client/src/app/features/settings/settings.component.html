@@ -23,6 +23,29 @@
 
   <div class="settings-section">
     <div class="section-header">
+      <h2 class="section-title">Connected Accounts</h2>
+    </div>
+    <div class="section-content">
+      @if (hasGoogleLinked()) {
+        <p class="section-meta">
+          <span class="meta-label">Google</span>
+          <span class="meta-value">Account linked</span>
+        </p>
+      } @else {
+        <p class="section-description">Link your Google account to sign in faster.</p>
+      }
+    </div>
+    @if (!hasGoogleLinked()) {
+      <div class="section-actions">
+        <button class="btn-action" (click)="linkGoogle()">
+          <mat-icon>link</mat-icon> Link Google account
+        </button>
+      </div>
+    }
+  </div>
+
+  <div class="settings-section">
+    <div class="section-header">
       <h2 class="section-title">Preferred Currency</h2>
     </div>
     <div class="section-content">

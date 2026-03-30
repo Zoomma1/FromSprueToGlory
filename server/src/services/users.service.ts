@@ -5,7 +5,7 @@
 import { prisma } from '../lib/prisma';
 import { NotFoundError } from '../lib/errors';
 
-const userSelect = { id: true, email: true, currency: true };
+const userSelect = { id: true, email: true, currency: true, googleId: true };
 
 // ─── getProfile ───────────────────────────────────────────
 
@@ -15,15 +15,18 @@ export async function getProfile(userId: string) {
         select: userSelect,
     });
     if (!user) throw new NotFoundError('User not found');
-    return user;
+    const { googleId, ...rest } = user;
+    return { ...rest, hasGoogleLinked: !!googleId };
 }
 
 // ─── updateCurrency ───────────────────────────────────────
 
 export async function updateCurrency(userId: string, currency: string) {
-    return prisma.user.update({
+    const user = await prisma.user.update({
         where: { id: userId },
         data: { currency },
         select: userSelect,
     });
+    const { googleId, ...rest } = user;
+    return { ...rest, hasGoogleLinked: !!googleId };
 }

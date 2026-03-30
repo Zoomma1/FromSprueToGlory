@@ -27,10 +27,14 @@ export class SettingsComponent implements OnInit {
     readonly CURRENCIES = CURRENCIES;
     selectedCurrency = signal('EUR');
     savingCurrency = signal(false);
+    hasGoogleLinked = signal(false);
 
     ngOnInit() {
         this.api.getMe().subscribe({
-            next: (profile) => this.selectedCurrency.set(profile.currency),
+            next: (profile) => {
+              this.selectedCurrency.set(profile.currency);
+              this.hasGoogleLinked.set(profile.hasGoogleLinked)
+            },
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             error: () => {},
         });
@@ -86,6 +90,21 @@ export class SettingsComponent implements OnInit {
                 this.snackBar.open('Failed to delete account', 'OK', { duration: 3000 });
             },
         });
+    }
+
+    linkGoogle() {
+        this.api.linkGoogle().subscribe({
+            next: (res) => {
+                this.navigateTo(res.redirectUrl);
+            },
+            error: () => {
+                this.snackBar.open('Failed to link Google account', 'OK', { duration: 3000 });
+            },
+        });
+    }
+
+    navigateTo(url: string) {
+      window.location.href = url;
     }
 
     private download(blob: Blob, filename: string) {
