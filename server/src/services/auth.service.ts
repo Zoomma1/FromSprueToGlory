@@ -152,6 +152,25 @@ export async function handleGoogleCallback(googleId: string, email: string) {
     return issueToken(payload);
 }
 
+// ─── linkGoogle ───────────────────────────────────────────────
+
+export async function linkGoogle(userId: string, googleId: string) {
+    const existing = await prisma.user.findUnique({ where: { googleId } });
+    if (existing && userId !== existing.id) {
+        throw new ConflictError('This Google account is already linked to another user');
+    }
+
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { googleId },
+        select: { id: true, email: true },
+    });
+
+    const payload = { userId: updatedUser.id, email: updatedUser.email };
+
+    return issueToken(payload);
+}
+
 
 // ─── Helper function ───────────────────────────────────────────────
 

@@ -15,7 +15,7 @@ describe('SettingsComponent', () => {
   let authServiceStub: Partial<AuthService> & { logout: jasmine.Spy };
 
   beforeEach(async () => {
-    apiSpy = jasmine.createSpyObj('ApiService', ['exportItems', 'deleteAccount', 'getMe', 'updateCurrency']);
+    apiSpy = jasmine.createSpyObj('ApiService', ['exportItems', 'deleteAccount', 'getMe', 'updateCurrency', 'linkGoogle']);
     snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
     authServiceStub = {
       ...jasmine.createSpyObj('AuthService', ['logout']),
@@ -30,7 +30,7 @@ describe('SettingsComponent', () => {
     ];
     const mockData = JSON.parse(JSON.stringify(mockItems));
     apiSpy.exportItems.and.returnValue(of(mockData));
-    apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
+    apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false }));
     apiSpy.updateCurrency.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
 
     await TestBed.configureTestingModule({
@@ -141,7 +141,7 @@ describe('SettingsComponent', () => {
 
   describe('Currency preference', () => {
     it('should call getMe on init and set selectedCurrency', () => {
-      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'GBP' }));
+      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'GBP', hasGoogleLinked: false }));
       component.ngOnInit();
       expect(apiSpy.getMe).toHaveBeenCalled();
       expect(component.selectedCurrency()).toBe('GBP');
@@ -180,6 +180,49 @@ describe('SettingsComponent', () => {
       apiSpy.updateCurrency.and.returnValue(throwError(() => new Error('fail')));
       component.saveCurrency();
       expect(component.savingCurrency()).toBeFalse();
+    });
+  });
+
+  describe('Google link — ngOnInit', () => {
+    it('should set hasGoogleLinked to false when getMe returns false', () => {
+      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false }));
+      component.ngOnInit();
+      expect(component.hasGoogleLinked()).toBeFalse();
+    });
+
+    it('should set hasGoogleLinked to true when getMe returns true', () => {
+      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: true }));
+      component.ngOnInit();
+      expect(component.hasGoogleLinked()).toBeTrue();
+    });
+
+    it('should default hasGoogleLinked to false when getMe fails', () => {
+      apiSpy.getMe.and.returnValue(throwError(() => new Error('fail')));
+      component.ngOnInit();
+      expect(component.hasGoogleLinked()).toBeFalse();
+    });
+  });
+
+  describe('Google link — linkGoogle()', () => {
+    beforeEach(() => {
+      apiSpy.linkGoogle.and.returnValue(of({ redirectUrl: 'http://localhost:3000/api/auth/google' }));
+      spyOn(component, 'navigateTo');
+    });
+
+    it('should call api.linkGoogle()', () => {
+      component.linkGoogle();
+      expect(apiSpy.linkGoogle).toHaveBeenCalled();
+    });
+
+    it('should redirect to the returned URL', () => {
+      component.linkGoogle();
+      expect(component.navigateTo).toHaveBeenCalledWith('http://localhost:3000/api/auth/google');
+    });
+
+    it('should show error snackbar when linkGoogle fails', () => {
+      apiSpy.linkGoogle.and.returnValue(throwError(() => new Error('fail')));
+      component.linkGoogle();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to link Google account', 'OK', { duration: 3000 });
     });
   });
 

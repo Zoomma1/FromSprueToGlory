@@ -233,6 +233,58 @@ async function seedReferenceData() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// 🎨 Similar Paints (safe for prod — fully idempotent)
+// ═══════════════════════════════════════════════════════════
+
+async function seedSimilarPaints() {
+    console.log('\n🎨 Seeding similar paints...\n');
+
+    type SimilarPaintEntry = {
+        paintName: string;
+        paintBrand: string;
+        similarPaintName: string;
+        similarPaintBrand: string;
+        source: string;
+    };
+
+    const similarPaintsData: SimilarPaintEntry[] = JSON.parse(
+        fs.readFileSync(path.resolve(__dirname, '../data/similar-paints.json'), 'utf-8'),
+    );
+
+    // Build lookup once: "brandSlug:name_lowercase" → paint id
+    const allPaints = await prisma.paint.findMany({
+        select: { id: true, name: true, brand: { select: { slug: true } } },
+    });
+
+    const paintLookup = new Map<string, string>();
+    for (const paint of allPaints) {
+        paintLookup.set(`${paint.brand.slug}:${paint.name.toLowerCase()}`, paint.id);
+    }
+
+    let count = 0;
+    let skipped = 0;
+
+    for (const entry of similarPaintsData) {
+        const paintId = paintLookup.get(`${entry.paintBrand}:${entry.paintName.toLowerCase()}`);
+        const similarPaintId = paintLookup.get(`${entry.similarPaintBrand}:${entry.similarPaintName.toLowerCase()}`);
+
+        if (!paintId || !similarPaintId) {
+            skipped++;
+            continue;
+        }
+
+        await prisma.similarPaint.upsert({
+            where: { paintId_similarPaintId: { paintId, similarPaintId } },
+            update: { source: entry.source },
+            create: { paintId, similarPaintId, source: entry.source },
+        });
+        count++;
+    }
+
+    console.log(`✅ Similar paints: ${count} seeded (${skipped} skipped — paint not found in DB)`);
+}
+
+// ═══════════════════════════════════════════════════════════
 // 🧪 Test Data (local dev only — never run in prod)
 // ═══════════════════════════════════════════════════════════
 
@@ -556,6 +608,7 @@ async function main() {
     console.log('🌱 Seeding database...\n');
 
     await seedReferenceData();
+    await seedSimilarPaints();
 
     if (addTestData) {
         await seedTestData();

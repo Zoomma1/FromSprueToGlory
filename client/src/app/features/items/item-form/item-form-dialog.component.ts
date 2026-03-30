@@ -13,6 +13,10 @@ import { Model } from '../../../classes/model';
 import { Project } from '../../../classes/project';
 import { ItemPayload } from '../../../classes/items';
 import {ITEM_STATUSES, CURRENCIES} from '../../../classes/item.constants';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Observable } from 'rxjs';
+import { MatChipsModule, MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
     selector: 'app-item-form-dialog',
@@ -21,6 +25,7 @@ import {ITEM_STATUSES, CURRENCIES} from '../../../classes/item.constants';
         ReactiveFormsModule,
         MatDialogModule,
         MatSnackBarModule,
+        MatChipsModule,
         SearchableSelectComponent,
     ],
     templateUrl: './item-form-dialog.component.html',
@@ -39,7 +44,7 @@ export class ItemFormDialogComponent implements OnInit {
     projects = signal<Project[]>([]);
     saving = signal(false);
 
-    readonly gameSystemDisplayFn = (gs: GameSystem) => gs.name;
+  readonly gameSystemDisplayFn = (gs: GameSystem) => gs.name;
     readonly factionDisplayFn = (f: Faction) => f.name;
     readonly projectDisplayFn = (p: Project) => p.name;
 
@@ -55,7 +60,13 @@ export class ItemFormDialogComponent implements OnInit {
         currency: ['EUR'],
         notes: [''],
         project: [null],
+        tags: [[] as string[]],
     });
+
+    tags = toSignal(
+      this.form.get('tags')!.valueChanges as Observable<string[]>,
+      { initialValue: [] as string[] }
+    );
 
     ngOnInit() {
         this.api.getGameSystems().subscribe({
@@ -114,6 +125,7 @@ export class ItemFormDialogComponent implements OnInit {
                 price: item.price,
                 currency: item.currency,
                 notes: item.notes,
+                tags: item.tags,
             });
 
             const gsList = this.gameSystems();
@@ -132,6 +144,17 @@ export class ItemFormDialogComponent implements OnInit {
                 if (proj) this.form.patchValue({ project: proj });
             }
         }
+    }
+
+    addTag(tag: string) {
+        if (tag.trim().length === 0) return;
+        const currentTags = this.tags();
+        if (currentTags.includes(tag)) return;
+        this.form.patchValue({ tags: [...currentTags, tag] });
+    }
+
+    removeTag(tag: string) {
+        this.form.patchValue({ tags: this.tags().filter(t => t !== tag) });
     }
 
     onGameSystemChange(gameSystemId: string) {
@@ -189,6 +212,7 @@ export class ItemFormDialogComponent implements OnInit {
             currency: v.currency,
             notes: v.notes,
             projectId: v.project?.id ?? null,
+            tags: v.tags?.map((x: string) => x.trim()).filter((x: string) => x.length > 0) || [],
         };
 
         const obs = this.data.mode === 'create'
@@ -210,6 +234,12 @@ export class ItemFormDialogComponent implements OnInit {
         });
     }
 
-  protected readonly ITEM_STATUSES = ITEM_STATUSES;
-  protected readonly CURRENCIES = CURRENCIES;
+    onTagInput(event: MatChipInputEvent) {
+        this.addTag(event.value);
+        event.chipInput!.clear();
+    }
+
+    protected readonly ITEM_STATUSES = ITEM_STATUSES;
+    protected readonly CURRENCIES = CURRENCIES;
+    protected readonly separatorKeyCodes = [ENTER, COMMA] as const;
 }

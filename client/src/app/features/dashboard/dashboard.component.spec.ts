@@ -19,7 +19,7 @@ describe('Dashboard', () => {
   beforeEach(async () => {
     apiSpy = jasmine.createSpyObj('ApiService', ['getItems', 'getMe']);
     apiSpy.getItems.and.returnValue(of(mockItems));
-    apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
+    apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false }));
 
     await TestBed.configureTestingModule({
       imports: [ DashboardComponent ],
@@ -54,7 +54,7 @@ describe('Dashboard', () => {
     });
 
     it('should set preferredCurrency from getMe response', () => {
-      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'GBP' }));
+      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'GBP', hasGoogleLinked: false }));
       component.ngOnInit();
       expect(component.preferredCurrency()).toBe('GBP');
     });

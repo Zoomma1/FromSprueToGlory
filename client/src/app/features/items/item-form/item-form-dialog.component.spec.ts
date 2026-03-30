@@ -18,6 +18,7 @@ describe('ItemFormDialogComponent', () => {
             id: 'item-1',
             name: 'Test Item',
             gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+            tags: ['Test Item', 'Test Tag'],
         } as Item,
         {
           id: 'item-2',
@@ -38,7 +39,7 @@ describe('ItemFormDialogComponent', () => {
         apiSpy.getGameSystems.and.returnValue(of([]));
         apiSpy.getProjects.and.returnValue(of([]));
         apiSpy.getFactions.and.returnValue(of([]));
-        apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
+        apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false }));
 
         if (spySetup) spySetup(apiSpy);
 
@@ -305,4 +306,63 @@ describe('ItemFormDialogComponent', () => {
             expect(apiSpy.updateItem).not.toHaveBeenCalled();
         });
   });
+
+    describe('Tags management', () => {
+        it('should initialize tags as empty array in create mode', async () => {
+            await createComponent({ mode: 'create' });
+
+            expect(component.tags()).toEqual([]);
+        });
+
+        it('should initialize tags with item tags in edit mode', async () => {
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+          });
+
+          expect(component.tags()).toEqual(mockItem[0].tags);
+        });
+
+        it('should add a tag when addTag is called with a value', () => {
+            component.addTag('New Tag');
+
+            expect(component.tags()).toContain('New Tag');
+        });
+
+        it('should not add empty or whitespace-only tags', () => {
+            component.addTag('   ');
+
+            expect(component.tags()).not.toContain('   ');
+        });
+
+        it('should remove a tag when removeTag is called', () => {
+            component.form.patchValue({ tags: ['Tag1', 'Tag2'] });
+
+            component.removeTag('Tag1');
+
+            expect(component.tags()).not.toContain('Tag1');
+            expect(component.tags()).toContain('Tag2');
+         });
+
+        it('should include tags in payload on save', async () => {
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+            });
+
+            component.form.patchValue({
+                name: 'Updated Item',
+                gameSystem: { id: 'gs-1', name: 'Warhammer 40k' },
+                faction: { id: 'f-1', name: 'Space Marines' },
+                tags: ['Tag1', 'Tag2'],
+            });
+            apiSpy.updateItem.and.returnValue(of({} as Item));
+
+            component.save();
+
+            expect(apiSpy.updateItem).toHaveBeenCalledWith('item-1', jasmine.objectContaining({
+                tags: ['Tag1', 'Tag2'],
+            }));
+        });
+    });
 });

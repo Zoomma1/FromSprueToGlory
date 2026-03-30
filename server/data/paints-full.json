@@ -8482,5 +8482,755 @@
     "range": "Instant Color",
     "type": "TECHNICAL",
     "code": "SI-48"
+  },
+  {
+    "name": "Model Color Sunset Red",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Brown Rose",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Beige Red",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color German Orange",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Blue Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Royal Purple",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Blue Violet",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Violet Red",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Luftwaffe Uniform WW2",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Red Leather",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Luftwaffe Cam. Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color German Cam. Medium Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Lime Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Amaranth Red",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Salmon Rose",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color London Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Pale Sand",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Emerald",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Light Turquoise",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Andrea Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Cork Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Deep Sky Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Sunny Skintone",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Mahogany Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Bright Orange",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Golden Olive",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Ice Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Glossy Black",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Grey Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Dark Blue Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Dark Sea Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Medium Sea Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Leather Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Chocolate Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Tan Earth",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Brown Sand",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Gold Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Middlestone",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Silver Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Olive Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color USA Olive Drab",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Reflective Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color US Dark Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color German Cam. Extra Dark Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Bronce Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color French Mirage Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Blue Grey Pale",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Orange Red",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Light Orange",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Deep Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Sand Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color English Uniform",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Uniform Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Russian Uniform WW2",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Light Flesh",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Light Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Saddle Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Light Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Grey Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Magenta",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Dark Red",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Lemon Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Yellow Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Clear Orange",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Field Blue",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Turquoise",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Park Green Flat",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Deep Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Grey Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Light Sea Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Desert Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Dark Yellow",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color German Cam. Dark Green",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Cavalry Brown",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Flat Earth",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Model Color Dark Sea Grey",
+    "brandSlug": "vallejo",
+    "range": "Model Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Elf Skintone",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Moon Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Gold Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Hot Orange",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Scarlet Red",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Squid Pink",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Warlord Purple",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Royal Purple",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Magic Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Turquoise",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Foul Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Jade Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Scurvy Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Dark Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Sick Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Camoflage Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Scorpion Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Livery Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Dead Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Bronze Fleshtone",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Filthy Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Scrofulous Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Leather Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Parasite Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Beasty Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Ghost Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Wolf Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Cold Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Black",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Earth",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Terracota",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Glacier Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Verdigris",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Pale Yellow",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Elfic Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Rosy Flesh",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Offwhite",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Skintone",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Red",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Violet",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Blue",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Blue Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Grey",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Green",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Khaki",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Ochre",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Gold Brown",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Orange",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
+  },
+  {
+    "name": "Game Color Heavy Charcoal",
+    "brandSlug": "vallejo",
+    "range": "Game Color",
+    "type": "BASE"
   }
 ]
