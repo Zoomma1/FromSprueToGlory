@@ -81,7 +81,7 @@ router.get(
 router.get(
     '/paints/:id/similar',
     asyncHandler(async (req, res) => {
-        const similarPaints = await referenceService.getSimilarPaints(req.params.id);
+        const similarPaints = await referenceService.getSimilarPaints(req.params.id as string);
         res.json(similarPaints);
     }),
 );
