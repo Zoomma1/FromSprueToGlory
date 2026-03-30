@@ -77,13 +77,12 @@ function parseHeaderTargets(headerRow: string): ColumnTarget[] {
   const thMatches = [...headerRow.matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)];
 
   thMatches.forEach((th, idx) => {
-    // Normalize: strip tags, collapse whitespace, lowercase
-    const text = th[1]
-      .replace(/<br\s*\/?>/gi, ' ')
-      .replace(/<[^>]+>/g, '')
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, ' ');
+    // Normalize: strip tags iteratively (prevents incomplete multi-char sanitization),
+    // collapse whitespace, lowercase
+    let raw = th[1].replace(/<br\s*\/?>/gi, ' ');
+    let prev: string;
+    do { prev = raw; raw = raw.replace(/<[^>]+>/g, ''); } while (raw !== prev);
+    const text = raw.trim().toLowerCase().replace(/\s+/g, ' ');
 
     let brandSlug: string | undefined;
     let rangePrefix = '';
