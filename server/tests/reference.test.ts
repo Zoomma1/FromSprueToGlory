@@ -19,12 +19,13 @@ import { prisma } from '../src/lib/prisma';
 // ─── Mock Prisma ─────────────────────────────────────────
 vi.mock('../src/lib/prisma', () => ({
     prisma: {
-        gameSystem:  { findMany: vi.fn() },
-        faction:     { findMany: vi.fn() },
-        model:       { findMany: vi.fn() },
-        paintBrand:  { findMany: vi.fn() },
-        paint:       { findMany: vi.fn() },
-        technique:   { findMany: vi.fn() },
+        gameSystem:   { findMany: vi.fn() },
+        faction:      { findMany: vi.fn() },
+        model:        { findMany: vi.fn() },
+        paintBrand:   { findMany: vi.fn() },
+        paint:        { findMany: vi.fn() },
+        technique:    { findMany: vi.fn() },
+        similarPaint: { findMany: vi.fn() },
         // Stubs for routes loaded during app creation
         user:             { findUnique: vi.fn(), create: vi.fn() },
         refreshToken:     { create: vi.fn(), findUnique: vi.fn(), delete: vi.fn(), deleteMany: vi.fn() },
@@ -58,6 +59,18 @@ const sampleModel      = { id: 'm-1',  name: 'Intercessor',   factionId: 'f-1' }
 const sampleBrand      = { id: 'b-1',  name: 'Citadel',       slug: 'citadel' };
 const samplePaint      = { id: 'p-1',  name: 'Macragge Blue', brandId: 'b-1', type: 'BASE' };
 const sampleTechnique  = { id: 't-1',  name: 'Layering' };
+const sampleSimilarPaintRow = {
+    paintId: 'p-1',
+    similarPaintId: 'p-2',
+    source: 'redgrimm',
+    similarPaint: {
+        id: 'p-2',
+        name: 'Dead White',
+        type: 'BASE',
+        code: '72.001',
+        brand: { id: 'b-2', name: 'Vallejo', slug: 'vallejo' },
+    },
+};
 
 describe('Reference Routes', () => {
     beforeEach(() => vi.clearAllMocks());
@@ -234,6 +247,110 @@ describe('Reference Routes', () => {
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
+        });
+    });
+
+    // ─── GET /api/reference/paints/:id/similar ───────────
+    describe('GET /api/reference/paints/:id/similar', () => {
+        it('returns similar paints for a given paint id', async () => {
+            (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleSimilarPaintRow]);
+
+            const res = await request(app).get('/api/reference/paints/p-1/similar');
+
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveLength(1);
+            expect(res.body[0]).toMatchObject({
+                id: 'p-2',
+                name: 'Dead White',
+                type: 'BASE',
+                code: '72.001',
+                source: 'redgrimm',
+                brand: { name: 'Vallejo', slug: 'vallejo' },
+            });
+        });
+
+        it('passes the paintId to the query', async () => {
+            (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+            await request(app).get('/api/reference/paints/p-1/similar');
+
+            expect(prisma.similarPaint.findMany).toHaveBeenCalledWith(
+                expect.objectContaining({ where: { paintId: 'p-1' } }),
+            );
+        });
+
+        it('returns an empty list when no similar paints exist', async () => {
+            (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+            const res = await request(app).get('/api/reference/paints/unknown-id/similar');
+
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveLength(0);
+        });
+
+        it('does not require authentication', async () => {
+            (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+            const res = await request(app).get('/api/reference/paints/p-1/similar');
+
+            expect(res.status).toBe(200);
+        });
+    });
+
+    // ─── GET /api/reference/similar-paints ───────────────
+    describe('GET /api/reference/similar-paints', () => {
+        const samplePaintWithEquivalents = {
+            id: 'p-1',
+            name: 'White Scar',
+            code: 'C1',
+            brand: { name: 'Citadel', slug: 'citadel' },
+            similarities: [
+                {
+                    paintId: 'p-1',
+                    similarPaintId: 'p-2',
+                    source: 'redgrimm',
+                    similarPaint: {
+                        id: 'p-2',
+                        name: 'Dead White',
+                        code: '72.001',
+                        brand: { id: 'b-2', name: 'Vallejo', slug: 'vallejo' },
+                    },
+                },
+            ],
+        };
+
+        it('returns all paints that have equivalents, with their equivalents', async () => {
+            (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaintWithEquivalents]);
+
+            const res = await request(app).get('/api/reference/similar-paints');
+
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveLength(1);
+            expect(res.body[0]).toMatchObject({
+                id: 'p-1',
+                name: 'White Scar',
+                brand: { name: 'Citadel', slug: 'citadel' },
+                equivalents: [
+                    { id: 'p-2', name: 'Dead White', code: '72.001', source: 'redgrimm', brand: { name: 'Vallejo', slug: 'vallejo' } },
+                ],
+            });
+        });
+
+        it('returns an empty list when no similar paints exist', async () => {
+            (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+            const res = await request(app).get('/api/reference/similar-paints');
+
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveLength(0);
+        });
+
+        it('does not require authentication', async () => {
+            (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+            const res = await request(app).get('/api/reference/similar-paints');
+
+            expect(res.status).toBe(200);
         });
     });
 

@@ -1,0 +1,101 @@
+<div class="page-header">
+  <div class="page-header-text">
+    <h1 class="page-title">Paint Converter</h1>
+    <p class="page-subtitle">Find equivalents across brands</p>
+  </div>
+</div>
+
+<div class="converter-toolbar">
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-label>Search a paint</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      matInput
+      [ngModel]="searchQuery()"
+      (ngModelChange)="onSearchInput($event)"
+      [matAutocomplete]="auto"
+      placeholder="e.g. Macragge Blue" />
+    @if (searchQuery()) {
+    <button matSuffix mat-icon-button (click)="onSearchInput('')" aria-label="Clear">
+      <mat-icon>close</mat-icon>
+    </button>
+    }
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayPaintName" (optionSelected)="selectPaint($event.option.value)">
+      @for (paint of filteredPaints(); track paint.id) {
+      <mat-option [value]="paint">
+        <span class="autocomplete-paint-name">{{ paint.name }}</span>
+        <span class="autocomplete-brand">{{ paint.brand.name }}</span>
+      </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <div class="toolbar-actions">
+    @if (availableBrands().length > 0) {
+    <div class="brand-selector">
+      <span class="brand-selector-label">Visible brands</span>
+      <div class="brand-checkboxes">
+        @for (brand of availableBrands(); track brand.slug) {
+        <mat-checkbox
+          [checked]="isBrandVisible(brand.slug)"
+          (change)="toggleBrand(brand.slug)"
+          color="primary">
+          {{ brand.name }}
+        </mat-checkbox>
+        }
+      </div>
+    </div>
+    }
+    <button class="toggle-codes-btn" (click)="toggleCodes()">
+      <mat-icon>{{ showCodes() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      {{ showCodes() ? 'Hide codes' : 'Show codes' }}
+    </button>
+  </div>
+</div>
+
+@if (loading()) {
+<div class="loading-state">
+  <mat-spinner diameter="36" />
+</div>
+}
+
+@if (!loading() && displayRows().length > 0) {
+<div class="table-wrapper">
+  <table class="converter-table">
+    <thead>
+      <tr>
+        @for (brand of displayedBrands(); track brand.slug) {
+        <th>{{ brand.name }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of displayRows(); track row.id) {
+      <tr>
+        @for (brand of displayedBrands(); track brand.slug) {
+        <td>
+          @if (getEquivalentForBrand(row, brand.slug); as eq) {
+          <div class="paint-cell">
+            <span class="paint-name">{{ eq.name }}</span>
+            @if (showCodes() && eq.code) {
+            <span class="paint-code">{{ eq.code }}</span>
+            }
+          </div>
+          } @else {
+          <span class="no-equiv">—</span>
+          }
+        </td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+}
+
+@if (!loading() && selectedPaint() && displayRows().length === 0) {
+<div class="empty-state">
+  <mat-icon>find_replace</mat-icon>
+  <p>No equivalents found for <strong>{{ selectedPaint()!.name }}</strong></p>
+</div>
+}

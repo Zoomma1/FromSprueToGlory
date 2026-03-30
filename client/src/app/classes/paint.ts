@@ -15,3 +15,24 @@ export class Paint {
     };
     isCustom?: boolean;
 }
+
+export interface PaintWithEquivalents {
+    id: string;
+    name: string;
+    code: string | null;
+    brand: { name: string; slug: string };
+    equivalents: SimilarPaint[];
+}
+
+export interface SimilarPaint {
+    id: string;
+    name: string;
+    type: string;
+    code: string | null;
+    source: string | null;
+    brand: {
+        id: string;
+        name: string;
+        slug: string;
+    };
+}
