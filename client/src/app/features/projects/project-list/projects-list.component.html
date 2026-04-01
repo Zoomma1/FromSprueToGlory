@@ -29,7 +29,7 @@
         <p class="project-description">{{ project.description }}</p>
         }
 
-        @if (project.tags?.length) {
+        @if (project.tags.length) {
         <div class="project-tags">
             @for (tag of project.tags; track tag) {
             <span class="project-tag">{{ tag }}</span>
