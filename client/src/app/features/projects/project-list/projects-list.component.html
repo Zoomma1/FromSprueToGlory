@@ -11,8 +11,10 @@
     @for (project of projects(); track project.id) {
     <div class="project-card" [routerLink]="['/projects', project.id]">
         <div class="card-header">
-            <div class="project-icon-wrap">
-                <mat-icon class="project-icon">folder</mat-icon>
+            <div class="project-icon-wrap"
+                 [style.background]="project.color ? project.color + '26' : null"
+                 [style.border]="project.color ? '1px solid ' + project.color + '55' : null">
+                <mat-icon class="project-icon" [style.color]="project.color || null">folder</mat-icon>
             </div>
             <div class="project-meta">
                 <h3 class="project-name">{{ project.name }}</h3>
@@ -25,6 +27,14 @@
 
         @if (project.description) {
         <p class="project-description">{{ project.description }}</p>
+        }
+
+        @if (project.tags.length) {
+        <div class="project-tags">
+            @for (tag of project.tags; track tag) {
+            <span class="project-tag">{{ tag }}</span>
+            }
+        </div>
         }
 
         <div class="progress-section">

@@ -65,13 +65,24 @@
                     <span class="step-dot"></span>
                     <span class="step-technique">{{ step.technique?.name }}</span>
                 </div>
-                @if (step.paint || step.userCustomPaint) {
+                @if (step.isMix && step.mixEntries?.length) {
+                <div class="step-mix-entries">
+                    @for (entry of step.mixEntries; track $index) {
+                    <span class="mix-chip">
+                        🎨 {{ entry.paint?.name || entry.userCustomPaint?.name }}
+                        @if (entry.ratio !== null) {
+                        <span class="mix-ratio">{{ entry.ratio }}%</span>
+                        }
+                    </span>
+                    }
+                </div>
+                } @else if (step.paint || step.userCustomPaint) {
                 <div class="step-paint">🎨 {{ step.paint?.name || step.userCustomPaint?.name }}</div>
                 }
-                @if (showDetails() && step.paint?.brand) {
+                @if (showDetails() && !step.isMix && step.paint?.brand) {
                 <div class="step-brand">Brand: {{ step!.paint!.brand.name }}</div>
                 }
-                @if (showDetails() && step.userCustomPaint) {
+                @if (showDetails() && !step.isMix && step.userCustomPaint) {
                 <div class="step-brand">Brand: Other (custom)</div>
                 }
             </div>
@@ -124,6 +135,12 @@
                 <div class="step-row-header">
                     <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
                     <span class="step-num">Step {{ i + 1 }}</span>
+                    <button type="button" class="mix-toggle-btn"
+                        [class.mix-toggle-btn--active]="stepsArray.at(i).get('isMix')?.value"
+                        (click)="toggleIsMix(i)"
+                        matTooltip="Toggle paint mix mode">
+                        Mix
+                    </button>
                     <button class="remove-btn" (click)="removeStep(i)" type="button">
                         <mat-icon>close</mat-icon>
                     </button>
@@ -141,6 +158,17 @@
                         [value]="getTechniqueForStep(i)"
                         (valueChange)="onTechniqueChange($event, i)">
                     </app-searchable-select>
+                </div>
+
+                @if (stepsArray.at(i).get('isMix')?.value) {
+                <app-step-mix-editor
+                    [mixArray]="getMixEntriesArray(i)"
+                    [allPaints]="allPaints()"
+                    [ratioMode]="getRatioMode(i)"
+                    (ratioModeChange)="onRatioModeChange($event, i)">
+                </app-step-mix-editor>
+                } @else {
+                <div class="step-paint-fields">
                     <app-searchable-select
                         class="brand-filter"
                         [options]="availableBrands()"
@@ -179,6 +207,7 @@
                         </mat-autocomplete>
                     </div>
                 </div>
+                }
 
                 @if (addingPaintForStep() === i) {
                 <div class="add-paint-form" [formGroup]="addPaintForm">

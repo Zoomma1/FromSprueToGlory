@@ -14,11 +14,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkDragDrop, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { ApiService } from '../../../core/services/api.service';
-import { ColorSchemeFull, ColorSchemeStepPayload, ColorSchemeStepFull } from '../../../classes/color-scheme';
+import { ColorSchemeFull, ColorSchemeStepPayload, ColorSchemeStepFull, MixEntryPayload } from '../../../classes/color-scheme';
 import { Technique } from '../../../classes/technique';
 import { Paint } from '../../../classes/paint';
 import { UserCustomPaint } from '../../../classes/user-custom-paint';
 import { SearchableSelectComponent } from '../../../shared/searchable-select/searchable-select.component';
+import { StepMixEditorComponent } from './step-mix-editor/step-mix-editor.component';
 
 export const ADD_PAINT_SENTINEL = '__ADD_PAINT__';
 
@@ -35,7 +36,7 @@ export const PAINT_TYPES = [
         MatCardModule, MatButtonModule, MatIconModule, MatChipsModule,
         MatAutocompleteModule,
         MatSnackBarModule, MatTooltipModule, CdkDrag, CdkDropList,
-        SearchableSelectComponent,
+        SearchableSelectComponent, StepMixEditorComponent,
     ],
     templateUrl: './scheme-detail.component.html',
     styleUrl: './scheme-detail.component.scss',
@@ -66,6 +67,9 @@ export class SchemeDetailComponent implements OnInit {
 
     /** Which step index currently has the "Add paint" form open (null = none) */
     addingPaintForStep = signal<number | null>(null);
+
+    /** Per-step ratio display mode — does not affect stored values (always %) */
+    stepRatioModes = signal<Record<number, 'percent' | 'drops'>>({});
 
     filteredSteps = computed(() => {
         const steps = this.scheme()?.steps || [];
@@ -275,6 +279,30 @@ export class SchemeDetailComponent implements OnInit {
         this.paintFilter.set('');
     }
 
+    // ─── Mix Mode ─────────────────────────────────
+    getMixEntriesArray(stepIndex: number): FormArray {
+        return this.stepsArray.at(stepIndex).get('mix') as FormArray;
+    }
+
+    getRatioMode(stepIndex: number): 'percent' | 'drops' {
+        return this.stepRatioModes()[stepIndex] ?? 'percent';
+    }
+
+    onRatioModeChange(mode: 'percent' | 'drops', stepIndex: number): void {
+        this.stepRatioModes.update(modes => ({ ...modes, [stepIndex]: mode }));
+    }
+
+    toggleIsMix(stepIndex: number): void {
+        const step = this.stepsArray.at(stepIndex);
+        const current = step.get('isMix')?.value as boolean;
+        if (!current) {
+            step.patchValue({ isMix: true, paintId: null });
+        } else {
+            step.patchValue({ isMix: false });
+            (step.get('mix') as FormArray).clear();
+        }
+    }
+
     // ─── Custom Paint Form ────────────────────────
     openAddPaintForm(stepIndex: number) {
         this.addPaintForm.reset({ name: '', type: null, notes: '' });
@@ -322,13 +350,24 @@ export class SchemeDetailComponent implements OnInit {
         controls.forEach((c) => this.stepsArray.push(c));
     }
 
-    private createStepGroup(step?: ColorSchemeStepPayload): FormGroup {
-        const paintId = step?.paintId || step?.userCustomPaintId || null;
+    private createStepGroup(step?: ColorSchemeStepFull): FormGroup {
+        const isMix = step?.isMix ?? false;
+        const paintId = !isMix
+            ? (step?.paintId || step?.paint?.id || step?.userCustomPaintId || step?.userCustomPaint?.id || null)
+            : null;
+        const mixEntries = (step?.mixEntries || []).map(e =>
+            this.fb.group({
+                paintId: [e.paintId || e.paint?.id || e.userCustomPaintId || e.userCustomPaint?.id || null],
+                ratio: [e.ratio ?? null],
+            })
+        );
         return this.fb.group({
             area: [step?.area || '', Validators.required],
             techniqueId: [step?.techniqueId || '', Validators.required],
             paintId: [paintId],
             notes: [step?.notes || ''],
+            isMix: [isMix],
+            mix: this.fb.array(mixEntries),
         });
     }
 
@@ -336,19 +375,63 @@ export class SchemeDetailComponent implements OnInit {
         if (this.form.invalid || this.stepsArray.length === 0) return;
         this.saving.set(true);
 
-        interface StepFormValue { area: string; techniqueId: string; paintId?: string | null; notes?: string | null }
+        interface StepFormValue {
+            area: string;
+            techniqueId: string;
+            paintId?: string | null;
+            notes?: string | null;
+            isMix?: boolean;
+            mix?: { paintId: string | null; ratio: number | null }[];
+        }
 
         const customPaintIds = new Set(this.customPaints().map(p => p.id));
 
         const value: { name: string; description?: string | null; steps: ColorSchemeStepPayload[] } = {
             name: this.form.value.name,
             description: this.form.value.description,
-            steps: this.form.value.steps.map((s: StepFormValue, i: number) => {
+            steps: this.form.value.steps.map((s: StepFormValue, i: number): ColorSchemeStepPayload => {
+                if (s.isMix) {
+                    const mixRaw = s.mix || [];
+                    const ratioMode = this.getRatioMode(i);
+                    let mix: MixEntryPayload[];
+                    if (ratioMode === 'drops') {
+                        const total = mixRaw.reduce((acc, m) => acc + (m.ratio ?? 0), 0);
+                        mix = mixRaw.map(m => {
+                            const isCustom = !!m.paintId && customPaintIds.has(m.paintId);
+                            const pct = total > 0 ? Math.round((m.ratio ?? 0) / total * 100) : null;
+                            return {
+                                paintId: isCustom ? null : (m.paintId || null),
+                                userCustomPaintId: isCustom ? m.paintId : null,
+                                ratio: pct,
+                            };
+                        });
+                    } else {
+                        mix = mixRaw.map(m => {
+                            const isCustom = !!m.paintId && customPaintIds.has(m.paintId);
+                            return {
+                                paintId: isCustom ? null : (m.paintId || null),
+                                userCustomPaintId: isCustom ? m.paintId : null,
+                                ratio: m.ratio,
+                            };
+                        });
+                    }
+                    return {
+                        orderIndex: i + 1,
+                        area: s.area,
+                        techniqueId: s.techniqueId,
+                        isMix: true,
+                        paintId: null,
+                        userCustomPaintId: null,
+                        mix,
+                        notes: s.notes || null,
+                    };
+                }
                 const isCustom = !!s.paintId && customPaintIds.has(s.paintId);
                 return {
                     orderIndex: i + 1,
                     area: s.area,
                     techniqueId: s.techniqueId,
+                    isMix: false,
                     paintId: isCustom ? null : (s.paintId || null),
                     userCustomPaintId: isCustom ? s.paintId : null,
                     notes: s.notes || null,
@@ -384,12 +467,29 @@ export class SchemeDetailComponent implements OnInit {
         const data: { name: string; description?: string | null; steps: ColorSchemeStepPayload[] } = {
             name: `${s.name} (copy)`,
             description: s.description,
-            steps: (s.steps || []).map((step: ColorSchemeStepFull, i: number) => {
+            steps: (s.steps || []).map((step: ColorSchemeStepFull, i: number): ColorSchemeStepPayload => {
                 const techniqueId = step.techniqueId || step.technique?.id;
+                if (step.isMix) {
+                    return {
+                        orderIndex: i + 1,
+                        area: step.area,
+                        techniqueId: techniqueId || '',
+                        isMix: true,
+                        paintId: null,
+                        userCustomPaintId: null,
+                        mix: (step.mixEntries || []).map(e => ({
+                            paintId: e.paintId || e.paint?.id || null,
+                            userCustomPaintId: e.userCustomPaintId || e.userCustomPaint?.id || null,
+                            ratio: e.ratio ?? null,
+                        })),
+                        notes: step.notes || null,
+                    };
+                }
                 return {
                     orderIndex: i + 1,
                     area: step.area,
                     techniqueId: techniqueId || '',
+                    isMix: false,
                     paintId: step.paintId || step.paint?.id || null,
                     userCustomPaintId: step.userCustomPaintId || step.userCustomPaint?.id || null,
                     notes: step.notes || null,

@@ -9,6 +9,8 @@ export class Project {
     userId!: string;
     name!: string;
     description!: string | null;
+    color!: string | null;
+    tags!: string[];
     createdAt!: string;
     updatedAt!: string;
     items?: Item[];

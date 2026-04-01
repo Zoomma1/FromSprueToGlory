@@ -56,6 +56,8 @@ model Project {
   userId      String
   name        String
   description String?
+  color       String?
+  tags        String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -170,6 +172,7 @@ model Paint {
 
   // Used in color scheme steps
   colorSchemeSteps     ColorSchemeStep[]
+  colorSchemeStepMixes ColorSchemeStepMix[]
   similarities         SimilarPaint[]    @relation("PaintSimilarities")
   similarPaintBackrefs SimilarPaint[]    @relation("SimilarPaintBackref")
 
@@ -198,8 +201,9 @@ model UserCustomPaint {
   notes     String?
   createdAt DateTime   @default(now())
 
-  user  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  steps ColorSchemeStep[]
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  steps     ColorSchemeStep[]
+  stepMixes ColorSchemeStepMix[]
 
   @@index([userId])
   @@map("user_custom_paints")
@@ -310,23 +314,40 @@ model ColorSchemeStep {
   orderIndex        Int // 1-based, unique per scheme
   area              String // "Armor", "Trim", "Weapon", "Base", etc.
   techniqueId       String
-  paintId           String? // optional: reference paint from shared catalog
-  userCustomPaintId String? // optional: user's own custom paint
-  mix               String? // e.g., "2:1 Paint:Medium" or JSON
+  paintId           String? // optional: reference paint from shared catalog — null when isMix is true
+  userCustomPaintId String? // optional: user's own custom paint — null when isMix is true
+  isMix             Boolean @default(false) // true when the step is a paint mix
   dilution          String? // e.g., "thin", "heavy", "milk consistency"
   tools             String? // e.g., "size 1 brush", "sponge", "airbrush"
   notes             String?
   expectedResult    String? // e.g., "smooth dark blue base"
 
   // Relations
-  colorScheme     ColorScheme      @relation(fields: [colorSchemeId], references: [id], onDelete: Cascade)
-  technique       Technique        @relation(fields: [techniqueId], references: [id])
-  paint           Paint?           @relation(fields: [paintId], references: [id])
-  userCustomPaint UserCustomPaint? @relation(fields: [userCustomPaintId], references: [id])
+  colorScheme     ColorScheme        @relation(fields: [colorSchemeId], references: [id], onDelete: Cascade)
+  technique       Technique          @relation(fields: [techniqueId], references: [id])
+  paint           Paint?             @relation(fields: [paintId], references: [id])
+  userCustomPaint UserCustomPaint?   @relation(fields: [userCustomPaintId], references: [id])
+  mixEntries      ColorSchemeStepMix[]
 
   @@unique([colorSchemeId, orderIndex]) // enforce unique order within a scheme
   @@index([colorSchemeId])
   @@map("color_scheme_steps")
+}
+
+// ─── Color Scheme Step Mix Entries ───────────────────────
+model ColorSchemeStepMix {
+  id                String  @id @default(uuid())
+  stepId            String
+  paintId           String?
+  userCustomPaintId String?
+  ratio             Float?  // percentage 0–100, set by client after converting drops to %
+
+  step            ColorSchemeStep  @relation(fields: [stepId], references: [id], onDelete: Cascade)
+  paint           Paint?           @relation(fields: [paintId], references: [id])
+  userCustomPaint UserCustomPaint? @relation(fields: [userCustomPaintId], references: [id])
+
+  @@index([stepId])
+  @@map("color_scheme_step_mixes")
 }
 
 // ─── Similar Paints (for suggesting alternatives) ─────────

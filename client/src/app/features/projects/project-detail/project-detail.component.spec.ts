@@ -19,6 +19,8 @@ describe(ProjectDetailComponent.name, () => {
         userId: 'user1',
         name: 'Project 1',
         description: 'Test project',
+        color: null,
+        tags: [],
         createdAt: '2026-02-15T00:00:00Z',
         updatedAt: '2026-02-15T00:00:00Z',
         Items: [
