@@ -42,7 +42,7 @@ router.post(
     '/owned/:paintId',
     asyncHandler(async (req, res) => {
         const userId = req.userId as string;
-        const { paintId } = req.params;
+        const paintId = req.params['paintId'] as string;
         await ownedPaintsService.markAsOwned(userId, paintId);
         res.status(201).json({ paintId });
     }),
@@ -54,7 +54,7 @@ router.delete(
     '/owned/:paintId',
     asyncHandler(async (req, res) => {
         const userId = req.userId as string;
-        const { paintId } = req.params;
+        const paintId = req.params['paintId'] as string;
         await ownedPaintsService.removeFromOwned(userId, paintId);
         res.status(204).send();
     }),
@@ -66,7 +66,7 @@ router.post(
     '/wishlist/:paintId',
     asyncHandler(async (req, res) => {
         const userId = req.userId as string;
-        const { paintId } = req.params;
+        const paintId = req.params['paintId'] as string;
         await ownedPaintsService.addToWishlist(userId, paintId);
         res.status(201).json({ paintId });
     }),
@@ -78,7 +78,7 @@ router.delete(
     '/wishlist/:paintId',
     asyncHandler(async (req, res) => {
         const userId = req.userId as string;
-        const { paintId } = req.params;
+        const paintId = req.params['paintId'] as string;
         await ownedPaintsService.removeFromWishlist(userId, paintId);
         res.status(204).send();
     }),
