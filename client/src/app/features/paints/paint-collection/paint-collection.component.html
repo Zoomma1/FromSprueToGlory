@@ -1,0 +1,106 @@
+<div class="page-header">
+  <h1 class="page-title">Arsenal &amp; Pigments</h1>
+</div>
+
+<div class="collection-toolbar">
+  <div class="filter-buttons">
+    <button class="filter-btn" [class.filter-btn--active]="activeFilter() === undefined" (click)="setFilter(undefined)">
+      ALL
+    </button>
+    <button class="filter-btn" [class.filter-btn--active]="activeFilter() === 'owned'" (click)="setFilter('owned')">
+      OWNED ({{ counts().owned }})
+    </button>
+    <button class="filter-btn" [class.filter-btn--active]="activeFilter() === 'need'" (click)="setFilter('need')">
+      NEED ({{ counts().need }})
+    </button>
+    <button class="filter-btn" [class.filter-btn--active]="activeFilter() === 'toBuy'" (click)="setFilter('toBuy')">
+      TO BUY ({{ counts().toBuy }})
+    </button>
+    <button class="filter-btn" [class.filter-btn--active]="activeFilter() === 'notOwned'" (click)="setFilter('notOwned')">
+      NOT OWNED ({{ counts().notOwned }})
+    </button>
+  </div>
+
+  <div class="search-bar">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Filter by name or brand..."
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event)"
+    />
+  </div>
+</div>
+
+<div class="paint-list">
+  @if (loading()) {
+    <div class="empty-state">Loading...</div>
+  } @else if (filteredPaints().length === 0) {
+    <div class="empty-state">No paints match this filter.</div>
+  } @else {
+    @for (paint of filteredPaints(); track paint.id; let i = $index) {
+      <div class="paint-row" [class.paint-row--alt]="i % 2 === 1">
+
+        <div class="paint-info">
+          @if (paint.hex) {
+            <span class="paint-swatch" [style.background-color]="paint.hex"></span>
+          }
+          <div class="paint-meta">
+            <span class="paint-name">{{ paint.name }}</span>
+            <div class="paint-badges">
+              <span class="badge badge--brand">{{ paint.brand.name }}</span>
+              <span class="badge badge--type">{{ paint.type }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="paint-actions">
+          @switch (paint.status) {
+            @case ('owned') {
+              <span class="chip chip--owned">
+                <mat-icon>check_circle</mat-icon> OWNED
+              </span>
+              <button class="btn-ghost btn-sm" (click)="removeFromOwned(paint.id)">REMOVE</button>
+            }
+            @case ('need') {
+              <div class="actions-right">
+                @if (paint.neededForSchemes?.length) {
+                  <span class="chip chip--need">NEEDED FOR: {{ paint.neededForSchemes![0].name }}</span>
+                }
+                <div class="action-buttons">
+                  <button class="btn-primary btn-sm" (click)="markAsOwned(paint.id)">MARK AS OWNED</button>
+                  <button class="btn-ghost btn-sm" (click)="addToWishlist(paint.id)">ADD TO WISHLIST</button>
+                </div>
+                @if (paint.similarOwned?.length) {
+                  <span class="similar-hint">Similar: {{ joinNames(paint.similarOwned!) }}</span>
+                }
+              </div>
+            }
+            @case ('toBuy') {
+              <div class="actions-right">
+                <span class="chip chip--wishlist">IN WISHLIST</span>
+                <div class="action-buttons">
+                  <button class="btn-primary btn-sm" (click)="markAsOwned(paint.id)">MARK AS OWNED</button>
+                  <button class="btn-ghost btn-sm" (click)="removeFromWishlist(paint.id)">REMOVE</button>
+                </div>
+              </div>
+            }
+            @default {
+              <div class="actions-right">
+                <div class="action-buttons">
+                  <button class="btn-primary btn-sm" (click)="markAsOwned(paint.id)">MARK AS OWNED</button>
+                  <button class="btn-ghost btn-sm" (click)="addToWishlist(paint.id)">ADD TO WISHLIST</button>
+                </div>
+                @if (paint.similarOwned?.length) {
+                  <span class="similar-hint">Similar: {{ joinNames(paint.similarOwned!) }}</span>
+                }
+              </div>
+            }
+          }
+        </div>
+
+      </div>
+    }
+  }
+</div>

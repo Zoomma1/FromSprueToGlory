@@ -42,11 +42,13 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations: a user "owns" items, color schemes, projects, and refresh tokens
-  items            Item[]
-  colorSchemes     ColorScheme[]
-  projects         Project[]
-  refreshTokens    RefreshToken[]
-  userCustomPaints UserCustomPaint[]
+  items              Item[]
+  colorSchemes       ColorScheme[]
+  projects           Project[]
+  refreshTokens      RefreshToken[]
+  userCustomPaints   UserCustomPaint[]
+  ownedPaints        UserOwnedPaint[]
+  wishlistPaints     UserWishlistPaint[]
 
   @@map("users") // table name in PostgreSQL
 }
@@ -164,6 +166,7 @@ model Paint {
   id      String    @id @default(uuid())
   name    String
   code    String? // product code (e.g., "21-25")
+  hex     String? // optional HTML color code e.g. "#A30000"
   brandId String
   type    PaintType @default(OTHER)
   notes   String?
@@ -173,8 +176,10 @@ model Paint {
   // Used in color scheme steps
   colorSchemeSteps     ColorSchemeStep[]
   colorSchemeStepMixes ColorSchemeStepMix[]
-  similarities         SimilarPaint[]    @relation("PaintSimilarities")
-  similarPaintBackrefs SimilarPaint[]    @relation("SimilarPaintBackref")
+  similarities         SimilarPaint[]     @relation("PaintSimilarities")
+  similarPaintBackrefs SimilarPaint[]     @relation("SimilarPaintBackref")
+  userOwnedPaints      UserOwnedPaint[]
+  userWishlistPaints   UserWishlistPaint[]
 
   @@unique([name, brandId]) // no duplicate paint names within a brand
   @@index([brandId])
@@ -348,6 +353,34 @@ model ColorSchemeStepMix {
 
   @@index([stepId])
   @@map("color_scheme_step_mixes")
+}
+
+// ─── User Owned Paints ───────────────────────────────────
+model UserOwnedPaint {
+  userId    String
+  paintId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paint Paint @relation(fields: [paintId], references: [id], onDelete: Cascade)
+
+  @@id([userId, paintId])
+  @@index([userId])
+  @@map("user_owned_paints")
+}
+
+// ─── User Wishlist Paints ────────────────────────────────
+model UserWishlistPaint {
+  userId    String
+  paintId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paint Paint @relation(fields: [paintId], references: [id], onDelete: Cascade)
+
+  @@id([userId, paintId])
+  @@index([userId])
+  @@map("user_wishlist_paints")
 }
 
 // ─── Similar Paints (for suggesting alternatives) ─────────

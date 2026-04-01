@@ -6,7 +6,7 @@ import { GameSystem } from '../../classes/game-system';
 import { Faction } from '../../classes/factions';
 import { Model } from '../../classes/model';
 import { PaintBrand } from '../../classes/paint-brand';
-import { Paint, SimilarPaint, PaintWithEquivalents } from '../../classes/paint';
+import { Paint, SimilarPaint, PaintWithEquivalents, PaintCollectionResult, PaintFilter } from '../../classes/paint';
 import { Technique } from '../../classes/technique';
 import { Item, ItemPayload, ItemStatusHistory } from '../../classes/items';
 import { ColorScheme, ColorSchemePayload, ColorSchemeFull } from '../../classes/color-scheme';
@@ -90,6 +90,29 @@ export class ApiService {
 
     getItemHistory(id: string): Observable<ItemStatusHistory[]> {
         return this.http.get<ItemStatusHistory[]>(`${this.baseUrl}/items/${id}/history`);
+    }
+
+    //  Paint Collection (owned / wishlist)
+    getPaintCollection(filter?: PaintFilter): Observable<PaintCollectionResult> {
+        let params = new HttpParams();
+        if (filter) params = params.set('filter', filter);
+        return this.http.get<PaintCollectionResult>(`${this.baseUrl}/paints`, { params });
+    }
+
+    markPaintAsOwned(paintId: string): Observable<{ paintId: string }> {
+        return this.http.post<{ paintId: string }>(`${this.baseUrl}/paints/owned/${paintId}`, {});
+    }
+
+    removePaintFromOwned(paintId: string): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/paints/owned/${paintId}`);
+    }
+
+    addPaintToWishlist(paintId: string): Observable<{ paintId: string }> {
+        return this.http.post<{ paintId: string }>(`${this.baseUrl}/paints/wishlist/${paintId}`, {});
+    }
+
+    removePaintFromWishlist(paintId: string): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/paints/wishlist/${paintId}`);
     }
 
     //  User Custom Paints
