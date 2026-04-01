@@ -1,0 +1,50 @@
+<div class="mix-editor">
+    <div class="mix-header">
+        <span class="mix-label">Mix</span>
+        <button type="button" class="mode-toggle" (click)="toggleRatioMode()">
+            {{ ratioMode() === 'percent' ? '% mode' : 'drops mode' }}
+        </button>
+    </div>
+
+    @for (entry of entries; track $index; let j = $index) {
+    <div class="mix-entry" [formGroup]="entry">
+        <div class="mix-entry-selectors">
+            <app-searchable-select
+                [options]="availableBrands()"
+                [displayFn]="brandDisplayFn"
+                label="Brand"
+                nullOptionLabel="All brands"
+                [value]="getBrandFilterOrNull(j)"
+                (valueChange)="onBrandFilterChange($event, j)">
+            </app-searchable-select>
+            <app-searchable-select
+                [options]="getFilteredPaintsForEntry(j)"
+                [displayFn]="paintDisplayFn"
+                label="Paint"
+                [value]="getPaintForEntry(entry)"
+                (valueChange)="onPaintChange($event, entry)">
+            </app-searchable-select>
+        </div>
+        <div class="mix-entry-ratio">
+            <label [for]="'ratio-' + j" class="ratio-label">
+                {{ ratioMode() === 'percent' ? '%' : 'drops' }}
+            </label>
+            <input [id]="'ratio-' + j" class="ratio-input" type="number" min="0"
+                formControlName="ratio"
+                [placeholder]="ratioMode() === 'percent' ? '0–100' : '#'">
+        </div>
+        <button type="button" class="remove-entry-btn" (click)="removeEntry(j)"
+            title="Remove entry">
+            <mat-icon>remove</mat-icon>
+        </button>
+    </div>
+    }
+
+    @if (entries.length === 0) {
+    <p class="mix-empty">No entries yet.</p>
+    }
+
+    <button type="button" class="add-entry-btn" (click)="addEntry()">
+        <mat-icon>add</mat-icon> Add paint
+    </button>
+</div>

@@ -9,18 +9,55 @@ import { NotFoundError, ValidationError, ForbiddenError } from '../lib/errors';
 
 // ─── Zod Schemas ──────────────────────────────────────────
 
-export const stepSchema = z.object({
-    orderIndex: z.number().int().positive(),
-    area: z.string().min(1),
-    techniqueId: z.string().uuid(),
-    paintId: z.string().uuid().optional().nullable(),
-    userCustomPaintId: z.string().uuid().optional().nullable(),
-    mix: z.string().optional().nullable(),
-    dilution: z.string().optional().nullable(),
-    tools: z.string().optional().nullable(),
-    notes: z.string().optional().nullable(),
-    expectedResult: z.string().optional().nullable(),
-}).strict();
+const mixEntrySchema = z
+    .object({
+        paintId: z.string().uuid().optional().nullable(),
+        userCustomPaintId: z.string().uuid().optional().nullable(),
+        ratio: z.number().min(0).max(100).optional().nullable(),
+    })
+    .strict()
+    .refine((entry) => entry.paintId != null || entry.userCustomPaintId != null, {
+        message: 'Each mix entry must have a paintId or userCustomPaintId',
+    });
+
+export const stepSchema = z
+    .object({
+        orderIndex: z.number().int().positive(),
+        area: z.string().min(1),
+        techniqueId: z.string().uuid(),
+        paintId: z.string().uuid().optional().nullable(),
+        userCustomPaintId: z.string().uuid().optional().nullable(),
+        isMix: z.boolean().default(false),
+        mix: z.array(mixEntrySchema).optional().nullable(),
+        dilution: z.string().optional().nullable(),
+        tools: z.string().optional().nullable(),
+        notes: z.string().optional().nullable(),
+        expectedResult: z.string().optional().nullable(),
+    })
+    .strict()
+    .superRefine((step, ctx) => {
+        if (step.isMix) {
+            if (!step.mix || step.mix.length === 0) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'mix must be a non-empty array when isMix is true',
+                });
+            }
+            if (step.paintId != null || step.userCustomPaintId != null) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'paintId and userCustomPaintId must be null when isMix is true',
+                });
+            }
+        } else {
+            if (step.mix && step.mix.length > 0) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'mix must be absent or empty when isMix is false',
+                });
+            }
+        }
+    });
 
 export const createSchemeSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -36,6 +73,14 @@ export const updateSchemeSchema = createSchemeSchema.partial().extend({
 }).strict();
 
 // ─── Helpers ──────────────────────────────────────────────
+
+function buildStepCreateData(step: z.infer<typeof stepSchema>) {
+    const { mix, ...stepFields } = step;
+    if (step.isMix && mix && mix.length > 0) {
+        return { ...stepFields, mixEntries: { create: mix } };
+    }
+    return stepFields;
+}
 
 function validateStepOrder(steps: z.infer<typeof stepSchema>[]): string | null {
     const indices = steps.map((s) => s.orderIndex).sort((a, b) => a - b);
@@ -75,6 +120,12 @@ export async function getScheme(userId: string, id: string) {
                     technique: true,
                     paint: { include: { brand: { select: { name: true } } } },
                     userCustomPaint: true,
+                    mixEntries: {
+                        include: {
+                            paint: { include: { brand: { select: { name: true } } } },
+                            userCustomPaint: true,
+                        },
+                    },
                 },
             },
             items: { select: { id: true, name: true, status: true } },
@@ -108,7 +159,7 @@ export async function createScheme(userId: string, body: unknown) {
             ...schemeData,
             userId,
             steps: {
-                create: steps,
+                create: steps.map(buildStepCreateData),
             },
         },
         include: {
@@ -147,9 +198,14 @@ export async function updateScheme(userId: string, id: string, body: unknown) {
                 where: { id },
                 data: {
                     ...schemeData,
-                    steps: { create: steps },
+                    steps: { create: steps.map(buildStepCreateData) },
                 },
-                include: { steps: { orderBy: { orderIndex: 'asc' } } },
+                include: {
+                    steps: {
+                        orderBy: { orderIndex: 'asc' },
+                        include: { mixEntries: true },
+                    },
+                },
             });
         });
     }

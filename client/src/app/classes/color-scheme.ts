@@ -17,12 +17,29 @@ export class ColorScheme {
     _count?: { steps: number; items: number };
 }
 
+export interface MixEntryPayload {
+    paintId?: string | null;
+    userCustomPaintId?: string | null;
+    ratio?: number | null;
+}
+
+export interface MixEntryFull {
+    id?: string;
+    paintId?: string | null;
+    userCustomPaintId?: string | null;
+    ratio?: number | null;
+    paint?: Paint | null;
+    userCustomPaint?: UserCustomPaint | null;
+}
+
 export interface ColorSchemeStepPayload {
     orderIndex: number;
     area: string;
     techniqueId: string;
     paintId?: string | null;
     userCustomPaintId?: string | null;
+    isMix?: boolean;
+    mix?: MixEntryPayload[];
     notes?: string | null;
 }
 
@@ -39,6 +56,8 @@ export interface ColorSchemeStepFull {
     techniqueId: string;
     paintId?: string | null;
     userCustomPaintId?: string | null;
+    isMix?: boolean;
+    mixEntries?: MixEntryFull[];
     notes?: string | null;
     technique?: Technique;
     paint?: Paint | null;

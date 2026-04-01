@@ -27,6 +27,9 @@ vi.mock('../src/lib/prisma', () => ({
         colorSchemeStep: {
             deleteMany: vi.fn(),
         },
+        colorSchemeStepMix: {
+            deleteMany: vi.fn(),
+        },
         $transaction: vi.fn(),
         user: { findUnique: vi.fn(), create: vi.fn() },
         refreshToken: { create: vi.fn(), findUnique: vi.fn(), delete: vi.fn(), deleteMany: vi.fn() },
@@ -55,9 +58,22 @@ const AUTH = 'Bearer fake-token';
 
 const TECH_1 = '00000000-0000-0000-0000-000000000001';
 const TECH_2 = '00000000-0000-0000-0000-000000000002';
+const PAINT_1 = '00000000-0000-0000-0000-000000000010';
+const PAINT_2 = '00000000-0000-0000-0000-000000000011';
 
 const validStep1 = { orderIndex: 1, area: 'Armor', techniqueId: TECH_1 };
 const validStep2 = { orderIndex: 2, area: 'Trim',  techniqueId: TECH_2 };
+
+const validMixStep = {
+    orderIndex: 1,
+    area: 'Armor',
+    techniqueId: TECH_1,
+    isMix: true,
+    mix: [
+        { paintId: PAINT_1, ratio: 70 },
+        { paintId: PAINT_2, ratio: 30 },
+    ],
+};
 
 const validSchemePayload = {
     name: 'Ultramarines Blue',
@@ -280,6 +296,126 @@ describe('Color Schemes Routes', () => {
         });
     });
 
+    // ─── POST /api/color-schemes — mix steps ─────────────
+    describe('POST /api/color-schemes — mix steps', () => {
+        it('creates a scheme with a valid mix step and returns 201', async () => {
+            (prisma.colorScheme.create as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
+
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({ name: 'Red mix', steps: [validMixStep] });
+
+            expect(res.status).toBe(201);
+        });
+
+        it('accepts a mix step with no ratio on entries', async () => {
+            (prisma.colorScheme.create as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
+
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'No ratio mix',
+                    steps: [{
+                        orderIndex: 1, area: 'Armor', techniqueId: TECH_1,
+                        isMix: true,
+                        mix: [{ paintId: PAINT_1 }, { paintId: PAINT_2 }],
+                    }],
+                });
+
+            expect(res.status).toBe(201);
+        });
+
+        it('returns 400 when isMix is true and mix[] is empty', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'Empty mix',
+                    steps: [{ orderIndex: 1, area: 'Armor', techniqueId: TECH_1, isMix: true, mix: [] }],
+                });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when isMix is true and mix is absent', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'No mix array',
+                    steps: [{ orderIndex: 1, area: 'Armor', techniqueId: TECH_1, isMix: true }],
+                });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when isMix is true and paintId is set on the step', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'Mix with paintId',
+                    steps: [{
+                        orderIndex: 1, area: 'Armor', techniqueId: TECH_1,
+                        isMix: true,
+                        paintId: PAINT_1,
+                        mix: [{ paintId: PAINT_1, ratio: 70 }, { paintId: PAINT_2, ratio: 30 }],
+                    }],
+                });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when a mix entry has neither paintId nor userCustomPaintId', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'Empty entry',
+                    steps: [{
+                        orderIndex: 1, area: 'Armor', techniqueId: TECH_1,
+                        isMix: true,
+                        mix: [{ ratio: 50 }],
+                    }],
+                });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when a mix entry has an unknown field (strict mode)', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'Unknown entry field',
+                    steps: [{
+                        orderIndex: 1, area: 'Armor', techniqueId: TECH_1,
+                        isMix: true,
+                        mix: [{ paintId: PAINT_1, ratio: 100, unknownField: 'x' }],
+                    }],
+                });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when mix[] is provided without isMix: true', async () => {
+            const res = await request(app)
+                .post('/api/color-schemes')
+                .set('Authorization', AUTH)
+                .send({
+                    name: 'Mix without flag',
+                    steps: [{
+                        orderIndex: 1, area: 'Armor', techniqueId: TECH_1,
+                        mix: [{ paintId: PAINT_1, ratio: 100 }],
+                    }],
+                });
+
+            expect(res.status).toBe(400);
+        });
+    });
+
     // ─── PUT /api/color-schemes/:id ───────────────────────
     describe('PUT /api/color-schemes/:id', () => {
         it('updates name only (no steps) and returns the scheme', async () => {
@@ -362,6 +498,40 @@ describe('Color Schemes Routes', () => {
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ name: 'Updated', extraField: 'x' });
+
+            expect(res.status).toBe(400);
+        });
+    });
+
+    // ─── PUT /api/color-schemes/:id — mix steps ──────────
+    describe('PUT /api/color-schemes/:id — mix steps', () => {
+        it('replaces steps with mix entries via transaction and returns 200', async () => {
+            (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
+            (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
+
+            const res = await request(app)
+                .put('/api/color-schemes/cs-1')
+                .set('Authorization', AUTH)
+                .send({ steps: [validMixStep] });
+
+            expect(res.status).toBe(200);
+            expect(prisma.$transaction).toHaveBeenCalled();
+        });
+
+        it('returns 400 when isMix is true and paintId is set on the step', async () => {
+            (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
+
+            const res = await request(app)
+                .put('/api/color-schemes/cs-1')
+                .set('Authorization', AUTH)
+                .send({
+                    steps: [{
+                        orderIndex: 1, area: 'Armor', techniqueId: TECH_1,
+                        isMix: true,
+                        paintId: PAINT_1,
+                        mix: [{ paintId: PAINT_1, ratio: 70 }, { paintId: PAINT_2, ratio: 30 }],
+                    }],
+                });
 
             expect(res.status).toBe(400);
         });

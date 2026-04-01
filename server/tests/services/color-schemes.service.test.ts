@@ -24,6 +24,9 @@ vi.mock('../../src/lib/prisma', () => ({
         colorSchemeStep: {
             deleteMany: vi.fn(),
         },
+        colorSchemeStepMix: {
+            deleteMany: vi.fn(),
+        },
         $transaction: vi.fn(),
     },
 }));

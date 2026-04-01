@@ -66,6 +66,8 @@ const sampleProject = {
     userId: 'user-1',
     name: 'Ultramarines Army',
     description: '500-point starter',
+    color: null,
+    tags: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     items: [],
@@ -112,6 +114,8 @@ describe('Projects Routes', () => {
             expect(res.body[0]).toHaveProperty('completion');
             expect(res.body[0]).toHaveProperty('itemCount', 2);
             expect(res.body[0]).toHaveProperty('statusCounts');
+            expect(res.body[0]).toHaveProperty('color');
+            expect(res.body[0]).toHaveProperty('tags');
         });
 
         it('returns 0% completion for a project with no items', async () => {
@@ -201,6 +205,38 @@ describe('Projects Routes', () => {
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: 'My Project', extraField: 'x' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('creates a project with color and tags', async () => {
+            const withMeta = { ...sampleProject, color: '#8B0000', tags: ['chaos', 'khorne'] };
+            (prisma.project.create as ReturnType<typeof vi.fn>).mockResolvedValue(withMeta);
+
+            const res = await request(app)
+                .post('/api/projects')
+                .set('Authorization', AUTH)
+                .send({ name: 'Ultramarines Army', color: '#8B0000', tags: ['chaos', 'khorne'] });
+
+            expect(res.status).toBe(201);
+            expect(res.body.color).toBe('#8B0000');
+            expect(res.body.tags).toEqual(['chaos', 'khorne']);
+        });
+
+        it('returns 400 when color format is invalid', async () => {
+            const res = await request(app)
+                .post('/api/projects')
+                .set('Authorization', AUTH)
+                .send({ name: 'My Project', color: 'not-a-color' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when tags has more than 10 items', async () => {
+            const res = await request(app)
+                .post('/api/projects')
+                .set('Authorization', AUTH)
+                .send({ name: 'My Project', tags: Array.from({ length: 11 }, (_, i) => `tag-${i}`) });
 
             expect(res.status).toBe(400);
         });
