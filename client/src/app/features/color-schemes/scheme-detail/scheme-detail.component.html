@@ -70,7 +70,7 @@
                     @for (entry of step.mixEntries; track $index) {
                     <span class="mix-chip">
                         🎨 {{ entry.paint?.name || entry.userCustomPaint?.name }}
-                        @if (entry.ratio != null) {
+                        @if (entry.ratio !== null) {
                         <span class="mix-ratio">{{ entry.ratio }}%</span>
                         }
                     </span>
