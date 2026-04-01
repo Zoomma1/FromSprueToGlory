@@ -84,5 +84,13 @@ export const routes: Routes = [
             ),
         canActivate: [authGuard],
     },
+    {
+        path: 'paints',
+        loadComponent: () =>
+            import('./features/paints/paint-collection/paint-collection.component').then(
+                (m) => m.PaintCollectionComponent,
+            ),
+        canActivate: [authGuard],
+    },
     { path: '**', redirectTo: '/dashboard' },
 ];
