@@ -1,9 +1,12 @@
 {
-  "name": "client",
-  "short_name": "client",
+  "name": "From Sprue to Glory",
+  "short_name": "FSTG",
+  "description": "Track your Warhammer miniature collection and painting progress",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
+  "theme_color": "#1a1a2e",
+  "background_color": "#1a1a2e",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
