@@ -1,15 +1,16 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { SKIP_AUTH } from '../interceptors/jwt.interceptor';
 import { environment } from '../../../environments/environment';
 import { GameSystem } from '../../classes/game-system';
 import { Faction } from '../../classes/factions';
 import { Model } from '../../classes/model';
 import { PaintBrand } from '../../classes/paint-brand';
-import { Paint, SimilarPaint, PaintWithEquivalents } from '../../classes/paint';
+import { Paint, SimilarPaint, PaintWithEquivalents, PaintCollectionResult, PaintFilter } from '../../classes/paint';
 import { Technique } from '../../classes/technique';
 import { Item, ItemPayload, ItemStatusHistory } from '../../classes/items';
-import { ColorScheme, ColorSchemePayload, ColorSchemeFull } from '../../classes/color-scheme';
+import { ColorScheme, ColorSchemePayload, ColorSchemeFull, ColorSchemeImage } from '../../classes/color-scheme';
 import { UserCustomPaint, UserCustomPaintPayload } from '../../classes/user-custom-paint';
 import { Project } from '../../classes/project';
 
@@ -92,6 +93,29 @@ export class ApiService {
         return this.http.get<ItemStatusHistory[]>(`${this.baseUrl}/items/${id}/history`);
     }
 
+    //  Paint Collection (owned / wishlist)
+    getPaintCollection(filter?: PaintFilter): Observable<PaintCollectionResult> {
+        let params = new HttpParams();
+        if (filter) params = params.set('filter', filter);
+        return this.http.get<PaintCollectionResult>(`${this.baseUrl}/paints`, { params });
+    }
+
+    markPaintAsOwned(paintId: string): Observable<{ paintId: string }> {
+        return this.http.post<{ paintId: string }>(`${this.baseUrl}/paints/owned/${paintId}`, {});
+    }
+
+    removePaintFromOwned(paintId: string): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/paints/owned/${paintId}`);
+    }
+
+    addPaintToWishlist(paintId: string): Observable<{ paintId: string }> {
+        return this.http.post<{ paintId: string }>(`${this.baseUrl}/paints/wishlist/${paintId}`, {});
+    }
+
+    removePaintFromWishlist(paintId: string): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/paints/wishlist/${paintId}`);
+    }
+
     //  User Custom Paints
     getUserCustomPaints(): Observable<UserCustomPaint[]> {
         return this.http.get<UserCustomPaint[]>(`${this.baseUrl}/user-paints`);
@@ -126,6 +150,24 @@ export class ApiService {
         return this.http.delete<void>(`${this.baseUrl}/color-schemes/${id}`);
     }
 
+    addSchemeImage(schemeId: string, key: string, order: number): Observable<ColorSchemeImage> {
+        return this.http.post<ColorSchemeImage>(
+            `${this.baseUrl}/color-schemes/${schemeId}/images`,
+            { key, order },
+        );
+    }
+
+    removeSchemeImage(schemeId: string, imageId: string): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/color-schemes/${schemeId}/images/${imageId}`);
+    }
+
+    uploadToS3(uploadUrl: string, file: File): Observable<unknown> {
+        return this.http.put(uploadUrl, file, {
+            headers: { 'Content-Type': file.type },
+            context: new HttpContext().set(SKIP_AUTH, true),
+        });
+    }
+
     //  Projects
     getProjects(): Observable<Project[]> {
         return this.http.get<Project[]>(`${this.baseUrl}/projects`);
@@ -156,10 +198,10 @@ export class ApiService {
     }
 
     //  Media
-    getPresignUpload(fileName: string, contentType: string): Observable<{ uploadUrl: string; key: string }> {
+    getPresignUpload(fileName: string, fileType: string): Observable<{ uploadUrl: string; key: string }> {
         return this.http.post<{ uploadUrl: string; key: string }>(
             `${this.baseUrl}/media/presign-upload`,
-            { fileName, contentType },
+            { fileName, fileType },
         );
     }
 

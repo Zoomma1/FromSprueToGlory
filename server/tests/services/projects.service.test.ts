@@ -40,6 +40,8 @@ const sampleProject = {
     userId: 'user-1',
     name: 'Army of Darkness',
     description: 'My Space Marines',
+    color: null,
+    tags: [],
     createdAt: new Date(),
     updatedAt: new Date(),
     items: [],
@@ -143,6 +145,40 @@ describe('Projects Service', () => {
         it('throws ValidationError when unknown field is included', async () => {
             await expect(
                 createProject('user-1', { name: 'Test', unknownField: 'x' }),
+            ).rejects.toThrow(ValidationError);
+        });
+
+        it('accepts color and tags and passes them to prisma.create', async () => {
+            const withMeta = { ...sampleProject, color: '#8B0000', tags: ['chaos', 'khorne'] };
+            (prisma.project.create as ReturnType<typeof vi.fn>).mockResolvedValue(withMeta);
+
+            const result = await createProject('user-1', {
+                name: 'Chaos Army',
+                color: '#8B0000',
+                tags: ['chaos', 'khorne'],
+            });
+
+            expect(result.color).toBe('#8B0000');
+            expect(result.tags).toEqual(['chaos', 'khorne']);
+            expect(prisma.project.create).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    data: expect.objectContaining({ color: '#8B0000', tags: ['chaos', 'khorne'] }),
+                }),
+            );
+        });
+
+        it('throws ValidationError when color format is invalid', async () => {
+            await expect(
+                createProject('user-1', { name: 'Test', color: 'not-a-color' }),
+            ).rejects.toThrow(ValidationError);
+        });
+
+        it('throws ValidationError when tags has more than 10 items', async () => {
+            await expect(
+                createProject('user-1', {
+                    name: 'Test',
+                    tags: Array.from({ length: 11 }, (_, i) => `tag-${i}`),
+                }),
             ).rejects.toThrow(ValidationError);
         });
     });

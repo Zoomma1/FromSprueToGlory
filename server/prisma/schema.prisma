@@ -42,11 +42,13 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations: a user "owns" items, color schemes, projects, and refresh tokens
-  items            Item[]
-  colorSchemes     ColorScheme[]
-  projects         Project[]
-  refreshTokens    RefreshToken[]
-  userCustomPaints UserCustomPaint[]
+  items              Item[]
+  colorSchemes       ColorScheme[]
+  projects           Project[]
+  refreshTokens      RefreshToken[]
+  userCustomPaints   UserCustomPaint[]
+  ownedPaints        UserOwnedPaint[]
+  wishlistPaints     UserWishlistPaint[]
 
   @@map("users") // table name in PostgreSQL
 }
@@ -56,6 +58,8 @@ model Project {
   userId      String
   name        String
   description String?
+  color       String?
+  tags        String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -162,6 +166,7 @@ model Paint {
   id      String    @id @default(uuid())
   name    String
   code    String? // product code (e.g., "21-25")
+  hex     String? // optional HTML color code e.g. "#A30000"
   brandId String
   type    PaintType @default(OTHER)
   notes   String?
@@ -170,8 +175,11 @@ model Paint {
 
   // Used in color scheme steps
   colorSchemeSteps     ColorSchemeStep[]
-  similarities         SimilarPaint[]    @relation("PaintSimilarities")
-  similarPaintBackrefs SimilarPaint[]    @relation("SimilarPaintBackref")
+  colorSchemeStepMixes ColorSchemeStepMix[]
+  similarities         SimilarPaint[]     @relation("PaintSimilarities")
+  similarPaintBackrefs SimilarPaint[]     @relation("SimilarPaintBackref")
+  userOwnedPaints      UserOwnedPaint[]
+  userWishlistPaints   UserWishlistPaint[]
 
   @@unique([name, brandId]) // no duplicate paint names within a brand
   @@index([brandId])
@@ -198,8 +206,9 @@ model UserCustomPaint {
   notes     String?
   createdAt DateTime   @default(now())
 
-  user  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  steps ColorSchemeStep[]
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  steps     ColorSchemeStep[]
+  stepMixes ColorSchemeStepMix[]
 
   @@index([userId])
   @@map("user_custom_paints")
@@ -296,6 +305,9 @@ model ColorScheme {
   // Steps: the ordered painting recipe
   steps ColorSchemeStep[]
 
+  // Inspiration photos attached to the scheme
+  images ColorSchemeImage[]
+
   // Items using this scheme
   items Item[]
 
@@ -310,23 +322,82 @@ model ColorSchemeStep {
   orderIndex        Int // 1-based, unique per scheme
   area              String // "Armor", "Trim", "Weapon", "Base", etc.
   techniqueId       String
-  paintId           String? // optional: reference paint from shared catalog
-  userCustomPaintId String? // optional: user's own custom paint
-  mix               String? // e.g., "2:1 Paint:Medium" or JSON
+  paintId           String? // optional: reference paint from shared catalog — null when isMix is true
+  userCustomPaintId String? // optional: user's own custom paint — null when isMix is true
+  isMix             Boolean @default(false) // true when the step is a paint mix
+  stepImageKey      String? // S3 object key — optional result photo for this step
   dilution          String? // e.g., "thin", "heavy", "milk consistency"
   tools             String? // e.g., "size 1 brush", "sponge", "airbrush"
   notes             String?
   expectedResult    String? // e.g., "smooth dark blue base"
 
   // Relations
-  colorScheme     ColorScheme      @relation(fields: [colorSchemeId], references: [id], onDelete: Cascade)
-  technique       Technique        @relation(fields: [techniqueId], references: [id])
-  paint           Paint?           @relation(fields: [paintId], references: [id])
-  userCustomPaint UserCustomPaint? @relation(fields: [userCustomPaintId], references: [id])
+  colorScheme     ColorScheme        @relation(fields: [colorSchemeId], references: [id], onDelete: Cascade)
+  technique       Technique          @relation(fields: [techniqueId], references: [id])
+  paint           Paint?             @relation(fields: [paintId], references: [id])
+  userCustomPaint UserCustomPaint?   @relation(fields: [userCustomPaintId], references: [id])
+  mixEntries      ColorSchemeStepMix[]
 
   @@unique([colorSchemeId, orderIndex]) // enforce unique order within a scheme
   @@index([colorSchemeId])
   @@map("color_scheme_steps")
+}
+
+// ─── Color Scheme Step Mix Entries ───────────────────────
+model ColorSchemeStepMix {
+  id                String  @id @default(uuid())
+  stepId            String
+  paintId           String?
+  userCustomPaintId String?
+  ratio             Float?  // percentage 0–100, set by client after converting drops to %
+
+  step            ColorSchemeStep  @relation(fields: [stepId], references: [id], onDelete: Cascade)
+  paint           Paint?           @relation(fields: [paintId], references: [id])
+  userCustomPaint UserCustomPaint? @relation(fields: [userCustomPaintId], references: [id])
+
+  @@index([stepId])
+  @@map("color_scheme_step_mixes")
+}
+
+// ─── Color Scheme Inspiration Images ─────────────────────
+model ColorSchemeImage {
+  id            String @id @default(uuid())
+  colorSchemeId String
+  key           String // S3 object key
+  order         Int
+
+  colorScheme ColorScheme @relation(fields: [colorSchemeId], references: [id], onDelete: Cascade)
+
+  @@index([colorSchemeId])
+  @@map("color_scheme_images")
+}
+
+// ─── User Owned Paints ───────────────────────────────────
+model UserOwnedPaint {
+  userId    String
+  paintId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paint Paint @relation(fields: [paintId], references: [id], onDelete: Cascade)
+
+  @@id([userId, paintId])
+  @@index([userId])
+  @@map("user_owned_paints")
+}
+
+// ─── User Wishlist Paints ────────────────────────────────
+model UserWishlistPaint {
+  userId    String
+  paintId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paint Paint @relation(fields: [paintId], references: [id], onDelete: Cascade)
+
+  @@id([userId, paintId])
+  @@index([userId])
+  @@map("user_wishlist_paints")
 }
 
 // ─── Similar Paints (for suggesting alternatives) ─────────

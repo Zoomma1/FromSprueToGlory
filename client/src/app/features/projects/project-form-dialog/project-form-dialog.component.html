@@ -11,6 +11,37 @@
       <textarea id="project-description" class="field-input field-textarea" formControlName="description" rows="3"
                 placeholder="Mission objectives & specifications..."></textarea>
     </div>
+    <div class="field-group field-group--row">
+      <div class="field-group field-group--color">
+        <label for="project-color" class="field-label">Color</label>
+        <div class="color-field">
+          <input id="project-color" type="color" class="color-picker" formControlName="color"
+                 [value]="form.get('color')?.value || '#8B4513'">
+          <span class="color-hex">{{ form.get('color')?.value || 'None' }}</span>
+          <button type="button" class="color-clear" (click)="form.patchValue({ color: null })"
+                  *ngIf="form.get('color')?.value">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="project-tag">Tags</label>
+      <mat-chip-grid #chipGrid class="field-chips">
+        @for (tag of tags(); track tag) {
+          <mat-chip-row (removed)="removeTag(tag)">
+            {{ tag }}
+            <button matChipRemove aria-label="Remove tag">✕</button>
+          </mat-chip-row>
+        }
+        <input
+          id="project-tag"
+          class="chip-input"
+          placeholder="Add a tag..."
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="onTagInput($event)"
+        />
+      </mat-chip-grid>
+    </div>
   </form>
 </mat-dialog-content>
 

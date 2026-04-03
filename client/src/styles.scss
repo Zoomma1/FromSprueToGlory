@@ -70,6 +70,19 @@ button, a, .mat-button, .mat-icon-button, .clickable {
   background: var(--color-surface) !important;
 }
 
+// ─── Lightbox dialog ─────────────────────────────────────
+.lightbox-panel {
+  background: transparent !important;
+  box-shadow: none !important;
+
+  .mdc-dialog__surface {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+}
+
 // ─── Page header pattern ─────────────────────────────────
 // Standard header for all list/detail pages.
 // Usage: <div class="page-header">

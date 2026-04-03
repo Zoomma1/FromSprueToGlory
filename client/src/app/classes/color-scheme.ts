@@ -17,13 +17,38 @@ export class ColorScheme {
     _count?: { steps: number; items: number };
 }
 
+export interface ColorSchemeImage {
+    id: string;
+    colorSchemeId: string;
+    key: string;
+    order: number;
+}
+
+export interface MixEntryPayload {
+    paintId?: string | null;
+    userCustomPaintId?: string | null;
+    ratio?: number | null;
+}
+
+export interface MixEntryFull {
+    id?: string;
+    paintId?: string | null;
+    userCustomPaintId?: string | null;
+    ratio?: number | null;
+    paint?: Paint | null;
+    userCustomPaint?: UserCustomPaint | null;
+}
+
 export interface ColorSchemeStepPayload {
     orderIndex: number;
     area: string;
     techniqueId: string;
     paintId?: string | null;
     userCustomPaintId?: string | null;
+    isMix?: boolean;
+    mix?: MixEntryPayload[];
     notes?: string | null;
+    stepImageKey?: string | null;
 }
 
 export interface ColorSchemePayload {
@@ -39,7 +64,10 @@ export interface ColorSchemeStepFull {
     techniqueId: string;
     paintId?: string | null;
     userCustomPaintId?: string | null;
+    isMix?: boolean;
+    mixEntries?: MixEntryFull[];
     notes?: string | null;
+    stepImageKey?: string | null;
     technique?: Technique;
     paint?: Paint | null;
     userCustomPaint?: UserCustomPaint | null;
@@ -47,4 +75,5 @@ export interface ColorSchemeStepFull {
 
 export type ColorSchemeFull = ColorScheme & {
     steps?: ColorSchemeStepFull[];
+    images?: ColorSchemeImage[];
 };

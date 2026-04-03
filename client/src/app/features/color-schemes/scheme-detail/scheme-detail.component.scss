@@ -603,6 +603,191 @@ select.field-input {
 }
 
 
+// Mix toggle button (step header)
+.mix-toggle-btn {
+    background: none;
+    border: 1px solid rgba(#d4a34a, 0.25);
+    color: var(--color-text-secondary);
+    font-size: 0.5625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.6rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        background: rgba(#d4a34a, 0.06);
+        color: var(--color-gold);
+        border-color: rgba(#d4a34a, 0.5);
+    }
+
+    &--active {
+        background: var(--color-orange-strong);
+        color: #131313;
+        border-color: transparent;
+
+        &:hover {
+            filter: brightness(1.1);
+            background: var(--color-orange-strong);
+            color: #131313;
+        }
+    }
+}
+
+// View mode mix entries
+.step-mix-entries {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.1rem;
+}
+
+.mix-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+
+    &:not(:last-child)::after {
+        content: '+';
+        color: var(--color-text-secondary);
+        opacity: 0.5;
+        margin-left: 0.1rem;
+    }
+}
+
+.mix-ratio {
+    font-size: 0.6875rem;
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+}
+
+// Edit mode: paint fields row (brand filter + paint input)
+.step-paint-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.5rem;
+}
+
+// View mode: step result thumbnail
+.step-thumb-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.step-thumb {
+    width: 4.5rem;
+    height: 4.5rem;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 0.85;
+    }
+}
+
+// Edit mode: step result photo
+.step-image-edit {
+    display: flex;
+    align-items: center;
+}
+
+.step-camera-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    background: var(--color-surface);
+    border: 1px dashed rgba(#d4a34a, 0.3);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    opacity: 0.6;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        opacity: 1;
+        border-color: rgba(#d4a34a, 0.7);
+        color: var(--color-gold);
+    }
+
+    &--loading {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    mat-icon {
+        font-size: 1.125rem;
+        width: 1.125rem;
+        height: 1.125rem;
+    }
+}
+
+.step-thumb-edit-wrap {
+    position: relative;
+    width: 4.5rem;
+    height: 4.5rem;
+    flex-shrink: 0;
+
+    &:hover .step-thumb-remove {
+        opacity: 1;
+    }
+}
+
+.step-thumb-edit-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.step-thumb-edit {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s ease;
+
+    .step-thumb-edit-btn:hover & {
+        opacity: 0.85;
+    }
+}
+
+.step-thumb-remove {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.2rem;
+    width: 1.375rem;
+    height: 1.375rem;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    mat-icon {
+        font-size: 0.8rem;
+        width: 0.8rem;
+        height: 0.8rem;
+    }
+}
+
 // Loading
 .loading-state {
     text-align: center;

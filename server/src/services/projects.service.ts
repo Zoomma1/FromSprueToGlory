@@ -13,6 +13,8 @@ import { paginationSchema } from '../lib/pagination';
 export const createProjectSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     description: z.string().optional().nullable(),
+    color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Color must be a valid hex color').optional().nullable(),
+    tags: z.array(z.string()).max(10, 'Maximum 10 tags allowed').default([]),
 }).strict();
 
 export const updateProjectSchema = createProjectSchema.partial();
@@ -38,6 +40,8 @@ type ProjectSummary = {
     id: string;
     name: string;
     description: string | null;
+    color: string | null;
+    tags: string[];
     createdAt: Date;
     updatedAt: Date;
     itemCount: number;
@@ -80,6 +84,8 @@ export async function listProjects(
         id: p.id,
         name: p.name,
         description: p.description,
+        color: p.color,
+        tags: p.tags,
         createdAt: p.createdAt,
         updatedAt: p.updatedAt,
         itemCount: (p.items ?? []).length,

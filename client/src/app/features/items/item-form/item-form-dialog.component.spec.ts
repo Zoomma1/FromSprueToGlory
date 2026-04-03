@@ -76,7 +76,7 @@ describe('ItemFormDialogComponent', () => {
         });
 
         it('should set project if defaultProjectId is provided in create mode', async () => {
-            const fakeProjects = [{ id: 'proj-1', userId: 'u-1', name: 'Project 1', description: 'Desc', createdAt: new Date().toDateString(), updatedAt: new Date().toDateString() }];
+            const fakeProjects = [{ id: 'proj-1', userId: 'u-1', name: 'Project 1', description: 'Desc', color: null, tags: [], createdAt: new Date().toDateString(), updatedAt: new Date().toDateString() }];
             await createComponent(
                 { mode: 'create', defaultProjectId: 'proj-1' },
                 (api) => api.getProjects.and.returnValue(of(fakeProjects)),

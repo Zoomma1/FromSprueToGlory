@@ -41,6 +41,13 @@
         <mat-icon>{{ showDetails() ? 'expand_less' : 'expand_more' }}</mat-icon>
     </button>
 
+    <!-- Inspiration photos -->
+    <app-scheme-images
+        [schemeId]="s.id"
+        [images]="s.images || []"
+        (imagesChanged)="loadScheme()">
+    </app-scheme-images>
+
     <!-- Steps header + area filter -->
     <div class="steps-header">
         <h2 class="section-title">Steps ({{ filteredSteps().length }}/{{ s.steps?.length || 0 }})</h2>
@@ -65,13 +72,24 @@
                     <span class="step-dot"></span>
                     <span class="step-technique">{{ step.technique?.name }}</span>
                 </div>
-                @if (step.paint || step.userCustomPaint) {
+                @if (step.isMix && step.mixEntries?.length) {
+                <div class="step-mix-entries">
+                    @for (entry of step.mixEntries; track $index) {
+                    <span class="mix-chip">
+                        🎨 {{ entry.paint?.name || entry.userCustomPaint?.name }}
+                        @if (entry.ratio !== null) {
+                        <span class="mix-ratio">{{ entry.ratio }}%</span>
+                        }
+                    </span>
+                    }
+                </div>
+                } @else if (step.paint || step.userCustomPaint) {
                 <div class="step-paint">🎨 {{ step.paint?.name || step.userCustomPaint?.name }}</div>
                 }
-                @if (showDetails() && step.paint?.brand) {
+                @if (showDetails() && !step.isMix && step.paint?.brand) {
                 <div class="step-brand">Brand: {{ step!.paint!.brand.name }}</div>
                 }
-                @if (showDetails() && step.userCustomPaint) {
+                @if (showDetails() && !step.isMix && step.userCustomPaint) {
                 <div class="step-brand">Brand: Other (custom)</div>
                 }
             </div>
@@ -80,6 +98,11 @@
                 <span class="notes-label">Notes</span>
                 <p class="step-notes">{{ step.notes }}</p>
             </div>
+            }
+            @if (step.id && stepReadUrls()[step.id]) {
+            <button class="step-thumb-btn" type="button" (click)="openStepLightbox(stepReadUrls()[step.id!])">
+                <img [src]="stepReadUrls()[step.id!]" class="step-thumb" alt="Step result">
+            </button>
             }
         </div>
         }
@@ -124,6 +147,12 @@
                 <div class="step-row-header">
                     <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
                     <span class="step-num">Step {{ i + 1 }}</span>
+                    <button type="button" class="mix-toggle-btn"
+                        [class.mix-toggle-btn--active]="stepsArray.at(i).get('isMix')?.value"
+                        (click)="toggleIsMix(i)"
+                        matTooltip="Toggle paint mix mode">
+                        Mix
+                    </button>
                     <button class="remove-btn" (click)="removeStep(i)" type="button">
                         <mat-icon>close</mat-icon>
                     </button>
@@ -141,6 +170,17 @@
                         [value]="getTechniqueForStep(i)"
                         (valueChange)="onTechniqueChange($event, i)">
                     </app-searchable-select>
+                </div>
+
+                @if (stepsArray.at(i).get('isMix')?.value) {
+                <app-step-mix-editor
+                    [mixArray]="getMixEntriesArray(i)"
+                    [allPaints]="allPaints()"
+                    [ratioMode]="getRatioMode(i)"
+                    (ratioModeChange)="onRatioModeChange($event, i)">
+                </app-step-mix-editor>
+                } @else {
+                <div class="step-paint-fields">
                     <app-searchable-select
                         class="brand-filter"
                         [options]="availableBrands()"
@@ -179,6 +219,7 @@
                         </mat-autocomplete>
                     </div>
                 </div>
+                }
 
                 @if (addingPaintForStep() === i) {
                 <div class="add-paint-form" [formGroup]="addPaintForm">
@@ -216,6 +257,25 @@
                 <div class="field-group">
                     <label [for]="'step-notes-' + i" class="field-label">Notes</label>
                     <input [id]="'step-notes-' + i" class="field-input" formControlName="notes" placeholder="Step notes...">
+                </div>
+
+                <!-- Step result photo -->
+                <div class="step-image-edit">
+                    @if (stepEditReadUrls()[i]) {
+                    <div class="step-thumb-edit-wrap">
+                        <button type="button" class="step-thumb-edit-btn" (click)="openStepLightbox(stepEditReadUrls()[i])">
+                            <img [src]="stepEditReadUrls()[i]" class="step-thumb-edit" alt="Step result">
+                        </button>
+                        <button class="step-thumb-remove" (click)="removeStepImage(i)" type="button" aria-label="Remove step photo">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                    } @else {
+                    <label class="step-camera-btn" [class.step-camera-btn--loading]="uploadingStep() === i">
+                        <mat-icon>{{ uploadingStep() === i ? 'hourglass_empty' : 'add_a_photo' }}</mat-icon>
+                        <input type="file" accept="image/*" (change)="onStepImageSelected($event, i)" hidden [disabled]="uploadingStep() === i">
+                    </label>
+                    }
                 </div>
             </div>
             }

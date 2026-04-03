@@ -61,6 +61,108 @@ mat-dialog-content {
   resize: none;
 }
 
+.field-group--row {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.field-group--color {
+  flex: 1;
+}
+
+.color-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #292020;
+  border-left: 3px solid var(--color-gold);
+  border-radius: 0 4px 4px 0;
+  padding: 8px 16px;
+  height: 46px;
+}
+
+.color-picker {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  flex-shrink: 0;
+}
+
+.color-hex {
+  font-family: 'Inter', monospace;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  flex: 1;
+}
+
+.color-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 0.7rem;
+  padding: 2px 4px;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.field-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  background: #292020;
+  border-left: 3px solid var(--color-gold);
+  border-radius: 0 4px 4px 0;
+  padding: 8px 12px;
+  min-height: 46px;
+
+  mat-chip-row {
+    background: rgba(255, 152, 0, 0.15);
+    color: var(--color-gold);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    border-radius: 3px;
+
+    button[matChipRemove] {
+      color: var(--color-gold);
+      opacity: 0.6;
+      font-size: 0.65rem;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.chip-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  flex: 1;
+  min-width: 100px;
+  padding: 4px 0;
+
+  &::placeholder {
+    color: rgba(219, 194, 173, 0.3);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+}
+
 .btn-cancel {
   background: none;
   border: none;

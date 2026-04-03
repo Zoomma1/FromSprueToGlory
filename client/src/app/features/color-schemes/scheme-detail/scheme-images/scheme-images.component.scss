@@ -1,0 +1,132 @@
+.scheme-images {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(#333344, 0.3);
+    margin-bottom: 2rem;
+}
+
+.images-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.images-title {
+    margin: 0;
+    color: var(--color-gold);
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+
+.upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    background: var(--color-surface);
+    border: 1px solid rgba(#d4a34a, 0.3);
+    cursor: pointer;
+    color: var(--color-gold);
+    transition: background 0.2s ease;
+
+    &:hover {
+        background: var(--color-surface-high);
+    }
+
+    &--loading {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    mat-icon {
+        font-size: 1.25rem;
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}
+
+.images-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.image-item {
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    flex-shrink: 0;
+
+    &:hover .image-remove {
+        opacity: 1;
+    }
+}
+
+.image-thumb-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.image-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s ease;
+
+    .image-thumb-btn:hover & {
+        opacity: 0.85;
+    }
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    opacity: 0.4;
+}
+
+.image-remove {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    mat-icon {
+        font-size: 0.875rem;
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+}
+
+.images-empty {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    opacity: 0.5;
+    margin: 0;
+    font-style: italic;
+}
