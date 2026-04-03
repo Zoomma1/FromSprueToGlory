@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { SKIP_AUTH } from '../interceptors/jwt.interceptor';
 import { environment } from '../../../environments/environment';
 import { GameSystem } from '../../classes/game-system';
 import { Faction } from '../../classes/factions';
@@ -9,7 +10,7 @@ import { PaintBrand } from '../../classes/paint-brand';
 import { Paint, SimilarPaint, PaintWithEquivalents, PaintCollectionResult, PaintFilter } from '../../classes/paint';
 import { Technique } from '../../classes/technique';
 import { Item, ItemPayload, ItemStatusHistory } from '../../classes/items';
-import { ColorScheme, ColorSchemePayload, ColorSchemeFull } from '../../classes/color-scheme';
+import { ColorScheme, ColorSchemePayload, ColorSchemeFull, ColorSchemeImage } from '../../classes/color-scheme';
 import { UserCustomPaint, UserCustomPaintPayload } from '../../classes/user-custom-paint';
 import { Project } from '../../classes/project';
 
@@ -149,6 +150,24 @@ export class ApiService {
         return this.http.delete<void>(`${this.baseUrl}/color-schemes/${id}`);
     }
 
+    addSchemeImage(schemeId: string, key: string, order: number): Observable<ColorSchemeImage> {
+        return this.http.post<ColorSchemeImage>(
+            `${this.baseUrl}/color-schemes/${schemeId}/images`,
+            { key, order },
+        );
+    }
+
+    removeSchemeImage(schemeId: string, imageId: string): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/color-schemes/${schemeId}/images/${imageId}`);
+    }
+
+    uploadToS3(uploadUrl: string, file: File): Observable<unknown> {
+        return this.http.put(uploadUrl, file, {
+            headers: { 'Content-Type': file.type },
+            context: new HttpContext().set(SKIP_AUTH, true),
+        });
+    }
+
     //  Projects
     getProjects(): Observable<Project[]> {
         return this.http.get<Project[]>(`${this.baseUrl}/projects`);
@@ -179,10 +198,10 @@ export class ApiService {
     }
 
     //  Media
-    getPresignUpload(fileName: string, contentType: string): Observable<{ uploadUrl: string; key: string }> {
+    getPresignUpload(fileName: string, fileType: string): Observable<{ uploadUrl: string; key: string }> {
         return this.http.post<{ uploadUrl: string; key: string }>(
             `${this.baseUrl}/media/presign-upload`,
-            { fileName, contentType },
+            { fileName, fileType },
         );
     }
 

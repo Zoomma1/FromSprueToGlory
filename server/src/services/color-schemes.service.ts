@@ -4,7 +4,9 @@
 
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
+import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { prisma } from '../lib/prisma';
+import { getS3Client } from '../lib/s3';
 import { NotFoundError, ValidationError, ForbiddenError } from '../lib/errors';
 
 // ─── Zod Schemas ──────────────────────────────────────────
@@ -28,6 +30,7 @@ export const stepSchema = z
         paintId: z.string().uuid().optional().nullable(),
         userCustomPaintId: z.string().uuid().optional().nullable(),
         isMix: z.boolean().default(false),
+        stepImageKey: z.string().optional().nullable(),
         mix: z.array(mixEntrySchema).optional().nullable(),
         dilution: z.string().optional().nullable(),
         tools: z.string().optional().nullable(),
@@ -82,6 +85,20 @@ function buildStepCreateData(step: z.infer<typeof stepSchema>) {
     return stepFields;
 }
 
+// ─── S3 helper ────────────────────────────────────────────
+// Best-effort: logs on failure but never throws, so a missing S3 file
+// does not block the DB deletion.
+
+async function deleteS3Key(key: string): Promise<void> {
+    const s3 = getS3Client();
+    if (!s3) return;
+    try {
+        await s3.send(new DeleteObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key }));
+    } catch (err) {
+        console.error(`S3 delete failed for key ${key}:`, err);
+    }
+}
+
 function validateStepOrder(steps: z.infer<typeof stepSchema>[]): string | null {
     const indices = steps.map((s) => s.orderIndex).sort((a, b) => a - b);
     const unique = new Set(indices);
@@ -128,6 +145,7 @@ export async function getScheme(userId: string, id: string) {
                     },
                 },
             },
+            images: { orderBy: { order: 'asc' } },
             items: { select: { id: true, name: true, status: true } },
         },
     });
@@ -192,6 +210,17 @@ export async function updateScheme(userId: string, id: string, body: unknown) {
             throw new ValidationError(orderError);
         }
 
+        // Clean up S3 files for step images that are no longer present
+        const oldStepsWithImages = await prisma.colorSchemeStep.findMany({
+            where: { colorSchemeId: id, stepImageKey: { not: null } },
+            select: { stepImageKey: true },
+        });
+        const newStepKeys = new Set(steps.filter(s => s.stepImageKey).map(s => s.stepImageKey));
+        const keysToDelete = oldStepsWithImages
+            .map(s => s.stepImageKey!)
+            .filter(key => !newStepKeys.has(key));
+        await Promise.all(keysToDelete.map(deleteS3Key));
+
         return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
             await tx.colorSchemeStep.deleteMany({ where: { colorSchemeId: id } });
             return tx.colorScheme.update({
@@ -215,6 +244,48 @@ export async function updateScheme(userId: string, id: string, body: unknown) {
         data: schemeData,
         include: { steps: { orderBy: { orderIndex: 'asc' } } },
     });
+}
+
+// ─── addSchemeImage ───────────────────────────────────────
+
+export const addSchemeImageSchema = z.object({
+    key: z.string().min(1),
+    order: z.number().int().nonnegative(),
+}).strict();
+
+export async function addSchemeImage(userId: string, schemeId: string, body: unknown) {
+    const parsed = addSchemeImageSchema.safeParse(body);
+    if (!parsed.success) {
+        throw new ValidationError('Validation failed', parsed.error.flatten());
+    }
+
+    const scheme = await prisma.colorScheme.findFirst({ where: { id: schemeId } });
+    if (!scheme) throw new NotFoundError('Color scheme not found');
+    if (scheme.userId !== userId) throw new ForbiddenError();
+
+    return prisma.colorSchemeImage.create({
+        data: { colorSchemeId: schemeId, key: parsed.data.key, order: parsed.data.order },
+    });
+}
+
+// ─── removeSchemeImage ────────────────────────────────────
+
+export async function removeSchemeImage(
+    userId: string,
+    schemeId: string,
+    imageId: string,
+): Promise<void> {
+    const scheme = await prisma.colorScheme.findFirst({ where: { id: schemeId } });
+    if (!scheme) throw new NotFoundError('Color scheme not found');
+    if (scheme.userId !== userId) throw new ForbiddenError();
+
+    const image = await prisma.colorSchemeImage.findFirst({
+        where: { id: imageId, colorSchemeId: schemeId },
+    });
+    if (!image) throw new NotFoundError('Image not found');
+
+    await deleteS3Key(image.key);
+    await prisma.colorSchemeImage.delete({ where: { id: imageId } });
 }
 
 // ─── deleteScheme ─────────────────────────────────────────
