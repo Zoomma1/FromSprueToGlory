@@ -218,8 +218,8 @@ export class ApiService {
     }
 
     //  User Profile
-    getMe(): Observable<{ id: string; email: string; currency: string, hasGoogleLinked: boolean }> {
-        return this.http.get<{ id: string; email: string; currency: string, hasGoogleLinked: boolean }>(`${this.baseUrl}/users/me`);
+    getMe(): Observable<{ id: string; email: string; currency: string; hasGoogleLinked: boolean; hasPassword: boolean }> {
+        return this.http.get<{ id: string; email: string; currency: string; hasGoogleLinked: boolean; hasPassword: boolean }>(`${this.baseUrl}/users/me`);
     }
 
     linkGoogle(): Observable<{ redirectUrl: string }> {

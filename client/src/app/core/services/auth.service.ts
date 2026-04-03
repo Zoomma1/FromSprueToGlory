@@ -108,6 +108,12 @@ export class AuthService {
         this.router.navigate(['/auth/login']);
     }
 
+    async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+        await firstValueFrom(
+            this.http.patch(`${environment.apiUrl}/users/me/password`, { currentPassword, newPassword })
+        );
+    }
+
     async handleOAuthCallback(): Promise<void> {
         const res = await firstValueFrom(
             this.http.get<AuthResponse>(`${environment.apiUrl}/auth/session`, { withCredentials: true })

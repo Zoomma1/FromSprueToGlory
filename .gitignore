@@ -14,7 +14,6 @@ dist/
 .vscode/
 *.swp
 *.swo
-.claude
 
 # OS
 .DS_Store
@@ -33,3 +32,7 @@ coverage/
 # Docker volumes
 pgdata/
 minio-data/
+
+# Ignore the .claude file which may contain sensitive information
+/CLAUDE.md
+.claude

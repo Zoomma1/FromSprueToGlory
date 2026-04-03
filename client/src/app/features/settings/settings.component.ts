@@ -1,7 +1,7 @@
 // ──────────────────────────────────────────────────────────
 // ⚙️ Settings Component — Account, Export, Danger Zone
 // ──────────────────────────────────────────────────────────
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -28,12 +28,21 @@ export class SettingsComponent implements OnInit {
     selectedCurrency = signal('EUR');
     savingCurrency = signal(false);
     hasGoogleLinked = signal(false);
+    hasPassword = signal(false);
+
+    currentPassword = signal('');
+    newPassword = signal('');
+    confirmPassword = signal('');
+    passwordsMismatch = computed(() => !!this.confirmPassword() && this.newPassword() !== this.confirmPassword());
+    showPasswords = signal(false);
+    savingPassword = signal(false);
 
     ngOnInit() {
         this.api.getMe().subscribe({
             next: (profile) => {
               this.selectedCurrency.set(profile.currency);
-              this.hasGoogleLinked.set(profile.hasGoogleLinked)
+              this.hasGoogleLinked.set(profile.hasGoogleLinked);
+              this.hasPassword.set(profile.hasPassword ?? false);
             },
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             error: () => {},
@@ -52,6 +61,31 @@ export class SettingsComponent implements OnInit {
                 this.savingCurrency.set(false);
             },
         });
+    }
+
+    async savePassword() {
+        if (!this.currentPassword() || !this.newPassword()) return;
+        if (this.newPassword() !== this.confirmPassword()) {
+            this.snackBar.open('Passwords do not match', 'OK', { duration: 3000 });
+            return;
+        }
+        this.savingPassword.set(true);
+        try {
+            await this.authService.changePassword(this.currentPassword(), this.newPassword());
+            this.snackBar.open('Password updated', 'OK', { duration: 3000 });
+            this.currentPassword.set('');
+            this.newPassword.set('');
+            this.confirmPassword.set('');
+        } catch (err: unknown) {
+            const body = (err as { error?: { error?: string; details?: { fieldErrors?: Record<string, string[]> } } })?.error;
+            const fieldErrors = body?.details?.fieldErrors;
+            const message = fieldErrors
+                ? Object.values(fieldErrors).flat().join(' · ')
+                : (body?.error ?? 'Failed to update password');
+            this.snackBar.open(message, 'OK', { duration: 4000 });
+        } finally {
+            this.savingPassword.set(false);
+        }
     }
 
     exportJSON() {

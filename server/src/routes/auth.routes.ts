@@ -22,6 +22,7 @@ import { asyncHandler } from '../lib/async-handler';
 import passport from '../lib/passport';
 import * as authService from '../services/auth.service';
 
+
 const router = Router();
 
 // ─── POST /api/auth/signup ──────────────────────────────
