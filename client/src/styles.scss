@@ -156,6 +156,51 @@ button, a, .mat-button, .mat-icon-button, .clickable {
   }
 }
 
+// password visibility toggle wrapper
+.field-input-wrapper {
+  position: relative;
+
+  .field-input {
+    padding-right: 44px;
+  }
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(219, 194, 173, 0.4);
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// explicit error state (e.g. passwords mismatch)
+.field-input--error {
+  background: rgba(180, 50, 50, 0.15) !important;
+}
+
+.field-error {
+  font-size: 0.7rem;
+  color: #ef5350;
+  letter-spacing: 0.03em;
+}
+
 // select has no :placeholder-shown — only dirty state
 select.field-input {
   &.ng-dirty {

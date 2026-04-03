@@ -5,7 +5,7 @@
 import { prisma } from '../lib/prisma';
 import { NotFoundError } from '../lib/errors';
 
-const userSelect = { id: true, email: true, currency: true, googleId: true };
+const userSelect = { id: true, email: true, currency: true, googleId: true, passwordHash: true };
 
 // ─── getProfile ───────────────────────────────────────────
 
@@ -15,8 +15,8 @@ export async function getProfile(userId: string) {
         select: userSelect,
     });
     if (!user) throw new NotFoundError('User not found');
-    const { googleId, ...rest } = user;
-    return { ...rest, hasGoogleLinked: !!googleId };
+    const { googleId, passwordHash, ...rest } = user;
+    return { ...rest, hasGoogleLinked: !!googleId, hasPassword: !!passwordHash };
 }
 
 // ─── updateCurrency ───────────────────────────────────────
@@ -27,6 +27,6 @@ export async function updateCurrency(userId: string, currency: string) {
         data: { currency },
         select: userSelect,
     });
-    const { googleId, ...rest } = user;
-    return { ...rest, hasGoogleLinked: !!googleId };
+    const { googleId, passwordHash, ...rest } = user;
+    return { ...rest, hasGoogleLinked: !!googleId, hasPassword: !!passwordHash };
 }

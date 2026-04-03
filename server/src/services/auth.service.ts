@@ -172,6 +172,47 @@ export async function linkGoogle(userId: string, googleId: string) {
 }
 
 
+// ─── changePassword ───────────────────────────────────────────────
+
+const changePasswordSchema = z.object({
+    currentPassword: z.string().min(1),
+    newPassword: z.string().min(8, 'Password must be at least 8 characters'),
+});
+
+export async function changePassword(userId: string, body: unknown) {
+    const parsed = changePasswordSchema.safeParse(body);
+    if (!parsed.success) {
+        throw new ValidationError('Validation failed', parsed.error.flatten());
+    }
+
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { passwordHash: true },
+    });
+
+    if (!user) {
+        throw new UnauthorizedError('User not found');
+    }
+
+    if (!user.passwordHash) {
+        throw new UnauthorizedError('Please sign in with Google');
+    }
+
+    const validPassword = await bcrypt.compare(parsed.data.currentPassword, user.passwordHash);
+    if (!validPassword) {
+        throw new UnauthorizedError('Current password is incorrect');
+    }
+
+    const newHash = await bcrypt.hash(parsed.data.newPassword, 12);
+
+    await prisma.user.update({
+        where: { id: userId },
+        data: { passwordHash: newHash },
+    });
+
+    return { message: 'Password updated successfully' };
+}
+
 // ─── Helper function ───────────────────────────────────────────────
 
 async function issueToken(payload: TokenPayload) {

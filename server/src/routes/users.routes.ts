@@ -9,6 +9,7 @@ import { authMiddleware } from '../middleware/auth.middleware';
 import { asyncHandler } from '../lib/async-handler';
 import { ValidationError } from '../lib/errors';
 import * as usersService from '../services/users.service';
+import * as authService from '../services/auth.service';
 
 // ─── Google Link Intent Store ─────────────────────────────
 // Maps opaque token → userId. Entries expire after 5 minutes.
@@ -47,6 +48,17 @@ router.patch(
         if (!parsed.success) throw new ValidationError('Invalid currency', parsed.error.errors);
         const profile = await usersService.updateCurrency(userId, parsed.data.currency);
         res.json(profile);
+    }),
+);
+
+// ─── PATCH /api/users/me/password ────────────────────
+
+router.patch(
+    '/me/password',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const result = await authService.changePassword(userId, req.body);
+        res.json(result);
     }),
 );
 

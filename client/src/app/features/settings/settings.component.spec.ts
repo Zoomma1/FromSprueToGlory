@@ -30,7 +30,7 @@ describe('SettingsComponent', () => {
     ];
     const mockData = JSON.parse(JSON.stringify(mockItems));
     apiSpy.exportItems.and.returnValue(of(mockData));
-    apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false }));
+    apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false, hasPassword: true }));
     apiSpy.updateCurrency.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR' }));
 
     await TestBed.configureTestingModule({
@@ -141,7 +141,7 @@ describe('SettingsComponent', () => {
 
   describe('Currency preference', () => {
     it('should call getMe on init and set selectedCurrency', () => {
-      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'GBP', hasGoogleLinked: false }));
+      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'GBP', hasGoogleLinked: false, hasPassword: true }));
       component.ngOnInit();
       expect(apiSpy.getMe).toHaveBeenCalled();
       expect(component.selectedCurrency()).toBe('GBP');
@@ -185,13 +185,13 @@ describe('SettingsComponent', () => {
 
   describe('Google link — ngOnInit', () => {
     it('should set hasGoogleLinked to false when getMe returns false', () => {
-      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false }));
+      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: false, hasPassword: true }));
       component.ngOnInit();
       expect(component.hasGoogleLinked()).toBeFalse();
     });
 
     it('should set hasGoogleLinked to true when getMe returns true', () => {
-      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: true }));
+      apiSpy.getMe.and.returnValue(of({ id: 'u1', email: 'test@test.com', currency: 'EUR', hasGoogleLinked: true, hasPassword: false }));
       component.ngOnInit();
       expect(component.hasGoogleLinked()).toBeTrue();
     });

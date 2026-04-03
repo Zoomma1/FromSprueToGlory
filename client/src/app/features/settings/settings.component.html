@@ -67,6 +67,56 @@
     </div>
   </div>
 
+  @if (hasPassword()) {
+  <div class="settings-section">
+    <div class="section-header">
+      <h2 class="section-title">Change Password</h2>
+    </div>
+    <div class="section-content">
+      <div class="field-group">
+        <label for="settings-current-password" class="field-label">Current password</label>
+        <div class="field-input-wrapper">
+          <input id="settings-current-password" [type]="showPasswords() ? 'text' : 'password'" class="field-input"
+            [ngModel]="currentPassword()" (ngModelChange)="currentPassword.set($event)" />
+          <button class="toggle-btn" type="button" (click)="showPasswords.set(!showPasswords())">
+            <mat-icon>{{ showPasswords() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="settings-new-password" class="field-label">New password</label>
+        <div class="field-input-wrapper">
+          <input id="settings-new-password" [type]="showPasswords() ? 'text' : 'password'" class="field-input"
+            [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" />
+          <button class="toggle-btn" type="button" (click)="showPasswords.set(!showPasswords())">
+            <mat-icon>{{ showPasswords() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="settings-confirm-password" class="field-label">Confirm new password</label>
+        <div class="field-input-wrapper">
+          <input id="settings-confirm-password" [type]="showPasswords() ? 'text' : 'password'" class="field-input"
+            [class.field-input--error]="passwordsMismatch()"
+            [ngModel]="confirmPassword()" (ngModelChange)="confirmPassword.set($event)" />
+          <button class="toggle-btn" type="button" (click)="showPasswords.set(!showPasswords())">
+            <mat-icon>{{ showPasswords() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        @if (passwordsMismatch()) {
+          <span class="field-error">Passwords do not match</span>
+        }
+      </div>
+    </div>
+    <div class="section-actions">
+      <button class="btn-primary" (click)="savePassword()"
+        [disabled]="savingPassword() || !currentPassword() || !newPassword() || !confirmPassword()">
+        <mat-icon>lock_reset</mat-icon> Update password
+      </button>
+    </div>
+  </div>
+  }
+
   <div class="settings-section">
     <div class="section-header">
       <h2 class="section-title">Export Data</h2>
