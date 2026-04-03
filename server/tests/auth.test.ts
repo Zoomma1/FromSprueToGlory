@@ -30,7 +30,19 @@ vi.mock('../src/lib/prisma', () => ({
             delete: vi.fn(),
             deleteMany: vi.fn(),
         },
+        passwordResetToken: {
+            findUnique: vi.fn(),
+            deleteMany: vi.fn(),
+            create: vi.fn(),
+            update: vi.fn(),
+        },
+        $transaction: vi.fn().mockImplementation((ops: Promise<unknown>[]) => Promise.all(ops)),
     },
+}));
+
+// ─── Mock email ───────────────────────────────────────────
+vi.mock('../src/lib/email', () => ({
+    sendPasswordResetEmail: vi.fn().mockResolvedValue(undefined),
 }));
 
 // ─── Mock bcrypt ─────────────────────────────────────────
@@ -476,6 +488,113 @@ describe('Auth Routes', () => {
             const setCookie = res.headers['set-cookie'] as string[] | string | undefined;
             const cookies = Array.isArray(setCookie) ? setCookie : setCookie ? [setCookie] : [];
             expect(cookies.some((c) => c.startsWith('oauth_tokens=;'))).toBe(true);
+        });
+    });
+
+    // ─── FORGOT PASSWORD ──────────────────────────────────
+    describe('POST /api/auth/forgot-password', () => {
+        it('returns 200 with a generic message when the email exists', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                id: 'user-1',
+                passwordHash: '$hashed$',
+            });
+            (prisma.passwordResetToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.passwordResetToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const res = await request(app)
+                .post('/api/auth/forgot-password')
+                .send({ email: 'test@example.com' });
+
+            expect(res.status).toBe(200);
+            expect(res.body.message).toBe('If that email is registered, a reset link has been sent');
+        });
+
+        it('returns 200 with the same generic message when the email is not registered', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+
+            const res = await request(app)
+                .post('/api/auth/forgot-password')
+                .send({ email: 'nobody@example.com' });
+
+            expect(res.status).toBe(200);
+            expect(res.body.message).toBe('If that email is registered, a reset link has been sent');
+        });
+
+        it('returns 400 for an invalid email format', async () => {
+            const res = await request(app)
+                .post('/api/auth/forgot-password')
+                .send({ email: 'not-an-email' });
+
+            expect(res.status).toBe(400);
+        });
+    });
+
+    // ─── RESET PASSWORD ───────────────────────────────────
+    describe('POST /api/auth/reset-password', () => {
+        const validToken = {
+            id: 'prt-1',
+            userId: 'user-1',
+            token: 'valid-hex-token',
+            expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+            usedAt: null,
+        };
+
+        it('returns 200 and resets the password on a valid token', async () => {
+            (prisma.passwordResetToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(validToken);
+            (prisma.user.update as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.passwordResetToken.update as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({});
+
+            const res = await request(app)
+                .post('/api/auth/reset-password')
+                .send({ token: 'valid-hex-token', newPassword: 'newpass123' });
+
+            expect(res.status).toBe(200);
+            expect(res.body.message).toBe('Password reset successfully');
+        });
+
+        it('returns 400 when the token is not found in DB', async () => {
+            (prisma.passwordResetToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+
+            const res = await request(app)
+                .post('/api/auth/reset-password')
+                .send({ token: 'unknown', newPassword: 'newpass123' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when the token is expired', async () => {
+            (prisma.passwordResetToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                ...validToken,
+                expiresAt: new Date(Date.now() - 1000),
+            });
+
+            const res = await request(app)
+                .post('/api/auth/reset-password')
+                .send({ token: 'expired-token', newPassword: 'newpass123' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when the token has already been used', async () => {
+            (prisma.passwordResetToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                ...validToken,
+                usedAt: new Date(),
+            });
+
+            const res = await request(app)
+                .post('/api/auth/reset-password')
+                .send({ token: 'used-token', newPassword: 'newpass123' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 400 when newPassword is too short', async () => {
+            const res = await request(app)
+                .post('/api/auth/reset-password')
+                .send({ token: 'valid-hex-token', newPassword: 'short' });
+
+            expect(res.status).toBe(400);
         });
     });
 

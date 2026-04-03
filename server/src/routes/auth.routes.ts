@@ -65,6 +65,26 @@ router.post(
     }),
 );
 
+// ─── POST /api/auth/forgot-password ────────────────────────
+
+router.post(
+    '/forgot-password',
+    asyncHandler(async (req, res) => {
+        const result = await authService.forgotPassword(req.body);
+        res.json(result);
+    }),
+);
+
+// ─── POST /api/auth/reset-password ─────────────────────────
+
+router.post(
+    '/reset-password',
+    asyncHandler(async (req, res) => {
+        const result = await authService.resetPassword(req.body);
+        res.json(result);
+    }),
+);
+
 // ─── GET /api/auth/session ─────────────────────────────────
 
 router.get(
