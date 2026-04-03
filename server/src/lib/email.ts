@@ -33,4 +33,8 @@ export async function sendPasswordResetEmail(email: string, resetUrl: string): P
             </div>
         `,
     });
+
+    if (error) {
+        throw new Error(`Resend error: ${error.message}`);
+    }
 }
