@@ -18,10 +18,14 @@ import {
     HttpHandler,
     HttpEvent,
     HttpErrorResponse,
+    HttpContextToken,
 } from '@angular/common/http';
+
 import { Observable, from, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+
+export const SKIP_AUTH = new HttpContextToken<boolean>(() => false);
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -30,6 +34,11 @@ export class JwtInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         // Skip auth endpoints to avoid infinite loops
         if (req.url.includes('/auth/')) {
+            return next.handle(req);
+        }
+
+        // Skip S3 presigned URL uploads (no JWT allowed)
+        if (req.context.get(SKIP_AUTH)) {
             return next.handle(req);
         }
 

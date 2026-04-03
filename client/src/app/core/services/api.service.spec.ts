@@ -504,7 +504,7 @@ describe('ApiService', () => {
 
             const req = httpMock.expectOne(`${baseUrl}/media/presign-upload`);
             expect(req.request.method).toBe('POST');
-            expect(req.request.body).toEqual({ fileName: 'photo.jpg', contentType: 'image/jpeg' });
+            expect(req.request.body).toEqual({ fileName: 'photo.jpg', fileType: 'image/jpeg' });
             req.flush(mockResponse);
         });
 

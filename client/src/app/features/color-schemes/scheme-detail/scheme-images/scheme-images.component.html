@@ -1,0 +1,30 @@
+<div class="scheme-images">
+    <div class="images-header">
+        <h3 class="images-title">Inspiration Photos</h3>
+        <label class="upload-btn" [class.upload-btn--loading]="uploading()">
+            <mat-icon>{{ uploading() ? 'hourglass_empty' : 'add_photo_alternate' }}</mat-icon>
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden [disabled]="uploading()">
+        </label>
+    </div>
+
+    @if (images.length) {
+    <div class="images-grid">
+        @for (image of images; track image.id; let i = $index) {
+        <div class="image-item">
+            @if (readUrls()[i]) {
+            <button type="button" class="image-thumb-btn" (click)="openLightbox(readUrls()[i])" aria-label="View photo">
+                <img [src]="readUrls()[i]" class="image-thumb" alt="Scheme photo">
+            </button>
+            } @else {
+            <div class="image-placeholder"><mat-icon>image</mat-icon></div>
+            }
+            <button class="image-remove" (click)="removeImage(image)" type="button" aria-label="Remove photo">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        }
+    </div>
+    } @else if (!uploading()) {
+    <p class="images-empty">No inspiration photos yet.</p>
+    }
+</div>

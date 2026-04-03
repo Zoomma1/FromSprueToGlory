@@ -84,4 +84,29 @@ router.delete(
     }),
 );
 
+// ─── POST /api/color-schemes/:id/images ──────────────────
+
+router.post(
+    '/:id/images',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+        const image = await colorSchemesService.addSchemeImage(userId, id, req.body);
+        res.status(201).json(image);
+    }),
+);
+
+// ─── DELETE /api/color-schemes/:id/images/:imageId ───────
+
+router.delete(
+    '/:id/images/:imageId',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+        const imageId = Array.isArray(req.params.imageId) ? req.params.imageId[0] : req.params.imageId;
+        await colorSchemesService.removeSchemeImage(userId, id, imageId);
+        res.status(204).send();
+    }),
+);
+
 export default router;

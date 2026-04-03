@@ -22,6 +22,7 @@ vi.mock('../../src/lib/prisma', () => ({
             delete: vi.fn(),
         },
         colorSchemeStep: {
+            findMany: vi.fn(),
             deleteMany: vi.fn(),
         },
         colorSchemeStepMix: {
@@ -29,6 +30,10 @@ vi.mock('../../src/lib/prisma', () => ({
         },
         $transaction: vi.fn(),
     },
+}));
+
+vi.mock('../../src/lib/s3', () => ({
+    getS3Client: vi.fn(() => ({ send: vi.fn().mockResolvedValue({}) })),
 }));
 
 import { prisma } from '../../src/lib/prisma';
@@ -45,6 +50,7 @@ const validBody = {
 describe('Color Schemes Service', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
     });
 
     // ─── updateScheme — ownership ─────────────────────────

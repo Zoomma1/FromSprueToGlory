@@ -209,19 +209,19 @@ describe('SchemeDetailComponent', () => {
   describe('Step group creation', () => {
     it('should create a step group with default values', () => {
       const group = component['createStepGroup']();
-      expect(group.value).toEqual({ area: '', techniqueId: '', paintId: null, notes: '', isMix: false, mix: [] });
+      expect(group.value).toEqual({ area: '', techniqueId: '', paintId: null, notes: '', isMix: false, mix: [], stepImageKey: null });
     });
 
     it('should create a step group with provided values', () => {
       const stepData = { area: 'Test Area', techniqueId: 'tech1', paintId: 'paint1', notes: 'Test Notes' };
       const group = component['createStepGroup'](stepData as never);
-      expect(group.value).toEqual({ ...stepData, isMix: false, mix: [] });
+      expect(group.value).toEqual({ ...stepData, isMix: false, mix: [], stepImageKey: null });
     });
 
     it('should create a step group with partial values', () => {
       const stepData = { area: 'Test Area', techniqueId: 'tech1' };
       const group = component['createStepGroup'](stepData as never);
-      expect(group.value).toEqual({ area: 'Test Area', techniqueId: 'tech1', paintId: null, notes: '', isMix: false, mix: [] });
+      expect(group.value).toEqual({ area: 'Test Area', techniqueId: 'tech1', paintId: null, notes: '', isMix: false, mix: [], stepImageKey: null });
     });
 
     it('should fallback null notes to empty string', () => {
