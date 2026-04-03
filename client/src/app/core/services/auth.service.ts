@@ -109,7 +109,6 @@ export class AuthService {
     }
 
     async handleOAuthCallback(): Promise<void> {
-        if (this.accessTokenSignal()) return;
         const res = await firstValueFrom(
             this.http.get<AuthResponse>(`${environment.apiUrl}/auth/session`, { withCredentials: true })
         );
