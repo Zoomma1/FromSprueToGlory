@@ -2,11 +2,13 @@
 // Auth Service — Business Logic Layer
 // ──────────────────────────────────────────────────────────
 
+import crypto from 'crypto';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../lib/prisma';
 import { generateAccessToken, generateRefreshToken, TokenPayload, verifyRefreshToken } from '../utils/jwt';
 import { ConflictError, UnauthorizedError, ValidationError } from '../lib/errors';
+import { sendPasswordResetEmail } from '../lib/email';
 
 // ─── Zod Schemas ──────────────────────────────────────────
 
@@ -211,6 +213,86 @@ export async function changePassword(userId: string, body: unknown) {
     });
 
     return { message: 'Password updated successfully' };
+}
+
+// ─── forgotPassword ───────────────────────────────────────────────
+
+const forgotPasswordSchema = z.object({
+    email: z.string().email('Invalid email'),
+});
+
+export async function forgotPassword(body: unknown) {
+    const parsed = forgotPasswordSchema.safeParse(body);
+    if (!parsed.success) {
+        throw new ValidationError('Validation failed', parsed.error.flatten());
+    }
+
+    // Always respond the same way — never reveal if an email is registered
+    const genericResponse = { message: 'If that email is registered, a reset link has been sent' };
+
+    const user = await prisma.user.findUnique({
+        where: { email: parsed.data.email },
+        select: { id: true, passwordHash: true },
+    });
+
+    // No account, or Google-only account (no password) — silently no-op
+    if (!user || !user.passwordHash) return genericResponse;
+
+    // Remove any existing unused reset tokens for this user
+    await prisma.passwordResetToken.deleteMany({ where: { userId: user.id, usedAt: null } });
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+    await prisma.passwordResetToken.create({
+        data: { token, userId: user.id, expiresAt },
+    });
+
+    const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:4200';
+    const resetUrl = `${frontendUrl}/auth/reset-password?token=${token}`;
+
+    await sendPasswordResetEmail(parsed.data.email, resetUrl);
+
+    return genericResponse;
+}
+
+// ─── resetPassword ────────────────────────────────────────────────
+
+const resetPasswordSchema = z.object({
+    token: z.string().min(1),
+    newPassword: z.string().min(8, 'Password must be at least 8 characters'),
+});
+
+export async function resetPassword(body: unknown) {
+    const parsed = resetPasswordSchema.safeParse(body);
+    if (!parsed.success) {
+        throw new ValidationError('Validation failed', parsed.error.flatten());
+    }
+
+    const resetToken = await prisma.passwordResetToken.findUnique({
+        where: { token: parsed.data.token },
+    });
+
+    if (!resetToken || resetToken.usedAt || resetToken.expiresAt < new Date()) {
+        throw new ValidationError('Invalid or expired reset token');
+    }
+
+    const newHash = await bcrypt.hash(parsed.data.newPassword, 12);
+
+    await prisma.$transaction([
+        prisma.user.update({
+            where: { id: resetToken.userId },
+            data: { passwordHash: newHash },
+        }),
+        prisma.passwordResetToken.update({
+            where: { id: resetToken.id },
+            data: { usedAt: new Date() },
+        }),
+        // Invalidate all active sessions for security
+        prisma.refreshToken.deleteMany({ where: { userId: resetToken.userId } }),
+    ]);
+
+    return { message: 'Password reset successfully' };
 }
 
 // ─── Helper function ───────────────────────────────────────────────

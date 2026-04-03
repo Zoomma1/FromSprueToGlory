@@ -67,17 +67,29 @@ export class AuthService {
         this.storeTokens(res);
     }
 
+    private refreshPromise: Promise<string | null> | null = null;
+
     async refresh(): Promise<string | null> {
+        if (this.refreshPromise) return this.refreshPromise;
+
+        this.refreshPromise = this._doRefresh().finally(() => {
+            this.refreshPromise = null;
+        });
+
+        return this.refreshPromise;
+    }
+
+    private async _doRefresh(): Promise<string | null> {
         const refreshToken = this.refreshToken;
         if (!refreshToken) return null;
 
         try {
-            const res = await this.http
-                .post<{ accessToken: string; refreshToken: string }>(
+            const res = await firstValueFrom(
+                this.http.post<{ accessToken: string; refreshToken: string }>(
                     `${environment.apiUrl}/auth/refresh`,
                     { refreshToken },
                 )
-                .toPromise();
+            );
 
             if (res) {
                 localStorage.setItem('accessToken', res.accessToken);
@@ -106,6 +118,18 @@ export class AuthService {
         this.accessTokenSignal.set(null);
         this.userSignal.set(null);
         this.router.navigate(['/auth/login']);
+    }
+
+    async forgotPassword(email: string): Promise<void> {
+        await firstValueFrom(
+            this.http.post(`${environment.apiUrl}/auth/forgot-password`, { email })
+        );
+    }
+
+    async resetPassword(token: string, newPassword: string): Promise<void> {
+        await firstValueFrom(
+            this.http.post(`${environment.apiUrl}/auth/reset-password`, { token, newPassword })
+        );
     }
 
     async changePassword(currentPassword: string, newPassword: string): Promise<void> {

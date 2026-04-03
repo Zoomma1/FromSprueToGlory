@@ -32,6 +32,10 @@
         </div>
       </div>
 
+      <div class="forgot-link-row">
+        <a [routerLink]="['/auth/forgot-password']" class="forgot-link">Forgot password?</a>
+      </div>
+
       @if (error()) {
         <p class="error-message">{{ error() }}</p>
       }
