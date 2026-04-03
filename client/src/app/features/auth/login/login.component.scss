@@ -147,6 +147,24 @@
   margin: 0;
 }
 
+// ─── Forgot password link ─────────────────────────────────
+.forgot-link-row {
+  text-align: right;
+  margin-top: -8px;
+}
+
+.forgot-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: rgba(219, 194, 173, 0.45);
+  text-decoration: none;
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--color-gold);
+  }
+}
+
 // ─── Submit button ────────────────────────────────────────
 .btn-submit {
   width: 100%;

@@ -154,6 +154,46 @@ describe('AuthService', () => {
         });
     });
 
+    describe('forgotPassword', () => {
+        beforeEach(() => setup());
+
+        it('should POST to /auth/forgot-password with the email', async () => {
+            const promise = service.forgotPassword('test@test.com');
+            const req = httpMock.expectOne(`${baseUrl}/auth/forgot-password`);
+            expect(req.request.method).toBe('POST');
+            expect(req.request.body).toEqual({ email: 'test@test.com' });
+            req.flush({ message: 'If that email is registered, a reset link has been sent' });
+            await promise;
+        });
+
+        it('should reject when the server returns an error', async () => {
+            const promise = service.forgotPassword('test@test.com');
+            const req = httpMock.expectOne(`${baseUrl}/auth/forgot-password`);
+            req.flush(null, { status: 400, statusText: 'Bad Request' });
+            await expectAsync(promise).toBeRejected();
+        });
+    });
+
+    describe('resetPassword', () => {
+        beforeEach(() => setup());
+
+        it('should POST to /auth/reset-password with token and newPassword', async () => {
+            const promise = service.resetPassword('some-token', 'newpass123');
+            const req = httpMock.expectOne(`${baseUrl}/auth/reset-password`);
+            expect(req.request.method).toBe('POST');
+            expect(req.request.body).toEqual({ token: 'some-token', newPassword: 'newpass123' });
+            req.flush({ message: 'Password reset successfully' });
+            await promise;
+        });
+
+        it('should reject when the token is invalid or expired', async () => {
+            const promise = service.resetPassword('bad-token', 'newpass123');
+            const req = httpMock.expectOne(`${baseUrl}/auth/reset-password`);
+            req.flush({ error: 'Invalid or expired reset token' }, { status: 400, statusText: 'Bad Request' });
+            await expectAsync(promise).toBeRejected();
+        });
+    });
+
     describe('refresh', () => {
         beforeEach(() => setup());
 
@@ -200,6 +240,25 @@ describe('AuthService', () => {
             expect(token).toBeNull();
             expect(service.isLoggedIn()).toBeFalse();
             expect(routerSpy.navigate).toHaveBeenCalledWith(['/auth/login']);
+        });
+
+        it('should send only one HTTP request when called concurrently (race condition fix)', async () => {
+            localStorage.setItem('refreshToken', 'refresh-456');
+
+            // Fire three concurrent refresh calls
+            const p1 = service.refresh();
+            const p2 = service.refresh();
+            const p3 = service.refresh();
+
+            // Only one request should have been made
+            const req = httpMock.expectOne(`${baseUrl}/auth/refresh`);
+            req.flush({ accessToken: 'new-access', refreshToken: 'new-refresh' });
+
+            const [t1, t2, t3] = await Promise.all([p1, p2, p3]);
+
+            expect(t1).toBe('new-access');
+            expect(t2).toBe('new-access');
+            expect(t3).toBe('new-access');
         });
     });
 
