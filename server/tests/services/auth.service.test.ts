@@ -172,10 +172,7 @@ describe('Auth Service', () => {
     // ─── refresh ──────────────────────────────────────────
     describe('refresh', () => {
         it('returns new accessToken and refreshToken on valid token', async () => {
-            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(
-                sampleStoredToken,
-            );
-            (prisma.refreshToken.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 1 });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             const result = await refresh({ refreshToken: 'refresh-tok' });
@@ -185,19 +182,18 @@ describe('Auth Service', () => {
         });
 
         it('deletes the old token before issuing new one', async () => {
-            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(
-                sampleStoredToken,
-            );
-            (prisma.refreshToken.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 1 });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             await refresh({ refreshToken: 'refresh-tok' });
 
-            expect(prisma.refreshToken.delete).toHaveBeenCalledWith({ where: { id: 'rt-1' } });
+            expect(prisma.refreshToken.deleteMany).toHaveBeenCalledWith({
+                where: { token: 'refresh-tok', expiresAt: { gt: expect.any(Date) } },
+            });
         });
 
         it('throws UnauthorizedError when token is not in DB', async () => {
-            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 0 });
 
             await expect(refresh({ refreshToken: 'unknown-tok' })).rejects.toThrow(
                 UnauthorizedError,
@@ -205,10 +201,8 @@ describe('Auth Service', () => {
         });
 
         it('throws UnauthorizedError when token is expired in DB', async () => {
-            const expiredToken = { ...sampleStoredToken, expiresAt: new Date(Date.now() - 1000) };
-            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(
-                expiredToken,
-            );
+            // Expired token won't match the expiresAt > now condition → count: 0
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 0 });
 
             await expect(refresh({ refreshToken: 'refresh-tok' })).rejects.toThrow(
                 UnauthorizedError,
