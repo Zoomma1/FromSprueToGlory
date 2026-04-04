@@ -307,12 +307,7 @@ describe('Auth Routes', () => {
                 userId: 'user-1',
                 email: 'test@example.com',
             });
-            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
-                id: 'rt-1',
-                token: 'valid-refresh-token',
-                expiresAt: new Date(Date.now() + 86400000),
-            });
-            (prisma.refreshToken.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 1 });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             const res = await request(app)
@@ -329,19 +324,16 @@ describe('Auth Routes', () => {
                 userId: 'user-1',
                 email: 'test@example.com',
             });
-            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
-                id: 'rt-1',
-                token: 'valid-refresh-token',
-                expiresAt: new Date(Date.now() + 86400000),
-            });
-            (prisma.refreshToken.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 1 });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             await request(app)
                 .post('/api/auth/refresh')
                 .send({ refreshToken: 'valid-refresh-token' });
 
-            expect(prisma.refreshToken.delete).toHaveBeenCalledWith({ where: { id: 'rt-1' } });
+            expect(prisma.refreshToken.deleteMany).toHaveBeenCalledWith({
+                where: { token: 'valid-refresh-token', expiresAt: { gt: expect.any(Date) } },
+            });
             expect(prisma.refreshToken.create).toHaveBeenCalledTimes(1);
         });
 
@@ -369,7 +361,7 @@ describe('Auth Routes', () => {
                 userId: 'user-1',
                 email: 'test@example.com',
             });
-            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 0 });
 
             const res = await request(app)
                 .post('/api/auth/refresh')
@@ -384,11 +376,8 @@ describe('Auth Routes', () => {
                 userId: 'user-1',
                 email: 'test@example.com',
             });
-            (prisma.refreshToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
-                id: 'rt-1',
-                token: 'expired-token',
-                expiresAt: new Date(Date.now() - 1000), // in the past
-            });
+            // Expired token won't match the expiresAt > now condition → count: 0
+            (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 0 });
 
             const res = await request(app)
                 .post('/api/auth/refresh')
