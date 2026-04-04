@@ -11,7 +11,7 @@ function getResend(): Resend {
 }
 
 export async function sendPasswordResetEmail(email: string, resetUrl: string): Promise<void> {
-    await getResend().emails.send({
+    const { error } = await getResend().emails.send({
         from: FROM_ADDRESS,
         to: email,
         subject: 'Reset your password — From Sprue to Glory',
@@ -33,4 +33,8 @@ export async function sendPasswordResetEmail(email: string, resetUrl: string): P
             </div>
         `,
     });
+
+    if (error) {
+        throw new Error(`Resend error: ${error.message}`);
+    }
 }

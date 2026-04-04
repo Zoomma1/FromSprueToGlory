@@ -93,15 +93,16 @@ export async function refresh(body: unknown) {
         throw new UnauthorizedError('Invalid or expired refresh token');
     }
 
-    const storedToken = await prisma.refreshToken.findUnique({
-        where: { token: parsed.data.refreshToken },
+    const result = await prisma.refreshToken.deleteMany({
+        where: {
+            token: parsed.data.refreshToken,
+            expiresAt: { gt: new Date() },
+        },
     });
 
-    if (!storedToken || storedToken.expiresAt < new Date()) {
+    if (result.count === 0) {
         throw new UnauthorizedError('Invalid or expired refresh token');
     }
-
-    await prisma.refreshToken.delete({ where: { id: storedToken.id } });
 
     const newPayload = { userId: payload.userId, email: payload.email };
 
