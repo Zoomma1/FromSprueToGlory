@@ -148,6 +148,33 @@ describe('Projects Service', () => {
             ).rejects.toThrow(ValidationError);
         });
 
+        it('accepts defaultGameSystemId and defaultFactionId', async () => {
+            const withDefaults = { ...sampleProject, defaultGameSystemId: 'gs-1', defaultFactionId: 'f-1' };
+            (prisma.project.create as ReturnType<typeof vi.fn>).mockResolvedValue(withDefaults);
+
+            await createProject('user-1', {
+                name: 'Test',
+                defaultGameSystemId: 'gs-1',
+                defaultFactionId: 'f-1',
+            });
+
+            expect(prisma.project.create).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    data: expect.objectContaining({
+                        defaultGameSystemId: 'gs-1',
+                        defaultFactionId: 'f-1',
+                    }),
+                }),
+            );
+        });
+
+        it('accepts null defaultGameSystemId and defaultFactionId', async () => {
+            (prisma.project.create as ReturnType<typeof vi.fn>).mockResolvedValue(sampleProject);
+            await expect(
+                createProject('user-1', { name: 'Test', defaultGameSystemId: null, defaultFactionId: null }),
+            ).resolves.toBeDefined();
+        });
+
         it('accepts color and tags and passes them to prisma.create', async () => {
             const withMeta = { ...sampleProject, color: '#8B0000', tags: ['chaos', 'khorne'] };
             (prisma.project.create as ReturnType<typeof vi.fn>).mockResolvedValue(withMeta);

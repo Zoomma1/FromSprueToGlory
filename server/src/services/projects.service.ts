@@ -15,6 +15,8 @@ export const createProjectSchema = z.object({
     description: z.string().optional().nullable(),
     color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Color must be a valid hex color').optional().nullable(),
     tags: z.array(z.string()).max(10, 'Maximum 10 tags allowed').default([]),
+    defaultGameSystemId: z.string().optional().nullable(),
+    defaultFactionId: z.string().optional().nullable(),
 }).strict();
 
 export const updateProjectSchema = createProjectSchema.partial();

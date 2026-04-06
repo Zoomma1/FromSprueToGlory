@@ -29,7 +29,9 @@ describe('ProjectFormDialogComponent', () => {
         dialogData: Record<string, unknown> = { mode: 'create' },
         spySetup?: (api: jasmine.SpyObj<ApiService>) => void,
     ) {
-        apiSpy = jasmine.createSpyObj('ApiService', ['createProject', 'updateProject']);
+        apiSpy = jasmine.createSpyObj('ApiService', ['createProject', 'updateProject', 'getGameSystems', 'getFactions']);
+        apiSpy.getGameSystems.and.returnValue(of([]));
+        apiSpy.getFactions.and.returnValue(of([]));
         snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
         dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
 

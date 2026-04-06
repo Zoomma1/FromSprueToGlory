@@ -95,10 +95,12 @@
     @for (item of proj.items; track item.id) {
       <app-item-card
         [item]="item"
-        [showEdit]="false"
+        [showEdit]="true"
         [deleteIcon]="'link_off'"
         [compactMode]="true"
         (statusChange)="onStatusChange($event)"
+        (edit)="openEditDialog($event)"
+        (duplicate)="duplicateItem($event)"
         (delete)="unassignItem($event.id)" />
     }
   </div>

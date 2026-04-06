@@ -13,6 +13,8 @@ export class Project {
     tags!: string[];
     createdAt!: string;
     updatedAt!: string;
+    defaultGameSystemId?: string | null;
+    defaultFactionId?: string | null;
     items?: Item[];
     completion?: number;
     itemCount?: number;
