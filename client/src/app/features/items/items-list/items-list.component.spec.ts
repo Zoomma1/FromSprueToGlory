@@ -66,7 +66,7 @@ describe('ItemsListComponent', () => {
     ];
 
     beforeEach(async () => {
-        apiSpy = jasmine.createSpyObj('ApiService', ['getItems', 'deleteItem', 'changeItemStatus']);
+        apiSpy = jasmine.createSpyObj('ApiService', ['getItems', 'deleteItem', 'changeItemStatus', 'createItem']);
         apiSpy.getItems.and.returnValue(of(mockItems));
         apiSpy.changeItemStatus.and.returnValue(of(mockItems[0]));
 
@@ -323,6 +323,71 @@ describe('ItemsListComponent', () => {
             apiSpy.getItems.and.returnValue(throwError(() => new Error('fail')));
             component.loadItems();
             expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load items', 'OK', { duration: 3000 });
+        });
+  });
+
+  describe('Item duplication', () => {
+        beforeEach(() => {
+            apiSpy.createItem = jasmine.createSpy('createItem').and.returnValue(of({} as Item));
+        });
+
+        it('should call createItem with status WANT and incremented name', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            component.duplicateItem(mockItems[0]);
+            expect(apiSpy.createItem).toHaveBeenCalledWith(jasmine.objectContaining({
+                name: 'Intercessors (2)',
+                status: 'WANT',
+            }));
+        });
+
+        it('should increment to (3) if (2) already exists', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            const itemWithCopy = { ...mockItems[0], name: 'Intercessors (2)' } as Item;
+            component.items.set([...mockItems, itemWithCopy]);
+            component.duplicateItem(mockItems[0]);
+            expect(apiSpy.createItem).toHaveBeenCalledWith(jasmine.objectContaining({ name: 'Intercessors (3)' }));
+        });
+
+        it('should copy gameSystemId, factionId and quantity', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            component.duplicateItem(mockItems[0]);
+            expect(apiSpy.createItem).toHaveBeenCalledWith(jasmine.objectContaining({
+                gameSystemId: '1',
+                factionId: '1',
+                quantity: 5,
+            }));
+        });
+
+        it('should show confirmation dialog with source and target name', () => {
+            const confirmSpy = spyOn(window, 'confirm').and.returnValue(true);
+            component.duplicateItem(mockItems[0]);
+            expect(confirmSpy).toHaveBeenCalledWith('Duplicate "Intercessors" as "Intercessors (2)"?');
+        });
+
+        it('should not call createItem if user cancels', () => {
+            spyOn(window, 'confirm').and.returnValue(false);
+            component.duplicateItem(mockItems[0]);
+            expect(apiSpy.createItem).not.toHaveBeenCalled();
+        });
+
+        it('should reload items after successful duplication', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            apiSpy.getItems.calls.reset();
+            component.duplicateItem(mockItems[0]);
+            expect(apiSpy.getItems).toHaveBeenCalledTimes(1);
+        });
+
+        it('should show snackbar after successful duplication', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            component.duplicateItem(mockItems[0]);
+            expect(snackBarSpy.open).toHaveBeenCalledWith('"Intercessors (2)" created', 'OK', { duration: 2000 });
+        });
+
+        it('should show error snackbar when duplication fails', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            apiSpy.createItem.and.returnValue(throwError(() => new Error('fail')));
+            component.duplicateItem(mockItems[0]);
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to duplicate item', 'OK', { duration: 3000 });
         });
   });
 });

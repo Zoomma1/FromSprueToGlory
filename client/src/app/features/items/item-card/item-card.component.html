@@ -48,6 +48,13 @@
                     </button>
                     }
                     <button
+                        class="item-card__action-btn"
+                        (click)="duplicate.emit(item())"
+                        data-testid="duplicate-btn"
+                        aria-label="Duplicate">
+                        <mat-icon>content_copy</mat-icon>
+                    </button>
+                    <button
                         class="item-card__action-btn item-card__action-btn--warn item-card__action-btn--lg"
                         (click)="delete.emit(item())"
                         data-testid="delete-btn"
@@ -66,6 +73,13 @@
                         <mat-icon>edit</mat-icon>
                     </button>
                     }
+                    <button
+                        class="item-card__action-btn"
+                        (click)="duplicate.emit(item())"
+                        data-testid="duplicate-btn"
+                        aria-label="Duplicate">
+                        <mat-icon>content_copy</mat-icon>
+                    </button>
                     <button
                         class="item-card__action-btn item-card__action-btn--warn"
                         (click)="delete.emit(item())"
