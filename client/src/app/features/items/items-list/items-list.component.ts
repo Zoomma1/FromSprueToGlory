@@ -110,6 +110,36 @@ export class ItemsListComponent implements OnInit {
         });
     }
 
+    duplicateItem(item: Item) {
+        const existingNames = new Set(this.items().map(i => i.name));
+        let n = 2;
+        while (existingNames.has(`${item.name} (${n})`)) n++;
+        const name = `${item.name} (${n})`;
+
+        if (!confirm(`Duplicate "${item.name}" as "${name}"?`)) return;
+
+        this.api.createItem({
+            name,
+            gameSystemId: item.gameSystemId!,
+            factionId: item.factionId!,
+            status: 'WANT',
+            quantity: item.quantity,
+            price: item.price,
+            currency: item.currency,
+            notes: item.notes,
+            projectId: item.projectId,
+            tags: [...item.tags],
+        }).subscribe({
+            next: () => {
+                this.snackBar.open(`"${name}" created`, 'OK', { duration: 2000 });
+                this.loadItems();
+            },
+            error: () => {
+                this.snackBar.open('Failed to duplicate item', 'OK', { duration: 3000 });
+            },
+        });
+    }
+
     deleteItem(item: Item) {
         if (!confirm(`Delete "${item.name}"?`)) return;
         this.api.deleteItem(item.id).subscribe({

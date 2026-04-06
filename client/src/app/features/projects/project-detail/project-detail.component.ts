@@ -132,6 +132,36 @@ export class ProjectDetailComponent implements OnInit {
         this.router.navigate(['/projects']);
     }
 
+    duplicateItem(item: Item) {
+        const existingNames = new Set((this.project()?.items ?? []).map((i: Item) => i.name));
+        let n = 2;
+        while (existingNames.has(`${item.name} (${n})`)) n++;
+        const name = `${item.name} (${n})`;
+
+        if (!confirm(`Duplicate "${item.name}" as "${name}"?`)) return;
+
+        this.api.createItem({
+            name,
+            gameSystemId: item.gameSystemId!,
+            factionId: item.factionId!,
+            status: 'WANT',
+            quantity: item.quantity,
+            price: item.price,
+            currency: item.currency,
+            notes: item.notes,
+            projectId: item.projectId,
+            tags: [...item.tags],
+        }).subscribe({
+            next: () => {
+                this.snackBar.open(`"${name}" created`, 'OK', { duration: 2000 });
+                this.loadProject();
+            },
+            error: () => {
+                this.snackBar.open('Failed to duplicate item', 'OK', { duration: 3000 });
+            },
+        });
+    }
+
     openEditDialog(item: Item) {
         const dialogRef = this.dialog.open(ItemFormDialogComponent, {
             width: '600px', maxWidth: '95vw',

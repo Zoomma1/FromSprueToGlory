@@ -103,6 +103,13 @@ describe('ItemCardComponent', () => {
         expect(spy).toHaveBeenCalledWith(jasmine.objectContaining({ id: '1' }));
     });
 
+    it('emits duplicate with item on duplicate button click', () => {
+        const spy = jasmine.createSpy('duplicate');
+        fixture.componentInstance.duplicate.subscribe(spy);
+        el.querySelector<HTMLButtonElement>('[data-testid="duplicate-btn"]')?.click();
+        expect(spy).toHaveBeenCalledWith(jasmine.objectContaining({ id: '1' }));
+    });
+
     it('emits delete with item on delete button click', () => {
         const spy = jasmine.createSpy('delete');
         fixture.componentInstance.delete.subscribe(spy);
@@ -159,6 +166,13 @@ describe('ItemCardComponent', () => {
             const spy = jasmine.createSpy('edit');
             fixture.componentInstance.edit.subscribe(spy);
             el.querySelector<HTMLButtonElement>('[data-testid="edit-btn"]')?.click();
+            expect(spy).toHaveBeenCalledWith(jasmine.objectContaining({ id: '1' }));
+        });
+
+        it('emits duplicate with item on duplicate button click in compact mode', () => {
+            const spy = jasmine.createSpy('duplicate');
+            fixture.componentInstance.duplicate.subscribe(spy);
+            el.querySelector<HTMLButtonElement>('[data-testid="duplicate-btn"]')?.click();
             expect(spy).toHaveBeenCalledWith(jasmine.objectContaining({ id: '1' }));
         });
     });

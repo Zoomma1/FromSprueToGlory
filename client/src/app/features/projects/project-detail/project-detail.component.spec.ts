@@ -353,6 +353,64 @@ describe(ProjectDetailComponent.name, () => {
         }));
     });
 
+    describe('Item duplication', () => {
+        const mockItem = { id: 'item-1', name: 'Intercessors', status: 'WIP', quantity: 5, gameSystemId: 'gs1', factionId: 'f1', price: null, currency: 'EUR', notes: null, projectId: 'project-1', tags: [] } as unknown as Item;
+
+        beforeEach(() => {
+            apiSpy.createItem = jasmine.createSpy('createItem').and.returnValue(of({} as Item));
+            component.project.set({ ...mockProject, items: [mockItem] } as never);
+        });
+
+        it('should call createItem with status WANT and incremented name', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            component.duplicateItem(mockItem);
+            expect(apiSpy.createItem).toHaveBeenCalledWith(jasmine.objectContaining({
+                name: 'Intercessors (2)',
+                status: 'WANT',
+            }));
+        });
+
+        it('should increment to (3) if (2) already exists', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            const itemWithCopy = { ...mockItem, name: 'Intercessors (2)' } as unknown as Item;
+            component.project.set({ ...mockProject, items: [mockItem, itemWithCopy] } as never);
+            component.duplicateItem(mockItem);
+            expect(apiSpy.createItem).toHaveBeenCalledWith(jasmine.objectContaining({ name: 'Intercessors (3)' }));
+        });
+
+        it('should show confirmation dialog with source and target name', () => {
+            const confirmSpy = spyOn(window, 'confirm').and.returnValue(true);
+            component.duplicateItem(mockItem);
+            expect(confirmSpy).toHaveBeenCalledWith('Duplicate "Intercessors" as "Intercessors (2)"?');
+        });
+
+        it('should not call createItem if user cancels', () => {
+            spyOn(window, 'confirm').and.returnValue(false);
+            component.duplicateItem(mockItem);
+            expect(apiSpy.createItem).not.toHaveBeenCalled();
+        });
+
+        it('should reload project after successful duplication', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            apiSpy.getProject.calls.reset();
+            component.duplicateItem(mockItem);
+            expect(apiSpy.getProject).toHaveBeenCalledTimes(1);
+        });
+
+        it('should show snackbar after successful duplication', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            component.duplicateItem(mockItem);
+            expect(snackBarSpy.open).toHaveBeenCalledWith('"Intercessors (2)" created', 'OK', { duration: 2000 });
+        });
+
+        it('should show error snackbar when duplication fails', () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            apiSpy.createItem.and.returnValue(throwError(() => new Error('fail')));
+            component.duplicateItem(mockItem);
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to duplicate item', 'OK', { duration: 3000 });
+        });
+    });
+
     describe('Dialog - Item editing', () => {
         const mockItem = { id: 'item-1', status: 'WANT' } as Item;
 

@@ -18,6 +18,7 @@ export class ItemCardComponent {
 
     statusChange = output<{ item: Item; direction: 'prev' | 'next' }>();
     edit = output<Item>();
+    duplicate = output<Item>();
     delete = output<Item>();
 
     statusLabel = computed(() => STATUS_LABELS[this.item().status] ?? this.item().status);
