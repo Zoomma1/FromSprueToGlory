@@ -109,6 +109,13 @@ export class ItemFormDialogComponent implements OnInit {
             },
         });
 
+        if (this.data.mode === 'create' && (this.data.defaultGameSystemId || this.data.defaultFactionId)) {
+            this.editSavedIds = {
+                gameSystemId: this.data.defaultGameSystemId ?? undefined,
+                factionId: this.data.defaultFactionId ?? undefined,
+            };
+        }
+
         if (this.data.mode === 'edit' && this.data.item) {
             const item = this.data.item;
 
