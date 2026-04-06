@@ -353,6 +353,35 @@ describe(ProjectDetailComponent.name, () => {
         }));
     });
 
+    describe('Dialog - Item editing', () => {
+        const mockItem = { id: 'item-1', status: 'WANT' } as Item;
+
+        it('should open edit dialog with mode edit and item data', () => {
+            component.openEditDialog(mockItem);
+            expect(dialogSpy.open).toHaveBeenCalledWith(jasmine.any(Function), jasmine.objectContaining({
+                data: jasmine.objectContaining({ mode: 'edit', item: mockItem }),
+            }));
+        });
+
+        it('should reload project after editing item', fakeAsync(() => {
+            apiSpy.getProject.calls.reset();
+            component.openEditDialog(mockItem);
+            tick();
+            expect(apiSpy.getProject).toHaveBeenCalledTimes(1);
+        }));
+
+        it('should not reload project if edit dialog is dismissed', fakeAsync(() => {
+            const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
+            dialogRefSpy.afterClosed.and.returnValue(of(undefined));
+            dialogSpy.open.and.returnValue(dialogRefSpy);
+
+            apiSpy.getProject.calls.reset();
+            component.openEditDialog(mockItem);
+            tick();
+            expect(apiSpy.getProject).not.toHaveBeenCalled();
+        }));
+    });
+
     describe('Error Handling', () => {
         it('should show error snackbar when getItems fails in toggleAssignPanel', () => {
             apiSpy.getItems.and.returnValue(throwError(() => new Error('fail')));

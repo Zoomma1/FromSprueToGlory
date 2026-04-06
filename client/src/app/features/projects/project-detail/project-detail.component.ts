@@ -132,6 +132,16 @@ export class ProjectDetailComponent implements OnInit {
         this.router.navigate(['/projects']);
     }
 
+    openEditDialog(item: Item) {
+        const dialogRef = this.dialog.open(ItemFormDialogComponent, {
+            width: '600px', maxWidth: '95vw',
+            data: { mode: 'edit', item },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) this.loadProject();
+        });
+    }
+
     openCreateDialog() {
         const project = this.project();
         const dialogRef = this.dialog.open(ItemFormDialogComponent, {
