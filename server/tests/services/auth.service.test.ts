@@ -64,15 +64,6 @@ const sampleUser = {
     passwordHash: 'hashed-pw',
 };
 
-const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
-const sampleStoredToken = {
-    id: 'rt-1',
-    token: 'refresh-tok',
-    userId: 'user-1',
-    expiresAt: futureDate,
-};
-
 describe('Auth Service', () => {
     beforeEach(() => {
         vi.clearAllMocks();

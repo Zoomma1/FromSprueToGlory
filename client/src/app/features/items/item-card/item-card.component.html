@@ -38,6 +38,15 @@
                         aria-label="Next status">
                         <mat-icon>chevron_right</mat-icon>
                     </button>
+                    @if (showEdit()) {
+                    <button
+                        class="item-card__action-btn"
+                        (click)="edit.emit(item())"
+                        data-testid="edit-btn"
+                        aria-label="Edit">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    }
                     <button
                         class="item-card__action-btn item-card__action-btn--warn item-card__action-btn--lg"
                         (click)="delete.emit(item())"

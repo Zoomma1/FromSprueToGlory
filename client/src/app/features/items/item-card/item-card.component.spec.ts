@@ -134,4 +134,32 @@ describe('ItemCardComponent', () => {
         fixture.detectChanges();
         expect(el.querySelector('.item-card__tags')).toBeFalsy();
     });
+
+    describe('compact mode', () => {
+        beforeEach(() => {
+            fixture.componentRef.setInput('compactMode', true);
+            fixture.detectChanges();
+        });
+
+        it('renders edit button when showEdit is true', () => {
+            fixture.componentRef.setInput('showEdit', true);
+            fixture.detectChanges();
+            expect(el.querySelector('[data-testid="edit-btn"]')).toBeTruthy();
+        });
+
+        it('does not render edit button when showEdit is false', () => {
+            fixture.componentRef.setInput('showEdit', false);
+            fixture.detectChanges();
+            expect(el.querySelector('[data-testid="edit-btn"]')).toBeFalsy();
+        });
+
+        it('emits edit with item on edit button click in compact mode', () => {
+            fixture.componentRef.setInput('showEdit', true);
+            fixture.detectChanges();
+            const spy = jasmine.createSpy('edit');
+            fixture.componentInstance.edit.subscribe(spy);
+            el.querySelector<HTMLButtonElement>('[data-testid="edit-btn"]')?.click();
+            expect(spy).toHaveBeenCalledWith(jasmine.objectContaining({ id: '1' }));
+        });
+    });
 });
