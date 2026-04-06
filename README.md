@@ -1,163 +1,85 @@
-# From Sprue to Glory ⚔️
-⚠️ This app was AI generated using google antigravity, I did not write any of the code inside the  initial commit, I just provided the idea and tested a new tool. I will continue to build the app by my own and will use it for learning purposes, maybe one day I will release it as an open source project.
+# From Sprue to Glory
 
-> *From sprue to glory* — Track your Warhammer Pile of Shame
+Track your Warhammer pile of shame — from the box on your shelf to the model on your display cabinet.
 
-A full-stack Angular + Node.js TypeScript mini-SaaS for tracking your Warhammer miniatures journey, from unboxed sprues to gloriously painted models.
+**Live at [fromspruetoglory.com](https://fromspruetoglory.com)**
 
-## 🏗️ Architecture
 
-```
-from-sprue-to-glory/
-├── client/          # Angular 19 + Material + PWA
-├── server/          # Express + TypeScript + Prisma
-├── docker-compose.yml
-├── .env.example
-└── README.md
-```
+---
 
-| Layer     | Technology                        |
-|-----------|-----------------------------------|
-| Frontend  | Angular 19, Material, CDK, PWA    |
-| Backend   | Express, TypeScript, Zod          |
-| ORM       | Prisma                            |
-| Database  | PostgreSQL 16 (Docker)            |
-| Auth      | JWT + Refresh Token Rotation      |
-| Media     | S3 Pre-signed URLs                |
-| Testing   | Vitest (server), Karma (client)   |
+## What it does
 
-## 🚀 Quick Start
+Every hobbyist has the same problem: boxes you haven't opened, models half-assembled, paint jobs started and abandoned. From Sprue to Glory gives each one a status — Want → Bought → Assembled → WIP → Finished — so you know where things actually stand.
 
-### Prerequisites
-- Node.js ≥ 18.19
-- Docker & Docker Compose
-- npm
+There's also a color scheme section where you can document your paint steps by layer, which turns out to be useful when you're back at the same model six months later with no memory of what you did. Projects let you group models into an army and see a real completion percentage. A paint converter helps if you're switching brands or trying to match a recipe that uses paints you don't own.
 
-### 1. Clone & Install
+I built it to track my own pile of shame and to learn full-stack development. Both goals are ongoing.
+
+---
+
+## Screenshots
+
+![Dashboard.jpeg](doc/screenshot/Dashboard.jpeg)
+![Projects.jpeg](doc/screenshot/Projects.jpeg)
+![ProjectDetail.jpeg](doc/screenshot/ProjectDetail.jpeg)
+![ColorScheme.jpeg](doc/screenshot/ColorScheme.jpeg)
+![PaintConverter.jpeg](doc/screenshot/PaintConverter.jpeg)
+
+---
+
+## Stack
+
+| Layer     | Technology                                      |
+|-----------|-------------------------------------------------|
+| Frontend  | Angular 19, Angular Material, PWA               |
+| Backend   | Express, TypeScript, Zod                        |
+| ORM       | Prisma 6                                        |
+| Database  | PostgreSQL 16                                   |
+| Auth      | JWT + Refresh Token Rotation, Google OAuth      |
+| Storage   | S3 (Railway in prod, MinIO locally)             |
+| Deploy    | Railway                                         |
+| Tests     | Vitest (server), Karma/Jasmine (client)         |
+
+---
+
+## Running locally
+
+Prerequisites: Node.js >= 18, Docker
 
 ```bash
-# Install server dependencies
+git clone https://github.com/Zoomma1/FromSprueToGlory.git
+cd FromSprueToGlory
+
 cd server && npm install
-
-# Install client dependencies
 cd ../client && npm install
-```
 
-### 2. Start Database
-
-```bash
-# From project root
 docker-compose up -d
 
-# With MinIO (for local S3):
-docker-compose --profile with-minio up -d
-```
-
-**Services:**
-| Service  | URL                      | Credentials             |
-|----------|--------------------------|-------------------------|
-| Postgres | `localhost:5432`         | sprue / sprue_secret    |
-| pgAdmin  | `http://localhost:5050`  | admin@sprue.dev / admin |
-| MinIO    | `http://localhost:9001`  | minioadmin / minioadmin |
-
-### 3. Setup Environment
-
-```bash
-# From project root
 cp .env.example .env
-# Edit .env with your values (JWT secrets, S3 keys later)
+# Fill in JWT secrets and S3 keys
+
+cd server && npx prisma migrate dev && npm run seed
 ```
 
-### 4. Run Migrations & Seed
+Then start both servers:
 
 ```bash
-cd server
-npx prisma migrate dev
-npm run seed
+cd server && npm run dev       # http://localhost:3000
+cd client && npx ng serve      # http://localhost:4200
 ```
 
-### 5. Start Development
+---
 
-```bash
-# Terminal 1: Backend
-cd server && npm run dev
+## Contributing
 
-# Terminal 2: Frontend
-cd client && npx ng serve
-```
+Fork the repo, make your changes, open a PR. No formal process.
 
-### 6. Final check before commit
-```bash
-# Terminal 1: Backend tests
-cd server && npm run test
-# Terminal 2: Frontend tests
-cd client && npm run test
+The backend follows `routes/ → services/ → Prisma`, with Zod on all request bodies. The frontend is Angular 19 standalone — signals throughout, lazy-loaded routes, no NgRx. Run `npm test` in `server/` and `client/` before pushing; the tests are the contract, not the comments.
 
-# Lint both
-cd server && npm run lint
-cd client && npm run lint
-```
+---
 
-- **Frontend:** http://localhost:4200
-- **Backend API:** http://localhost:3000
-- **API Health:** http://localhost:3000/api/health
+## License
 
-## 📡 API Endpoints
+[AGPL v3 + Commons Clause](LICENSE)
 
-| Method | Endpoint                        | Description                  |
-|--------|---------------------------------|------------------------------|
-| GET    | `/api/health`                   | Health check                 |
-| POST   | `/api/auth/signup`              | Create account               |
-| POST   | `/api/auth/login`               | Login                        |
-| POST   | `/api/auth/refresh`             | Refresh JWT                  |
-| POST   | `/api/auth/logout`              | Logout                       |
-| GET    | `/api/items`                    | List items (filtered)        |
-| POST   | `/api/items`                    | Create item                  |
-| PUT    | `/api/items/:id`                | Update item                  |
-| DELETE | `/api/items/:id`                | Delete item                  |
-| PATCH  | `/api/items/:id/status`         | Change status + history      |
-| GET    | `/api/items/:id/history`        | Status change history        |
-| GET    | `/api/color-schemes`            | List color schemes           |
-| POST   | `/api/color-schemes`            | Create scheme + steps        |
-| PUT    | `/api/color-schemes/:id`        | Update scheme + steps        |
-| DELETE | `/api/color-schemes/:id`        | Delete scheme                |
-| GET    | `/api/reference/game-systems`   | Game systems                 |
-| GET    | `/api/reference/factions`       | Factions (filterable)        |
-| GET    | `/api/reference/models`         | Models (filterable)          |
-| GET    | `/api/reference/paint-brands`   | Paint brands                 |
-| GET    | `/api/reference/paints`         | Paints (filterable)          |
-| GET    | `/api/reference/techniques`     | Painting techniques          |
-| POST   | `/api/media/presign-upload`     | Get pre-signed upload URL    |
-| GET    | `/api/media/presign-read/:key`  | Get pre-signed read URL      |
-| GET    | `/api/export/items`             | Export items (JSON/CSV)      |
-| DELETE | `/api/account`                  | Delete account + all data    |
-
-## 📦 Import Format
-
-### CSV (Factions example)
-```csv
-name,gameSystemSlug
-Space Marines,40k
-Orks,40k
-Stormcast Eternals,aos
-```
-
-### JSON (Paints example)
-```json
-[
-  { "name": "Abaddon Black", "code": null, "brandSlug": "citadel", "type": "BASE" },
-  { "name": "Retributor Armour", "code": null, "brandSlug": "citadel", "type": "BASE" }
-]
-```
-
-### Run import
-```bash
-cd server
-npm run import -- --type factions --file data/factions.csv
-npm run import -- --type paints --file data/paints.json
-```
-
-## 🗄️ Database Schema
-
-See `server/prisma/schema.prisma` for the full schema.
-
+Forks and contributions are welcome. Selling a fork is not.
