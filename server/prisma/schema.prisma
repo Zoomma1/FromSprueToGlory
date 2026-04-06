@@ -55,17 +55,21 @@ model User {
 }
 
 model Project {
-  id          String   @id @default(uuid())
-  userId      String
-  name        String
-  description String?
-  color       String?
-  tags        String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                  String   @id @default(uuid())
+  userId              String
+  name                String
+  description         String?
+  color               String?
+  tags                String[]
+  defaultGameSystemId String?
+  defaultFactionId    String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items Item[]
+  user                User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items               Item[]
+  defaultGameSystem   GameSystem? @relation("ProjectDefaultGameSystem", fields: [defaultGameSystemId], references: [id])
+  defaultFaction      Faction?    @relation("ProjectDefaultFaction", fields: [defaultFactionId], references: [id])
 
   @@index([userId])
   @@map("projects")
@@ -109,9 +113,10 @@ model GameSystem {
   slug String @unique // URL-friendly name: "40k", "aos", "kill-team"
 
   // Relations
-  factions     Faction[]
-  items        Item[]
-  colorSchemes ColorScheme[]
+  factions        Faction[]
+  items           Item[]
+  colorSchemes    ColorScheme[]
+  projectDefaults Project[]    @relation("ProjectDefaultGameSystem")
 
   @@map("game_systems")
 }
@@ -124,9 +129,10 @@ model Faction {
   gameSystem GameSystem @relation(fields: [gameSystemId], references: [id])
 
   // Relations
-  models       Model[]
-  items        Item[]
-  colorSchemes ColorScheme[]
+  models          Model[]
+  items           Item[]
+  colorSchemes    ColorScheme[]
+  projectDefaults Project[]    @relation("ProjectDefaultFaction")
 
   @@unique([name, gameSystemId]) // no duplicate faction names within a game system
   @@index([gameSystemId])

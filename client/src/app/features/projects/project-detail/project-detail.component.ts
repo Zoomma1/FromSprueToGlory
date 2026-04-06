@@ -180,6 +180,8 @@ export class ProjectDetailComponent implements OnInit {
                 mode: 'create',
                 defaultProjectId: project?.id ?? null,
                 defaultProjectName: project?.name ?? null,
+                defaultGameSystemId: project?.defaultGameSystemId ?? null,
+                defaultFactionId: project?.defaultFactionId ?? null,
             },
         });
         dialogRef.afterClosed().subscribe((result) => {

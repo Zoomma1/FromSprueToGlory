@@ -24,6 +24,25 @@
       </div>
     </div>
     <div class="field-group">
+      <app-searchable-select
+        label="Default Game System"
+        formControlName="gameSystem"
+        [options]="gameSystems()"
+        [displayFn]="gameSystemDisplayFn"
+        placeholder="Select game system..."
+        (valueChange)="onGameSystemChange($event?.id ?? null)">
+      </app-searchable-select>
+    </div>
+    <div class="field-group">
+      <app-searchable-select
+        label="Default Army"
+        formControlName="faction"
+        [options]="factions()"
+        [displayFn]="factionDisplayFn"
+        placeholder="Select army...">
+      </app-searchable-select>
+    </div>
+    <div class="field-group">
       <label class="field-label" for="project-tag">Tags</label>
       <mat-chip-grid #chipGrid class="field-chips">
         @for (tag of tags(); track tag) {
