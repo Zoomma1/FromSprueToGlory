@@ -26,10 +26,15 @@ $project-colors: (
     border-left: 4px solid transparent;
     padding: 16px;
     transition: background 0.2s ease;
-    cursor: default;
+    cursor: pointer;
 
     &:hover {
         background: var(--color-surface-high);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--color-orange-strong);
+        outline-offset: 2px;
     }
 
     &--empty {
