@@ -1,7 +1,7 @@
 // ──────────────────────────────────────────────────────────
 // 🎨 Scheme Detail Component — View/Edit Color Scheme
 // ──────────────────────────────────────────────────────────
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -46,7 +46,7 @@ export const PAINT_TYPES = [
     styleUrl: './scheme-detail.component.scss',
 })
 
-export class SchemeDetailComponent implements OnInit {
+export class SchemeDetailComponent implements OnInit, OnDestroy {
     private api = inject(ApiService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
@@ -57,6 +57,10 @@ export class SchemeDetailComponent implements OnInit {
 
     readonly ADD_PAINT_SENTINEL = ADD_PAINT_SENTINEL;
     readonly paintTypes = PAINT_TYPES;
+
+    private readonly mobileQuery = window.matchMedia('(max-width: 640px)');
+    private readonly onMobileChange = (e: MediaQueryListEvent) => this.isMobile.set(e.matches);
+    isMobile = signal(this.mobileQuery.matches);
 
     readonly techniqueDisplayFn = (t: Technique) => t.name;
     readonly brandDisplayFn = (b: string) => b;
@@ -161,7 +165,12 @@ export class SchemeDetailComponent implements OnInit {
         return this.form.get('steps') as FormArray;
     }
 
+    ngOnDestroy() {
+        this.mobileQuery.removeEventListener('change', this.onMobileChange);
+    }
+
     ngOnInit() {
+        this.mobileQuery.addEventListener('change', this.onMobileChange);
         const mode = this.route.snapshot.paramMap.get('mode');
         const id = this.route.snapshot.paramMap.get('id');
         const url = this.route.snapshot.url.map(s => s.path);
@@ -446,6 +455,22 @@ export class SchemeDetailComponent implements OnInit {
         controls.splice(event.currentIndex, 0, moved);
         this.stepsArray.clear();
         controls.forEach((c) => this.stepsArray.push(c));
+    }
+
+    moveStepUp(index: number): void {
+        if (index === 0) return;
+        const controls = [...this.stepsArray.controls];
+        [controls[index - 1], controls[index]] = [controls[index], controls[index - 1]];
+        this.stepsArray.clear();
+        controls.forEach(c => this.stepsArray.push(c));
+    }
+
+    moveStepDown(index: number): void {
+        if (index === this.stepsArray.length - 1) return;
+        const controls = [...this.stepsArray.controls];
+        [controls[index], controls[index + 1]] = [controls[index + 1], controls[index]];
+        this.stepsArray.clear();
+        controls.forEach(c => this.stepsArray.push(c));
     }
 
     private createStepGroup(step?: ColorSchemeStepFull): FormGroup {
