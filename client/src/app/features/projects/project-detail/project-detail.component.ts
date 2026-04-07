@@ -9,6 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
 import { Project } from '../../../classes/project';
 import { Item } from '../../../classes/items';
@@ -20,8 +23,9 @@ import { ItemFormDialogComponent } from '../../items/item-form/item-form-dialog.
     selector: 'app-project-detail',
     standalone: true,
     imports: [
-        CommonModule, CurrencyPipe,
+        CommonModule, CurrencyPipe, FormsModule,
         MatButtonModule, MatIconModule,
+        MatSelectModule, MatFormFieldModule,
         MatSnackBarModule, MatDialogModule, MatTooltipModule,
         ItemCardComponent,
     ],
@@ -38,6 +42,19 @@ export class ProjectDetailComponent implements OnInit {
     project = signal<Project | null>(null);
     unassignedItems = signal<Item[]>([]);
     showAssignPanel = signal(false);
+
+    sortOption = signal<'name-asc' | 'name-desc' | 'status-asc' | 'status-desc'>('name-asc');
+
+    sortedItems = computed(() => {
+        const items = this.project()?.items ?? [];
+        const [field, dir] = this.sortOption().split('-') as ['name' | 'status', 'asc' | 'desc'];
+        return [...items].sort((a, b) => {
+            const cmp = field === 'name'
+                ? a.name.localeCompare(b.name)
+                : STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status);
+            return dir === 'asc' ? cmp : -cmp;
+        });
+    });
 
     toSpendSummary = computed(() => {
         const wantItems = this.project()?.items?.filter((i) => i.status === 'WANT') ?? [];

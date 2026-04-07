@@ -143,9 +143,17 @@
 
         <div formArrayName="steps" cdkDropList (cdkDropListDropped)="reorderStep($event)" class="steps-form-list">
             @for (step of stepsArray.controls; track $index; let i = $index) {
-            <div [formGroupName]="i" class="step-row" cdkDrag>
+            <div [formGroupName]="i" class="step-row" cdkDrag [cdkDragDisabled]="isMobile()">
                 <div class="step-row-header">
                     <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+                    <div class="move-btns">
+                        <button type="button" class="move-btn" (click)="moveStepUp(i)" [disabled]="i === 0">
+                            <mat-icon>arrow_upward</mat-icon>
+                        </button>
+                        <button type="button" class="move-btn" (click)="moveStepDown(i)" [disabled]="i === stepsArray.length - 1">
+                            <mat-icon>arrow_downward</mat-icon>
+                        </button>
+                    </div>
                     <span class="step-num">Step {{ i + 1 }}</span>
                     <button type="button" class="mix-toggle-btn"
                         [class.mix-toggle-btn--active]="stepsArray.at(i).get('isMix')?.value"

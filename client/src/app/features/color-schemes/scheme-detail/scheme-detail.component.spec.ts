@@ -204,6 +204,60 @@ describe('SchemeDetailComponent', () => {
       expect(component.stepsArray.at(0).value.area).toBe('Second');
       expect(component.stepsArray.at(1).value.area).toBe('First');
     });
+
+    it('should move a step up', () => {
+      component.addStep();
+      component.addStep();
+      component.addStep();
+      component.stepsArray.at(0).patchValue({ area: 'First' });
+      component.stepsArray.at(1).patchValue({ area: 'Second' });
+      component.stepsArray.at(2).patchValue({ area: 'Third' });
+
+      component.moveStepUp(1);
+
+      expect(component.stepsArray.at(0).value.area).toBe('Second');
+      expect(component.stepsArray.at(1).value.area).toBe('First');
+      expect(component.stepsArray.at(2).value.area).toBe('Third');
+    });
+
+    it('should not move up when already at the top', () => {
+      component.addStep();
+      component.addStep();
+      component.stepsArray.at(0).patchValue({ area: 'First' });
+      component.stepsArray.at(1).patchValue({ area: 'Second' });
+
+      component.moveStepUp(0);
+
+      expect(component.stepsArray.at(0).value.area).toBe('First');
+      expect(component.stepsArray.at(1).value.area).toBe('Second');
+    });
+
+    it('should move a step down', () => {
+      component.addStep();
+      component.addStep();
+      component.addStep();
+      component.stepsArray.at(0).patchValue({ area: 'First' });
+      component.stepsArray.at(1).patchValue({ area: 'Second' });
+      component.stepsArray.at(2).patchValue({ area: 'Third' });
+
+      component.moveStepDown(1);
+
+      expect(component.stepsArray.at(0).value.area).toBe('First');
+      expect(component.stepsArray.at(1).value.area).toBe('Third');
+      expect(component.stepsArray.at(2).value.area).toBe('Second');
+    });
+
+    it('should not move down when already at the bottom', () => {
+      component.addStep();
+      component.addStep();
+      component.stepsArray.at(0).patchValue({ area: 'First' });
+      component.stepsArray.at(1).patchValue({ area: 'Second' });
+
+      component.moveStepDown(1);
+
+      expect(component.stepsArray.at(0).value.area).toBe('First');
+      expect(component.stepsArray.at(1).value.area).toBe('Second');
+    });
   });
 
   describe('Step group creation', () => {

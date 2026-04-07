@@ -8,6 +8,7 @@ import { ApiService } from '../../../core/services/api.service';
 import { Item } from '../../../classes/items';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 describe('ItemsListComponent', () => {
     let component: ItemsListComponent;
@@ -324,6 +325,55 @@ describe('ItemsListComponent', () => {
             component.loadItems();
             expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load items', 'OK', { duration: 3000 });
         });
+  });
+
+  describe('Query param pre-fill', () => {
+    const buildComponent = async (statusParam: string | null): Promise<{ component: ItemsListComponent; apiSpy: jasmine.SpyObj<ApiService> }> => {
+        TestBed.resetTestingModule();
+        const spy = jasmine.createSpyObj('ApiService', ['getItems', 'changeItemStatus']);
+        spy.getItems.and.returnValue(of([]));
+        const snackSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+        const dlgSpy   = jasmine.createSpyObj('MatDialog', ['open']);
+
+        await TestBed.configureTestingModule({
+            imports: [ItemsListComponent, NoopAnimationsModule],
+            providers: [
+                provideRouter([]),
+                provideHttpClient(),
+                { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: { get: () => statusParam } } } },
+            ],
+        }).overrideComponent(ItemsListComponent, {
+            set: { providers: [
+                { provide: ApiService,  useValue: spy     },
+                { provide: MatSnackBar, useValue: snackSpy },
+                { provide: MatDialog,   useValue: dlgSpy   },
+            ]},
+        }).compileComponents();
+
+        const f = TestBed.createComponent(ItemsListComponent);
+        f.detectChanges();
+        return { component: f.componentInstance, apiSpy: spy };
+    };
+
+    it('should pre-fill statusFilter from status query param', async () => {
+        const { component } = await buildComponent('WIP');
+        expect(component.statusFilter).toBe('WIP');
+    });
+
+    it('should call loadItems with query param status on init', async () => {
+        const { apiSpy: spy } = await buildComponent('WANT');
+        expect(spy.getItems).toHaveBeenCalledWith({ status: 'WANT' });
+    });
+
+    it('should leave statusFilter empty when no query param is present', async () => {
+        const { component } = await buildComponent(null);
+        expect(component.statusFilter).toBe('');
+    });
+
+    it('should call loadItems without filter when no query param is present', async () => {
+        const { apiSpy: spy } = await buildComponent(null);
+        expect(spy.getItems).toHaveBeenCalledWith({});
+    });
   });
 
   describe('Item duplication', () => {

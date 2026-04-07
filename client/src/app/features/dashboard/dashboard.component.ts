@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiService } from '../../core/services/api.service';
 import { Item } from '../../classes/items';
@@ -33,7 +33,8 @@ interface WastedMoneyResult {
     styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
-    private api = inject(ApiService);
+    private api    = inject(ApiService);
+    private router = inject(Router);
 
     stats = signal<StatusCount[]>([]);
     allItems = signal<Item[]>([]);
@@ -80,6 +81,10 @@ export class DashboardComponent implements OnInit {
         WIP: { icon: 'brush', color: '#f44336' },
         FINISHED: { icon: 'check_circle', color: '#4caf50' },
     };
+
+    navigateToItems(status: string) {
+        this.router.navigate(['/items'], { queryParams: { status } });
+    }
 
     ngOnInit() {
         this.api.getMe().subscribe({

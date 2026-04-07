@@ -11,6 +11,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
 import { Item } from '../../../classes/items';
 import { ItemFormDialogComponent } from '../item-form/item-form-dialog.component';
@@ -31,9 +32,10 @@ import {STATUS_ORDER, STATUS_LABELS} from '../../../classes/item.constants';
     styleUrl: './items-list.component.scss',
 })
 export class ItemsListComponent implements OnInit {
-    private api = inject(ApiService);
+    private api    = inject(ApiService);
     private dialog = inject(MatDialog);
     private snackBar = inject(MatSnackBar);
+    private route  = inject(ActivatedRoute);
 
     items = signal<Item[]>([]);
     statusFilter = '';
@@ -42,6 +44,8 @@ export class ItemsListComponent implements OnInit {
     readonly statusLabels = STATUS_LABELS;
 
     ngOnInit() {
+        const statusParam = this.route.snapshot.queryParamMap.get('status');
+        if (statusParam) this.statusFilter = statusParam;
         this.loadItems();
     }
 

@@ -49,6 +49,8 @@ type ProjectSummary = {
     itemCount: number;
     completion: number;
     statusCounts: Record<string, number>;
+    defaultFactionId: string | null;
+    defaultGameSystemId: string | null;
 };
 
 // ─── listProjects ─────────────────────────────────────────
@@ -100,6 +102,8 @@ export async function listProjects(
                     .reduce((sum: number, i: ProjectWithItems['items'][number]) => sum + i.quantity, 0),
             ]),
         ),
+        defaultFactionId: p.defaultFactionId,
+        defaultGameSystemId: p.defaultGameSystemId,
     }));
 
     return { data, total };
