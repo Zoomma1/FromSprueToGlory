@@ -6,7 +6,7 @@
 <!-- ─── Status grid ───────────────────────────────────────────────────────── -->
 <div class="stats-grid">
     @for (stat of stats(); track stat.status) {
-    <div class="stat-card" [class.stat-card--empty]="stat.count === 0" [style.border-left-color]="stat.color">
+    <div class="stat-card" [class.stat-card--empty]="stat.count === 0" [style.border-left-color]="stat.color" (click)="navigateToItems(stat.status)" role="button" tabindex="0">
         <div class="stat-card__header">
             <span class="stat-card__label" [style.color]="stat.color">{{ stat.status }}</span>
             <mat-icon class="stat-card__icon" [style.color]="stat.color">{{ stat.icon }}</mat-icon>

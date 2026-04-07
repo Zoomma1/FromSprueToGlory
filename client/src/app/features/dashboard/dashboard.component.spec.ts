@@ -1,6 +1,6 @@
 import { DashboardComponent } from './dashboard.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ApiService } from '../../core/services/api.service';
 import { Item } from '../../classes/items';
@@ -94,6 +94,15 @@ describe('Dashboard', () => {
         { status: 'FINISHED', count: 0, icon: 'check_circle', color: '#4caf50' },
       ]);
       expect(component.totalItems()).toBe(0);
+    });
+  });
+
+  describe('Stat card navigation', () => {
+    it('should navigate to /items with status filter when navigateToItems is called', () => {
+      const router = TestBed.inject(Router);
+      spyOn(router, 'navigate');
+      component.navigateToItems('WIP');
+      expect(router.navigate).toHaveBeenCalledWith(['/items'], { queryParams: { status: 'WIP' } });
     });
   });
 
