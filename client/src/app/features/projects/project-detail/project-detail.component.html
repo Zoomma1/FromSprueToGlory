@@ -60,6 +60,19 @@
     </button>
   </div>
 
+  <!-- Sort controls -->
+  <div class="filters-bar">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Sort by</mat-label>
+      <mat-select [value]="sortOption()" (valueChange)="sortOption.set($event)">
+        <mat-option value="name-asc">Name A→Z</mat-option>
+        <mat-option value="name-desc">Name Z→A</mat-option>
+        <mat-option value="status-asc">Status ↑</mat-option>
+        <mat-option value="status-desc">Status ↓</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   <!-- Assign panel -->
   @if (showAssignPanel()) {
     <div class="assign-panel">
@@ -92,7 +105,7 @@
 
   <!-- Items list -->
   <div class="items-list">
-    @for (item of proj.items; track item.id) {
+    @for (item of sortedItems(); track item.id) {
       <app-item-card
         [item]="item"
         [showEdit]="true"

@@ -411,6 +411,53 @@ describe(ProjectDetailComponent.name, () => {
         });
     });
 
+    describe('sortedItems - Frontend sorting', () => {
+        const itemAlpha = { id: 'item-a', name: 'Alpha', status: 'WANT'     } as unknown as Item;
+        const itemMango = { id: 'item-b', name: 'Mango', status: 'FINISHED' } as unknown as Item;
+        const itemZebra = { id: 'item-c', name: 'Zebra', status: 'WIP'      } as unknown as Item;
+
+        beforeEach(() => {
+            component.project.set({ ...mockProject, items: [itemZebra, itemAlpha, itemMango] } as never);
+        });
+
+        it('should sort by name A→Z by default', () => {
+            expect(component.sortedItems().map(i => i.name)).toEqual(['Alpha', 'Mango', 'Zebra']);
+        });
+
+        it('should sort by name Z→A after sortOption name-desc', () => {
+            component.sortOption.set('name-desc');
+            expect(component.sortedItems().map(i => i.name)).toEqual(['Zebra', 'Mango', 'Alpha']);
+        });
+
+        it('should sort by status ascending after sortOption status-asc', () => {
+            component.sortOption.set('status-asc');
+            // WANT(0) < WIP(3) < FINISHED(4)
+            expect(component.sortedItems().map(i => i.status)).toEqual(['WANT', 'WIP', 'FINISHED']);
+        });
+
+        it('should sort by status descending after sortOption status-desc', () => {
+            component.sortOption.set('status-desc');
+            expect(component.sortedItems().map(i => i.status)).toEqual(['FINISHED', 'WIP', 'WANT']);
+        });
+
+        it('should return empty array when project has no items', () => {
+            component.project.set({ ...mockProject, items: [] } as never);
+            expect(component.sortedItems()).toEqual([]);
+        });
+
+        it('should return empty array when project is null', () => {
+            component.project.set(null);
+            expect(component.sortedItems()).toEqual([]);
+        });
+
+        it('should not mutate the original items array', () => {
+            component.sortOption.set('name-desc');
+            const originalFirst = component.project()!.items![0];
+            component.sortedItems();
+            expect(component.project()!.items![0]).toBe(originalFirst);
+        });
+    });
+
     describe('Dialog - Item editing', () => {
         const mockItem = { id: 'item-1', status: 'WANT' } as Item;
 

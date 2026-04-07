@@ -242,6 +242,18 @@
   }
 }
 
+// ─── Filters bar ──────────────────────────────────────────────────────────────
+.filters-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.filter-field {
+  width: 160px;
+}
+
 // ─── Assign panel ─────────────────────────────────────────────────────────────
 .assign-panel {
   background: var(--color-surface);
