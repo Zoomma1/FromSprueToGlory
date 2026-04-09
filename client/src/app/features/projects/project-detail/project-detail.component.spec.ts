@@ -253,8 +253,8 @@ describe(ProjectDetailComponent.name, () => {
             component.project.set({
                 ...mockProject,
                 items: [
-                    { id: 'item-1', status: 'WIP', price: 20 },
-                    { id: 'item-2', status: 'FINISHED', price: 10 },
+                    { id: 'item-1', status: 'WIP', price: 20, quantity: 1 },
+                    { id: 'item-2', status: 'FINISHED', price: 10, quantity: 1 },
                 ],
             } as never);
             expect(component.toSpendSummary()).toBeNull();
@@ -264,43 +264,52 @@ describe(ProjectDetailComponent.name, () => {
             component.project.set({
                 ...mockProject,
                 items: [
-                    { id: 'item-1', status: 'WANT', price: 30 },
-                    { id: 'item-2', status: 'WANT', price: 20 },
-                    { id: 'item-3', status: 'WIP', price: 50 },
+                    { id: 'item-1', status: 'WANT', price: 30, quantity: 1 },
+                    { id: 'item-2', status: 'WANT', price: 20, quantity: 1 },
+                    { id: 'item-3', status: 'WIP', price: 50, quantity: 1 },
                 ],
             } as never);
             expect(component.toSpendSummary()?.total).toBe(50);
+        });
+
+        it('should multiply price by quantity for total', () => {
+            component.project.set({
+                ...mockProject,
+                items: [
+                    { id: 'item-1', status: 'WANT', price: 380, quantity: 2 },
+                ],
+            } as never);
+            expect(component.toSpendSummary()?.total).toBe(760);
         });
 
         it('should exclude WANT items without price from total', () => {
             component.project.set({
                 ...mockProject,
                 items: [
-                    { id: 'item-1', status: 'WANT', price: 30 },
-                    { id: 'item-2', status: 'WANT', price: null },
+                    { id: 'item-1', status: 'WANT', price: 30, quantity: 1 },
+                    { id: 'item-2', status: 'WANT', price: null, quantity: 1 },
                 ],
             } as never);
             expect(component.toSpendSummary()?.total).toBe(30);
         });
 
-        it('should count WANT items without price', () => {
+        it('should count missing by total quantity of WANT items without price', () => {
             component.project.set({
                 ...mockProject,
                 items: [
-                    { id: 'item-1', status: 'WANT', price: 30 },
-                    { id: 'item-2', status: 'WANT', price: null },
-                    { id: 'item-3', status: 'WANT', price: null },
+                    { id: 'item-1', status: 'WANT', price: 30, quantity: 1 },
+                    { id: 'item-2', status: 'WANT', price: null, quantity: 3 },
                 ],
             } as never);
-            expect(component.toSpendSummary()?.missing).toBe(2);
+            expect(component.toSpendSummary()?.missing).toBe(3);
         });
 
         it('should return total 0 and missing equal to all when all WANT items have no price', () => {
             component.project.set({
                 ...mockProject,
                 items: [
-                    { id: 'item-1', status: 'WANT', price: null },
-                    { id: 'item-2', status: 'WANT', price: null },
+                    { id: 'item-1', status: 'WANT', price: null, quantity: 1 },
+                    { id: 'item-2', status: 'WANT', price: null, quantity: 1 },
                 ],
             } as never);
             const summary = component.toSpendSummary();

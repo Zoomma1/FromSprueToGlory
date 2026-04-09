@@ -60,8 +60,10 @@ export class ProjectDetailComponent implements OnInit {
         const wantItems = this.project()?.items?.filter((i) => i.status === 'WANT') ?? [];
         if (!wantItems.length) return null;
         const withPrice = wantItems.filter((i) => i.price != null);
-        const total = withPrice.reduce((sum, i) => sum + i.price!, 0);
-        const missing = wantItems.length - withPrice.length;
+        const total = withPrice.reduce((sum, i) => sum + i.price! * i.quantity, 0);
+        const missing = wantItems
+            .filter((i) => i.price == null)
+            .reduce((sum, i) => sum + i.quantity, 0);
         return { total, missing };
     });
 
