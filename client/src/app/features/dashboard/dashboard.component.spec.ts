@@ -117,7 +117,7 @@ describe('Dashboard', () => {
 
   describe('Wasted money', () => {
     const makeItem = (overrides: Partial<Item>): Item =>
-      ({ id: '0', name: 'Item', status: 'WIP', price: null, currency: 'EUR', project: null, ...overrides }) as Item;
+      ({ id: '0', name: 'Item', status: 'WIP', price: null, currency: 'EUR', quantity: 1, project: null, ...overrides }) as Item;
 
     const reloadWith = (items: Item[]) => {
       apiSpy.getItems.and.returnValue(of(items));
@@ -203,6 +203,27 @@ describe('Dashboard', () => {
       const result = component.wastedMoney();
       const alpha = result!.projectBreakdown.find((p) => p.project === 'Alpha');
       expect(alpha!.total).toBeCloseTo(20 + 10 * (1 / 1.083), 2);
+    });
+
+    it('should multiply price by quantity for total', () => {
+      reloadWith([
+        makeItem({ id: '1', status: 'BOUGHT', price: 47.5, currency: 'EUR', quantity: 2 }),
+        makeItem({ id: '2', status: 'WIP',    price: 37,   currency: 'EUR', quantity: 1 }),
+      ]);
+      const result = component.wastedMoney();
+      // 47.5 × 2 + 37 × 1 = 132  (bug was: 47.5 + 37 = 84.5)
+      expect(result!.total).toBe(132);
+    });
+
+    it('should multiply price by quantity in project breakdown', () => {
+      reloadWith([
+        makeItem({ id: '1', status: 'WIP', price: 50, currency: 'EUR', quantity: 3, project: { id: 'p1', name: 'Alpha' } }),
+        makeItem({ id: '2', status: 'WIP', price: 20, currency: 'EUR', quantity: 1, project: { id: 'p1', name: 'Alpha' } }),
+      ]);
+      const result = component.wastedMoney();
+      const alpha = result!.projectBreakdown.find((p) => p.project === 'Alpha');
+      // 50 × 3 + 20 × 1 = 170
+      expect(alpha!.total).toBe(170);
     });
   });
 });

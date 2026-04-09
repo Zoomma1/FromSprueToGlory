@@ -56,13 +56,13 @@ export class DashboardComponent implements OnInit {
         };
 
         const total = eligibleItems.reduce(
-            (sum, item) => sum + convert(item.price!, item.currency),
+            (sum, item) => sum + convert(item.price!, item.currency) * item.quantity,
             0,
         );
 
         const byProject = eligibleItems.reduce((map, item) => {
             const projectName = item.project?.name ?? 'No Project';
-            map.set(projectName, (map.get(projectName) ?? 0) + convert(item.price!, item.currency));
+            map.set(projectName, (map.get(projectName) ?? 0) + convert(item.price!, item.currency) * item.quantity);
             return map;
         }, new Map<string, number>());
 
