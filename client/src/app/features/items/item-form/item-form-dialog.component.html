@@ -96,9 +96,16 @@
   </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button class="btn-cancel" mat-dialog-close>Cancel</button>
-  <button class="btn-save" (click)="save()" [disabled]="form.invalid || saving()">
-    {{ data.mode === 'create' ? 'Create' : 'Save' }}
-  </button>
+<mat-dialog-actions>
+  <div class="actions-left">
+    @if (data.mode === 'edit') {
+      <button class="btn-delete" (click)="delete()" [disabled]="deleting()">Delete</button>
+    }
+  </div>
+  <div class="actions-right">
+    <button class="btn-cancel" mat-dialog-close>Cancel</button>
+    <button class="btn-save" (click)="save()" [disabled]="form.invalid || saving()">
+      {{ data.mode === 'create' ? 'Create' : 'Save' }}
+    </button>
+  </div>
 </mat-dialog-actions>

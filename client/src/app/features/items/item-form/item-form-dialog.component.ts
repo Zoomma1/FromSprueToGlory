@@ -43,6 +43,7 @@ export class ItemFormDialogComponent implements OnInit {
     models = signal<Model[]>([]);
     projects = signal<Project[]>([]);
     saving = signal(false);
+    deleting = signal(false);
 
   readonly gameSystemDisplayFn = (gs: GameSystem) => gs.name;
     readonly factionDisplayFn = (f: Faction) => f.name;
@@ -237,6 +238,22 @@ export class ItemFormDialogComponent implements OnInit {
             error: (err) => {
                 this.snackBar.open(err?.error?.error || 'Failed to save', 'OK', { duration: 5000 });
                 this.saving.set(false);
+            },
+        });
+    }
+
+    delete() {
+        if (!confirm(`Delete "${this.data.item.name}"?`)) return;
+        this.deleting.set(true);
+
+        this.api.deleteItem(this.data.item.id).subscribe({
+            next: () => {
+                this.snackBar.open('Item deleted', 'OK', { duration: 3000 });
+                this.dialogRef.close({ deleted: true });
+            },
+            error: () => {
+                this.snackBar.open('Failed to delete item', 'OK', { duration: 3000 });
+                this.deleting.set(false);
             },
         });
     }

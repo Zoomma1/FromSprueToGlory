@@ -31,7 +31,7 @@ describe('ItemFormDialogComponent', () => {
         spySetup?: (api: jasmine.SpyObj<ApiService>) => void,
     ) {
         apiSpy = jasmine.createSpyObj('ApiService', [
-            'getGameSystems', 'getFactions', 'getProjects', 'createItem', 'updateItem', 'getMe'
+            'getGameSystems', 'getFactions', 'getProjects', 'createItem', 'updateItem', 'getMe', 'deleteItem'
         ]);
         snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
         dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
@@ -363,6 +363,88 @@ describe('ItemFormDialogComponent', () => {
             expect(apiSpy.updateItem).toHaveBeenCalledWith('item-1', jasmine.objectContaining({
                 tags: ['Tag1', 'Tag2'],
             }));
+        });
+    });
+
+    describe('Delete', () => {
+        it('should call deleteItem when delete is confirmed in edit mode', async () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+            });
+            apiSpy.deleteItem.and.returnValue(of(undefined));
+
+            component.delete();
+
+            expect(window.confirm).toHaveBeenCalledWith('Delete "Test Item"?');
+            expect(apiSpy.deleteItem).toHaveBeenCalledWith('item-1');
+        });
+
+        it('should not call deleteItem when delete is cancelled', async () => {
+            spyOn(window, 'confirm').and.returnValue(false);
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+            });
+
+            component.delete();
+
+            expect(window.confirm).toHaveBeenCalled();
+            expect(apiSpy.deleteItem).not.toHaveBeenCalled();
+        });
+
+        it('should display snackbar and close dialog on successful delete', async () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+            });
+            apiSpy.deleteItem.and.returnValue(of(undefined));
+
+            component.delete();
+
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Item deleted', 'OK', { duration: 3000 });
+            expect(dialogRefSpy.close).toHaveBeenCalledWith({ deleted: true });
+        });
+
+        it('should display error snackbar on delete failure', async () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+            });
+            apiSpy.deleteItem.and.returnValue(throwError(() => ({ error: { error: 'Delete failed' } })));
+
+            component.delete();
+
+            expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to delete item', 'OK', { duration: 3000 });
+        });
+
+        it('should set deleting to true during delete', async () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+            });
+            apiSpy.deleteItem.and.returnValue(of(undefined));
+
+            component.delete();
+
+            expect(component.deleting()).toBeTrue();
+        });
+
+        it('should set deleting to false on delete failure', async () => {
+            spyOn(window, 'confirm').and.returnValue(true);
+            await createComponent({
+                mode: 'edit',
+                item: { ...mockItem[0], id: 'item-1', status: 'WANT', quantity: 1 },
+            });
+            apiSpy.deleteItem.and.returnValue(throwError(() => ({})));
+
+            component.delete();
+
+            expect(component.deleting()).toBeFalse();
         });
     });
 });
