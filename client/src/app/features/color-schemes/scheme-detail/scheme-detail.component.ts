@@ -118,8 +118,7 @@ export class SchemeDetailComponent implements OnInit, OnDestroy {
         const brands = this.allPaints().map(p => p.brand?.name).filter(Boolean) as string[];
         const unique = Array.from(new Set(brands));
         const rest = unique.filter(b => b !== 'Other').sort();
-        const hasOther = unique.includes('Other');
-        return hasOther ? [...rest, 'Other'] : rest;
+        return [...rest, 'Other'];
     });
 
     getDisplayedPaints(stepIndex: number): Paint[] {

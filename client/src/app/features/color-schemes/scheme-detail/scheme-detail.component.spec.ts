@@ -717,7 +717,7 @@ describe('SchemeDetailComponent', () => {
 
     it('should compute available brands sorted and deduplicated', () => {
       component.paints.set(mockPaintsWithBrands);
-      expect(component.availableBrands()).toEqual(['Citadel', 'Vallejo']);
+      expect(component.availableBrands()).toEqual(['Citadel', 'Vallejo', 'Other']);
     });
 
     it('should include "Other" brand when custom paints are loaded', () => {
@@ -741,9 +741,9 @@ describe('SchemeDetailComponent', () => {
       expect(withoutOther).toEqual([...withoutOther].sort());
     });
 
-    it('should return empty brands when no paints are loaded', () => {
+    it('should return Other brand when no paints are loaded', () => {
       component.paints.set([]);
-      expect(component.availableBrands()).toEqual([]);
+      expect(component.availableBrands()).toEqual(['Other']);
     });
 
     it('should return empty string for brand filter when not set on a step', () => {
