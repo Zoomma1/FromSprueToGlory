@@ -2,7 +2,7 @@
 // 🌱 Seed Script — Pre-populate Reference Data
 // ──────────────────────────────────────────────────────────
 // This script populates the database with:
-//   - Game Systems (40K, AoS, Kill Team)
+//   - Game Systems (40K, AoS, Kill Team, Horus Heresy)
 //   - Major factions per system
 //   - Paint brands + common paints (Citadel MVP)
 //   - Painting techniques
@@ -52,9 +52,14 @@ async function seedReferenceData() {
             update: {},
             create: { name: 'Kill Team', slug: 'kill-team' },
         }),
+        prisma.gameSystem.upsert({
+            where: { slug: 'horus-heresy' },
+            update: {},
+            create: { name: 'The Horus Heresy', slug: 'horus-heresy' },
+        }),
     ]);
 
-    const [wh40k, aos, killTeam] = gameSystems;
+    const [wh40k, aos, killTeam, horusHeresy] = gameSystems;
     console.log(`✅ Game Systems: ${gameSystems.length} created`);
 
     // ─── Factions ─────────────────────────────────────────
@@ -88,10 +93,40 @@ async function seedReferenceData() {
         'Genestealer Cults', 'Leagues of Votann',
     ];
 
+    const factionsHH = [
+        // Legions
+        'Dark Angels',
+        'Emperor\'s Children',
+        'Iron Warriors',
+        'White Scars',
+        'Space Wolves',
+        'Imperial Fists',
+        'Night Lords',
+        'Blood Angels',
+        'Iron Hands',
+        'World Eaters',
+        'Ultramarines',
+        'Death Guard',
+        'Thousand Sons',
+        'Sons of Horus',
+        'Word Bearers',
+        'Salamanders',
+        'Raven Guard',
+        'Alpha Legion',
+        // Other factions
+        'Mechanicum',
+        'Solar Auxilia',
+        'Imperialis Militia',
+        'Custodian Guard',
+        'Sisters of Silence',
+        'Daemons of the Ruinstorm',
+    ];
+
     const allFactions = [
         ...factions40k.map((name) => ({ name, gameSystemId: wh40k.id })),
         ...factionsAoS.map((name) => ({ name, gameSystemId: aos.id })),
         ...factionsKT.map((name) => ({ name, gameSystemId: killTeam.id })),
+        ...factionsHH.map((name) => ({ name, gameSystemId: horusHeresy.id })),
     ];
 
     let factionCount = 0;
