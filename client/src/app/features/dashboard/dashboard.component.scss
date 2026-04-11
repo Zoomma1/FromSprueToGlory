@@ -425,3 +425,26 @@ $project-colors: (
     opacity: 0.2;
     pointer-events: none;
 }
+
+// ─── Featured Intel — active state (feedback campaign) ────────────────────────
+// Requires both classes on the <a> tag: class="featured-intel featured-intel--active"
+a.featured-intel--active {
+    border: 1px solid rgba(255, 192, 129, 0.25);
+    text-decoration: none;
+    cursor: pointer;
+    align-items: center;
+    transition: background 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+        background: var(--color-surface-high);
+        border-color: var(--color-orange);
+    }
+
+    .featured-intel__content {
+        opacity: 1;
+    }
+
+    .featured-intel__lock {
+        display: none;
+    }
+}
