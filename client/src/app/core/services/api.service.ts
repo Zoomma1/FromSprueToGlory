@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { SKIP_AUTH } from '../interceptors/jwt.interceptor';
 import { environment } from '../../../environments/environment';
 import { GameSystem } from '../../classes/game-system';
@@ -14,26 +14,61 @@ import { ColorScheme, ColorSchemePayload, ColorSchemeFull, ColorSchemeImage } fr
 import { UserCustomPaint, UserCustomPaintPayload } from '../../classes/user-custom-paint';
 import { Project } from '../../classes/project';
 
+interface UserProfile {
+    id: string;
+    email: string;
+    currency: string;
+    hasGoogleLinked: boolean;
+    hasPassword: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
     private http = inject(HttpClient);
     private baseUrl = environment.apiUrl;
 
+    // Caches for static reference data + session-stable user profile.
+    // Reason: item-form dialog opens fire 3-5 reference requests each —
+    // a 20-item army saisie burst would otherwise exceed rate limits.
+    private _gameSystems$?: Observable<GameSystem[]>;
+    private _factions$ = new Map<string, Observable<Faction[]>>();
+    private _models$ = new Map<string, Observable<Model[]>>();
+    private _me$?: Observable<UserProfile>;
+
     //  Reference Data
     getGameSystems(): Observable<GameSystem[]> {
-        return this.http.get<GameSystem[]>(`${this.baseUrl}/reference/game-systems`);
+        this._gameSystems$ ??= this.http
+            .get<GameSystem[]>(`${this.baseUrl}/reference/game-systems`)
+            .pipe(shareReplay(1));
+        return this._gameSystems$;
     }
 
     getFactions(gameSystemId?: string): Observable<Faction[]> {
-        let params = new HttpParams();
-        if (gameSystemId) params = params.set('gameSystemId', gameSystemId);
-        return this.http.get<Faction[]>(`${this.baseUrl}/reference/factions`, { params });
+        const key = gameSystemId ?? '';
+        let cached = this._factions$.get(key);
+        if (!cached) {
+            let params = new HttpParams();
+            if (gameSystemId) params = params.set('gameSystemId', gameSystemId);
+            cached = this.http
+                .get<Faction[]>(`${this.baseUrl}/reference/factions`, { params })
+                .pipe(shareReplay(1));
+            this._factions$.set(key, cached);
+        }
+        return cached;
     }
 
     getModels(factionId?: string): Observable<Model[]> {
-        let params = new HttpParams();
-        if (factionId) params = params.set('factionId', factionId);
-        return this.http.get<Model[]>(`${this.baseUrl}/reference/models`, { params });
+        const key = factionId ?? '';
+        let cached = this._models$.get(key);
+        if (!cached) {
+            let params = new HttpParams();
+            if (factionId) params = params.set('factionId', factionId);
+            cached = this.http
+                .get<Model[]>(`${this.baseUrl}/reference/models`, { params })
+                .pipe(shareReplay(1));
+            this._models$.set(key, cached);
+        }
+        return cached;
     }
 
     getPaintBrands(): Observable<PaintBrand[]> {
@@ -218,8 +253,11 @@ export class ApiService {
     }
 
     //  User Profile
-    getMe(): Observable<{ id: string; email: string; currency: string; hasGoogleLinked: boolean; hasPassword: boolean }> {
-        return this.http.get<{ id: string; email: string; currency: string; hasGoogleLinked: boolean; hasPassword: boolean }>(`${this.baseUrl}/users/me`);
+    getMe(): Observable<UserProfile> {
+        this._me$ ??= this.http
+            .get<UserProfile>(`${this.baseUrl}/users/me`)
+            .pipe(shareReplay(1));
+        return this._me$;
     }
 
     linkGoogle(): Observable<{ redirectUrl: string }> {
@@ -227,6 +265,7 @@ export class ApiService {
     }
 
     updateCurrency(currency: string): Observable<{ id: string; email: string; currency: string }> {
+        this._me$ = undefined;
         return this.http.patch<{ id: string; email: string; currency: string }>(
             `${this.baseUrl}/users/me`,
             { currency },
@@ -235,6 +274,7 @@ export class ApiService {
 
     //  Account
     deleteAccount(): Observable<void> {
+        this._me$ = undefined;
         return this.http.delete<void>(`${this.baseUrl}/account`);
     }
 }

@@ -79,7 +79,7 @@ export function createApp(options: AppOptions = {}) {
     app.use(
         rateLimit({
             windowMs: 15 * 60 * 1000,
-            max: 100,
+            max: 300,
             standardHeaders: true,
             legacyHeaders: false,
         }),
