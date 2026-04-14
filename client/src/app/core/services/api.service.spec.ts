@@ -614,4 +614,100 @@ describe('ApiService', () => {
             req.flush('Unauthorized', { status: 401, statusText: 'Unauthorized' });
         });
     });
+
+    describe('Reference data caching', () => {
+        it('should cache getGameSystems between calls', () => {
+            service.getGameSystems().subscribe();
+            httpMock.expectOne(`${baseUrl}/reference/game-systems`).flush(mockGameSystems);
+
+            service.getGameSystems().subscribe(data => {
+                expect(data).toEqual(mockGameSystems);
+            });
+            httpMock.expectNone(`${baseUrl}/reference/game-systems`);
+        });
+
+        it('should cache getFactions per gameSystemId', () => {
+            service.getFactions('gs-1').subscribe();
+            httpMock.expectOne(`${baseUrl}/reference/factions?gameSystemId=gs-1`).flush(mockFactions);
+
+            service.getFactions('gs-1').subscribe(data => {
+                expect(data).toEqual(mockFactions);
+            });
+            httpMock.expectNone(`${baseUrl}/reference/factions?gameSystemId=gs-1`);
+        });
+
+        it('should fetch factions separately for different gameSystemId', () => {
+            let firstResult: Faction[] | undefined;
+            let secondResult: Faction[] | undefined;
+
+            service.getFactions('gs-1').subscribe(data => firstResult = data);
+            httpMock.expectOne(`${baseUrl}/reference/factions?gameSystemId=gs-1`).flush(mockFactions);
+
+            service.getFactions('gs-2').subscribe(data => secondResult = data);
+            httpMock.expectOne(`${baseUrl}/reference/factions?gameSystemId=gs-2`).flush([]);
+
+            expect(firstResult).toEqual(mockFactions);
+            expect(secondResult).toEqual([]);
+        });
+
+        it('should cache getModels per factionId', () => {
+            service.getModels('f-1').subscribe();
+            httpMock.expectOne(`${baseUrl}/reference/models?factionId=f-1`).flush(mockModels);
+
+            service.getModels('f-1').subscribe(data => {
+                expect(data).toEqual(mockModels);
+            });
+            httpMock.expectNone(`${baseUrl}/reference/models?factionId=f-1`);
+        });
+
+        it('should fetch models separately for different factionId', () => {
+            let firstResult: Model[] | undefined;
+            let secondResult: Model[] | undefined;
+
+            service.getModels('f-1').subscribe(data => firstResult = data);
+            httpMock.expectOne(`${baseUrl}/reference/models?factionId=f-1`).flush(mockModels);
+
+            service.getModels('f-2').subscribe(data => secondResult = data);
+            httpMock.expectOne(`${baseUrl}/reference/models?factionId=f-2`).flush([]);
+
+            expect(firstResult).toEqual(mockModels);
+            expect(secondResult).toEqual([]);
+        });
+    });
+
+    describe('User profile caching', () => {
+        const mockProfile = {
+            id: 'u-1',
+            email: 'test@test.com',
+            currency: 'EUR',
+            hasGoogleLinked: false,
+            hasPassword: true,
+        };
+
+        it('should cache getMe between calls', () => {
+            service.getMe().subscribe();
+            httpMock.expectOne(`${baseUrl}/users/me`).flush(mockProfile);
+
+            service.getMe().subscribe(data => {
+                expect(data).toEqual(mockProfile);
+            });
+            httpMock.expectNone(`${baseUrl}/users/me`);
+        });
+
+        it('should invalidate getMe cache after updateCurrency', () => {
+            service.getMe().subscribe();
+            httpMock.expectOne(req => req.url === `${baseUrl}/users/me` && req.method === 'GET')
+                .flush(mockProfile);
+
+            service.updateCurrency('USD').subscribe();
+            httpMock.expectOne(req => req.url === `${baseUrl}/users/me` && req.method === 'PATCH')
+                .flush({ id: 'u-1', email: 'test@test.com', currency: 'USD' });
+
+            service.getMe().subscribe(data => {
+                expect(data.currency).toBe('USD');
+            });
+            httpMock.expectOne(req => req.url === `${baseUrl}/users/me` && req.method === 'GET')
+                .flush({ ...mockProfile, currency: 'USD' });
+        });
+    });
 });
