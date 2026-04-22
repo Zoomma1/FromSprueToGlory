@@ -151,9 +151,9 @@
 
 .actions-right {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.4rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .action-buttons {
@@ -170,7 +170,7 @@
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.06em;
-  padding: 0.25rem 0.65rem;
+  padding: 0.45rem 0.65rem;
   text-transform: uppercase;
 
   mat-icon {
@@ -206,6 +206,8 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.45rem 0.9rem;
+  min-width: 130px;
+  text-align: center;
   cursor: pointer;
   transition: background 0.15s;
 
@@ -221,6 +223,8 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.45rem 0.6rem;
+  min-width: 130px;
+  text-align: center;
   cursor: pointer;
   transition: color 0.15s;
 
@@ -241,4 +245,105 @@
   color: var(--color-text-secondary);
   font-size: 0.875rem;
   letter-spacing: 0.05em;
+}
+
+// ─── Mobile ────────────────────────────────────────────────
+@media (max-width: 599px) {
+  .collection-toolbar {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .search-bar {
+    order: -1;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .search-input {
+    flex: 1;
+    width: auto;
+    font-size: 1rem;
+  }
+
+  .filter-buttons {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .filter-btn {
+    white-space: nowrap;
+  }
+
+  .paint-list {
+    gap: 0.75rem;
+    min-height: 70vh;
+  }
+
+  .paint-row {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 0.5rem;
+    min-height: unset;
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .paint-swatch {
+    width: 52px;
+    height: 52px;
+    border-radius: 0.5rem;
+  }
+
+  .paint-info {
+    width: 100%;
+  }
+
+  .paint-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .actions-right {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    align-self: flex-start;
+  }
+
+  // Cas owned : chip + btn-ghost enfants directs de paint-actions → full-width
+  .paint-actions > .chip {
+    width: 100%;
+    justify-content: center;
+    align-self: stretch;
+  }
+
+  .paint-actions > .btn-ghost {
+    width: 100%;
+    min-width: unset;
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+
+  .action-buttons {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .btn-primary,
+    .btn-ghost {
+      min-width: unset;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      text-align: center;
+    }
+  }
 }
