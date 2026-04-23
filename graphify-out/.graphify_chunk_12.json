@@ -1,0 +1,773 @@
+{
+  "nodes": [
+    {
+      "id": "dashboard_screen",
+      "label": "Dashboard Screen",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_sidebar_navigation",
+      "label": "Sidebar Navigation",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_nav_item_dashboard",
+      "label": "Nav Item: Dashboard",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_nav_item_my_items",
+      "label": "Nav Item: My Items",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_nav_item_projects",
+      "label": "Nav Item: Projects",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_nav_item_color_schemes",
+      "label": "Nav Item: Color Schemes",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_nav_item_paint_collection",
+      "label": "Nav Item: Paint Collection",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_nav_item_paint_converter",
+      "label": "Nav Item: Paint Converter",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_nav_item_settings",
+      "label": "Nav Item: Settings",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_nav_logout",
+      "label": "Nav Item: Logout",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_status_cards_row",
+      "label": "Item Status Cards Row",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_status_card_want",
+      "label": "Status Card: Want (4)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_status_card_bought",
+      "label": "Status Card: Bought (3)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_status_card_assembled",
+      "label": "Status Card: Assembled (0)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_status_card_wip",
+      "label": "Status Card: WIP (0)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_status_card_finished",
+      "label": "Status Card: Finished (0)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_miniature_lifecycle_statuses",
+      "label": "Miniature Lifecycle Statuses (Want → Bought → Assembled → WIP → Finished)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_strategic_reserves_widget",
+      "label": "Strategic Reserves Widget",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_total_items_in_pile",
+      "label": "Total Items in Pile (7)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_pile_of_shame_widget",
+      "label": "Pile of Shame — Money Wasted Widget",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_pile_of_shame_total",
+      "label": "Pile of Shame Total: 116.00 EUR",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_pile_of_shame_breakdown",
+      "label": "Pile of Shame Per-Project Breakdown",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_project_pile_of_shame",
+      "label": "Project: Pile of Shame (28.00 EUR)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_project_ultramarines",
+      "label": "Project: Ultramarines 10th Company (42.50 EUR)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_project_ork_boyz",
+      "label": "Project: Ork Boyz (45.50 EUR)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_pile_of_shame_progress_bar",
+      "label": "Pile of Shame Stacked Progress Bar",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_quick_actions_panel",
+      "label": "Quick Actions Panel",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_quick_action_view_items",
+      "label": "Quick Action: View Items",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_quick_action_projects",
+      "label": "Quick Action: Projects",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_quick_action_color_schemes",
+      "label": "Quick Action: Color Schemes",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_coming_soon_section",
+      "label": "Coming Soon Placeholder Section",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_dark_theme",
+      "label": "Dark Theme (Black/Gold/Orange palette)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_currency_eur",
+      "label": "Currency Display: EUR",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dashboard_app_brand_from_sprue_to_glory",
+      "label": "App Brand: From Sprue to Glory",
+      "file_type": "image",
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "dashboard_screen",
+      "target": "dashboard_sidebar_navigation",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_screen",
+      "target": "dashboard_status_cards_row",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_screen",
+      "target": "dashboard_strategic_reserves_widget",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_screen",
+      "target": "dashboard_pile_of_shame_widget",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_screen",
+      "target": "dashboard_quick_actions_panel",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_screen",
+      "target": "dashboard_coming_soon_section",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_screen",
+      "target": "dashboard_dark_theme",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_screen",
+      "target": "dashboard_app_brand_from_sprue_to_glory",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_sidebar_navigation",
+      "target": "dashboard_nav_item_dashboard",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_sidebar_navigation",
+      "target": "dashboard_nav_item_my_items",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_sidebar_navigation",
+      "target": "dashboard_nav_item_projects",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_sidebar_navigation",
+      "target": "dashboard_nav_item_color_schemes",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_sidebar_navigation",
+      "target": "dashboard_nav_item_paint_collection",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_sidebar_navigation",
+      "target": "dashboard_nav_item_paint_converter",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_sidebar_navigation",
+      "target": "dashboard_nav_item_settings",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_sidebar_navigation",
+      "target": "dashboard_nav_logout",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_status_cards_row",
+      "target": "dashboard_status_card_want",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_status_cards_row",
+      "target": "dashboard_status_card_bought",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_status_cards_row",
+      "target": "dashboard_status_card_assembled",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_status_cards_row",
+      "target": "dashboard_status_card_wip",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_status_cards_row",
+      "target": "dashboard_status_card_finished",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_status_cards_row",
+      "target": "dashboard_miniature_lifecycle_statuses",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_strategic_reserves_widget",
+      "target": "dashboard_total_items_in_pile",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_pile_of_shame_widget",
+      "target": "dashboard_pile_of_shame_total",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_pile_of_shame_widget",
+      "target": "dashboard_pile_of_shame_breakdown",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_pile_of_shame_widget",
+      "target": "dashboard_pile_of_shame_progress_bar",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_pile_of_shame_breakdown",
+      "target": "dashboard_project_pile_of_shame",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_pile_of_shame_breakdown",
+      "target": "dashboard_project_ultramarines",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_pile_of_shame_breakdown",
+      "target": "dashboard_project_ork_boyz",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_pile_of_shame_total",
+      "target": "dashboard_currency_eur",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_quick_actions_panel",
+      "target": "dashboard_quick_action_view_items",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_quick_actions_panel",
+      "target": "dashboard_quick_action_projects",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_quick_actions_panel",
+      "target": "dashboard_quick_action_color_schemes",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard_quick_action_view_items",
+      "target": "dashboard_nav_item_my_items",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 0.9
+    },
+    {
+      "source": "dashboard_quick_action_projects",
+      "target": "dashboard_nav_item_projects",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 0.9
+    },
+    {
+      "source": "dashboard_quick_action_color_schemes",
+      "target": "dashboard_nav_item_color_schemes",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 0.9
+    },
+    {
+      "source": "dashboard_strategic_reserves_widget",
+      "target": "dashboard_pile_of_shame_widget",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 0.85
+    },
+    {
+      "source": "dashboard_miniature_lifecycle_statuses",
+      "target": "dashboard_pile_of_shame_widget",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "dashboard_nav_item_dashboard",
+      "target": "dashboard_screen",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/Dashboard.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

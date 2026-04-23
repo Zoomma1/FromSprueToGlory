@@ -1,0 +1,541 @@
+{
+  "nodes": [
+    {
+      "id": "projectdetail_project_detail_screen",
+      "label": "Project Detail Screen",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_project_header",
+      "label": "Project Header with Title and Description",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_overall_completion_indicator",
+      "label": "Overall Completion Progress Indicator",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_budget_to_spend",
+      "label": "Budget / To Spend Amount Display",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_items_list",
+      "label": "Items List within Project",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_add_items_button",
+      "label": "Add Items Button (CTA)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_card_intercessors_squad",
+      "label": "Item Card — Intercessors Squad (x10 Space Marines, Bought)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_card_redemptor_dreadnought",
+      "label": "Item Card — Redemptor Dreadnought (x1 Space Marines, Want)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_card_captain_in_gravis",
+      "label": "Item Card — Captain in Gravis Armour (x1 Space Marines, Want)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_card_hellblasters_squad",
+      "label": "Item Card — Hellblasters Squad (x5 Space Marines, Want)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_status_bought",
+      "label": "Item Status — Bought (orange dot indicator)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_status_want",
+      "label": "Item Status — Want (blue dot indicator)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_thumbnail_placeholder",
+      "label": "Item Thumbnail Placeholder (camera icon)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_navigate_arrow",
+      "label": "Item Navigate Arrow (chevron right — go to item detail)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_unlink_action",
+      "label": "Item Unlink / Remove from Project Action (chain-break icon)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_back_to_projects_nav",
+      "label": "Back to Projects Navigation Link",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_sidebar_nav",
+      "label": "Sidebar Navigation (Dashboard, My Items, Projects, Color Schemes, Paint Collection, Paint Converter, Settings, Logout)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_dark_theme_ui",
+      "label": "Dark Theme UI Design with Gold Accent Colors",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_quantity_display",
+      "label": "Item Quantity Display (xN prefix on faction label)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_project_entity",
+      "label": "Project Entity (army-level grouping of items)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_item_entity",
+      "label": "Item Entity (miniature kit with faction, quantity, status)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "projectdetail_currency_euro_display",
+      "label": "Currency Display in Euro (EUR) for Budget",
+      "file_type": "image",
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_project_header",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_overall_completion_indicator",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_budget_to_spend",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_items_list",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_sidebar_nav",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_dark_theme_ui",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_back_to_projects_nav",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_items_list",
+      "target": "projectdetail_add_items_button",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_items_list",
+      "target": "projectdetail_item_card_intercessors_squad",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_items_list",
+      "target": "projectdetail_item_card_redemptor_dreadnought",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_items_list",
+      "target": "projectdetail_item_card_captain_in_gravis",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_items_list",
+      "target": "projectdetail_item_card_hellblasters_squad",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_card_intercessors_squad",
+      "target": "projectdetail_item_status_bought",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_card_redemptor_dreadnought",
+      "target": "projectdetail_item_status_want",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_card_captain_in_gravis",
+      "target": "projectdetail_item_status_want",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_card_hellblasters_squad",
+      "target": "projectdetail_item_status_want",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_card_intercessors_squad",
+      "target": "projectdetail_item_thumbnail_placeholder",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_card_intercessors_squad",
+      "target": "projectdetail_item_navigate_arrow",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_card_intercessors_squad",
+      "target": "projectdetail_item_unlink_action",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_entity",
+      "target": "projectdetail_item_entity",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_overall_completion_indicator",
+      "target": "projectdetail_item_status_bought",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "projectdetail_budget_to_spend",
+      "target": "projectdetail_currency_euro_display",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_entity",
+      "target": "projectdetail_item_quantity_display",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_entity",
+      "target": "projectdetail_item_thumbnail_placeholder",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_back_to_projects_nav",
+      "target": "projectdetail_project_entity",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_item_entity",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_project_detail_screen",
+      "target": "projectdetail_project_entity",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_item_status_bought",
+      "target": "projectdetail_item_status_want",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "projectdetail_budget_to_spend",
+      "target": "projectdetail_item_status_want",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "doc/screenshot/ProjectDetail.jpeg",
+      "source_location": null,
+      "weight": 0.75
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

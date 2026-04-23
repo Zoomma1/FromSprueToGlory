@@ -1,0 +1,647 @@
+{
+  "nodes": [
+    {
+      "id": "paintconverter_screen",
+      "label": "Paint Converter Screen",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_feature",
+      "label": "Paint Converter Feature",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_search_bar",
+      "label": "Paint Search Bar",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_brand_filter",
+      "label": "Visible Brands Filter (Checkboxes)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_show_codes_toggle",
+      "label": "Show Codes Toggle Button",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_equivalence_table",
+      "label": "Paint Equivalence Table",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_brand_citadel",
+      "label": "Citadel Brand Column",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_brand_vallejo",
+      "label": "Vallejo Brand Column",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_brand_army_painter",
+      "label": "Army Painter Brand Column",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_null_equivalent",
+      "label": "No Equivalent Indicator (dash)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paintconverter_cross_brand_mapping",
+      "label": "Cross-Brand Paint Mapping",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_sidebar",
+      "label": "App Navigation Sidebar",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_dashboard",
+      "label": "Dashboard Nav Item",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_my_items",
+      "label": "My Items Nav Item",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_projects",
+      "label": "Projects Nav Item",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_color_schemes",
+      "label": "Color Schemes Nav Item",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_paint_collection",
+      "label": "Paint Collection Nav Item",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_paint_converter_active",
+      "label": "Paint Converter Nav Item (Active)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_settings",
+      "label": "Settings Nav Item",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "nav_logout",
+      "label": "Logout Action",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_dark_theme",
+      "label": "Dark Theme (Dark Background, Gold Accent)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_active_nav_highlight",
+      "label": "Active Nav Item Highlight Pattern",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "ux_filter_by_brand",
+      "label": "UX: Filter Displayed Brands via Checkboxes",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "ux_search_paint",
+      "label": "UX: Search Paint by Name",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "ux_toggle_codes",
+      "label": "UX: Toggle Paint Reference Codes Display",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paint_data_citadel_samples",
+      "label": "Sample Citadel Paint Names (Abaddon Black, Administratum Grey, etc.)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paint_data_vallejo_samples",
+      "label": "Sample Vallejo Paint Names (Model Color, Game Color lines)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "paint_data_army_painter_samples",
+      "label": "Sample Army Painter Paint Names (Ash Grey, Hydra Turquoise, etc.)",
+      "file_type": "image",
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "paintconverter_screen",
+      "target": "paintconverter_feature",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_feature",
+      "target": "paintconverter_search_bar",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_feature",
+      "target": "paintconverter_brand_filter",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_feature",
+      "target": "paintconverter_show_codes_toggle",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_feature",
+      "target": "paintconverter_equivalence_table",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_equivalence_table",
+      "target": "paintconverter_brand_citadel",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_equivalence_table",
+      "target": "paintconverter_brand_vallejo",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_equivalence_table",
+      "target": "paintconverter_brand_army_painter",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_equivalence_table",
+      "target": "paintconverter_null_equivalent",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_equivalence_table",
+      "target": "paintconverter_cross_brand_mapping",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 0.95
+    },
+    {
+      "source": "paintconverter_brand_filter",
+      "target": "paintconverter_brand_citadel",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_brand_filter",
+      "target": "paintconverter_brand_vallejo",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_brand_filter",
+      "target": "paintconverter_brand_army_painter",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_screen",
+      "target": "nav_sidebar",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_sidebar",
+      "target": "nav_dashboard",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_sidebar",
+      "target": "nav_my_items",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_sidebar",
+      "target": "nav_projects",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_sidebar",
+      "target": "nav_color_schemes",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_sidebar",
+      "target": "nav_paint_collection",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_sidebar",
+      "target": "nav_paint_converter_active",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_sidebar",
+      "target": "nav_settings",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_sidebar",
+      "target": "nav_logout",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "nav_paint_converter_active",
+      "target": "design_active_nav_highlight",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_screen",
+      "target": "design_dark_theme",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_brand_filter",
+      "target": "ux_filter_by_brand",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_search_bar",
+      "target": "ux_search_paint",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_show_codes_toggle",
+      "target": "ux_toggle_codes",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_brand_citadel",
+      "target": "paint_data_citadel_samples",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_brand_vallejo",
+      "target": "paint_data_vallejo_samples",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_brand_army_painter",
+      "target": "paint_data_army_painter_samples",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "paintconverter_cross_brand_mapping",
+      "target": "paintconverter_null_equivalent",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 0.85
+    },
+    {
+      "source": "ux_filter_by_brand",
+      "target": "paintconverter_equivalence_table",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 0.9
+    },
+    {
+      "source": "ux_search_paint",
+      "target": "paintconverter_equivalence_table",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "doc/screenshot/PaintConverter.jpeg",
+      "source_location": null,
+      "weight": 0.9
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}
