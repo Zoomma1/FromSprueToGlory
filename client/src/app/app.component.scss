@@ -176,10 +176,8 @@
 // ─── Main content ────────────────────────────
 .main-content {
     flex: 1;
-    min-width: 0;
     background: var(--color-bg);
     min-height: 100%;
-    overflow-x: hidden;
     transition: margin-left 0.25s ease;
 
     &--shifted {
@@ -189,7 +187,6 @@
 
 .content-wrapper {
     padding: 2rem;
-    overflow-x: hidden;
 
     @media (max-width: 600px) {
         padding: 0.75rem;

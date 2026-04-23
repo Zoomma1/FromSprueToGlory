@@ -17,9 +17,9 @@ import { AuthService } from './core/services/auth.service';
 })
 export class AppComponent implements OnInit {
   title = 'From Sprue to Glory';
-  private breakpointObserver = inject(BreakpointObserver);
-  isMobile = signal(this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small]));
+  isMobile = signal(false);
   sidenavOpen = signal(false);
+  private breakpointObserver = inject(BreakpointObserver);
   authService = inject(AuthService);
   private matIconRegistry = inject(MatIconRegistry);
   private sanitizer = inject(DomSanitizer);
