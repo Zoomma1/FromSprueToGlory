@@ -36,3 +36,6 @@ minio-data/
 # Ignore the .claude file which may contain sensitive information
 /CLAUDE.md
 .claude
+
+# Ignore the graphyfy directory
+graphify-out/
