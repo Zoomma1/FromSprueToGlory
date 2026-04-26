@@ -3,6 +3,8 @@
 parse-arcturus.py — Fetch and parse Arcturus5404/miniature-paints data
 Outputs data/arcturus-paints.json in FSTG import format
 
+Source: https://github.com/Arcturus5404/miniature-paints (MIT License)
+
 Usage: python scripts/parse-arcturus.py
        (run from server/ directory)
 """
@@ -92,6 +94,8 @@ def parse_table(content: str, brand_slug: str) -> list[dict]:
 
         row = dict(zip(headers, cells))
         name = row.get("name", "").strip()
+        # Normalize typographic apostrophes/quotes to ASCII straight apostrophe
+        name = name.replace("‘", "'").replace("’", "'").replace("ʼ", "'")
         if not name:
             continue
 

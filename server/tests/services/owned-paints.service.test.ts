@@ -10,6 +10,7 @@ vi.mock('../../src/lib/prisma', () => ({
         userOwnedPaint: { findMany: vi.fn(), create: vi.fn(), delete: vi.fn(), findUnique: vi.fn() },
         userWishlistPaint: { findMany: vi.fn(), create: vi.fn(), delete: vi.fn(), findUnique: vi.fn() },
         colorSchemeStep: { findMany: vi.fn() },
+        similarPaint: { findMany: vi.fn() },
     },
 }));
 
@@ -31,6 +32,7 @@ const PAINT_4 = { id: 'paint-4', name: 'Retributor Armour', hex: '#C9A84C', type
 describe('Owned Paints Service', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        (prisma.similarPaint as any).findMany.mockResolvedValue([]);
     });
 
     // ─── listPaintsWithStatus ─────────────────────────────
@@ -117,16 +119,14 @@ describe('Owned Paints Service', () => {
         });
 
         it('includes similarOwned hint for not-owned paints that have similar paints in collection', async () => {
-            const paintWithSimilar = {
-                ...PAINT_2,
-                similarities: [
-                    { similarPaint: { id: 'paint-1', name: 'Abaddon Black' } },
-                ],
-            };
-            (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([PAINT_1, paintWithSimilar]);
+            (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([PAINT_1, PAINT_2]);
             (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([{ paintId: 'paint-1' }]);
             (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
             (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([{ paintId: 'paint-2' }]);
+            // Reverse lookup: paint-2 (not owned) is similar to paint-1 (owned)
+            (prisma.similarPaint as any).findMany.mockResolvedValue([
+                { paintId: 'paint-2', similarPaint: { id: 'paint-1', name: 'Abaddon Black' } },
+            ]);
 
             const result = await listPaintsWithStatus('user-1', undefined);
 

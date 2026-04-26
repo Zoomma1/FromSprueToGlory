@@ -47,14 +47,16 @@ export async function getPaintBrands() {
 
 // ─── getPaints ────────────────────────────────────────────
 
-export async function getPaints(brandId?: string, type?: string) {
+export async function getPaints(brandId?: string, type?: string, q?: string) {
     return prisma.paint.findMany({
         where: {
             ...(brandId ? { brandId } : {}),
             ...(type ? { type: type as never } : {}),
+            ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),
         },
         orderBy: { name: 'asc' },
         include: { brand: { select: { name: true, slug: true } } },
+        ...(q ? { take: 20 } : {}),
     });
 }
 
@@ -68,7 +70,7 @@ export async function getSimilarPaints(paintId: string) {
                 include: { brand: { select: { id: true, name: true, slug: true } } },
             },
         },
-        orderBy: { similarPaint: { name: 'asc' } },
+        orderBy: { distance: { sort: 'asc', nulls: 'last' } },
     });
 
     return rows.map((r) => ({
@@ -77,42 +79,71 @@ export async function getSimilarPaints(paintId: string) {
         type: r.similarPaint.type,
         code: r.similarPaint.code,
         source: r.source,
+        distance: r.distance,
         brand: r.similarPaint.brand,
     }));
 }
 
 // ─── getAllSimilarPaints ──────────────────────────────────
 
-export async function getAllSimilarPaints() {
-    const paints = await prisma.paint.findMany({
-        where: { similarities: { some: {} } },
-        include: {
-            brand: { select: { name: true, slug: true } },
-            similarities: {
-                include: {
-                    similarPaint: {
-                        include: { brand: { select: { id: true, name: true, slug: true } } },
-                    },
-                },
-                orderBy: { similarPaint: { name: 'asc' } },
-            },
+const CONVERTER_BRANDS = ['citadel', 'vallejo', 'army-painter', 'ak-interactive', 'green-stuff-world', 'scale75', 'p3', 'duncan', 'monument-hobby'];
+
+export async function getAllSimilarPaints(page = 1, limit = 50) {
+    const skip = (page - 1) * limit;
+
+    // Query 1: paginated source paints (take limit+1 to detect hasMore without COUNT)
+    const sourcePaints = await prisma.paint.findMany({
+        where: {
+            brand: { slug: { in: CONVERTER_BRANDS } },
+            similarities: { some: { source: 'auto' } },
         },
+        select: { id: true, name: true, code: true, brand: { select: { name: true, slug: true } } },
         orderBy: { name: 'asc' },
+        skip,
+        take: limit + 1,
     });
 
-    return paints.map((paint) => ({
+    const hasMore = sourcePaints.length > limit;
+    const page_paints = sourcePaints.slice(0, limit);
+
+    if (page_paints.length === 0) return { data: [], hasMore: false };
+
+    // Query 2: all similarities for this page's paints in one IN query
+    const paintIds = page_paints.map((p) => p.id);
+    const pairs = await prisma.similarPaint.findMany({
+        where: { paintId: { in: paintIds }, source: 'auto' },
+        include: { similarPaint: { include: { brand: { select: { id: true, name: true, slug: true } } } } },
+        orderBy: { distance: { sort: 'asc', nulls: 'last' } },
+    });
+
+    // Group by source paint, keep top 5 per group (pairs already sorted by distance)
+    const pairsByPaint = new Map<string, ReturnType<typeof mapEquivalent>[]>();
+    for (const row of pairs) {
+        const list = pairsByPaint.get(row.paintId) ?? [];
+        if (list.length < 5) list.push(mapEquivalent(row));
+        pairsByPaint.set(row.paintId, list);
+    }
+
+    const data = page_paints.map((paint) => ({
         id: paint.id,
         name: paint.name,
         code: paint.code,
         brand: paint.brand,
-        equivalents: paint.similarities.map((sp) => ({
-            id: sp.similarPaint.id,
-            name: sp.similarPaint.name,
-            code: sp.similarPaint.code,
-            source: sp.source,
-            brand: sp.similarPaint.brand,
-        })),
+        equivalents: pairsByPaint.get(paint.id) ?? [],
     }));
+
+    return { data, hasMore };
+}
+
+function mapEquivalent(row: { similarPaint: { id: string; name: string; code: string | null; brand: { id: string; name: string; slug: string } }; source: string | null; distance: number | null }) {
+    return {
+        id: row.similarPaint.id,
+        name: row.similarPaint.name,
+        code: row.similarPaint.code,
+        source: row.source,
+        distance: row.distance,
+        brand: row.similarPaint.brand,
+    };
 }
 
 // ─── getTechniques ────────────────────────────────────────

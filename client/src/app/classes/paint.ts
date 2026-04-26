@@ -20,6 +20,7 @@ export interface PaintWithStatus {
 export interface PaintCollectionResult {
     paints: PaintWithStatus[];
     counts: { owned: number; need: number; toBuy: number; notOwned: number };
+    hasMore: boolean;
 }
 
 export class Paint {
@@ -50,6 +51,7 @@ export interface SimilarPaint {
     type: string;
     code: string | null;
     source: string | null;
+    distance: number | null;
     brand: {
         id: string;
         name: string;

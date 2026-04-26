@@ -78,6 +78,12 @@ The backend follows `routes/ → services/ → Prisma`, with Zod on all request 
 
 ---
 
+## Data Sources
+
+- Paint catalog data: [Arcturus5404/miniature-paints](https://github.com/Arcturus5404/miniature-paints) (MIT License)
+
+---
+
 ## License
 
 [AGPL v3 + Commons Clause](LICENSE)

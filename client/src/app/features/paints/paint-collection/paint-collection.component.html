@@ -104,3 +104,8 @@
     }
   }
 </div>
+
+<div #sentinel></div>
+@if (loadingMore()) {
+  <div class="empty-state">Loading more...</div>
+}

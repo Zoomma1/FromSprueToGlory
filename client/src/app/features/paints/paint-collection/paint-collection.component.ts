@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,15 +15,21 @@ import { PaintWithStatus, PaintFilter, PaintCollectionResult } from '../../../cl
     templateUrl: './paint-collection.component.html',
     styleUrl: './paint-collection.component.scss',
 })
-export class PaintCollectionComponent implements OnInit {
+export class PaintCollectionComponent implements OnInit, AfterViewInit, OnDestroy {
     private api = inject(ApiService);
     private snackBar = inject(MatSnackBar);
+
+    @ViewChild('sentinel') sentinelRef!: ElementRef;
+    private observer?: IntersectionObserver;
 
     paints = signal<PaintWithStatus[]>([]);
     counts = signal<PaintCollectionResult['counts']>({ owned: 0, need: 0, toBuy: 0, notOwned: 0 });
     activeFilter = signal<PaintFilter>(undefined);
     searchQuery = signal<string>('');
     loading = signal(false);
+    loadingMore = signal(false);
+    hasMore = signal(false);
+    private currentPage = 1;
 
     filteredPaints = computed(() => {
         const query = this.searchQuery().toLowerCase().trim();
@@ -37,18 +43,47 @@ export class PaintCollectionComponent implements OnInit {
         this.loadCollection();
     }
 
+    ngAfterViewInit() {
+        this.observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && this.hasMore() && !this.loadingMore() && !this.loading()) {
+                this.loadNextPage();
+            }
+        });
+        this.observer.observe(this.sentinelRef.nativeElement);
+    }
+
+    ngOnDestroy() {
+        this.observer?.disconnect();
+    }
+
     loadCollection() {
         this.loading.set(true);
-        this.api.getPaintCollection(this.activeFilter()).subscribe({
+        this.currentPage = 1;
+        this.api.getPaintCollection(this.activeFilter(), 1).subscribe({
             next: (result) => {
                 this.paints.set(result.paints);
                 this.counts.set(result.counts);
+                this.hasMore.set(result.hasMore);
                 this.loading.set(false);
             },
             error: () => {
                 this.loading.set(false);
                 this.snackBar.open('Failed to load paint collection', 'OK', { duration: 3000 });
             },
+        });
+    }
+
+    private loadNextPage() {
+        this.loadingMore.set(true);
+        const next = this.currentPage + 1;
+        this.api.getPaintCollection(this.activeFilter(), next).subscribe({
+            next: (result) => {
+                this.paints.update(p => [...p, ...result.paints]);
+                this.hasMore.set(result.hasMore);
+                this.currentPage = next;
+                this.loadingMore.set(false);
+            },
+            error: () => this.loadingMore.set(false),
         });
     }
 

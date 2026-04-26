@@ -31,7 +31,9 @@ router.get(
                 ? (rawFilter as PaintFilter)
                 : undefined;
 
-        const result = await ownedPaintsService.listPaintsWithStatus(userId, filter);
+        const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 50;
+        const result = await ownedPaintsService.listPaintsWithStatus(userId, filter, page, limit);
         res.json(result);
     }),
 );

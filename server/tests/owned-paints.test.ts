@@ -18,6 +18,7 @@ vi.mock('../src/lib/prisma', () => ({
         userOwnedPaint: { findMany: vi.fn(), create: vi.fn(), delete: vi.fn(), findUnique: vi.fn() },
         userWishlistPaint: { findMany: vi.fn(), create: vi.fn(), delete: vi.fn(), findUnique: vi.fn() },
         colorSchemeStep: { findMany: vi.fn() },
+        similarPaint: { findMany: vi.fn() },
         user: { findUnique: vi.fn(), create: vi.fn() },
         refreshToken: { create: vi.fn(), findUnique: vi.fn(), delete: vi.fn(), deleteMany: vi.fn() },
         colorScheme: { findMany: vi.fn(), findFirst: vi.fn() },
@@ -51,11 +52,13 @@ const samplePaint = {
     notes: null,
     brandId: 'brand-1',
     brand: { id: 'brand-1', name: 'Citadel', slug: 'citadel' },
-    similarities: [],
 };
 
 describe('GET /api/paints', () => {
-    beforeEach(() => vi.clearAllMocks());
+    beforeEach(() => {
+        vi.clearAllMocks();
+        (prisma.similarPaint as any).findMany.mockResolvedValue([]);
+    });
 
     it('returns 401 without auth', async () => {
         const res = await request(app).get('/api/paints');
