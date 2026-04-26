@@ -81,6 +81,11 @@ export class ApiService {
         return this.http.get<Paint[]>(`${this.baseUrl}/reference/paints`, { params });
     }
 
+    searchPaints(q: string): Observable<Paint[]> {
+        const params = new HttpParams().set('q', q);
+        return this.http.get<Paint[]>(`${this.baseUrl}/reference/paints`, { params });
+    }
+
     getTechniques(): Observable<Technique[]> {
         return this.http.get<Technique[]>(`${this.baseUrl}/reference/techniques`);
     }
@@ -89,8 +94,9 @@ export class ApiService {
         return this.http.get<SimilarPaint[]>(`${this.baseUrl}/reference/paints/${paintId}/similar`);
     }
 
-    getAllSimilarPaints(): Observable<PaintWithEquivalents[]> {
-        return this.http.get<PaintWithEquivalents[]>(`${this.baseUrl}/reference/similar-paints`);
+    getAllSimilarPaints(page = 1, limit = 50): Observable<{ data: PaintWithEquivalents[]; hasMore: boolean }> {
+        const params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
+        return this.http.get<{ data: PaintWithEquivalents[]; hasMore: boolean }>(`${this.baseUrl}/reference/similar-paints`, { params });
     }
 
     //  Items
@@ -129,8 +135,8 @@ export class ApiService {
     }
 
     //  Paint Collection (owned / wishlist)
-    getPaintCollection(filter?: PaintFilter): Observable<PaintCollectionResult> {
-        let params = new HttpParams();
+    getPaintCollection(filter?: PaintFilter, page = 1): Observable<PaintCollectionResult> {
+        let params = new HttpParams().set('page', page.toString());
         if (filter) params = params.set('filter', filter);
         return this.http.get<PaintCollectionResult>(`${this.baseUrl}/paints`, { params });
     }

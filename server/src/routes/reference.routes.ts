@@ -63,7 +63,8 @@ router.get(
     asyncHandler(async (req, res) => {
         const brandId = req.query.brandId as string | undefined;
         const type = req.query.type as string | undefined;
-        const paints = await referenceService.getPaints(brandId, type);
+        const q = req.query.q as string | undefined;
+        const paints = await referenceService.getPaints(brandId, type, q);
         res.json(paints);
     }),
 );
@@ -71,9 +72,11 @@ router.get(
 // GET /api/reference/similar-paints
 router.get(
     '/similar-paints',
-    asyncHandler(async (_req, res) => {
-        const rows = await referenceService.getAllSimilarPaints();
-        res.json(rows);
+    asyncHandler(async (req, res) => {
+        const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 50;
+        const result = await referenceService.getAllSimilarPaints(page, limit);
+        res.json(result);
     }),
 );
 

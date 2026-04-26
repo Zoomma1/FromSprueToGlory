@@ -425,7 +425,8 @@ model UserWishlistPaint {
 model SimilarPaint {
   paintId        String
   similarPaintId String
-  source         String? // ex. "Scale75 forum", "Reddit"
+  source         String? // ex. "Scale75 forum", "Reddit", "auto"
+  distance       Float?  // RGB euclidean distance — lower = more similar
 
   paint        Paint @relation("PaintSimilarities", fields: [paintId], references: [id], onDelete: Cascade)
   similarPaint Paint @relation("SimilarPaintBackref", fields: [similarPaintId], references: [id], onDelete: Cascade)

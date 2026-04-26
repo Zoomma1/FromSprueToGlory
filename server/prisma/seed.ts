@@ -196,6 +196,12 @@ async function seedReferenceData() {
         prisma.paintBrand.upsert({ where: { slug: 'ak-interactive' }, update: {}, create: { name: 'AK Interactive', slug: 'ak-interactive' } }),
         prisma.paintBrand.upsert({ where: { slug: 'pro-acryl' }, update: {}, create: { name: 'Pro Acryl', slug: 'pro-acryl' } }),
         prisma.paintBrand.upsert({ where: { slug: 'scale75' }, update: {}, create: { name: 'Scale75', slug: 'scale75' } }),
+        prisma.paintBrand.upsert({ where: { slug: 'p3' }, update: {}, create: { name: 'P3', slug: 'p3' } }),
+        prisma.paintBrand.upsert({ where: { slug: 'tamiya' }, update: {}, create: { name: 'Tamiya', slug: 'tamiya' } }),
+        prisma.paintBrand.upsert({ where: { slug: 'duncan' }, update: {}, create: { name: 'Duncan', slug: 'duncan' } }),
+        prisma.paintBrand.upsert({ where: { slug: 'green-stuff-world' }, update: {}, create: { name: 'Green Stuff World', slug: 'green-stuff-world' } }),
+        prisma.paintBrand.upsert({ where: { slug: 'monument-hobby' }, update: {}, create: { name: 'Monument Hobby', slug: 'monument-hobby' } }),
+        prisma.paintBrand.upsert({ where: { slug: 'liquitex' }, update: {}, create: { name: 'Liquitex', slug: 'liquitex' } }),
     ]);
     console.log(`✅ Paint Brands: ${brands.length} created`);
 

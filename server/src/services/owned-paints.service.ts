@@ -32,21 +32,23 @@ export interface PaintWithStatus {
 export interface PaintCollectionResult {
     paints: PaintWithStatus[];
     counts: { owned: number; need: number; toBuy: number; notOwned: number };
+    hasMore: boolean;
 }
 
 // ─── listPaintsWithStatus ─────────────────────────────────
 
+const PAGE_SIZE = 50;
+
 export async function listPaintsWithStatus(
     userId: string,
     filter: PaintFilter,
+    page = 1,
+    limit = PAGE_SIZE,
 ): Promise<PaintCollectionResult> {
     const [allPaints, ownedRows, schemeSteps, wishlistRows] = await Promise.all([
         prisma.paint.findMany({
             orderBy: [{ brand: { name: 'asc' } }, { name: 'asc' }],
-            include: {
-                brand: true,
-                similarities: { include: { similarPaint: { select: { id: true, name: true } } } },
-            },
+            include: { brand: true },
         }),
         prisma.userOwnedPaint.findMany({ where: { userId }, select: { paintId: true } }),
         prisma.colorSchemeStep.findMany({
@@ -61,6 +63,22 @@ export async function listPaintsWithStatus(
 
     const ownedSet = new Set(ownedRows.map(r => r.paintId));
     const wishlistSet = new Set(wishlistRows.map(r => r.paintId));
+
+    // Reverse similarity lookup: paintId → owned paints that are similar
+    const similarOwnedMap = new Map<string, Array<{ id: string; name: string }>>();
+    if (ownedSet.size > 0) {
+        const reverseLinks = await prisma.similarPaint.findMany({
+            where: { similarPaintId: { in: Array.from(ownedSet) } },
+            select: { paintId: true, similarPaint: { select: { id: true, name: true } } },
+        });
+        for (const link of reverseLinks) {
+            const list = similarOwnedMap.get(link.paintId) ?? [];
+            if (!list.some(p => p.id === link.similarPaint.id)) {
+                list.push({ id: link.similarPaint.id, name: link.similarPaint.name });
+            }
+            similarOwnedMap.set(link.paintId, list);
+        }
+    }
 
     // Build need map: paintId → schemes that need it
     const needMap = new Map<string, Array<{ id: string; name: string }>>();
@@ -103,10 +121,8 @@ export async function listPaintsWithStatus(
         }
 
         if (status !== 'owned') {
-            const ownedSimilar = (paint.similarities ?? [])
-                .filter(s => ownedSet.has(s.similarPaint.id))
-                .map(s => ({ id: s.similarPaint.id, name: s.similarPaint.name }));
-            if (ownedSimilar.length > 0) {
+            const ownedSimilar = similarOwnedMap.get(paint.id);
+            if (ownedSimilar?.length) {
                 result.similarOwned = ownedSimilar;
             }
         }
@@ -123,18 +139,22 @@ export async function listPaintsWithStatus(
     };
 
     // Apply filter
-    let paints = allWithStatus;
+    let filtered = allWithStatus;
     if (filter === 'owned') {
-        paints = allWithStatus.filter(p => p.status === 'owned');
+        filtered = allWithStatus.filter(p => p.status === 'owned');
     } else if (filter === 'need') {
-        paints = allWithStatus.filter(p => p.status === 'need');
+        filtered = allWithStatus.filter(p => p.status === 'need');
     } else if (filter === 'toBuy') {
-        paints = allWithStatus.filter(p => p.status === 'need' || p.status === 'toBuy');
+        filtered = allWithStatus.filter(p => p.status === 'need' || p.status === 'toBuy');
     } else if (filter === 'notOwned') {
-        paints = allWithStatus.filter(p => p.status === 'notOwned');
+        filtered = allWithStatus.filter(p => p.status === 'notOwned');
     }
 
-    return { paints, counts };
+    const skip = (page - 1) * limit;
+    const paints = filtered.slice(skip, skip + limit);
+    const hasMore = skip + limit < filtered.length;
+
+    return { paints, counts, hasMore };
 }
 
 // ─── markAsOwned ──────────────────────────────────────────
