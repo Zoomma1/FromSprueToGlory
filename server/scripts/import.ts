@@ -163,12 +163,16 @@ async function importPaints(records: Record<string, string>[]) {
 
         await prisma.paint.upsert({
             where: { name_brandId: { name: r.name, brandId: brand.id } },
-            update: {},
+            update: {
+                hex: r.hex || undefined,
+                code: r.code || undefined,
+            },
             create: {
                 name: r.name,
                 brandId: brand.id,
                 type: paintType,
                 code: r.code || null,
+                hex: r.hex || null,
                 notes: r.notes || null,
             },
         });

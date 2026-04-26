@@ -15,6 +15,7 @@ const mockResult: PaintCollectionResult = {
         { id: 'p-3', name: 'Agrax Earthshade', hex: null, type: 'SHADE', code: null, brand: { id: 'b-1', name: 'Citadel', slug: 'citadel' }, status: 'notOwned' },
     ],
     counts: { owned: 1, need: 1, toBuy: 1, notOwned: 1 },
+    hasMore: false,
 };
 
 describe('PaintCollectionComponent', () => {
@@ -54,19 +55,19 @@ describe('PaintCollectionComponent', () => {
     it('should create', () => expect(component).toBeTruthy());
 
     it('should load collection on init', () => {
-        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith(undefined);
+        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith(undefined, 1);
         expect(component.paints().length).toBe(3);
         expect(component.counts()).toEqual(mockResult.counts);
     });
 
     it('should reload with filter when setFilter is called', () => {
         apiSpy.getPaintCollection.calls.reset();
-        apiSpy.getPaintCollection.and.returnValue(of({ paints: [], counts: { owned: 0, need: 0, toBuy: 0, notOwned: 0 } }));
+        apiSpy.getPaintCollection.and.returnValue(of({ paints: [], counts: { owned: 0, need: 0, toBuy: 0, notOwned: 0 }, hasMore: false }));
 
         component.setFilter('owned');
 
         expect(component.activeFilter()).toBe('owned');
-        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith('owned');
+        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith('owned', 1);
     });
 
     it('should mark paint as owned and reload', () => {
