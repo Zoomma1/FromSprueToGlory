@@ -8,4 +8,4 @@ cmds = ["npm ci"]
 cmds = ["npm run build", "npx prisma generate"]
 
 [start]
-cmd = "npm run migrate:prod && npm run seed && npm start"
+cmd = "npm run migrate:prod && npm run seed && npm run import -- --type paints --file data/arcturus-paints.json && npm start"
