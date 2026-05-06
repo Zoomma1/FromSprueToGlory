@@ -41,4 +41,15 @@ router.get(
     }),
 );
 
+// ─── GET /api/export/owned-paints ───────────────────────
+
+router.get(
+  '/owned-paints',
+  asyncHandler(async (req, res) => {
+      const userId = req.userId as string;
+      const userOwnedPaints = await exportService.exportOwnedPaints(userId);
+      res.json(userOwnedPaints);
+  }),
+);
+
 export default router;

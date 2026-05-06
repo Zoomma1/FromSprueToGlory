@@ -7,6 +7,7 @@ vi.mock('../src/lib/prisma', () => ({
   prisma: {
     item: { findMany: vi.fn() },
     colorScheme: { findMany: vi.fn() },
+    userOwnedPaint: { findMany: vi.fn() },
     user: { findUnique: vi.fn(), create: vi.fn() },
     refreshToken: { create: vi.fn(), findUnique: vi.fn(), delete: vi.fn(), deleteMany: vi.fn() },
     paintBrand: { findUnique: vi.fn() },
@@ -161,6 +162,61 @@ describe('GET /api/export/color-schemes', () => {
     (prisma.colorScheme.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
     const res = await request(app).get('/api/export/color-schemes').set(AUTH_HEADER);
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
+  });
+});
+
+// ─── GET /api/export/owned-paints ────────────────────────
+describe('GET /api/export/owned-paints', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('returns 401 when no auth header', async () => {
+    const res = await request(app).get('/api/export/owned-paints');
+    expect(res.status).toBe(401);
+  });
+
+  it('returns 200 with WPF-aligned JSON array on happy path', async () => {
+    const { prisma } = await import('../src/lib/prisma');
+    (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([
+      {
+        userId: 'user-1',
+        paintId: 'paint-1',
+        paint: {
+          name: 'Abaddon Black',
+          code: null,
+          hex: '#231F20',
+          type: 'BASE',
+          brand: { name: 'Citadel Colour' },
+        },
+      },
+    ]);
+
+    const res = await request(app).get('/api/export/owned-paints').set(AUTH_HEADER);
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0]).toEqual({
+      name: 'Abaddon Black',
+      brand: 'Citadel Colour',
+      set: null,
+      hex: '#231F20',
+      r: 35,
+      g: 31,
+      b: 32,
+      type: 'BASE',
+      code: null,
+    });
+  });
+
+  it('returns 200 with empty array when user has no owned paints', async () => {
+    const { prisma } = await import('../src/lib/prisma');
+    (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+    const res = await request(app).get('/api/export/owned-paints').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
   });
