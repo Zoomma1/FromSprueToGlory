@@ -1,4 +1,5 @@
 module.exports = function (config) {
+  process.env.CHROME_BIN = require('which').sync('brave-browser');
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],

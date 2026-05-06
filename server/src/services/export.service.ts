@@ -5,6 +5,7 @@
 import z from 'zod';
 import { prisma } from '../lib/prisma';
 import { ValidationError } from '../lib/errors';
+import { hexToRgb } from '../lib/color';
 
 // ─── exportQuerySchema ────────────────────────────────────
 
@@ -82,5 +83,35 @@ export async function exportColorSchemes(userId: string) {
             },
         },
         orderBy: { createdAt: 'desc' },
+    });
+}
+
+// ─── exportOwnedPaints ───────────────────────────────────
+
+export async function exportOwnedPaints(userId: string) {
+    const userOwnedPaints = await prisma.userOwnedPaint.findMany({
+        where: { userId },
+        include: {
+            paint: { include: { brand: true } },
+        },
+        orderBy: [
+            { paint: { brand: { name: 'asc' } } },
+            { paint: { name: 'asc' } },
+        ],
+    });
+
+    return userOwnedPaints.map(({ paint }) => {
+        const rgb = hexToRgb(paint.hex);
+        return {
+            name: paint.name,
+            brand: paint.brand.name,
+            set: null,
+            hex: paint.hex,
+            r: rgb?.r ?? null,
+            g: rgb?.g ?? null,
+            b: rgb?.b ?? null,
+            type: paint.type,
+            code: paint.code,
+        };
     });
 }

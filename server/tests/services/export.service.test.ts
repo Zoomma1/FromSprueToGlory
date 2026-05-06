@@ -12,12 +12,13 @@ vi.mock('../../src/lib/prisma', () => ({
     prisma: {
         item: { findMany: vi.fn() },
         colorScheme: { findMany: vi.fn() },
+        userOwnedPaint: { findMany: vi.fn() },
     },
 }));
 
 import { prisma } from '../../src/lib/prisma';
 import { ValidationError } from '../../src/lib/errors';
-import { exportItems, exportColorSchemes } from '../../src/services/export.service';
+import { exportItems, exportColorSchemes, exportOwnedPaints } from '../../src/services/export.service';
 
 // ─── Fixtures ────────────────────────────────────────────
 
@@ -44,6 +45,30 @@ const mockScheme = {
     userId: 'user-1',
     steps: [],
     createdAt: new Date('2024-01-01'),
+};
+
+const mockOwnedPaintWithHex = {
+    userId: 'user-1',
+    paintId: 'paint-1',
+    paint: {
+        name: 'Abaddon Black',
+        code: null,
+        hex: '#231F20',
+        type: 'BASE',
+        brand: { name: 'Citadel Colour' },
+    },
+};
+
+const mockOwnedPaintWithoutHex = {
+    userId: 'user-1',
+    paintId: 'paint-2',
+    paint: {
+        name: 'Custom Mix',
+        code: 'CM-01',
+        hex: null,
+        type: 'OTHER',
+        brand: { name: 'Vallejo' },
+    },
 };
 
 describe('Export Service', () => {
@@ -117,6 +142,72 @@ describe('Export Service', () => {
             const result = await exportColorSchemes('user-1');
 
             expect(result).toHaveLength(0);
+        });
+    });
+
+    // ─── exportOwnedPaints ───────────────────────────────
+    describe('exportOwnedPaints', () => {
+        it('returns WPF-aligned shape with hex and computed r/g/b', async () => {
+            (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([mockOwnedPaintWithHex]);
+
+            const result = await exportOwnedPaints('user-1');
+
+            expect(result).toHaveLength(1);
+            expect(result[0]).toEqual({
+                name: 'Abaddon Black',
+                brand: 'Citadel Colour',
+                set: null,
+                hex: '#231F20',
+                r: 35,
+                g: 31,
+                b: 32,
+                type: 'BASE',
+                code: null,
+            });
+        });
+
+        it('returns null hex/r/g/b when paint has no hex', async () => {
+            (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([mockOwnedPaintWithoutHex]);
+
+            const result = await exportOwnedPaints('user-1');
+
+            expect(result).toHaveLength(1);
+            expect(result[0]).toMatchObject({
+                name: 'Custom Mix',
+                brand: 'Vallejo',
+                hex: null,
+                r: null,
+                g: null,
+                b: null,
+                code: 'CM-01',
+            });
+        });
+
+        it('returns empty array when user has no owned paints', async () => {
+            (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+            const result = await exportOwnedPaints('user-1');
+
+            expect(result).toEqual([]);
+        });
+
+        it('passes userId filter and includes paint + brand', async () => {
+            (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+            await exportOwnedPaints('user-42');
+
+            expect(prisma.userOwnedPaint.findMany).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    where: { userId: 'user-42' },
+                    include: expect.objectContaining({
+                        paint: expect.objectContaining({
+                            include: expect.objectContaining({
+                                brand: true,
+                            }),
+                        }),
+                    }),
+                }),
+            );
         });
     });
 });
