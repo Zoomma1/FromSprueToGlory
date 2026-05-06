@@ -45,6 +45,8 @@
         <div class="paint-info">
           @if (paint.hex) {
             <span class="paint-swatch" [style.background-color]="paint.hex"></span>
+          } @else {
+            <span class="paint-swatch paint-swatch--empty"></span>
           }
           <div class="paint-meta">
             <span class="paint-name">{{ paint.name }}</span>
