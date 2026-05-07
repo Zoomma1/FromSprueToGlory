@@ -28,7 +28,7 @@
       class="search-input"
       placeholder="Filter by name or brand..."
       [ngModel]="searchQuery()"
-      (ngModelChange)="searchQuery.set($event)"
+      (ngModelChange)="onSearchChange($event)"
     />
   </div>
 </div>

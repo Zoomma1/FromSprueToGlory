@@ -135,9 +135,10 @@ export class ApiService {
     }
 
     //  Paint Collection (owned / wishlist)
-    getPaintCollection(filter?: PaintFilter, page = 1): Observable<PaintCollectionResult> {
+    getPaintCollection(filter?: PaintFilter, page = 1, search?: string): Observable<PaintCollectionResult> {
         let params = new HttpParams().set('page', page.toString());
         if (filter) params = params.set('filter', filter);
+        if (search) params = params.set('search', search);
         return this.http.get<PaintCollectionResult>(`${this.baseUrl}/paints`, { params });
     }
 

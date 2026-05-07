@@ -44,6 +44,7 @@ export async function listPaintsWithStatus(
     filter: PaintFilter,
     page = 1,
     limit = PAGE_SIZE,
+    search?: string,
 ): Promise<PaintCollectionResult> {
     const [allPaints, ownedRows, schemeSteps, wishlistRows] = await Promise.all([
         prisma.paint.findMany({
@@ -138,16 +139,24 @@ export async function listPaintsWithStatus(
         notOwned: allWithStatus.filter(p => p.status === 'notOwned').length,
     };
 
-    // Apply filter
+    // Apply search
     let filtered = allWithStatus;
+    if (search) {
+        const q = search.toLowerCase();
+        filtered = filtered.filter(
+            p => p.name.toLowerCase().includes(q) || p.brand.name.toLowerCase().includes(q),
+        );
+    }
+
+    // Apply filter
     if (filter === 'owned') {
-        filtered = allWithStatus.filter(p => p.status === 'owned');
+        filtered = filtered.filter(p => p.status === 'owned');
     } else if (filter === 'need') {
-        filtered = allWithStatus.filter(p => p.status === 'need');
+        filtered = filtered.filter(p => p.status === 'need');
     } else if (filter === 'toBuy') {
-        filtered = allWithStatus.filter(p => p.status === 'need' || p.status === 'toBuy');
+        filtered = filtered.filter(p => p.status === 'need' || p.status === 'toBuy');
     } else if (filter === 'notOwned') {
-        filtered = allWithStatus.filter(p => p.status === 'notOwned');
+        filtered = filtered.filter(p => p.status === 'notOwned');
     }
 
     const skip = (page - 1) * limit;
