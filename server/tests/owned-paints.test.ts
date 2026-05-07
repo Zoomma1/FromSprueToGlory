@@ -54,6 +54,28 @@ const samplePaint = {
     brand: { id: 'brand-1', name: 'Citadel', slug: 'citadel' },
 };
 
+const samplePaint2 = {
+    id: 'paint-2',
+    name: 'Mephiston Red',
+    hex: '#9A1115',
+    type: 'BASE',
+    code: null,
+    notes: null,
+    brandId: 'brand-1',
+    brand: { id: 'brand-1', name: 'Citadel', slug: 'citadel' },
+};
+
+const samplePaint3 = {
+    id: 'paint-3',
+    name: 'Heavy Red',
+    hex: '#A30000',
+    type: 'BASE',
+    code: '72.141',
+    notes: null,
+    brandId: 'brand-2',
+    brand: { id: 'brand-2', name: 'Vallejo Game Color', slug: 'vallejo-game-color' },
+};
+
 describe('GET /api/paints', () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -90,6 +112,70 @@ describe('GET /api/paints', () => {
 
         expect(res.status).toBe(200);
         expect(res.body.paints).toHaveLength(1);
+    });
+
+    it('filters paints by name with search param', async () => {
+        (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint, samplePaint2, samplePaint3]);
+        (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+        const res = await request(app).get('/api/paints?search=abaddon').set('Authorization', AUTH);
+
+        expect(res.status).toBe(200);
+        expect(res.body.paints).toHaveLength(1);
+        expect(res.body.paints[0].name).toBe('Abaddon Black');
+    });
+
+    it('search is case-insensitive', async () => {
+        (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint, samplePaint2]);
+        (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+        const res = await request(app).get('/api/paints?search=MEPHISTON').set('Authorization', AUTH);
+
+        expect(res.status).toBe(200);
+        expect(res.body.paints).toHaveLength(1);
+        expect(res.body.paints[0].name).toBe('Mephiston Red');
+    });
+
+    it('search matches brand name', async () => {
+        (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint, samplePaint2, samplePaint3]);
+        (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+        const res = await request(app).get('/api/paints?search=vallejo').set('Authorization', AUTH);
+
+        expect(res.status).toBe(200);
+        expect(res.body.paints).toHaveLength(1);
+        expect(res.body.paints[0].name).toBe('Heavy Red');
+    });
+
+    it('combines search with filter', async () => {
+        (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint, samplePaint2, samplePaint3]);
+        (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([{ paintId: 'paint-1' }, { paintId: 'paint-2' }]);
+        (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+        const res = await request(app).get('/api/paints?search=red&filter=owned').set('Authorization', AUTH);
+
+        expect(res.status).toBe(200);
+        expect(res.body.paints).toHaveLength(1);
+        expect(res.body.paints[0].name).toBe('Mephiston Red');
+    });
+
+    it('returns empty array when search matches nothing', async () => {
+        (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint, samplePaint2]);
+        (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+        const res = await request(app).get('/api/paints?search=nonexistent').set('Authorization', AUTH);
+
+        expect(res.status).toBe(200);
+        expect(res.body.paints).toHaveLength(0);
     });
 });
 
