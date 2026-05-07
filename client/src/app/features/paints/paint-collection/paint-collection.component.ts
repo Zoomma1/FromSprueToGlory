@@ -1,10 +1,12 @@
-import { Component, inject, signal, computed, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, inject, signal, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ApiService } from '../../../core/services/api.service';
 import { PaintWithStatus, PaintFilter, PaintCollectionResult } from '../../../classes/paint';
 
@@ -18,6 +20,8 @@ import { PaintWithStatus, PaintFilter, PaintCollectionResult } from '../../../cl
 export class PaintCollectionComponent implements OnInit, AfterViewInit, OnDestroy {
     private api = inject(ApiService);
     private snackBar = inject(MatSnackBar);
+    private destroy$ = new Subject<void>();
+    private searchSubject$ = new Subject<string>();
 
     @ViewChild('sentinel') sentinelRef!: ElementRef;
     private observer?: IntersectionObserver;
@@ -30,17 +34,25 @@ export class PaintCollectionComponent implements OnInit, AfterViewInit, OnDestro
     loadingMore = signal(false);
     hasMore = signal(false);
     private currentPage = 1;
+    private activeSearch = '';
 
-    filteredPaints = computed(() => {
-        const query = this.searchQuery().toLowerCase().trim();
-        if (!query) return this.paints();
-        return this.paints().filter(p =>
-            p.name.toLowerCase().includes(query) || p.brand.name.toLowerCase().includes(query),
-        );
-    });
+    filteredPaints = this.paints;
 
     ngOnInit() {
+        this.searchSubject$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            takeUntil(this.destroy$),
+        ).subscribe(query => {
+            this.activeSearch = query;
+            this.loadCollection();
+        });
         this.loadCollection();
+    }
+
+    onSearchChange(query: string) {
+        this.searchQuery.set(query);
+        this.searchSubject$.next(query);
     }
 
     ngAfterViewInit() {
@@ -54,12 +66,15 @@ export class PaintCollectionComponent implements OnInit, AfterViewInit, OnDestro
 
     ngOnDestroy() {
         this.observer?.disconnect();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     loadCollection() {
         this.loading.set(true);
         this.currentPage = 1;
-        this.api.getPaintCollection(this.activeFilter(), 1).subscribe({
+        const search = this.activeSearch.trim() || undefined;
+        this.api.getPaintCollection(this.activeFilter(), 1, search).subscribe({
             next: (result) => {
                 this.paints.set(result.paints);
                 this.counts.set(result.counts);
@@ -76,7 +91,8 @@ export class PaintCollectionComponent implements OnInit, AfterViewInit, OnDestro
     private loadNextPage() {
         this.loadingMore.set(true);
         const next = this.currentPage + 1;
-        this.api.getPaintCollection(this.activeFilter(), next).subscribe({
+        const search = this.activeSearch.trim() || undefined;
+        this.api.getPaintCollection(this.activeFilter(), next, search).subscribe({
             next: (result) => {
                 this.paints.update(p => [...p, ...result.paints]);
                 this.hasMore.set(result.hasMore);

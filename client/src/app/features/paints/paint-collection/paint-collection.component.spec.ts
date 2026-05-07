@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
@@ -55,7 +55,7 @@ describe('PaintCollectionComponent', () => {
     it('should create', () => expect(component).toBeTruthy());
 
     it('should load collection on init', () => {
-        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith(undefined, 1);
+        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith(undefined, 1, undefined);
         expect(component.paints().length).toBe(3);
         expect(component.counts()).toEqual(mockResult.counts);
     });
@@ -67,7 +67,7 @@ describe('PaintCollectionComponent', () => {
         component.setFilter('owned');
 
         expect(component.activeFilter()).toBe('owned');
-        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith('owned', 1);
+        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith('owned', 1, undefined);
     });
 
     it('should mark paint as owned and reload', () => {
@@ -106,12 +106,22 @@ describe('PaintCollectionComponent', () => {
         expect(snackBarSpy.open).toHaveBeenCalledWith('Failed to load paint collection', 'OK', { duration: 3000 });
     });
 
-    it('filteredPaints returns paints matching search query', () => {
-        component.searchQuery.set('mephi');
-        const filtered = component.filteredPaints();
-        expect(filtered.length).toBe(1);
-        expect(filtered[0].name).toBe('Mephiston Red');
-    });
+    it('should call API with search param after debounce', fakeAsync(() => {
+        apiSpy.getPaintCollection.calls.reset();
+        const searchResult: PaintCollectionResult = {
+            paints: [mockResult.paints[1]],
+            counts: mockResult.counts,
+            hasMore: false,
+        };
+        apiSpy.getPaintCollection.and.returnValue(of(searchResult));
+
+        component.onSearchChange('mephi');
+        tick(300);
+
+        expect(apiSpy.getPaintCollection).toHaveBeenCalledWith(undefined, 1, 'mephi');
+        expect(component.paints().length).toBe(1);
+        expect(component.paints()[0].name).toBe('Mephiston Red');
+    }));
 
     it('filteredPaints returns all paints when search is empty', () => {
         component.searchQuery.set('');
