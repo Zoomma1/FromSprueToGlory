@@ -40,6 +40,7 @@ model User {
   currency     String   @default("EUR")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  lastLoginAt  DateTime? // denormalized MAX(UserActivity.timestamp) — powers the "active in last N days" counter without scanning the activity log
 
   // Relations: a user "owns" items, color schemes, projects, and refresh tokens
   items              Item[]
@@ -50,6 +51,7 @@ model User {
   userCustomPaints   UserCustomPaint[]
   ownedPaints        UserOwnedPaint[]
   wishlistPaints     UserWishlistPaint[]
+  activities         UserActivity[]
 
   @@map("users") // table name in PostgreSQL
 }
@@ -434,4 +436,29 @@ model SimilarPaint {
   @@id([paintId, similarPaintId])
   @@index([paintId])
   @@map("similar_paints")
+}
+
+// ─── User Activity (adoption metric — FSTG-12) ────────────
+// Event log of user activity, deduped to 1 row per user per UTC day.
+// WHY a separate table (B) + denormalized User.lastLoginAt (A)?
+//   - UserActivity is the source of truth → retention / returning-user
+//     queries ("active on day 0 AND day N").
+//   - lastLoginAt is derivable (MAX(timestamp)) but kept in sync so the
+//     "active in last N days" counter is a trivial User.count, no scan.
+// Dedup is enforced structurally by @@unique([userId, day]) — the tracking
+// helper relies on INSERT ... ON CONFLICT DO NOTHING (createMany skipDuplicates),
+// so it is idempotent and race-safe without a read-before-write.
+// No PII is stored: only userId + timestamps (+ optional route).
+model UserActivity {
+  id        String   @id @default(uuid())
+  userId    String
+  day       DateTime @db.Date // UTC calendar day — dedup granularity
+  timestamp DateTime @default(now())
+  route     String? // optional: which route triggered the activity (no query string / PII)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, day]) // one activity row per user per day
+  @@index([userId, timestamp])
+  @@map("user_activities")
 }
