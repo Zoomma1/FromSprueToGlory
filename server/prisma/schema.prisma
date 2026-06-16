@@ -38,6 +38,7 @@ model User {
   googleId     String?  @unique
   isAdmin      Boolean  @default(false)
   currency     String   @default("EUR")
+  acquisitionChannel String? // self-reported signup channel (reddit|discord|instagram|autre); null = not asked yet or skipped. Captured post-signup, never retroactive.
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   lastLoginAt  DateTime? // denormalized MAX(UserActivity.timestamp) — powers the "active in last N days" counter without scanning the activity log

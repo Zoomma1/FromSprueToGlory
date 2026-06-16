@@ -27,6 +27,11 @@ const updateSchema = z.object({
     currency: z.enum(['EUR', 'GBP', 'USD', 'CHF', 'CAD', 'AUD', 'CZK']),
 });
 
+// Closed list — self-report assumed lossy, fine at launch scale. UTM = V2.
+const acquisitionChannelSchema = z.object({
+    acquisitionChannel: z.enum(['reddit', 'discord', 'instagram', 'autre']),
+});
+
 // ─── GET /api/users/me ────────────────────────────────────
 
 router.get(
@@ -47,6 +52,19 @@ router.patch(
         const parsed = updateSchema.safeParse(req.body);
         if (!parsed.success) throw new ValidationError('Invalid currency', parsed.error.errors);
         const profile = await usersService.updateCurrency(userId, parsed.data.currency);
+        res.json(profile);
+    }),
+);
+
+// ─── PATCH /api/users/me/acquisition-channel ─────────
+
+router.patch(
+    '/me/acquisition-channel',
+    asyncHandler(async (req, res) => {
+        const userId = req.userId as string;
+        const parsed = acquisitionChannelSchema.safeParse(req.body);
+        if (!parsed.success) throw new ValidationError('Invalid acquisition channel', parsed.error.errors);
+        const profile = await usersService.setAcquisitionChannel(userId, parsed.data.acquisitionChannel);
         res.json(profile);
     }),
 );

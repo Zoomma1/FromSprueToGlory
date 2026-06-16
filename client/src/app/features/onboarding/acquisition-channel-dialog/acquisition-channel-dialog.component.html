@@ -1,0 +1,37 @@
+<div class="acq-dialog" data-testid="acq-dialog">
+    <h2 class="acq-dialog__title">Comment nous as-tu connu ?</h2>
+    <p class="acq-dialog__subtitle">Ça nous aide à savoir où te trouver. Une seule réponse, optionnel.</p>
+
+    <div class="acq-dialog__options" role="radiogroup" aria-label="Canal d'acquisition">
+        @for (channel of channels; track channel.value) {
+            <button
+                type="button"
+                class="acq-dialog__option"
+                role="radio"
+                [class.acq-dialog__option--selected]="selected() === channel.value"
+                [attr.aria-checked]="selected() === channel.value"
+                [attr.data-testid]="'acq-option-' + channel.value"
+                (click)="select(channel.value)">
+                {{ channel.label }}
+            </button>
+        }
+    </div>
+
+    <div class="acq-dialog__actions">
+        <button
+            type="button"
+            class="acq-dialog__btn acq-dialog__btn--ghost"
+            data-testid="acq-skip"
+            (click)="skip()">
+            Passer
+        </button>
+        <button
+            type="button"
+            class="acq-dialog__btn acq-dialog__btn--primary"
+            data-testid="acq-submit"
+            [disabled]="!selected() || saving()"
+            (click)="submit()">
+            Valider
+        </button>
+    </div>
+</div>

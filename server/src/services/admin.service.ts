@@ -81,6 +81,47 @@ export async function syncPaints(body: unknown): Promise<SyncResult> {
     return results;
 }
 
+// ─── countAcquisitionChannels ─────────────────────────────
+// Signup counts per acquisition channel, optionally scoped to a campaign
+// period via ?from / ?to (ISO dates on User.createdAt). null channels
+// (OAuth signups + skips) are reported as `unattributed`.
+
+const ACQUISITION_CHANNELS = ['reddit', 'discord', 'instagram', 'autre'] as const;
+
+export const acquisitionPeriodSchema = z.object({
+    from: z.coerce.date().optional(),
+    to: z.coerce.date().optional(),
+});
+
+export async function countAcquisitionChannels(query: unknown) {
+    const parsed = acquisitionPeriodSchema.safeParse(query);
+    if (!parsed.success) {
+        throw new ValidationError('Invalid date range', parsed.error.flatten());
+    }
+    const { from, to } = parsed.data;
+
+    const createdAt: { gte?: Date; lte?: Date } = {};
+    if (from) createdAt.gte = from;
+    if (to) createdAt.lte = to;
+    const where = from || to ? { createdAt } : {};
+
+    const groups = await prisma.user.groupBy({
+        by: ['acquisitionChannel'],
+        where,
+        _count: { _all: true },
+    });
+
+    const counts: Record<string, number> = {
+        ...Object.fromEntries(ACQUISITION_CHANNELS.map((c) => [c, 0])),
+        unattributed: 0,
+    };
+    for (const group of groups) {
+        const key = group.acquisitionChannel ?? 'unattributed';
+        if (key in counts) counts[key] = group._count._all;
+    }
+    return counts;
+}
+
 // ─── exportPaints ─────────────────────────────────────────
 
 export async function exportPaints() {

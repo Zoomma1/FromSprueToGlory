@@ -5,7 +5,7 @@
 import { prisma } from '../lib/prisma';
 import { NotFoundError } from '../lib/errors';
 
-const userSelect = { id: true, email: true, currency: true, googleId: true, passwordHash: true };
+const userSelect = { id: true, email: true, currency: true, acquisitionChannel: true, googleId: true, passwordHash: true };
 
 // ─── getProfile ───────────────────────────────────────────
 
@@ -25,6 +25,19 @@ export async function updateCurrency(userId: string, currency: string) {
     const user = await prisma.user.update({
         where: { id: userId },
         data: { currency },
+        select: userSelect,
+    });
+    const { googleId, passwordHash, ...rest } = user;
+    return { ...rest, hasGoogleLinked: !!googleId, hasPassword: !!passwordHash };
+}
+
+// ─── setAcquisitionChannel ────────────────────────────────
+// Self-reported signup channel, captured post-signup (never retroactive).
+
+export async function setAcquisitionChannel(userId: string, acquisitionChannel: string) {
+    const user = await prisma.user.update({
+        where: { id: userId },
+        data: { acquisitionChannel },
         select: userSelect,
     });
     const { googleId, passwordHash, ...rest } = user;

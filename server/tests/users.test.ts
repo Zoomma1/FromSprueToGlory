@@ -37,7 +37,7 @@ vi.mock('bcryptjs', () => ({
 const app = createApp();
 const AUTH = 'Bearer fake-token';
 
-const mockUser = { id: 'user-1', email: 'a@b.com', currency: 'EUR' };
+const mockUser = { id: 'user-1', email: 'a@b.com', currency: 'EUR', acquisitionChannel: null };
 
 describe('Users Routes', () => {
     beforeEach(() => {
@@ -68,6 +68,27 @@ describe('Users Routes', () => {
 
             expect(res.status).toBe(200);
             expect(res.body).toMatchObject({ id: 'user-1', email: 'a@b.com', currency: 'EUR' });
+        });
+
+        it('exposes acquisitionChannel so the front knows whether to ask', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+                ...mockUser,
+                acquisitionChannel: 'reddit',
+            });
+
+            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+
+            expect(res.status).toBe(200);
+            expect(res.body.acquisitionChannel).toBe('reddit');
+        });
+
+        it('exposes acquisitionChannel as null when never answered', async () => {
+            (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(mockUser);
+
+            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+
+            expect(res.status).toBe(200);
+            expect(res.body.acquisitionChannel).toBeNull();
         });
 
         it('queries by the userId from the token, not from request params', async () => {
@@ -156,6 +177,86 @@ describe('Users Routes', () => {
 
                 expect(res.status).toBe(200);
             }
+        });
+    });
+
+    // ─── PATCH /api/users/me/acquisition-channel ──────────
+    describe('PATCH /api/users/me/acquisition-channel', () => {
+        it('persists the acquisition channel and returns the updated profile', async () => {
+            (prisma.user.update as ReturnType<typeof vi.fn>).mockResolvedValue({
+                ...mockUser,
+                acquisitionChannel: 'reddit',
+            });
+
+            const res = await request(app)
+                .patch('/api/users/me/acquisition-channel')
+                .set('Authorization', AUTH)
+                .send({ acquisitionChannel: 'reddit' });
+
+            expect(res.status).toBe(200);
+            expect(res.body.acquisitionChannel).toBe('reddit');
+        });
+
+        it('updates only the authenticated user (scoped by userId from token)', async () => {
+            (prisma.user.update as ReturnType<typeof vi.fn>).mockResolvedValue({
+                ...mockUser,
+                acquisitionChannel: 'discord',
+            });
+
+            await request(app)
+                .patch('/api/users/me/acquisition-channel')
+                .set('Authorization', AUTH)
+                .send({ acquisitionChannel: 'discord' });
+
+            expect(prisma.user.update).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    where: { id: 'user-1' },
+                    data: { acquisitionChannel: 'discord' },
+                }),
+            );
+        });
+
+        it('accepts every channel of the closed list', async () => {
+            for (const channel of ['reddit', 'discord', 'instagram', 'autre']) {
+                (prisma.user.update as ReturnType<typeof vi.fn>).mockResolvedValue({
+                    ...mockUser,
+                    acquisitionChannel: channel,
+                });
+
+                const res = await request(app)
+                    .patch('/api/users/me/acquisition-channel')
+                    .set('Authorization', AUTH)
+                    .send({ acquisitionChannel: channel });
+
+                expect(res.status).toBe(200);
+            }
+        });
+
+        it('returns 400 for a channel outside the closed list', async () => {
+            const res = await request(app)
+                .patch('/api/users/me/acquisition-channel')
+                .set('Authorization', AUTH)
+                .send({ acquisitionChannel: 'tiktok' });
+
+            expect(res.status).toBe(400);
+            expect(prisma.user.update).not.toHaveBeenCalled();
+        });
+
+        it('returns 400 when the channel field is missing', async () => {
+            const res = await request(app)
+                .patch('/api/users/me/acquisition-channel')
+                .set('Authorization', AUTH)
+                .send({});
+
+            expect(res.status).toBe(400);
+        });
+
+        it('returns 401 with no Authorization header', async () => {
+            const res = await request(app)
+                .patch('/api/users/me/acquisition-channel')
+                .send({ acquisitionChannel: 'reddit' });
+
+            expect(res.status).toBe(401);
         });
     });
 });
