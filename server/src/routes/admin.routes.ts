@@ -27,4 +27,12 @@ router.get(
     }),
 );
 
+router.get(
+    '/acquisition-channels',
+    asyncHandler(async (req, res) => {
+        const counts = await adminService.countAcquisitionChannels(req.query);
+        res.json(counts);
+    }),
+);
+
 export default router;

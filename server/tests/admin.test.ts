@@ -36,7 +36,7 @@ vi.mock('../src/lib/prisma', () => ({
       create: vi.fn(),
       findMany: vi.fn(),
     },
-    user: { findUnique: vi.fn(), create: vi.fn() },
+    user: { findUnique: vi.fn(), create: vi.fn(), groupBy: vi.fn() },
     refreshToken: { create: vi.fn(), findUnique: vi.fn(), delete: vi.fn(), deleteMany: vi.fn() },
     item: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
     itemStatusHistory: { create: vi.fn(), findMany: vi.fn() },
@@ -411,6 +411,100 @@ describe('POST /api/admin/paints/sync', () => {
       expect(res.status).toBe(200);
       expect(res.body.errors).toHaveLength(1);
       expect(res.body.created).toBe(0);
+    });
+  });
+
+  //  Acquisition channel counts
+  describe('GET /api/admin/acquisition-channels', () => {
+    const ENDPOINT = '/api/admin/acquisition-channels';
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('returns 401 when no Authorization header is provided', async () => {
+      const res = await request(app).get(ENDPOINT);
+      expect(res.status).toBe(401);
+    });
+
+    it('returns 403 when user has isAdmin=false', async () => {
+      mockNonAdminUser();
+      const res = await request(app).get(ENDPOINT).set('Authorization', AUTH_HEADER);
+      expect(res.status).toBe(403);
+    });
+
+    it('returns counts per channel for an admin', async () => {
+      mockAdminUser();
+      (prisma.user.groupBy as ReturnType<typeof vi.fn>).mockResolvedValue([
+        { acquisitionChannel: 'reddit', _count: { _all: 3 } },
+        { acquisitionChannel: 'discord', _count: { _all: 2 } },
+        { acquisitionChannel: 'instagram', _count: { _all: 5 } },
+        { acquisitionChannel: 'autre', _count: { _all: 1 } },
+        { acquisitionChannel: null, _count: { _all: 4 } },
+      ]);
+
+      const res = await request(app).get(ENDPOINT).set('Authorization', AUTH_HEADER);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({
+        reddit: 3,
+        discord: 2,
+        instagram: 5,
+        autre: 1,
+        unattributed: 4,
+      });
+    });
+
+    it('defaults every known channel to 0 when no signups', async () => {
+      mockAdminUser();
+      (prisma.user.groupBy as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+      const res = await request(app).get(ENDPOINT).set('Authorization', AUTH_HEADER);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({
+        reddit: 0,
+        discord: 0,
+        instagram: 0,
+        autre: 0,
+        unattributed: 0,
+      });
+    });
+
+    it('filters by createdAt period when from/to are provided', async () => {
+      mockAdminUser();
+      (prisma.user.groupBy as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+      await request(app)
+        .get(`${ENDPOINT}?from=2026-06-01&to=2026-06-30`)
+        .set('Authorization', AUTH_HEADER);
+
+      expect(prisma.user.groupBy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { createdAt: { gte: new Date('2026-06-01'), lte: new Date('2026-06-30') } },
+        }),
+      );
+    });
+
+    it('queries without a date filter when no period is given', async () => {
+      mockAdminUser();
+      (prisma.user.groupBy as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+      await request(app).get(ENDPOINT).set('Authorization', AUTH_HEADER);
+
+      expect(prisma.user.groupBy).toHaveBeenCalledWith(
+        expect.objectContaining({ where: {} }),
+      );
+    });
+
+    it('returns 400 for an invalid date param', async () => {
+      mockAdminUser();
+      const res = await request(app)
+        .get(`${ENDPOINT}?from=not-a-date`)
+        .set('Authorization', AUTH_HEADER);
+
+      expect(res.status).toBe(400);
+      expect(prisma.user.groupBy).not.toHaveBeenCalled();
     });
   });
 

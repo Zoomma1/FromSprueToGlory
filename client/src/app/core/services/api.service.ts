@@ -18,6 +18,7 @@ interface UserProfile {
     id: string;
     email: string;
     currency: string;
+    acquisitionChannel?: string | null;
     hasGoogleLinked: boolean;
     hasPassword: boolean;
 }
@@ -276,6 +277,14 @@ export class ApiService {
         return this.http.patch<{ id: string; email: string; currency: string }>(
             `${this.baseUrl}/users/me`,
             { currency },
+        );
+    }
+
+    setAcquisitionChannel(acquisitionChannel: string): Observable<UserProfile> {
+        this._me$ = undefined;
+        return this.http.patch<UserProfile>(
+            `${this.baseUrl}/users/me/acquisition-channel`,
+            { acquisitionChannel },
         );
     }
 
