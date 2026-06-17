@@ -7,7 +7,7 @@
 //   DELETE /api/user-paints/:id → delete own custom paint (auth required)
 //
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -58,20 +58,24 @@ const mockCustomPaint = {
 };
 
 // ─── Tests ────────────────────────────────────────────────
+const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
+
 describe('GET /api/user-paints', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('should return 401 when not authenticated', async () => {
-    const app = createApp();
-    const res = await request(app).get('/api/user-paints');
+    const res = await request(server).get('/api/user-paints');
     expect(res.status).toBe(401);
   });
 
   it('should return the list of custom paints for the authenticated user', async () => {
     vi.mocked(prisma.userCustomPaint.findMany).mockResolvedValue([mockCustomPaint] as never);
-    const app = createApp();
 
-    const res = await request(app)
+    const res = await request(server)
       .get('/api/user-paints')
       .set(AUTH_HEADER);
 
@@ -85,9 +89,8 @@ describe('GET /api/user-paints', () => {
 
   it('should return an empty array when user has no custom paints', async () => {
     vi.mocked(prisma.userCustomPaint.findMany).mockResolvedValue([] as never);
-    const app = createApp();
 
-    const res = await request(app)
+    const res = await request(server)
       .get('/api/user-paints')
       .set(AUTH_HEADER);
 
@@ -100,16 +103,14 @@ describe('POST /api/user-paints', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('should return 401 when not authenticated', async () => {
-    const app = createApp();
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/user-paints')
       .send({ name: 'My Paint' });
     expect(res.status).toBe(401);
   });
 
   it('should return 400 when name is missing', async () => {
-    const app = createApp();
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/user-paints')
       .set(AUTH_HEADER)
       .send({ type: 'BASE' });
@@ -118,8 +119,7 @@ describe('POST /api/user-paints', () => {
   });
 
   it('should return 400 when name is empty', async () => {
-    const app = createApp();
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/user-paints')
       .set(AUTH_HEADER)
       .send({ name: '' });
@@ -127,8 +127,7 @@ describe('POST /api/user-paints', () => {
   });
 
   it('should return 400 when type is not a valid PaintType', async () => {
-    const app = createApp();
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/user-paints')
       .set(AUTH_HEADER)
       .send({ name: 'My Paint', type: 'INVALID_TYPE' });
@@ -139,9 +138,8 @@ describe('POST /api/user-paints', () => {
     vi.mocked(prisma.userCustomPaint.create).mockResolvedValue(
       { ...mockCustomPaint, type: null, notes: null } as never,
     );
-    const app = createApp();
 
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/user-paints')
       .set(AUTH_HEADER)
       .send({ name: 'My Custom Red' });
@@ -159,9 +157,8 @@ describe('POST /api/user-paints', () => {
 
   it('should create a custom paint with all optional fields', async () => {
     vi.mocked(prisma.userCustomPaint.create).mockResolvedValue(mockCustomPaint as never);
-    const app = createApp();
 
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/user-paints')
       .set(AUTH_HEADER)
       .send({ name: 'My Custom Red', type: 'BASE', notes: 'Slightly orange-tinted red' });
@@ -180,8 +177,7 @@ describe('POST /api/user-paints', () => {
   });
 
   it('should return 400 when body has an unknown field', async () => {
-    const app = createApp();
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/user-paints')
       .set(AUTH_HEADER)
       .send({ name: 'My Paint', extraField: 'x' });
@@ -192,9 +188,8 @@ describe('POST /api/user-paints', () => {
     vi.mocked(prisma.userCustomPaint.create).mockResolvedValue(
       { ...mockCustomPaint, type: null } as never,
     );
-    const app = createApp();
 
-    await request(app)
+    await request(server)
       .post('/api/user-paints')
       .set(AUTH_HEADER)
       .send({ name: 'Unnamed Type Paint' });
@@ -211,16 +206,14 @@ describe('DELETE /api/user-paints/:id', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('should return 401 when not authenticated', async () => {
-    const app = createApp();
-    const res = await request(app).delete('/api/user-paints/cp-1');
+    const res = await request(server).delete('/api/user-paints/cp-1');
     expect(res.status).toBe(401);
   });
 
   it('should return 404 when paint does not exist', async () => {
     vi.mocked(prisma.userCustomPaint.findFirst).mockResolvedValue(null as never);
-    const app = createApp();
 
-    const res = await request(app)
+    const res = await request(server)
       .delete('/api/user-paints/cp-999')
       .set(AUTH_HEADER);
 
@@ -230,9 +223,8 @@ describe('DELETE /api/user-paints/:id', () => {
 
   it('should return 404 when paint belongs to another user', async () => {
     vi.mocked(prisma.userCustomPaint.findFirst).mockResolvedValue(null as never);
-    const app = createApp();
 
-    const res = await request(app)
+    const res = await request(server)
       .delete('/api/user-paints/cp-other-user')
       .set(AUTH_HEADER);
 
@@ -242,9 +234,8 @@ describe('DELETE /api/user-paints/:id', () => {
   it('should delete the paint and return 204', async () => {
     vi.mocked(prisma.userCustomPaint.findFirst).mockResolvedValue(mockCustomPaint as never);
     vi.mocked(prisma.userCustomPaint.delete).mockResolvedValue(mockCustomPaint as never);
-    const app = createApp();
 
-    const res = await request(app)
+    const res = await request(server)
       .delete('/api/user-paints/cp-1')
       .set(AUTH_HEADER);
 
@@ -255,9 +246,8 @@ describe('DELETE /api/user-paints/:id', () => {
   it('should only delete paints belonging to the authenticated user', async () => {
     vi.mocked(prisma.userCustomPaint.findFirst).mockResolvedValue(mockCustomPaint as never);
     vi.mocked(prisma.userCustomPaint.delete).mockResolvedValue(mockCustomPaint as never);
-    const app = createApp();
 
-    await request(app)
+    await request(server)
       .delete('/api/user-paints/cp-1')
       .set(AUTH_HEADER);
 

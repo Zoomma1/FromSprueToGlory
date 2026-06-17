@@ -7,7 +7,7 @@
 //   linkGoogle()              — service logic (direct unit test)
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -46,6 +46,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH = 'Bearer fake-token';
 
 // ─── Helpers ──────────────────────────────────────────────
@@ -71,7 +75,7 @@ describe('Google Link Feature', () => {
                 id: 'user-1', email: 'a@b.com', currency: 'EUR', googleId: null,
             });
 
-            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+            const res = await request(server).get('/api/users/me').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.hasGoogleLinked).toBe(false);
@@ -82,7 +86,7 @@ describe('Google Link Feature', () => {
                 id: 'user-1', email: 'a@b.com', currency: 'EUR', googleId: 'google-abc',
             });
 
-            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+            const res = await request(server).get('/api/users/me').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.hasGoogleLinked).toBe(true);
@@ -93,7 +97,7 @@ describe('Google Link Feature', () => {
                 id: 'user-1', email: 'a@b.com', currency: 'EUR', googleId: 'google-abc',
             });
 
-            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+            const res = await request(server).get('/api/users/me').set('Authorization', AUTH);
 
             expect(res.body.googleId).toBeUndefined();
         });
@@ -102,14 +106,14 @@ describe('Google Link Feature', () => {
     // ─── POST /api/users/me/google-link ───────────────────
     describe('POST /api/users/me/google-link', () => {
         it('returns 401 without Authorization header', async () => {
-            const res = await request(app).post('/api/users/me/google-link');
+            const res = await request(server).post('/api/users/me/google-link');
             expect(res.status).toBe(401);
         });
 
         it('returns 401 when the token is invalid', async () => {
             mockVerifyAccessToken.mockImplementationOnce(() => { throw new Error('jwt expired'); });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/users/me/google-link')
                 .set('Authorization', 'Bearer bad-token');
 
@@ -117,7 +121,7 @@ describe('Google Link Feature', () => {
         });
 
         it('returns 200 with a redirectUrl pointing to the Google OAuth flow', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/users/me/google-link')
                 .set('Authorization', AUTH);
 
@@ -126,7 +130,7 @@ describe('Google Link Feature', () => {
         });
 
         it('sets a google_link_intent cookie containing an opaque token (not the userId)', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/users/me/google-link')
                 .set('Authorization', AUTH);
 
@@ -141,7 +145,7 @@ describe('Google Link Feature', () => {
         });
 
         it('resolveGoogleLinkIntent maps the token to the authenticated userId', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/users/me/google-link')
                 .set('Authorization', AUTH);
 
@@ -153,7 +157,7 @@ describe('Google Link Feature', () => {
         });
 
         it('does not map an attacker-supplied userId — mapping is derived from the token', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/users/me/google-link')
                 .set('Authorization', AUTH)
                 .send({ userId: 'attacker-id' });
@@ -167,7 +171,7 @@ describe('Google Link Feature', () => {
         });
 
         it('sets the cookie with a short maxAge (5 minutes)', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/users/me/google-link')
                 .set('Authorization', AUTH);
 

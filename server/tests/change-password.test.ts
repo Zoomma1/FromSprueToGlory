@@ -9,7 +9,7 @@
 //   - Success path
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import bcrypt from 'bcryptjs';
 import { createApp } from '../src/app';
@@ -48,6 +48,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH = 'Bearer fake-token';
 const VALID_BODY = { currentPassword: 'OldPass123', newPassword: 'NewPass456' };
 
@@ -60,7 +64,7 @@ describe('PATCH /api/users/me/password', () => {
     // ─── AUTH MIDDLEWARE ──────────────────────────────────
     describe('Auth middleware', () => {
         it('returns 401 with no Authorization header', async () => {
-            const res = await request(app).patch('/api/users/me/password').send(VALID_BODY);
+            const res = await request(server).patch('/api/users/me/password').send(VALID_BODY);
             expect(res.status).toBe(401);
             expect(res.body.error).toBe('No token provided');
         });
@@ -68,7 +72,7 @@ describe('PATCH /api/users/me/password', () => {
         it('returns 401 when the token is invalid', async () => {
             mockVerifyAccessToken.mockImplementationOnce(() => { throw new Error('jwt expired'); });
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send(VALID_BODY);
@@ -81,7 +85,7 @@ describe('PATCH /api/users/me/password', () => {
     // ─── VALIDATION ───────────────────────────────────────
     describe('Validation', () => {
         it('returns 400 when currentPassword is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send({ newPassword: 'NewPass456' });
@@ -90,7 +94,7 @@ describe('PATCH /api/users/me/password', () => {
         });
 
         it('returns 400 when newPassword is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send({ currentPassword: 'OldPass123' });
@@ -99,7 +103,7 @@ describe('PATCH /api/users/me/password', () => {
         });
 
         it('returns 400 when newPassword is shorter than 8 characters', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send({ currentPassword: 'OldPass123', newPassword: 'short' });
@@ -116,7 +120,7 @@ describe('PATCH /api/users/me/password', () => {
             });
             (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(false);
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send(VALID_BODY);
@@ -130,7 +134,7 @@ describe('PATCH /api/users/me/password', () => {
                 passwordHash: null,
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send(VALID_BODY);
@@ -146,7 +150,7 @@ describe('PATCH /api/users/me/password', () => {
             (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
             (prisma.user.update as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send(VALID_BODY);
@@ -162,7 +166,7 @@ describe('PATCH /api/users/me/password', () => {
             (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
             (prisma.user.update as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            await request(app)
+            await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send(VALID_BODY);
@@ -179,7 +183,7 @@ describe('PATCH /api/users/me/password', () => {
             (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
             (prisma.user.update as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            await request(app)
+            await request(server)
                 .patch('/api/users/me/password')
                 .set('Authorization', AUTH)
                 .send(VALID_BODY);

@@ -6,7 +6,7 @@
 // it is not.
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -22,6 +22,10 @@ vi.mock('../src/lib/prisma', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 
 describe('Health Check', () => {
     beforeEach(() => {
@@ -31,7 +35,7 @@ describe('Health Check', () => {
     it('should return 200 with database: ok when DB is reachable', async () => {
         (prisma.$queryRawUnsafe as ReturnType<typeof vi.fn>).mockResolvedValue([{ '?column?': 1 }]);
 
-        const res = await request(app).get('/api/health');
+        const res = await request(server).get('/api/health');
 
         expect(res.status).toBe(200);
         expect(res.body.status).toBe('ok');
@@ -45,7 +49,7 @@ describe('Health Check', () => {
             new Error("Can't reach database server at `localhost:5432`"),
         );
 
-        const res = await request(app).get('/api/health');
+        const res = await request(server).get('/api/health');
 
         expect(res.status).toBe(503);
         expect(res.body.status).toBe('degraded');
@@ -58,7 +62,7 @@ describe('Health Check', () => {
             new Error('password authentication failed for user "sprue"'),
         );
 
-        const res = await request(app).get('/api/health');
+        const res = await request(server).get('/api/health');
 
         expect(res.status).toBe(503);
         expect(res.body.status).toBe('degraded');

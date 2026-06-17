@@ -11,7 +11,7 @@
 //   POST /api/projects/:id/unassign — unassign items
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -59,6 +59,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH = 'Bearer fake-token';
 
 const sampleProject = {
@@ -90,13 +94,13 @@ describe('Projects Routes', () => {
     // ─── AUTH MIDDLEWARE ──────────────────────────────────
     describe('Auth middleware', () => {
         it('returns 401 with no Authorization header', async () => {
-            const res = await request(app).get('/api/projects');
+            const res = await request(server).get('/api/projects');
             expect(res.status).toBe(401);
         });
 
         it('returns 401 when the token is invalid', async () => {
             mockVerifyAccessToken.mockImplementationOnce(() => { throw new Error('jwt expired'); });
-            const res = await request(app).get('/api/projects').set('Authorization', 'Bearer bad');
+            const res = await request(server).get('/api/projects').set('Authorization', 'Bearer bad');
             expect(res.status).toBe(401);
         });
     });
@@ -106,7 +110,7 @@ describe('Projects Routes', () => {
         it('returns a flat array of projects with completion and status counts', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleProjectWithItems], 1]);
 
-            const res = await request(app).get('/api/projects').set('Authorization', AUTH);
+            const res = await request(server).get('/api/projects').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(Array.isArray(res.body)).toBe(true);
@@ -121,7 +125,7 @@ describe('Projects Routes', () => {
         it('returns 0% completion for a project with no items', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleProject], 1]);
 
-            const res = await request(app).get('/api/projects').set('Authorization', AUTH);
+            const res = await request(server).get('/api/projects').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body[0].completion).toBe(0);
@@ -135,7 +139,7 @@ describe('Projects Routes', () => {
             };
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[finished], 1]);
 
-            const res = await request(app).get('/api/projects').set('Authorization', AUTH);
+            const res = await request(server).get('/api/projects').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body[0].completion).toBe(100);
@@ -144,14 +148,14 @@ describe('Projects Routes', () => {
         it('returns [] when the user has no projects', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
-            const res = await request(app).get('/api/projects').set('Authorization', AUTH);
+            const res = await request(server).get('/api/projects').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
         });
 
         it('returns 400 when limit=0 (below min=1)', async () => {
-            const res = await request(app).get('/api/projects?limit=0').set('Authorization', AUTH);
+            const res = await request(server).get('/api/projects?limit=0').set('Authorization', AUTH);
             expect(res.status).toBe(400);
         });
     });
@@ -161,7 +165,7 @@ describe('Projects Routes', () => {
         it('creates a project and returns 201', async () => {
             (prisma.project.create as ReturnType<typeof vi.fn>).mockResolvedValue(sampleProject);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: 'Ultramarines Army', description: '500-point starter' });
@@ -174,7 +178,7 @@ describe('Projects Routes', () => {
             const noDesc = { ...sampleProject, description: null };
             (prisma.project.create as ReturnType<typeof vi.fn>).mockResolvedValue(noDesc);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: 'Minimal Project' });
@@ -183,7 +187,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when name is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ description: 'No name' });
@@ -192,7 +196,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when name is empty', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: '' });
@@ -201,7 +205,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when body contains an unknown field (.strict())', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: 'My Project', extraField: 'x' });
@@ -213,7 +217,7 @@ describe('Projects Routes', () => {
             const withMeta = { ...sampleProject, color: '#8B0000', tags: ['chaos', 'khorne'] };
             (prisma.project.create as ReturnType<typeof vi.fn>).mockResolvedValue(withMeta);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: 'Ultramarines Army', color: '#8B0000', tags: ['chaos', 'khorne'] });
@@ -224,7 +228,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when color format is invalid', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: 'My Project', color: 'not-a-color' });
@@ -233,7 +237,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when tags has more than 10 items', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects')
                 .set('Authorization', AUTH)
                 .send({ name: 'My Project', tags: Array.from({ length: 11 }, (_, i) => `tag-${i}`) });
@@ -247,7 +251,7 @@ describe('Projects Routes', () => {
         it('returns the project with completion when found', async () => {
             (prisma.project.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleProjectWithItems);
 
-            const res = await request(app).get('/api/projects/proj-1').set('Authorization', AUTH);
+            const res = await request(server).get('/api/projects/proj-1').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.id).toBe('proj-1');
@@ -257,7 +261,7 @@ describe('Projects Routes', () => {
         it('returns 404 when the project does not exist', async () => {
             (prisma.project.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app).get('/api/projects/nope').set('Authorization', AUTH);
+            const res = await request(server).get('/api/projects/nope').set('Authorization', AUTH);
 
             expect(res.status).toBe(404);
             expect(res.body.error).toBe('Project not found');
@@ -271,7 +275,7 @@ describe('Projects Routes', () => {
             const updated = { ...sampleProject, name: 'Renamed' };
             (prisma.project.update as ReturnType<typeof vi.fn>).mockResolvedValue(updated);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/projects/proj-1')
                 .set('Authorization', AUTH)
                 .send({ name: 'Renamed' });
@@ -283,7 +287,7 @@ describe('Projects Routes', () => {
         it('returns 404 when the project does not exist', async () => {
             (prisma.project.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/projects/nope')
                 .set('Authorization', AUTH)
                 .send({ name: 'Renamed' });
@@ -293,7 +297,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when name is empty', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/projects/proj-1')
                 .set('Authorization', AUTH)
                 .send({ name: '' });
@@ -309,7 +313,7 @@ describe('Projects Routes', () => {
             (prisma.item.updateMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 0 });
             (prisma.project.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/projects/proj-1')
                 .set('Authorization', AUTH);
 
@@ -324,7 +328,7 @@ describe('Projects Routes', () => {
         it('returns 404 when the project does not exist', async () => {
             (prisma.project.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/projects/nope')
                 .set('Authorization', AUTH);
 
@@ -339,7 +343,7 @@ describe('Projects Routes', () => {
             (prisma.project.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleProject);
             (prisma.item.updateMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 2 });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects/proj-1/assign')
                 .set('Authorization', AUTH)
                 .send({ itemIds: ['item-1', 'item-2'] });
@@ -352,7 +356,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when itemIds is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects/proj-1/assign')
                 .set('Authorization', AUTH)
                 .send({});
@@ -362,7 +366,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when itemIds is an empty array', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects/proj-1/assign')
                 .set('Authorization', AUTH)
                 .send({ itemIds: [] });
@@ -372,7 +376,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when itemIds is not an array', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects/proj-1/assign')
                 .set('Authorization', AUTH)
                 .send({ itemIds: 'item-1' });
@@ -383,7 +387,7 @@ describe('Projects Routes', () => {
         it('returns 404 when the project does not exist', async () => {
             (prisma.project.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects/nope/assign')
                 .set('Authorization', AUTH)
                 .send({ itemIds: ['item-1'] });
@@ -398,7 +402,7 @@ describe('Projects Routes', () => {
         it('unassigns items from the project and returns the count', async () => {
             (prisma.item.updateMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 1 });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects/proj-1/unassign')
                 .set('Authorization', AUTH)
                 .send({ itemIds: ['item-1'] });
@@ -411,7 +415,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when itemIds is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects/proj-1/unassign')
                 .set('Authorization', AUTH)
                 .send({});
@@ -421,7 +425,7 @@ describe('Projects Routes', () => {
         });
 
         it('returns 400 when itemIds is an empty array', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/projects/proj-1/unassign')
                 .set('Authorization', AUTH)
                 .send({ itemIds: [] });

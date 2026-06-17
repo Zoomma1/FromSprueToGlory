@@ -6,7 +6,7 @@
 //   PATCH /api/users/me — update preferred currency
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -35,6 +35,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH = 'Bearer fake-token';
 
 const mockUser = { id: 'user-1', email: 'a@b.com', currency: 'EUR', acquisitionChannel: null };
@@ -48,13 +52,13 @@ describe('Users Routes', () => {
     // ─── AUTH MIDDLEWARE ──────────────────────────────────
     describe('Auth middleware', () => {
         it('returns 401 with no Authorization header', async () => {
-            const res = await request(app).get('/api/users/me');
+            const res = await request(server).get('/api/users/me');
             expect(res.status).toBe(401);
         });
 
         it('returns 401 when the token is invalid', async () => {
             mockVerifyAccessToken.mockImplementationOnce(() => { throw new Error('jwt expired'); });
-            const res = await request(app).get('/api/users/me').set('Authorization', 'Bearer bad');
+            const res = await request(server).get('/api/users/me').set('Authorization', 'Bearer bad');
             expect(res.status).toBe(401);
         });
     });
@@ -64,7 +68,7 @@ describe('Users Routes', () => {
         it('returns the authenticated user profile', async () => {
             (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(mockUser);
 
-            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+            const res = await request(server).get('/api/users/me').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body).toMatchObject({ id: 'user-1', email: 'a@b.com', currency: 'EUR' });
@@ -76,7 +80,7 @@ describe('Users Routes', () => {
                 acquisitionChannel: 'reddit',
             });
 
-            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+            const res = await request(server).get('/api/users/me').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.acquisitionChannel).toBe('reddit');
@@ -85,7 +89,7 @@ describe('Users Routes', () => {
         it('exposes acquisitionChannel as null when never answered', async () => {
             (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(mockUser);
 
-            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+            const res = await request(server).get('/api/users/me').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.acquisitionChannel).toBeNull();
@@ -94,7 +98,7 @@ describe('Users Routes', () => {
         it('queries by the userId from the token, not from request params', async () => {
             (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(mockUser);
 
-            await request(app).get('/api/users/me').set('Authorization', AUTH);
+            await request(server).get('/api/users/me').set('Authorization', AUTH);
 
             expect(prisma.user.findUnique).toHaveBeenCalledWith(
                 expect.objectContaining({ where: { id: 'user-1' } }),
@@ -104,7 +108,7 @@ describe('Users Routes', () => {
         it('returns 404 when user is not found', async () => {
             (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app).get('/api/users/me').set('Authorization', AUTH);
+            const res = await request(server).get('/api/users/me').set('Authorization', AUTH);
 
             expect(res.status).toBe(404);
         });
@@ -118,7 +122,7 @@ describe('Users Routes', () => {
                 currency: 'GBP',
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me')
                 .set('Authorization', AUTH)
                 .send({ currency: 'GBP' });
@@ -133,7 +137,7 @@ describe('Users Routes', () => {
                 currency: 'USD',
             });
 
-            await request(app)
+            await request(server)
                 .patch('/api/users/me')
                 .set('Authorization', AUTH)
                 .send({ currency: 'USD' });
@@ -144,7 +148,7 @@ describe('Users Routes', () => {
         });
 
         it('returns 400 for an unknown currency code', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me')
                 .set('Authorization', AUTH)
                 .send({ currency: 'XYZ' });
@@ -153,7 +157,7 @@ describe('Users Routes', () => {
         });
 
         it('returns 400 when currency field is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me')
                 .set('Authorization', AUTH)
                 .send({});
@@ -170,7 +174,7 @@ describe('Users Routes', () => {
                     currency,
                 });
 
-                const res = await request(app)
+                const res = await request(server)
                     .patch('/api/users/me')
                     .set('Authorization', AUTH)
                     .send({ currency });
@@ -188,7 +192,7 @@ describe('Users Routes', () => {
                 acquisitionChannel: 'reddit',
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/acquisition-channel')
                 .set('Authorization', AUTH)
                 .send({ acquisitionChannel: 'reddit' });
@@ -203,7 +207,7 @@ describe('Users Routes', () => {
                 acquisitionChannel: 'discord',
             });
 
-            await request(app)
+            await request(server)
                 .patch('/api/users/me/acquisition-channel')
                 .set('Authorization', AUTH)
                 .send({ acquisitionChannel: 'discord' });
@@ -223,7 +227,7 @@ describe('Users Routes', () => {
                     acquisitionChannel: channel,
                 });
 
-                const res = await request(app)
+                const res = await request(server)
                     .patch('/api/users/me/acquisition-channel')
                     .set('Authorization', AUTH)
                     .send({ acquisitionChannel: channel });
@@ -233,7 +237,7 @@ describe('Users Routes', () => {
         });
 
         it('returns 400 for a channel outside the closed list', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/acquisition-channel')
                 .set('Authorization', AUTH)
                 .send({ acquisitionChannel: 'tiktok' });
@@ -243,7 +247,7 @@ describe('Users Routes', () => {
         });
 
         it('returns 400 when the channel field is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/acquisition-channel')
                 .set('Authorization', AUTH)
                 .send({});
@@ -252,7 +256,7 @@ describe('Users Routes', () => {
         });
 
         it('returns 401 with no Authorization header', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/users/me/acquisition-channel')
                 .send({ acquisitionChannel: 'reddit' });
 

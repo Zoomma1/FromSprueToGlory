@@ -9,7 +9,7 @@
 //   DELETE /api/color-schemes/:id  — delete
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -66,6 +66,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH = 'Bearer fake-token';
 
 const TECH_1 = '00000000-0000-0000-0000-000000000001';
@@ -114,7 +118,7 @@ describe('Color Schemes Routes', () => {
     // ─── AUTH MIDDLEWARE ──────────────────────────────────
     describe('Auth middleware', () => {
         it('returns 401 with no Authorization header', async () => {
-            const res = await request(app).get('/api/color-schemes');
+            const res = await request(server).get('/api/color-schemes');
             expect(res.status).toBe(401);
             expect(res.body.error).toBe('No token provided');
         });
@@ -122,7 +126,7 @@ describe('Color Schemes Routes', () => {
         it('returns 401 when the token is invalid', async () => {
             mockVerifyAccessToken.mockImplementationOnce(() => { throw new Error('jwt expired'); });
 
-            const res = await request(app)
+            const res = await request(server)
                 .get('/api/color-schemes')
                 .set('Authorization', 'Bearer bad-token');
 
@@ -136,7 +140,7 @@ describe('Color Schemes Routes', () => {
         it('returns the list of color schemes', async () => {
             (prisma.colorScheme.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleScheme]);
 
-            const res = await request(app).get('/api/color-schemes').set('Authorization', AUTH);
+            const res = await request(server).get('/api/color-schemes').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -146,7 +150,7 @@ describe('Color Schemes Routes', () => {
         it('returns an empty list when the user has no schemes', async () => {
             (prisma.colorScheme.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/color-schemes').set('Authorization', AUTH);
+            const res = await request(server).get('/api/color-schemes').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -158,7 +162,7 @@ describe('Color Schemes Routes', () => {
         it('returns the scheme when found', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app).get('/api/color-schemes/cs-1').set('Authorization', AUTH);
+            const res = await request(server).get('/api/color-schemes/cs-1').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.id).toBe('cs-1');
@@ -168,7 +172,7 @@ describe('Color Schemes Routes', () => {
         it('returns 404 when the scheme does not exist', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app).get('/api/color-schemes/nope').set('Authorization', AUTH);
+            const res = await request(server).get('/api/color-schemes/nope').set('Authorization', AUTH);
 
             expect(res.status).toBe(404);
             expect(res.body.error).toContain('not found');
@@ -180,7 +184,7 @@ describe('Color Schemes Routes', () => {
         it('creates a scheme with steps and returns 201', async () => {
             (prisma.colorScheme.create as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send(validSchemePayload);
@@ -191,7 +195,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when name is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({ steps: [validStep1] });
@@ -200,7 +204,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when name is empty', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({ name: '', steps: [validStep1] });
@@ -209,7 +213,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when steps array is empty', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({ name: 'No steps', steps: [] });
@@ -218,7 +222,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when steps are missing entirely', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({ name: 'No steps' });
@@ -227,7 +231,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 for duplicate orderIndex values', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -243,7 +247,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when orderIndex values have a gap', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -259,7 +263,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when orderIndex does not start at 1', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -275,7 +279,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when a step techniqueId is not a UUID', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -290,7 +294,7 @@ describe('Color Schemes Routes', () => {
     // ─── POST /api/color-schemes — strict mode ────────────
     describe('POST /api/color-schemes — strict mode', () => {
         it('returns 400 when body has an unknown field', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({ ...validSchemePayload, extraField: 'x' });
@@ -299,7 +303,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when a step has an unknown field', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -316,7 +320,7 @@ describe('Color Schemes Routes', () => {
         it('creates a scheme with a valid mix step and returns 201', async () => {
             (prisma.colorScheme.create as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({ name: 'Red mix', steps: [validMixStep] });
@@ -327,7 +331,7 @@ describe('Color Schemes Routes', () => {
         it('accepts a mix step with no ratio on entries', async () => {
             (prisma.colorScheme.create as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -343,7 +347,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when isMix is true and mix[] is empty', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -355,7 +359,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when isMix is true and mix is absent', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -367,7 +371,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when isMix is true and paintId is set on the step', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -384,7 +388,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when a mix entry has neither paintId nor userCustomPaintId', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -400,7 +404,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when a mix entry has an unknown field (strict mode)', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -416,7 +420,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when mix[] is provided without isMix: true', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes')
                 .set('Authorization', AUTH)
                 .send({
@@ -438,7 +442,7 @@ describe('Color Schemes Routes', () => {
             const updated = { ...sampleScheme, name: 'Crimson Fists' };
             (prisma.colorScheme.update as ReturnType<typeof vi.fn>).mockResolvedValue(updated);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ name: 'Crimson Fists' });
@@ -453,7 +457,7 @@ describe('Color Schemes Routes', () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ name: 'Updated', steps: [validStep1, validStep2] });
@@ -465,7 +469,7 @@ describe('Color Schemes Routes', () => {
         it('returns 404 when the scheme does not exist', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/nope')
                 .set('Authorization', AUTH)
                 .send({ name: 'Updated' });
@@ -477,7 +481,7 @@ describe('Color Schemes Routes', () => {
         it('returns 400 for duplicate orderIndex in updated steps', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({
@@ -494,7 +498,7 @@ describe('Color Schemes Routes', () => {
         it('returns 400 for a gap in orderIndex in updated steps', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({
@@ -509,7 +513,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 400 when body has an unknown field', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ name: 'Updated', extraField: 'x' });
@@ -524,7 +528,7 @@ describe('Color Schemes Routes', () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ steps: [validMixStep] });
@@ -536,7 +540,7 @@ describe('Color Schemes Routes', () => {
         it('returns 400 when isMix is true and paintId is set on the step', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({
@@ -558,7 +562,7 @@ describe('Color Schemes Routes', () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
             (prisma.colorScheme.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH);
 
@@ -569,7 +573,7 @@ describe('Color Schemes Routes', () => {
         it('returns 404 when the scheme does not exist', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/color-schemes/nope')
                 .set('Authorization', AUTH);
 
@@ -578,7 +582,7 @@ describe('Color Schemes Routes', () => {
         });
 
         it('returns 401 without an Authorization header', async () => {
-            const res = await request(app).delete('/api/color-schemes/cs-1');
+            const res = await request(server).delete('/api/color-schemes/cs-1');
             expect(res.status).toBe(401);
         });
     });
@@ -591,7 +595,7 @@ describe('Color Schemes Routes', () => {
                 id: 'img-1', colorSchemeId: 'cs-1', key: 'users/user-1/123-ref.jpg', order: 1,
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes/cs-1/images')
                 .set('Authorization', AUTH)
                 .send({ key: 'users/user-1/123-ref.jpg', order: 1 });
@@ -603,7 +607,7 @@ describe('Color Schemes Routes', () => {
         it('returns 400 when key is missing', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes/cs-1/images')
                 .set('Authorization', AUTH)
                 .send({ order: 1 });
@@ -614,7 +618,7 @@ describe('Color Schemes Routes', () => {
         it('returns 400 when order is missing', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes/cs-1/images')
                 .set('Authorization', AUTH)
                 .send({ key: 'users/user-1/123-ref.jpg' });
@@ -625,7 +629,7 @@ describe('Color Schemes Routes', () => {
         it('returns 404 when the scheme does not exist', async () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes/nope/images')
                 .set('Authorization', AUTH)
                 .send({ key: 'users/user-1/123-ref.jpg', order: 1 });
@@ -638,7 +642,7 @@ describe('Color Schemes Routes', () => {
                 ...sampleScheme, userId: 'other-user',
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/color-schemes/cs-1/images')
                 .set('Authorization', AUTH)
                 .send({ key: 'users/user-1/123-ref.jpg', order: 1 });
@@ -656,7 +660,7 @@ describe('Color Schemes Routes', () => {
             (prisma.colorSchemeImage.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleImage);
             (prisma.colorSchemeImage.delete as ReturnType<typeof vi.fn>).mockResolvedValue(sampleImage);
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/color-schemes/cs-1/images/img-1')
                 .set('Authorization', AUTH);
 
@@ -669,7 +673,7 @@ describe('Color Schemes Routes', () => {
             (prisma.colorSchemeImage.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleImage);
             (prisma.colorSchemeImage.delete as ReturnType<typeof vi.fn>).mockResolvedValue(sampleImage);
 
-            await request(app)
+            await request(server)
                 .delete('/api/color-schemes/cs-1/images/img-1')
                 .set('Authorization', AUTH);
 
@@ -682,7 +686,7 @@ describe('Color Schemes Routes', () => {
             (prisma.colorSchemeImage.delete as ReturnType<typeof vi.fn>).mockResolvedValue(sampleImage);
             mockSend.mockRejectedValueOnce(new Error('S3 unavailable'));
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/color-schemes/cs-1/images/img-1')
                 .set('Authorization', AUTH);
 
@@ -694,7 +698,7 @@ describe('Color Schemes Routes', () => {
             (prisma.colorScheme.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
             (prisma.colorSchemeImage.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/color-schemes/cs-1/images/nope')
                 .set('Authorization', AUTH);
 
@@ -706,7 +710,7 @@ describe('Color Schemes Routes', () => {
                 ...sampleScheme, userId: 'other-user',
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/color-schemes/cs-1/images/img-1')
                 .set('Authorization', AUTH);
 
@@ -722,7 +726,7 @@ describe('Color Schemes Routes', () => {
                 images: [{ id: 'img-1', colorSchemeId: 'cs-1', key: 'users/user-1/ref.jpg', order: 1 }],
             });
 
-            const res = await request(app).get('/api/color-schemes/cs-1').set('Authorization', AUTH);
+            const res = await request(server).get('/api/color-schemes/cs-1').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.images).toHaveLength(1);
@@ -739,7 +743,7 @@ describe('Color Schemes Routes', () => {
                 steps: [{ ...sampleScheme.steps[0], stepImageKey: 'users/user-1/step.jpg' }],
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ steps: [{ orderIndex: 1, area: 'Armor', techniqueId: TECH_1, stepImageKey: 'users/user-1/step.jpg' }] });
@@ -754,7 +758,7 @@ describe('Color Schemes Routes', () => {
             ]);
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            await request(app)
+            await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ steps: [{ orderIndex: 1, area: 'Armor', techniqueId: TECH_1 }] });
@@ -767,7 +771,7 @@ describe('Color Schemes Routes', () => {
             // findMany already returns [] from beforeEach
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue(sampleScheme);
 
-            await request(app)
+            await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ steps: [validStep1, validStep2] });
@@ -788,7 +792,7 @@ describe('Color Schemes Routes', () => {
                 steps: [],
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH)
                 .send({ name: 'Updated' });
@@ -803,7 +807,7 @@ describe('Color Schemes Routes', () => {
                 steps: [],
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/color-schemes/cs-1')
                 .set('Authorization', AUTH);
 
