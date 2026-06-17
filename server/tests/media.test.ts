@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { getS3Client } from '../src/lib/s3';
@@ -47,6 +47,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH_HEADER = { Authorization: 'Bearer valid-token' };
 
 describe('POST /api/media/presign-upload — Zod validation (ZOD-05)', () => {
@@ -57,7 +61,7 @@ describe('POST /api/media/presign-upload — Zod validation (ZOD-05)', () => {
   });
 
   it('returns 400 with details when body is missing', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/media/presign-upload')
       .set(AUTH_HEADER)
       .send({});
@@ -66,7 +70,7 @@ describe('POST /api/media/presign-upload — Zod validation (ZOD-05)', () => {
   });
 
   it('returns 400 with details when fileName is empty string', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/media/presign-upload')
       .set(AUTH_HEADER)
       .send({ fileName: '', fileType: 'image/jpeg' });
@@ -75,7 +79,7 @@ describe('POST /api/media/presign-upload — Zod validation (ZOD-05)', () => {
   });
 
   it('returns 400 when fileType is not in accepted enum', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/media/presign-upload')
       .set(AUTH_HEADER)
       .send({ fileName: 'shot.jpg', fileType: 'application/pdf' });
@@ -84,7 +88,7 @@ describe('POST /api/media/presign-upload — Zod validation (ZOD-05)', () => {
   });
 
   it('returns 400 when extra field is present (.strict())', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/media/presign-upload')
       .set(AUTH_HEADER)
       .send({ fileName: 'shot.jpg', fileType: 'image/jpeg', extra: 'x' });
@@ -92,7 +96,7 @@ describe('POST /api/media/presign-upload — Zod validation (ZOD-05)', () => {
   });
 
   it('proceeds to service when body is valid', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/media/presign-upload')
       .set(AUTH_HEADER)
       .send({ fileName: 'shot.jpg', fileType: 'image/png' });
@@ -108,7 +112,7 @@ describe('GET /api/export/items — Zod validation (ZOD-07)', () => {
   });
 
   it('returns 400 with details when format is invalid', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .get('/api/export/items?format=xml')
       .set(AUTH_HEADER);
     expect(res.status).toBe(400);
@@ -116,21 +120,21 @@ describe('GET /api/export/items — Zod validation (ZOD-07)', () => {
   });
 
   it('returns 400 when unknown query param is present (.strict())', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .get('/api/export/items?format=json&extra=x')
       .set(AUTH_HEADER);
     expect(res.status).toBe(400);
   });
 
   it('returns 200 when format=csv (valid)', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .get('/api/export/items?format=csv')
       .set(AUTH_HEADER);
     expect(res.status).toBe(200);
   });
 
   it('returns 200 with default json when no format param', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .get('/api/export/items')
       .set(AUTH_HEADER);
     expect(res.status).toBe(200);
@@ -145,7 +149,7 @@ describe('GET /api/media/presign-read/:key', () => {
   });
 
   it('returns 200 with readUrl on happy path', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .get('/api/media/presign-read/users/user-1/photo.jpg')
       .set(AUTH_HEADER);
     expect(res.status).toBe(200);
@@ -153,20 +157,20 @@ describe('GET /api/media/presign-read/:key', () => {
   });
 
   it('returns 401 when no auth header is provided', async () => {
-    const res = await request(app).get('/api/media/presign-read/users/user-1/photo.jpg');
+    const res = await request(server).get('/api/media/presign-read/users/user-1/photo.jpg');
     expect(res.status).toBe(401);
   });
 
   it('returns 503 when getS3Client returns null', async () => {
     (getS3Client as ReturnType<typeof vi.fn>).mockReturnValueOnce(null);
-    const res = await request(app)
+    const res = await request(server)
       .get('/api/media/presign-read/users/user-1/photo.jpg')
       .set(AUTH_HEADER);
     expect(res.status).toBe(503);
   });
 
   it('returns 400 when the key path is missing', async () => {
-    const res = await request(app).get('/api/media/presign-read/').set(AUTH_HEADER);
+    const res = await request(server).get('/api/media/presign-read/').set(AUTH_HEADER);
     expect(res.status).toBe(400);
   });
 });
@@ -180,7 +184,7 @@ describe('S3 Singleton (S3S-01/02)', () => {
   });
 
   it('presignUpload calls getS3Client() instead of constructing new S3Client (S3S-01)', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/media/presign-upload')
       .set(AUTH_HEADER)
       .send({ fileName: 'test.jpg', fileType: 'image/jpeg' });
@@ -190,7 +194,7 @@ describe('S3 Singleton (S3S-01/02)', () => {
 
   it('presignUpload returns 503 when getS3Client returns null (S3S-01)', async () => {
     (getS3Client as ReturnType<typeof vi.fn>).mockReturnValueOnce(null);
-    const res = await request(app)
+    const res = await request(server)
       .post('/api/media/presign-upload')
       .set(AUTH_HEADER)
       .send({ fileName: 'test.jpg', fileType: 'image/jpeg' });
@@ -203,7 +207,7 @@ describe('S3 Singleton (S3S-01/02)', () => {
     // getSignedUrl is mocked to throw
     const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
     (getSignedUrl as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error('S3 error'));
-    await request(app)
+    await request(server)
       .post('/api/media/presign-upload')
       .set(AUTH_HEADER)
       .send({ fileName: 'test.jpg', fileType: 'image/jpeg' });

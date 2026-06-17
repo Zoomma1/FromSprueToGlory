@@ -20,7 +20,7 @@
 //   - returns error entry on unexpected Prisma error
 //
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -72,6 +72,10 @@ const ADMIN_USER = { id: 'user-1', email: 'a@b.com', isAdmin: true };
 const NON_ADMIN_USER = { id: 'user-1', email: 'a@b.com', isAdmin: false };
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const SYNC_ENDPOINT = '/api/admin/paints/sync';
 const EXPORT_ENDPOINT = '/api/admin/paints/export';
 const AUTH_HEADER = 'Bearer valid-token';
@@ -107,7 +111,7 @@ describe('Admin routes — auth tier', () => {
   });
 
   it('POST /paints/sync returns 401 when no Authorization header is provided', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .post(SYNC_ENDPOINT)
       .send([validPaint]);
 
@@ -117,7 +121,7 @@ describe('Admin routes — auth tier', () => {
   it('POST /paints/sync returns 403 when user has isAdmin=false', async () => {
     mockNonAdminUser();
 
-    const res = await request(app)
+    const res = await request(server)
       .post(SYNC_ENDPOINT)
       .set('Authorization', AUTH_HEADER)
       .send([validPaint]);
@@ -126,7 +130,7 @@ describe('Admin routes — auth tier', () => {
   });
 
   it('GET /paints/export returns 401 when no Authorization header is provided', async () => {
-    const res = await request(app).get(EXPORT_ENDPOINT);
+    const res = await request(server).get(EXPORT_ENDPOINT);
 
     expect(res.status).toBe(401);
   });
@@ -134,7 +138,7 @@ describe('Admin routes — auth tier', () => {
   it('GET /paints/export returns 403 when user has isAdmin=false', async () => {
     mockNonAdminUser();
 
-    const res = await request(app)
+    const res = await request(server)
       .get(EXPORT_ENDPOINT)
       .set('Authorization', AUTH_HEADER);
 
@@ -145,7 +149,7 @@ describe('Admin routes — auth tier', () => {
     mockAdminUser();
     (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-    const res = await request(app)
+    const res = await request(server)
       .get(EXPORT_ENDPOINT)
       .set('Authorization', AUTH_HEADER);
 
@@ -165,7 +169,7 @@ describe('POST /api/admin/paints/sync', () => {
   //  Validation du body
   describe('Body validation', () => {
     it('returns 400 when body is not an array', async () => {
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send({ name: 'Abaddon Black' });
@@ -175,7 +179,7 @@ describe('POST /api/admin/paints/sync', () => {
     });
 
     it('returns 400 when body is an empty array', async () => {
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([]);
@@ -185,7 +189,7 @@ describe('POST /api/admin/paints/sync', () => {
     });
 
     it('returns 400 when body is null', async () => {
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send({});
@@ -194,7 +198,7 @@ describe('POST /api/admin/paints/sync', () => {
     });
 
     it('returns 400 with a details field when body is not an array', async () => {
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send({ name: 'Abaddon Black' });
@@ -208,7 +212,7 @@ describe('POST /api/admin/paints/sync', () => {
   //  Champs manquants
   describe('Missing required fields', () => {
     it('records an error when name is missing', async () => {
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([{ brandSlug: 'citadel', type: 'BASE', code: 'REF-001' }]);
@@ -218,7 +222,7 @@ describe('POST /api/admin/paints/sync', () => {
     });
 
     it('records an error when brandSlug is missing', async () => {
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([{ name: 'Abaddon Black', type: 'BASE', code: 'REF-001' }]);
@@ -228,7 +232,7 @@ describe('POST /api/admin/paints/sync', () => {
     });
 
     it('records an error when type is missing', async () => {
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([{ name: 'Abaddon Black', brandSlug: 'citadel', code: 'REF-001' }]);
@@ -243,7 +247,7 @@ describe('POST /api/admin/paints/sync', () => {
     it('records an error when brandSlug does not exist in DB', async () => {
       mockBrandNotFound();
 
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
@@ -262,7 +266,7 @@ describe('POST /api/admin/paints/sync', () => {
       mockBrandFound();
       mockPaintFound();
 
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
@@ -277,7 +281,7 @@ describe('POST /api/admin/paints/sync', () => {
       mockBrandFound();
       mockPaintFound();
 
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([validPaint, validPaint]);
@@ -295,7 +299,7 @@ describe('POST /api/admin/paints/sync', () => {
       mockPaintNotFound();
       mockPaintCreated();
 
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
@@ -312,7 +316,7 @@ describe('POST /api/admin/paints/sync', () => {
       mockPaintNotFound();
       mockPaintCreated();
 
-      await request(app)
+      await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
@@ -336,7 +340,7 @@ describe('POST /api/admin/paints/sync', () => {
 
       const paintWithoutRef = { name: 'Abaddon Black', brandSlug: 'citadel', type: 'BASE' };
 
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([paintWithoutRef]);
@@ -366,7 +370,7 @@ describe('POST /api/admin/paints/sync', () => {
         { name: 'Unknown Paint', brandSlug: 'unknown-brand', type: 'BASE', code: 'REF-3' },
       ];
 
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send(batch);
@@ -387,7 +391,7 @@ describe('POST /api/admin/paints/sync', () => {
         new Error('DB connection lost'),
       );
 
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
@@ -403,7 +407,7 @@ describe('POST /api/admin/paints/sync', () => {
         new Error('Timeout'),
       );
 
-      const res = await request(app)
+      const res = await request(server)
         .post(SYNC_ENDPOINT)
         .set('Authorization', AUTH_HEADER)
         .send([validPaint]);
@@ -423,13 +427,13 @@ describe('POST /api/admin/paints/sync', () => {
     });
 
     it('returns 401 when no Authorization header is provided', async () => {
-      const res = await request(app).get(ENDPOINT);
+      const res = await request(server).get(ENDPOINT);
       expect(res.status).toBe(401);
     });
 
     it('returns 403 when user has isAdmin=false', async () => {
       mockNonAdminUser();
-      const res = await request(app).get(ENDPOINT).set('Authorization', AUTH_HEADER);
+      const res = await request(server).get(ENDPOINT).set('Authorization', AUTH_HEADER);
       expect(res.status).toBe(403);
     });
 
@@ -443,7 +447,7 @@ describe('POST /api/admin/paints/sync', () => {
         { acquisitionChannel: null, _count: { _all: 4 } },
       ]);
 
-      const res = await request(app).get(ENDPOINT).set('Authorization', AUTH_HEADER);
+      const res = await request(server).get(ENDPOINT).set('Authorization', AUTH_HEADER);
 
       expect(res.status).toBe(200);
       expect(res.body).toEqual({
@@ -459,7 +463,7 @@ describe('POST /api/admin/paints/sync', () => {
       mockAdminUser();
       (prisma.user.groupBy as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-      const res = await request(app).get(ENDPOINT).set('Authorization', AUTH_HEADER);
+      const res = await request(server).get(ENDPOINT).set('Authorization', AUTH_HEADER);
 
       expect(res.status).toBe(200);
       expect(res.body).toEqual({
@@ -475,7 +479,7 @@ describe('POST /api/admin/paints/sync', () => {
       mockAdminUser();
       (prisma.user.groupBy as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-      await request(app)
+      await request(server)
         .get(`${ENDPOINT}?from=2026-06-01&to=2026-06-30`)
         .set('Authorization', AUTH_HEADER);
 
@@ -490,7 +494,7 @@ describe('POST /api/admin/paints/sync', () => {
       mockAdminUser();
       (prisma.user.groupBy as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-      await request(app).get(ENDPOINT).set('Authorization', AUTH_HEADER);
+      await request(server).get(ENDPOINT).set('Authorization', AUTH_HEADER);
 
       expect(prisma.user.groupBy).toHaveBeenCalledWith(
         expect.objectContaining({ where: {} }),
@@ -499,7 +503,7 @@ describe('POST /api/admin/paints/sync', () => {
 
     it('returns 400 for an invalid date param', async () => {
       mockAdminUser();
-      const res = await request(app)
+      const res = await request(server)
         .get(`${ENDPOINT}?from=not-a-date`)
         .set('Authorization', AUTH_HEADER);
 
@@ -522,7 +526,7 @@ describe('POST /api/admin/paints/sync', () => {
         },
       ]);
 
-      const res = await request(app)
+      const res = await request(server)
         .get(EXPORT_ENDPOINT)
         .set('Authorization', AUTH_HEADER);
 

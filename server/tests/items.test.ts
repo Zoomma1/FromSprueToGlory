@@ -11,7 +11,7 @@
 //   GET /api/items/:id/history  — status history
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -55,6 +55,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH = 'Bearer fake-token';
 
 const GS_1 = '00000000-0000-0000-0000-000000000001';
@@ -83,14 +87,14 @@ describe('Items Routes', () => {
     // ─── AUTH MIDDLEWARE ──────────────────────────────────
     describe('Auth middleware', () => {
         it('returns 401 with no Authorization header', async () => {
-            const res = await request(app).get('/api/items');
+            const res = await request(server).get('/api/items');
             expect(res.status).toBe(401);
             expect(res.body.error).toBe('No token provided');
         });
 
         it('returns 401 when token verification fails', async () => {
             mockVerifyAccessToken.mockImplementationOnce(() => { throw new Error('jwt expired'); });
-            const res = await request(app).get('/api/items').set('Authorization', 'Bearer bad');
+            const res = await request(server).get('/api/items').set('Authorization', 'Bearer bad');
             expect(res.status).toBe(401);
             expect(res.body.error).toBe('Invalid or expired token');
         });
@@ -101,7 +105,7 @@ describe('Items Routes', () => {
         it('returns a flat array of items for the authenticated user', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleItem], 1]);
 
-            const res = await request(app).get('/api/items').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(Array.isArray(res.body)).toBe(true);
@@ -112,7 +116,7 @@ describe('Items Routes', () => {
         it('returns [] when the user has no items', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
-            const res = await request(app).get('/api/items').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -121,7 +125,7 @@ describe('Items Routes', () => {
         it('forwards the status filter to Prisma', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
-            await request(app).get('/api/items?status=BOUGHT').set('Authorization', AUTH);
+            await request(server).get('/api/items?status=BOUGHT').set('Authorization', AUTH);
 
             expect(prisma.$transaction).toHaveBeenCalled();
         });
@@ -129,7 +133,7 @@ describe('Items Routes', () => {
         it('forwards the search filter as an OR condition', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
-            await request(app).get('/api/items?search=space').set('Authorization', AUTH);
+            await request(server).get('/api/items?search=space').set('Authorization', AUTH);
 
             expect(prisma.$transaction).toHaveBeenCalled();
         });
@@ -137,7 +141,7 @@ describe('Items Routes', () => {
         it('forwards the tags filter as hasSome', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
-            await request(app).get('/api/items?tags=elite,troops').set('Authorization', AUTH);
+            await request(server).get('/api/items?tags=elite,troops').set('Authorization', AUTH);
 
             expect(prisma.$transaction).toHaveBeenCalled();
         });
@@ -145,7 +149,7 @@ describe('Items Routes', () => {
         it('sorts by name ascending when sortBy=name&sortDir=asc', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
-            await request(app).get('/api/items?sortBy=name&sortDir=asc').set('Authorization', AUTH);
+            await request(server).get('/api/items?sortBy=name&sortDir=asc').set('Authorization', AUTH);
 
             expect(prisma.$transaction).toHaveBeenCalled();
         });
@@ -153,7 +157,7 @@ describe('Items Routes', () => {
         it('falls back to createdAt desc for an unsupported sortBy value', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[], 0]);
 
-            await request(app).get('/api/items?sortBy=invalid').set('Authorization', AUTH);
+            await request(server).get('/api/items?sortBy=invalid').set('Authorization', AUTH);
 
             expect(prisma.$transaction).toHaveBeenCalled();
         });
@@ -161,19 +165,19 @@ describe('Items Routes', () => {
         it('returns a flat array with limit=5 applied', async () => {
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([[sampleItem], 10]);
 
-            const res = await request(app).get('/api/items?limit=5').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items?limit=5').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(Array.isArray(res.body)).toBe(true);
         });
 
         it('returns 400 when limit=0 (below min=1)', async () => {
-            const res = await request(app).get('/api/items?limit=0').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items?limit=0').set('Authorization', AUTH);
             expect(res.status).toBe(400);
         });
 
         it('returns 400 when limit=101 (above max=100)', async () => {
-            const res = await request(app).get('/api/items?limit=101').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items?limit=101').set('Authorization', AUTH);
             expect(res.status).toBe(400);
         });
     });
@@ -183,7 +187,7 @@ describe('Items Routes', () => {
         it('returns the item when found', async () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleItem);
 
-            const res = await request(app).get('/api/items/item-1').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items/item-1').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.id).toBe('item-1');
@@ -192,7 +196,7 @@ describe('Items Routes', () => {
         it('returns 404 when the item does not exist', async () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app).get('/api/items/nope').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items/nope').set('Authorization', AUTH);
 
             expect(res.status).toBe(404);
             expect(res.body.error).toBe('Item not found');
@@ -204,7 +208,7 @@ describe('Items Routes', () => {
         it('creates an item and returns 201', async () => {
             (prisma.item.create as ReturnType<typeof vi.fn>).mockResolvedValue(sampleItem);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/items')
                 .set('Authorization', AUTH)
                 .send({ name: 'Intercessors', gameSystemId: GS_1, factionId: F_1 });
@@ -214,7 +218,7 @@ describe('Items Routes', () => {
         });
 
         it('returns 400 when name is empty', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/items')
                 .set('Authorization', AUTH)
                 .send({ name: '', gameSystemId: GS_1, factionId: F_1 });
@@ -224,7 +228,7 @@ describe('Items Routes', () => {
         });
 
         it('returns 400 when gameSystemId is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/items')
                 .set('Authorization', AUTH)
                 .send({ name: 'Intercessors', factionId: F_1 });
@@ -233,7 +237,7 @@ describe('Items Routes', () => {
         });
 
         it('returns 400 when gameSystemId is not a UUID', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/items')
                 .set('Authorization', AUTH)
                 .send({ name: 'Intercessors', gameSystemId: 'not-a-uuid', factionId: F_1 });
@@ -242,7 +246,7 @@ describe('Items Routes', () => {
         });
 
         it('returns 400 when factionId is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/items')
                 .set('Authorization', AUTH)
                 .send({ name: 'Intercessors', gameSystemId: GS_1 });
@@ -254,7 +258,7 @@ describe('Items Routes', () => {
             const itemWithDefaults = { ...sampleItem, quantity: 1, status: 'WANT' };
             (prisma.item.create as ReturnType<typeof vi.fn>).mockResolvedValue(itemWithDefaults);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/items')
                 .set('Authorization', AUTH)
                 .send({ name: 'Scouts', gameSystemId: GS_1, factionId: F_1 });
@@ -268,7 +272,7 @@ describe('Items Routes', () => {
         });
 
         it('returns 400 when body contains an unknown field (.strict())', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/items')
                 .set('Authorization', AUTH)
                 .send({ name: 'Intercessors', gameSystemId: GS_1, factionId: F_1, extraField: 'x' });
@@ -284,7 +288,7 @@ describe('Items Routes', () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleItem);
             (prisma.item.update as ReturnType<typeof vi.fn>).mockResolvedValue(updated);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/items/item-1')
                 .set('Authorization', AUTH)
                 .send({ name: 'Updated' });
@@ -296,7 +300,7 @@ describe('Items Routes', () => {
         it('returns 404 when the item does not exist', async () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/items/nope')
                 .set('Authorization', AUTH)
                 .send({ name: 'Updated' });
@@ -306,7 +310,7 @@ describe('Items Routes', () => {
         });
 
         it('returns 400 when body fails schema validation', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .put('/api/items/item-1')
                 .set('Authorization', AUTH)
                 .send({ quantity: -5 }); // negative quantity is invalid
@@ -322,7 +326,7 @@ describe('Items Routes', () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleItem);
             (prisma.item.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app).delete('/api/items/item-1').set('Authorization', AUTH);
+            const res = await request(server).delete('/api/items/item-1').set('Authorization', AUTH);
 
             expect(res.status).toBe(204);
             expect(prisma.item.delete).toHaveBeenCalledWith({ where: { id: 'item-1' } });
@@ -331,7 +335,7 @@ describe('Items Routes', () => {
         it('returns 404 when the item does not exist', async () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app).delete('/api/items/nope').set('Authorization', AUTH);
+            const res = await request(server).delete('/api/items/nope').set('Authorization', AUTH);
 
             expect(res.status).toBe(404);
             expect(res.body.error).toBe('Item not found');
@@ -345,7 +349,7 @@ describe('Items Routes', () => {
             const updated = { ...sampleItem, status: 'BOUGHT' };
             (prisma.$transaction as ReturnType<typeof vi.fn>).mockResolvedValue([updated, {}]);
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/items/item-1/status')
                 .set('Authorization', AUTH)
                 .send({ status: 'BOUGHT' });
@@ -357,7 +361,7 @@ describe('Items Routes', () => {
         it('returns 400 when new status equals current status', async () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue({ ...sampleItem, status: 'WANT' });
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/items/item-1/status')
                 .set('Authorization', AUTH)
                 .send({ status: 'WANT' });
@@ -367,7 +371,7 @@ describe('Items Routes', () => {
         });
 
         it('returns 400 for an invalid status value', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/items/item-1/status')
                 .set('Authorization', AUTH)
                 .send({ status: 'INVALID_STATUS' });
@@ -377,7 +381,7 @@ describe('Items Routes', () => {
         });
 
         it('returns 400 when status field is missing from body', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/items/item-1/status')
                 .set('Authorization', AUTH)
                 .send({});
@@ -388,7 +392,7 @@ describe('Items Routes', () => {
         it('returns 404 when the item does not exist', async () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .patch('/api/items/nope/status')
                 .set('Authorization', AUTH)
                 .send({ status: 'BOUGHT' });
@@ -406,7 +410,7 @@ describe('Items Routes', () => {
                 { fromStatus: 'WANT', toStatus: 'BOUGHT', changedAt: new Date().toISOString() },
             ]);
 
-            const res = await request(app).get('/api/items/item-1/history').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items/item-1/history').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -417,7 +421,7 @@ describe('Items Routes', () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(sampleItem);
             (prisma.itemStatusHistory.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/items/item-1/history').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items/item-1/history').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -426,7 +430,7 @@ describe('Items Routes', () => {
         it('returns 404 when the item does not exist', async () => {
             (prisma.item.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app).get('/api/items/nope/history').set('Authorization', AUTH);
+            const res = await request(server).get('/api/items/nope/history').set('Authorization', AUTH);
 
             expect(res.status).toBe(404);
             expect(res.body.error).toBe('Item not found');

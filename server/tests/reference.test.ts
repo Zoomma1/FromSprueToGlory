@@ -11,7 +11,7 @@
 //   GET /api/reference/techniques
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -52,6 +52,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 
 const sampleGameSystem = { id: 'gs-1', name: 'Warhammer 40K', slug: 'wh40k' };
 const sampleFaction    = { id: 'f-1',  name: 'Space Marines', gameSystemId: 'gs-1' };
@@ -80,7 +84,7 @@ describe('Reference Routes', () => {
         it('returns all game systems', async () => {
             (prisma.gameSystem.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleGameSystem]);
 
-            const res = await request(app).get('/api/reference/game-systems');
+            const res = await request(server).get('/api/reference/game-systems');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -90,7 +94,7 @@ describe('Reference Routes', () => {
         it('returns an empty list when there are no game systems', async () => {
             (prisma.gameSystem.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/game-systems');
+            const res = await request(server).get('/api/reference/game-systems');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -99,7 +103,7 @@ describe('Reference Routes', () => {
         it('does not require authentication', async () => {
             (prisma.gameSystem.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/game-systems');
+            const res = await request(server).get('/api/reference/game-systems');
 
             // No Authorization header — should still return 200
             expect(res.status).toBe(200);
@@ -111,7 +115,7 @@ describe('Reference Routes', () => {
         it('returns all factions when no gameSystemId is given', async () => {
             (prisma.faction.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleFaction]);
 
-            const res = await request(app).get('/api/reference/factions');
+            const res = await request(server).get('/api/reference/factions');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -123,7 +127,7 @@ describe('Reference Routes', () => {
         it('filters by gameSystemId when provided', async () => {
             (prisma.faction.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleFaction]);
 
-            await request(app).get('/api/reference/factions?gameSystemId=gs-1');
+            await request(server).get('/api/reference/factions?gameSystemId=gs-1');
 
             expect(prisma.faction.findMany).toHaveBeenCalledWith(
                 expect.objectContaining({ where: { gameSystemId: 'gs-1' } }),
@@ -133,7 +137,7 @@ describe('Reference Routes', () => {
         it('returns an empty list when no factions match', async () => {
             (prisma.faction.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/factions?gameSystemId=unknown');
+            const res = await request(server).get('/api/reference/factions?gameSystemId=unknown');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -145,7 +149,7 @@ describe('Reference Routes', () => {
         it('returns all models when no factionId is given', async () => {
             (prisma.model.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleModel]);
 
-            const res = await request(app).get('/api/reference/models');
+            const res = await request(server).get('/api/reference/models');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -157,7 +161,7 @@ describe('Reference Routes', () => {
         it('filters by factionId when provided', async () => {
             (prisma.model.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleModel]);
 
-            await request(app).get('/api/reference/models?factionId=f-1');
+            await request(server).get('/api/reference/models?factionId=f-1');
 
             expect(prisma.model.findMany).toHaveBeenCalledWith(
                 expect.objectContaining({ where: { factionId: 'f-1' } }),
@@ -167,7 +171,7 @@ describe('Reference Routes', () => {
         it('returns an empty list when no models match', async () => {
             (prisma.model.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/models?factionId=unknown');
+            const res = await request(server).get('/api/reference/models?factionId=unknown');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -179,7 +183,7 @@ describe('Reference Routes', () => {
         it('returns all paint brands', async () => {
             (prisma.paintBrand.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleBrand]);
 
-            const res = await request(app).get('/api/reference/paint-brands');
+            const res = await request(server).get('/api/reference/paint-brands');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -189,7 +193,7 @@ describe('Reference Routes', () => {
         it('returns an empty list when there are no brands', async () => {
             (prisma.paintBrand.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/paint-brands');
+            const res = await request(server).get('/api/reference/paint-brands');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -201,7 +205,7 @@ describe('Reference Routes', () => {
         it('returns all paints when no filters are given', async () => {
             (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint]);
 
-            const res = await request(app).get('/api/reference/paints');
+            const res = await request(server).get('/api/reference/paints');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -213,7 +217,7 @@ describe('Reference Routes', () => {
         it('filters by brandId when provided', async () => {
             (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint]);
 
-            await request(app).get('/api/reference/paints?brandId=b-1');
+            await request(server).get('/api/reference/paints?brandId=b-1');
 
             expect(prisma.paint.findMany).toHaveBeenCalledWith(
                 expect.objectContaining({ where: { brandId: 'b-1' } }),
@@ -223,7 +227,7 @@ describe('Reference Routes', () => {
         it('filters by type when provided', async () => {
             (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint]);
 
-            await request(app).get('/api/reference/paints?type=BASE');
+            await request(server).get('/api/reference/paints?type=BASE');
 
             expect(prisma.paint.findMany).toHaveBeenCalledWith(
                 expect.objectContaining({ where: { type: 'BASE' } }),
@@ -233,7 +237,7 @@ describe('Reference Routes', () => {
         it('combines brandId and type filters', async () => {
             (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([samplePaint]);
 
-            await request(app).get('/api/reference/paints?brandId=b-1&type=BASE');
+            await request(server).get('/api/reference/paints?brandId=b-1&type=BASE');
 
             expect(prisma.paint.findMany).toHaveBeenCalledWith(
                 expect.objectContaining({ where: { brandId: 'b-1', type: 'BASE' } }),
@@ -243,7 +247,7 @@ describe('Reference Routes', () => {
         it('returns an empty list when no paints match', async () => {
             (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/paints?type=UNKNOWN');
+            const res = await request(server).get('/api/reference/paints?type=UNKNOWN');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -255,7 +259,7 @@ describe('Reference Routes', () => {
         it('returns similar paints for a given paint id', async () => {
             (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleSimilarPaintRow]);
 
-            const res = await request(app).get('/api/reference/paints/p-1/similar');
+            const res = await request(server).get('/api/reference/paints/p-1/similar');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -272,7 +276,7 @@ describe('Reference Routes', () => {
         it('passes the paintId to the query', async () => {
             (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            await request(app).get('/api/reference/paints/p-1/similar');
+            await request(server).get('/api/reference/paints/p-1/similar');
 
             expect(prisma.similarPaint.findMany).toHaveBeenCalledWith(
                 expect.objectContaining({ where: { paintId: 'p-1' } }),
@@ -282,7 +286,7 @@ describe('Reference Routes', () => {
         it('returns an empty list when no similar paints exist', async () => {
             (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/paints/unknown-id/similar');
+            const res = await request(server).get('/api/reference/paints/unknown-id/similar');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);
@@ -291,7 +295,7 @@ describe('Reference Routes', () => {
         it('does not require authentication', async () => {
             (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/paints/p-1/similar');
+            const res = await request(server).get('/api/reference/paints/p-1/similar');
 
             expect(res.status).toBe(200);
         });
@@ -314,7 +318,7 @@ describe('Reference Routes', () => {
             (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sourcePaintStub]);
             (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleSimilarPairRow]);
 
-            const res = await request(app).get('/api/reference/similar-paints');
+            const res = await request(server).get('/api/reference/similar-paints');
 
             expect(res.status).toBe(200);
             expect(res.body.data).toHaveLength(1);
@@ -332,7 +336,7 @@ describe('Reference Routes', () => {
             (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
             (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/similar-paints');
+            const res = await request(server).get('/api/reference/similar-paints');
 
             expect(res.status).toBe(200);
             expect(res.body.data).toHaveLength(0);
@@ -342,7 +346,7 @@ describe('Reference Routes', () => {
             (prisma.paint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
             (prisma.similarPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/similar-paints');
+            const res = await request(server).get('/api/reference/similar-paints');
 
             expect(res.status).toBe(200);
         });
@@ -353,7 +357,7 @@ describe('Reference Routes', () => {
         it('returns all techniques', async () => {
             (prisma.technique.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([sampleTechnique]);
 
-            const res = await request(app).get('/api/reference/techniques');
+            const res = await request(server).get('/api/reference/techniques');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
@@ -363,7 +367,7 @@ describe('Reference Routes', () => {
         it('returns an empty list when there are no techniques', async () => {
             (prisma.technique.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-            const res = await request(app).get('/api/reference/techniques');
+            const res = await request(server).get('/api/reference/techniques');
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(0);

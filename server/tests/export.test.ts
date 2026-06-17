@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 
@@ -73,6 +73,10 @@ const mockItem = {
 };
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH_HEADER = { Authorization: 'Bearer valid-token' };
 
 // ─── GET /api/export/items ────────────────────────────────
@@ -82,7 +86,7 @@ describe('GET /api/export/items', () => {
   });
 
   it('returns 401 when no auth header', async () => {
-    const res = await request(app).get('/api/export/items');
+    const res = await request(server).get('/api/export/items');
     expect(res.status).toBe(401);
   });
 
@@ -90,7 +94,7 @@ describe('GET /api/export/items', () => {
     const { prisma } = await import('../src/lib/prisma');
     (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([mockItem]);
 
-    const res = await request(app).get('/api/export/items?format=json').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/items?format=json').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body).toHaveLength(1);
@@ -100,7 +104,7 @@ describe('GET /api/export/items', () => {
     const { prisma } = await import('../src/lib/prisma');
     (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([mockItem]);
 
-    const res = await request(app).get('/api/export/items').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/items').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
@@ -109,7 +113,7 @@ describe('GET /api/export/items', () => {
     const { prisma } = await import('../src/lib/prisma');
     (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([mockItem]);
 
-    const res = await request(app).get('/api/export/items?format=csv').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/items?format=csv').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(res.headers['content-type']).toMatch(/text\/csv/);
   });
@@ -118,7 +122,7 @@ describe('GET /api/export/items', () => {
     const { prisma } = await import('../src/lib/prisma');
     (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([mockItem]);
 
-    const res = await request(app).get('/api/export/items?format=csv').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/items?format=csv').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(res.headers['content-disposition']).toMatch(/attachment/);
   });
@@ -127,7 +131,7 @@ describe('GET /api/export/items', () => {
     const { prisma } = await import('../src/lib/prisma');
     (prisma.item.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-    const res = await request(app).get('/api/export/items?format=csv').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/items?format=csv').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(res.text).toContain('name,status,gameSystem');
     expect(res.text.trim().split('\n')).toHaveLength(1);
@@ -141,7 +145,7 @@ describe('GET /api/export/color-schemes', () => {
   });
 
   it('returns 401 when no auth header', async () => {
-    const res = await request(app).get('/api/export/color-schemes');
+    const res = await request(server).get('/api/export/color-schemes');
     expect(res.status).toBe(401);
   });
 
@@ -151,7 +155,7 @@ describe('GET /api/export/color-schemes', () => {
       { id: 'cs-1', name: 'Test Scheme', steps: [] },
     ]);
 
-    const res = await request(app).get('/api/export/color-schemes').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/color-schemes').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body).toHaveLength(1);
@@ -161,7 +165,7 @@ describe('GET /api/export/color-schemes', () => {
     const { prisma } = await import('../src/lib/prisma');
     (prisma.colorScheme.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-    const res = await request(app).get('/api/export/color-schemes').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/color-schemes').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
   });
@@ -174,7 +178,7 @@ describe('GET /api/export/owned-paints', () => {
   });
 
   it('returns 401 when no auth header', async () => {
-    const res = await request(app).get('/api/export/owned-paints');
+    const res = await request(server).get('/api/export/owned-paints');
     expect(res.status).toBe(401);
   });
 
@@ -194,7 +198,7 @@ describe('GET /api/export/owned-paints', () => {
       },
     ]);
 
-    const res = await request(app).get('/api/export/owned-paints').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/owned-paints').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(res.headers['content-type']).toMatch(/application\/json/);
     expect(Array.isArray(res.body)).toBe(true);
@@ -216,7 +220,7 @@ describe('GET /api/export/owned-paints', () => {
     const { prisma } = await import('../src/lib/prisma');
     (prisma.userOwnedPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-    const res = await request(app).get('/api/export/owned-paints').set(AUTH_HEADER);
+    const res = await request(server).get('/api/export/owned-paints').set(AUTH_HEADER);
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
   });

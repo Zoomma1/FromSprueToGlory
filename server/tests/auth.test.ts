@@ -8,7 +8,7 @@
 //   POST /api/auth/logout  — with and without a refresh token
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -62,6 +62,10 @@ vi.mock('../src/utils/jwt', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 
 describe('Auth Routes', () => {
     beforeEach(() => {
@@ -78,7 +82,7 @@ describe('Auth Routes', () => {
             });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/signup')
                 .send({ email: 'test@example.com', password: 'password123' });
 
@@ -93,7 +97,7 @@ describe('Auth Routes', () => {
             (prisma.user.create as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 'user-1', email: 'test@example.com' });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            await request(app)
+            await request(server)
                 .post('/api/auth/signup')
                 .send({ email: 'test@example.com', password: 'password123' });
 
@@ -106,7 +110,7 @@ describe('Auth Routes', () => {
                 email: 'test@example.com',
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/signup')
                 .send({ email: 'test@example.com', password: 'password123' });
 
@@ -115,7 +119,7 @@ describe('Auth Routes', () => {
         });
 
         it('returns 400 for an invalid email format', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/signup')
                 .send({ email: 'not-an-email', password: 'password123' });
 
@@ -124,7 +128,7 @@ describe('Auth Routes', () => {
         });
 
         it('returns 400 when password is shorter than 8 characters', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/signup')
                 .send({ email: 'test@example.com', password: 'short' });
 
@@ -133,14 +137,14 @@ describe('Auth Routes', () => {
         });
 
         it('returns 400 when both email and password are missing', async () => {
-            const res = await request(app).post('/api/auth/signup').send({});
+            const res = await request(server).post('/api/auth/signup').send({});
 
             expect(res.status).toBe(400);
             expect(res.body.error).toBe('Validation failed');
         });
 
         it('returns 400 when email is missing', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/signup')
                 .send({ password: 'password123' });
 
@@ -155,7 +159,7 @@ describe('Auth Routes', () => {
             });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/signup')
                 .send({ email: 'test@example.com', password: 'password123' });
 
@@ -165,7 +169,7 @@ describe('Auth Routes', () => {
         });
 
         it('does not expose the password value in Zod validation error details', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/signup')
                 .send({ email: 'test@example.com', password: 'short' });
 
@@ -185,7 +189,7 @@ describe('Auth Routes', () => {
             (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'test@example.com', password: 'password123' });
 
@@ -203,7 +207,7 @@ describe('Auth Routes', () => {
             });
             (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(false);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'test@example.com', password: 'wrongpass1' });
 
@@ -214,7 +218,7 @@ describe('Auth Routes', () => {
         it('returns 401 when the email is not registered', async () => {
             (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'nobody@example.com', password: 'password123' });
 
@@ -230,7 +234,7 @@ describe('Auth Routes', () => {
                 googleId: 'google-123',
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'test@example.com', password: 'anypassword' });
 
@@ -239,7 +243,7 @@ describe('Auth Routes', () => {
         });
 
         it('returns 400 for an invalid email format', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'not-valid', password: 'password123' });
 
@@ -248,7 +252,7 @@ describe('Auth Routes', () => {
         });
 
         it('returns 400 when password is too short', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'test@example.com', password: 'short' });
 
@@ -264,7 +268,7 @@ describe('Auth Routes', () => {
             (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'test@example.com', password: 'password123' });
 
@@ -275,7 +279,7 @@ describe('Auth Routes', () => {
         });
 
         it('does not expose the password value in Zod validation error details', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'test@example.com', password: 'short' });
 
@@ -292,7 +296,7 @@ describe('Auth Routes', () => {
             (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            await request(app)
+            await request(server)
                 .post('/api/auth/login')
                 .send({ email: 'test@example.com', password: 'password123' });
 
@@ -310,7 +314,7 @@ describe('Auth Routes', () => {
             (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 1 });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/refresh')
                 .send({ refreshToken: 'valid-refresh-token' });
 
@@ -327,7 +331,7 @@ describe('Auth Routes', () => {
             (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 1 });
             (prisma.refreshToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            await request(app)
+            await request(server)
                 .post('/api/auth/refresh')
                 .send({ refreshToken: 'valid-refresh-token' });
 
@@ -338,7 +342,7 @@ describe('Auth Routes', () => {
         });
 
         it('returns 400 when refreshToken field is missing', async () => {
-            const res = await request(app).post('/api/auth/refresh').send({});
+            const res = await request(server).post('/api/auth/refresh').send({});
 
             expect(res.status).toBe(400);
         });
@@ -348,7 +352,7 @@ describe('Auth Routes', () => {
                 throw new Error('invalid signature');
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/refresh')
                 .send({ refreshToken: 'tampered-token' });
 
@@ -363,7 +367,7 @@ describe('Auth Routes', () => {
             });
             (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 0 });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/refresh')
                 .send({ refreshToken: 'unknown-token' });
 
@@ -379,7 +383,7 @@ describe('Auth Routes', () => {
             // Expired token won't match the expiresAt > now condition → count: 0
             (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({ count: 0 });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/refresh')
                 .send({ refreshToken: 'expired-token' });
 
@@ -457,12 +461,12 @@ describe('Auth Routes', () => {
         });
 
         it('returns 401 if no oauth_tokens cookie is present', async () => {
-            const res = await request(app).get('/api/auth/session');
+            const res = await request(server).get('/api/auth/session');
             expect(res.status).toBe(401);
         });
 
         it('returns tokens and clears the cookie when the cookie is valid', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .get('/api/auth/session')
                 .set('Cookie', `oauth_tokens=${encodeURIComponent(cookiePayload)}`);
 
@@ -490,7 +494,7 @@ describe('Auth Routes', () => {
             (prisma.passwordResetToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({});
             (prisma.passwordResetToken.create as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/forgot-password')
                 .send({ email: 'test@example.com' });
 
@@ -501,7 +505,7 @@ describe('Auth Routes', () => {
         it('returns 200 with the same generic message when the email is not registered', async () => {
             (prisma.user.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/forgot-password')
                 .send({ email: 'nobody@example.com' });
 
@@ -510,7 +514,7 @@ describe('Auth Routes', () => {
         });
 
         it('returns 400 for an invalid email format', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/forgot-password')
                 .send({ email: 'not-an-email' });
 
@@ -534,7 +538,7 @@ describe('Auth Routes', () => {
             (prisma.passwordResetToken.update as ReturnType<typeof vi.fn>).mockResolvedValue({});
             (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/reset-password')
                 .send({ token: 'valid-hex-token', newPassword: 'newpass123' });
 
@@ -545,7 +549,7 @@ describe('Auth Routes', () => {
         it('returns 400 when the token is not found in DB', async () => {
             (prisma.passwordResetToken.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/reset-password')
                 .send({ token: 'unknown', newPassword: 'newpass123' });
 
@@ -558,7 +562,7 @@ describe('Auth Routes', () => {
                 expiresAt: new Date(Date.now() - 1000),
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/reset-password')
                 .send({ token: 'expired-token', newPassword: 'newpass123' });
 
@@ -571,7 +575,7 @@ describe('Auth Routes', () => {
                 usedAt: new Date(),
             });
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/reset-password')
                 .send({ token: 'used-token', newPassword: 'newpass123' });
 
@@ -579,7 +583,7 @@ describe('Auth Routes', () => {
         });
 
         it('returns 400 when newPassword is too short', async () => {
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/reset-password')
                 .send({ token: 'valid-hex-token', newPassword: 'short' });
 
@@ -592,7 +596,7 @@ describe('Auth Routes', () => {
         it('deletes the refresh token and returns 200', async () => {
             (prisma.refreshToken.deleteMany as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            const res = await request(app)
+            const res = await request(server)
                 .post('/api/auth/logout')
                 .send({ refreshToken: 'some-token' });
 
@@ -604,7 +608,7 @@ describe('Auth Routes', () => {
         });
 
         it('returns 200 even when no refreshToken is provided in the body', async () => {
-            const res = await request(app).post('/api/auth/logout').send({});
+            const res = await request(server).post('/api/auth/logout').send({});
 
             expect(res.status).toBe(200);
             expect(res.body.message).toBe('Logged out');

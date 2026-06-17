@@ -5,7 +5,7 @@
 //   DELETE /api/account — cascading user deletion
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { prisma } from '../src/lib/prisma';
@@ -40,6 +40,10 @@ vi.mock('bcryptjs', () => ({
 }));
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH = 'Bearer fake-token';
 
 describe('Account Routes', () => {
@@ -51,7 +55,7 @@ describe('Account Routes', () => {
     // ─── AUTH MIDDLEWARE ──────────────────────────────────
     describe('Auth middleware', () => {
         it('returns 401 with no Authorization header', async () => {
-            const res = await request(app).delete('/api/account');
+            const res = await request(server).delete('/api/account');
             expect(res.status).toBe(401);
             expect(res.body.error).toBe('No token provided');
         });
@@ -59,7 +63,7 @@ describe('Account Routes', () => {
         it('returns 401 when the token is invalid', async () => {
             mockVerifyAccessToken.mockImplementationOnce(() => { throw new Error('jwt expired'); });
 
-            const res = await request(app)
+            const res = await request(server)
                 .delete('/api/account')
                 .set('Authorization', 'Bearer bad-token');
 
@@ -76,7 +80,7 @@ describe('Account Routes', () => {
                 email: 'a@b.com',
             });
 
-            const res = await request(app).delete('/api/account').set('Authorization', AUTH);
+            const res = await request(server).delete('/api/account').set('Authorization', AUTH);
 
             expect(res.status).toBe(200);
             expect(res.body.message).toBe('Account and all associated data deleted');
@@ -85,7 +89,7 @@ describe('Account Routes', () => {
         it('deletes only the authenticated user (scoped by userId from token)', async () => {
             (prisma.user.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-            await request(app).delete('/api/account').set('Authorization', AUTH);
+            await request(server).delete('/api/account').set('Authorization', AUTH);
 
             expect(prisma.user.delete).toHaveBeenCalledWith({ where: { id: 'user-1' } });
         });
@@ -94,7 +98,7 @@ describe('Account Routes', () => {
             (prisma.user.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
             // Even if a different userId is injected in the body, the route uses req.userId
-            await request(app)
+            await request(server)
                 .delete('/api/account')
                 .set('Authorization', AUTH)
                 .send({ userId: 'attacker-id' });

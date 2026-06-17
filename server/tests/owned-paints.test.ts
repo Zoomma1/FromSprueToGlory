@@ -8,7 +8,7 @@
 // DELETE /api/paints/wishlist/:id — remove from wishlist
 // ──────────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app';
 
@@ -41,6 +41,10 @@ vi.mock('bcryptjs', () => ({ default: { hash: vi.fn(), compare: vi.fn() } }));
 import { prisma } from '../src/lib/prisma';
 
 const app = createApp();
+const server = app.listen(0);
+afterAll(() => {
+    server.close();
+});
 const AUTH = 'Bearer fake-token';
 
 const samplePaint = {
@@ -83,7 +87,7 @@ describe('GET /api/paints', () => {
     });
 
     it('returns 401 without auth', async () => {
-        const res = await request(app).get('/api/paints');
+        const res = await request(server).get('/api/paints');
         expect(res.status).toBe(401);
     });
 
@@ -93,7 +97,7 @@ describe('GET /api/paints', () => {
         (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-        const res = await request(app).get('/api/paints').set('Authorization', AUTH);
+        const res = await request(server).get('/api/paints').set('Authorization', AUTH);
 
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('paints');
@@ -108,7 +112,7 @@ describe('GET /api/paints', () => {
         (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-        const res = await request(app).get('/api/paints?filter=owned').set('Authorization', AUTH);
+        const res = await request(server).get('/api/paints?filter=owned').set('Authorization', AUTH);
 
         expect(res.status).toBe(200);
         expect(res.body.paints).toHaveLength(1);
@@ -120,7 +124,7 @@ describe('GET /api/paints', () => {
         (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-        const res = await request(app).get('/api/paints?search=abaddon').set('Authorization', AUTH);
+        const res = await request(server).get('/api/paints?search=abaddon').set('Authorization', AUTH);
 
         expect(res.status).toBe(200);
         expect(res.body.paints).toHaveLength(1);
@@ -133,7 +137,7 @@ describe('GET /api/paints', () => {
         (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-        const res = await request(app).get('/api/paints?search=MEPHISTON').set('Authorization', AUTH);
+        const res = await request(server).get('/api/paints?search=MEPHISTON').set('Authorization', AUTH);
 
         expect(res.status).toBe(200);
         expect(res.body.paints).toHaveLength(1);
@@ -146,7 +150,7 @@ describe('GET /api/paints', () => {
         (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-        const res = await request(app).get('/api/paints?search=vallejo').set('Authorization', AUTH);
+        const res = await request(server).get('/api/paints?search=vallejo').set('Authorization', AUTH);
 
         expect(res.status).toBe(200);
         expect(res.body.paints).toHaveLength(1);
@@ -159,7 +163,7 @@ describe('GET /api/paints', () => {
         (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-        const res = await request(app).get('/api/paints?search=red&filter=owned').set('Authorization', AUTH);
+        const res = await request(server).get('/api/paints?search=red&filter=owned').set('Authorization', AUTH);
 
         expect(res.status).toBe(200);
         expect(res.body.paints).toHaveLength(1);
@@ -172,7 +176,7 @@ describe('GET /api/paints', () => {
         (prisma.colorSchemeStep.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         (prisma.userWishlistPaint.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
-        const res = await request(app).get('/api/paints?search=nonexistent').set('Authorization', AUTH);
+        const res = await request(server).get('/api/paints?search=nonexistent').set('Authorization', AUTH);
 
         expect(res.status).toBe(200);
         expect(res.body.paints).toHaveLength(0);
@@ -186,7 +190,7 @@ describe('POST /api/paints/owned/:paintId', () => {
         (prisma.paint.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(samplePaint);
         (prisma.userOwnedPaint.create as ReturnType<typeof vi.fn>).mockResolvedValue({ userId: 'user-1', paintId: 'paint-1' });
 
-        const res = await request(app).post('/api/paints/owned/paint-1').set('Authorization', AUTH);
+        const res = await request(server).post('/api/paints/owned/paint-1').set('Authorization', AUTH);
 
         expect(res.status).toBe(201);
     });
@@ -194,7 +198,7 @@ describe('POST /api/paints/owned/:paintId', () => {
     it('returns 404 if paint not found', async () => {
         (prisma.paint.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-        const res = await request(app).post('/api/paints/owned/paint-999').set('Authorization', AUTH);
+        const res = await request(server).post('/api/paints/owned/paint-999').set('Authorization', AUTH);
 
         expect(res.status).toBe(404);
     });
@@ -207,7 +211,7 @@ describe('DELETE /api/paints/owned/:paintId', () => {
         (prisma.userOwnedPaint.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({ userId: 'user-1', paintId: 'paint-1' });
         (prisma.userOwnedPaint.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-        const res = await request(app).delete('/api/paints/owned/paint-1').set('Authorization', AUTH);
+        const res = await request(server).delete('/api/paints/owned/paint-1').set('Authorization', AUTH);
 
         expect(res.status).toBe(204);
     });
@@ -215,7 +219,7 @@ describe('DELETE /api/paints/owned/:paintId', () => {
     it('returns 404 if not owned', async () => {
         (prisma.userOwnedPaint.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-        const res = await request(app).delete('/api/paints/owned/paint-1').set('Authorization', AUTH);
+        const res = await request(server).delete('/api/paints/owned/paint-1').set('Authorization', AUTH);
 
         expect(res.status).toBe(404);
     });
@@ -228,7 +232,7 @@ describe('POST /api/paints/wishlist/:paintId', () => {
         (prisma.paint.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(samplePaint);
         (prisma.userWishlistPaint.create as ReturnType<typeof vi.fn>).mockResolvedValue({ userId: 'user-1', paintId: 'paint-1' });
 
-        const res = await request(app).post('/api/paints/wishlist/paint-1').set('Authorization', AUTH);
+        const res = await request(server).post('/api/paints/wishlist/paint-1').set('Authorization', AUTH);
 
         expect(res.status).toBe(201);
     });
@@ -236,7 +240,7 @@ describe('POST /api/paints/wishlist/:paintId', () => {
     it('returns 404 if paint not found', async () => {
         (prisma.paint.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-        const res = await request(app).post('/api/paints/wishlist/paint-999').set('Authorization', AUTH);
+        const res = await request(server).post('/api/paints/wishlist/paint-999').set('Authorization', AUTH);
 
         expect(res.status).toBe(404);
     });
@@ -249,7 +253,7 @@ describe('DELETE /api/paints/wishlist/:paintId', () => {
         (prisma.userWishlistPaint.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({ userId: 'user-1', paintId: 'paint-1' });
         (prisma.userWishlistPaint.delete as ReturnType<typeof vi.fn>).mockResolvedValue({});
 
-        const res = await request(app).delete('/api/paints/wishlist/paint-1').set('Authorization', AUTH);
+        const res = await request(server).delete('/api/paints/wishlist/paint-1').set('Authorization', AUTH);
 
         expect(res.status).toBe(204);
     });
@@ -257,7 +261,7 @@ describe('DELETE /api/paints/wishlist/:paintId', () => {
     it('returns 404 if not in wishlist', async () => {
         (prisma.userWishlistPaint.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
-        const res = await request(app).delete('/api/paints/wishlist/paint-1').set('Authorization', AUTH);
+        const res = await request(server).delete('/api/paints/wishlist/paint-1').set('Authorization', AUTH);
 
         expect(res.status).toBe(404);
     });
