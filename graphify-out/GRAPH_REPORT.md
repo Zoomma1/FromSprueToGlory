@@ -1,16 +1,16 @@
 # Graph Report - FromSprueToGlory  (2026-06-19)
 
 ## Corpus Check
-- 178 files · ~199,960 words
+- 178 files · ~200,410 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1148 nodes · 1702 edges · 101 communities (84 shown, 17 thin omitted)
+- 1151 nodes · 1709 edges · 99 communities (82 shown, 17 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dc3c69e9`
+- Built from commit: `d81edfb8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -63,7 +63,6 @@
 - [[_COMMUNITY_Community 45|Community 45]]
 - [[_COMMUNITY_Community 46|Community 46]]
 - [[_COMMUNITY_Community 47|Community 47]]
-- [[_COMMUNITY_Community 48|Community 48]]
 - [[_COMMUNITY_Community 49|Community 49]]
 - [[_COMMUNITY_Community 50|Community 50]]
 - [[_COMMUNITY_Community 51|Community 51]]
@@ -87,7 +86,6 @@
 - [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
 - [[_COMMUNITY_Community 71|Community 71]]
-- [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
@@ -107,7 +105,7 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `ApiService` - 75 edges
-2. `SchemeDetailComponent` - 45 edges
+2. `SchemeDetailComponent` - 46 edges
 3. `AuthService` - 27 edges
 4. `createApp()` - 20 edges
 5. `ValidationError` - 19 edges
@@ -129,7 +127,7 @@
 - `authMiddleware()` --calls--> `trackUserActivity()`  [EXTRACTED]
   server/src/middleware/auth.middleware.ts → server/src/services/user-activity.service.ts
 
-## Communities (101 total, 17 thin omitted)
+## Communities (99 total, 17 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.04
@@ -152,8 +150,8 @@ Cohesion: 0.09
 Nodes (16): EXCHANGE_RATES, byProject, currency, DashboardComponent, eligibleItems, projectBreakdown, alpha, beta (+8 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.10
-Nodes (20): activatedRouteStub, adapted, brands, created, group, mockCustomPaint, mockPaints, mockPaintsWithBrands (+12 more)
+Cohesion: 0.09
+Nodes (21): activatedRouteStub, adapted, brands, created, group, mockCustomPaint, mockPaints, mockPaintsWithBrands (+13 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.16
@@ -165,27 +163,31 @@ Nodes (12): addSchemeImageSchema, createScheme(), createSchemeSchema, deleteS3Ke
 
 ### Community 11 - "Community 11"
 Cohesion: 0.10
-Nodes (24): Faction, Factions, GameSystem, GameSystems, ItemStatusHistory, Model, PaintBrand, PaintBrands (+16 more)
+Nodes (19): PaintBrand, PaintBrands, Technique, Techniques, itemIds, mockColorScheme, mockData, mockFactions (+11 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.13
-Nodes (15): dependencies, @aws-sdk/client-s3, @aws-sdk/s3-request-presigner, bcryptjs, cookie-parser, dotenv, express-rate-limit, jsonwebtoken (+7 more)
+Cohesion: 0.12
+Nodes (19): dependencies, @aws-sdk/client-s3, @aws-sdk/s3-request-presigner, bcryptjs, cookie-parser, cors, dotenv, express (+11 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.15
-Nodes (14): STATUS_WEIGHT, computeCompletion(), createProject(), createProjectSchema, deleteProject(), getProject(), listProjects(), ProjectSummary (+6 more)
+Cohesion: 0.07
+Nodes (31): STATUS_WEIGHT, PaginationParams, paginationSchema, changeStatus(), createItem(), createItemSchema, deleteItem(), getHistory() (+23 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.13
-Nodes (17): addToWishlist(), listPaintsWithStatus(), markAsOwned(), PaintCollectionResult, PaintFilter, PaintStatus, PaintWithStatus, removeFromOwned() (+9 more)
+Cohesion: 0.14
+Nodes (16): addToWishlist(), listPaintsWithStatus(), markAsOwned(), PaintCollectionResult, PaintStatus, PaintWithStatus, removeFromOwned(), removeFromWishlist() (+8 more)
 
 ### Community 15 - "Community 15"
-Cohesion: 0.12
-Nodes (19): ColorSchemeImage, ColorSchemePayload, ColorSchemes, ColorSchemeStepFull, ColorSchemeStepPayload, MixEntryFull, MixEntryPayload, Technique (+11 more)
+Cohesion: 0.13
+Nodes (11): ColorSchemeImage, MixEntryPayload, brands, custom, paint, PAINT_TYPES, rest, unique (+3 more)
 
 ### Community 16 - "Community 16"
 Cohesion: 0.16
 Nodes (7): Project, Projects, mockProject, ProjectsListComponent, confirmSpy, event, mockProjects
+
+### Community 17 - "Community 17"
+Cohesion: 0.12
+Nodes (6): CURRENCIES, SettingsComponent, blob, mockData, mockItems, revokeSpy
 
 ### Community 18 - "Community 18"
 Cohesion: 0.12
@@ -200,16 +202,12 @@ Cohesion: 0.22
 Nodes (8): ACQUISITION_CHANNELS, acquisitionPeriodSchema, exportPaints(), syncPaints(), syncPaintsBodySchema, SyncResult, mockBrand, validPaint
 
 ### Community 22 - "Community 22"
-Cohesion: 0.17
-Nodes (8): Item, ItemPayload, Items, ItemStatus, blob, mockData, mockItems, revokeSpy
-
-### Community 23 - "Community 23"
 Cohesion: 0.15
-Nodes (5): ItemFormDialogComponent, fakeFactions, fakeGameSystems, fakeProjects, mockItem
+Nodes (8): Item, ItemPayload, Items, ItemStatus, confirmSpy, finishedItem, itemWithCopy, mockItems
 
 ### Community 24 - "Community 24"
-Cohesion: 0.20
-Nodes (13): changeStatus(), createItem(), createItemSchema, deleteItem(), getHistory(), getItem(), listItems(), statusChangeSchema (+5 more)
+Cohesion: 0.19
+Nodes (13): ColorScheme, ColorSchemeFull, ColorSchemePayload, ColorSchemes, ColorSchemeStepFull, ColorSchemeStepPayload, MixEntryFull, ItemStatusHistory (+5 more)
 
 ### Community 25 - "Community 25"
 Cohesion: 0.22
@@ -220,8 +218,8 @@ Cohesion: 0.14
 Nodes (13): Additional Resources, Building, Client, Code scaffolding, code:bash (ng serve), code:bash (ng generate component component-name), code:bash (ng generate --help), code:bash (ng build) (+5 more)
 
 ### Community 27 - "Community 27"
-Cohesion: 0.21
-Nodes (10): CURRENCIES, Currency, ITEM_STATUSES, STATUS_LABELS, STATUS_ORDER, ItemCardComponent, [field, dir], missing (+2 more)
+Cohesion: 0.25
+Nodes (8): Currency, STATUS_LABELS, STATUS_ORDER, ItemCardComponent, [field, dir], missing, total, withPrice
 
 ### Community 28 - "Community 28"
 Cohesion: 0.16
@@ -243,13 +241,17 @@ Nodes (9): hexToRgb(), exportColorSchemes(), exportItems(), exportOwnedPaints(),
 Cohesion: 0.20
 Nodes (10): Paint, PaintWithEquivalents, brands, row, selected, mockCitadelBlue, mockRows, result (+2 more)
 
+### Community 33 - "Community 33"
+Cohesion: 0.36
+Nodes (5): Faction, Factions, GameSystem, GameSystems, ITEM_STATUSES
+
 ### Community 34 - "Community 34"
 Cohesion: 0.17
 Nodes (11): app, mockSend, mockVerifyAccessToken, sampleImage, sampleScheme, server, updated, validMixStep (+3 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.32
-Nodes (4): globalForPrisma, deleteAccount(), app, server
+Cohesion: 0.20
+Nodes (7): globalForPrisma, deleteAccount(), app, mockVerifyAccessToken, server, app, server
 
 ### Community 36 - "Community 36"
 Cohesion: 0.17
@@ -276,8 +278,8 @@ Cohesion: 0.18
 Nodes (10): code:bash (git clone https://github.com/Zoomma1/FromSprueToGlory.git), code:bash (cd server && npm run dev       # http://localhost:3000), Contributing, Data Sources, From Sprue to Glory, License, Running locally, Screenshots (+2 more)
 
 ### Community 44 - "Community 44"
-Cohesion: 0.25
-Nodes (7): cors, express, helmet, createApp(), app, mockVerifyAccessToken, server
+Cohesion: 0.33
+Nodes (4): fakeFactions, fakeGameSystems, fakeProjects, mockItem
 
 ### Community 45 - "Community 45"
 Cohesion: 0.25
@@ -286,10 +288,6 @@ Nodes (8): ValidationError, createPaint(), createPaintSchema, deletePaint(), lis
 ### Community 47 - "Community 47"
 Cohesion: 0.20
 Nodes (10): serve, production, budgets, buildTarget, fileReplacements, outputHashing, serviceWorker, builder (+2 more)
-
-### Community 48 - "Community 48"
-Cohesion: 0.33
-Nodes (4): confirmSpy, finishedItem, itemWithCopy, mockItems
 
 ### Community 49 - "Community 49"
 Cohesion: 0.20
@@ -356,12 +354,8 @@ Cohesion: 0.29
 Nodes (6): brandId, factionId, gameSystemId, q, router, type
 
 ### Community 67 - "Community 67"
-Cohesion: 0.33
-Nodes (5): paintId, rawFilter, router, userId, VALID_FILTERS
-
-### Community 68 - "Community 68"
-Cohesion: 0.24
-Nodes (4): ColorScheme, ColorSchemeFull, ColorSchemesListComponent, mockColorSchemes
+Cohesion: 0.29
+Nodes (6): paintId, rawFilter, router, userId, VALID_FILTERS, PaintFilter
 
 ### Community 69 - "Community 69"
 Cohesion: 0.53
@@ -374,10 +368,6 @@ Nodes (4): main(), PaintWithRgb, prisma, rgbDistance()
 ### Community 71 - "Community 71"
 Cohesion: 0.33
 Nodes (5): app, mockUser, mockVerifyAccessToken, server, supported
-
-### Community 72 - "Community 72"
-Cohesion: 0.47
-Nodes (4): PaginationParams, paginationSchema, params, result
 
 ### Community 73 - "Community 73"
 Cohesion: 0.40
@@ -420,23 +410,23 @@ Cohesion: 0.50
 Nodes (3): code:bash (graphify claude install   # PreToolUse hook + this CLAUDE.md), graphify, graphify — first-time setup (after clone)
 
 ## Knowledge Gaps
-- **504 isolated node(s):** `command`, `args`, `PreToolUse`, `allow`, `name` (+499 more)
+- **505 isolated node(s):** `command`, `args`, `PreToolUse`, `allow`, `name` (+500 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ApiService` connect `Community 0` to `Community 32`, `Community 68`, `Community 39`, `Community 8`, `Community 41`, `Community 7`, `Community 11`, `Community 15`, `Community 16`, `Community 48`, `Community 22`, `Community 23`, `Community 27`, `Community 61`?**
+- **Why does `ApiService` connect `Community 0` to `Community 32`, `Community 33`, `Community 39`, `Community 8`, `Community 41`, `Community 7`, `Community 11`, `Community 44`, `Community 15`, `Community 16`, `Community 17`, `Community 22`, `Community 24`, `Community 27`, `Community 61`?**
   _High betweenness centrality (0.052) - this node is a cross-community bridge._
-- **Why does `createApp()` connect `Community 44` to `Community 64`, `Community 65`, `Community 34`, `Community 3`, `Community 36`, `Community 35`, `Community 71`, `Community 9`, `Community 75`, `Community 76`, `Community 49`, `Community 18`, `Community 19`, `Community 25`?**
+- **Why does `createApp()` connect `Community 12` to `Community 64`, `Community 65`, `Community 34`, `Community 3`, `Community 36`, `Community 35`, `Community 71`, `Community 9`, `Community 75`, `Community 76`, `Community 49`, `Community 18`, `Community 19`, `Community 25`?**
   _High betweenness centrality (0.039) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `Community 12` to `Community 4`, `Community 44`?**
+- **Why does `dependencies` connect `Community 12` to `Community 4`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `createApp()` (e.g. with `express` and `helmet`) actually correct?**
   _`createApp()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `command`, `args`, `PreToolUse` to the rest of the system?**
-  _504 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _505 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**

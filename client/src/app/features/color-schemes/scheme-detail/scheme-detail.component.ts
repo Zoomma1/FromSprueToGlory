@@ -444,8 +444,30 @@ export class SchemeDetailComponent implements OnInit, OnDestroy {
         this.stepsArray.push(this.createStepGroup());
     }
 
+    /**
+     * Realign the per-step signals (keyed by step index) after the steps array
+     * is mutated. `remap` maps an old step index to its new index, or null if
+     * the step was removed. Without this, deleting/reordering a step leaves
+     * stepRatioModes/stepEditReadUrls/brandFilters pointing at the wrong step
+     * (e.g. a "drops" ratio mode applied to the wrong mix step → corrupted save).
+     */
+    private remapStepSignals(remap: (oldIndex: number) => number | null): void {
+        const apply = <T>(rec: Record<number, T>): Record<number, T> => {
+            const next: Record<number, T> = {};
+            for (const [k, v] of Object.entries(rec)) {
+                const newIndex = remap(Number(k));
+                if (newIndex !== null) next[newIndex] = v;
+            }
+            return next;
+        };
+        this.stepRatioModes.update(apply);
+        this.stepEditReadUrls.update(apply);
+        this.brandFilters.update(apply);
+    }
+
     removeStep(index: number) {
         this.stepsArray.removeAt(index);
+        this.remapStepSignals(i => (i === index ? null : i > index ? i - 1 : i));
     }
 
     reorderStep(event: CdkDragDrop<unknown>) {
@@ -454,6 +476,13 @@ export class SchemeDetailComponent implements OnInit, OnDestroy {
         controls.splice(event.currentIndex, 0, moved);
         this.stepsArray.clear();
         controls.forEach((c) => this.stepsArray.push(c));
+
+        const { previousIndex: from, currentIndex: to } = event;
+        this.remapStepSignals(i => {
+            if (i === from) return to;
+            if (from < to) return i > from && i <= to ? i - 1 : i;
+            return i >= to && i < from ? i + 1 : i;
+        });
     }
 
     moveStepUp(index: number): void {
@@ -462,6 +491,7 @@ export class SchemeDetailComponent implements OnInit, OnDestroy {
         [controls[index - 1], controls[index]] = [controls[index], controls[index - 1]];
         this.stepsArray.clear();
         controls.forEach(c => this.stepsArray.push(c));
+        this.remapStepSignals(i => (i === index ? index - 1 : i === index - 1 ? index : i));
     }
 
     moveStepDown(index: number): void {
@@ -470,6 +500,7 @@ export class SchemeDetailComponent implements OnInit, OnDestroy {
         [controls[index], controls[index + 1]] = [controls[index + 1], controls[index]];
         this.stepsArray.clear();
         controls.forEach(c => this.stepsArray.push(c));
+        this.remapStepSignals(i => (i === index ? index + 1 : i === index + 1 ? index : i));
     }
 
     private createStepGroup(step?: ColorSchemeStepFull): FormGroup {

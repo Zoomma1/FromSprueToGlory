@@ -260,6 +260,60 @@ describe('SchemeDetailComponent', () => {
     });
   });
 
+  describe('FSTG-11 — per-step signals stay aligned on remove/reorder', () => {
+    const mixSchemeWith = (): ColorSchemeFull => ({
+      ...mockScheme,
+      steps: [
+        { orderIndex: 1, area: 'Base', techniqueId: 't1', paintId: 'p1', notes: null },
+        {
+          orderIndex: 2, area: 'Mix', techniqueId: 't2', isMix: true, notes: null,
+          mixEntries: [
+            { paintId: 'p2', ratio: 2 },
+            { paintId: 'p3', ratio: 1 },
+          ],
+        } as ColorSchemeStepFull,
+      ],
+    });
+
+    it('keeps the "drops" ratio mode on the mix step after deleting a preceding step', () => {
+      component.scheme.set(mixSchemeWith());
+      component.enterEditMode();
+      component.onRatioModeChange('drops', 1); // mix step is at index 1
+      apiServiceSpy.updateColorScheme.and.returnValue(of(new ColorScheme()));
+
+      component.removeStep(0); // mix step shifts to index 0
+      component.save();
+
+      const payload = apiServiceSpy.updateColorScheme.calls.mostRecent().args[1] as {
+        steps: { mix?: { ratio: number | null }[] }[];
+      };
+      // 2:1 drops must be persisted as 67% / 33%, not the raw drop counts.
+      expect(payload.steps[0].mix?.map(m => m.ratio)).toEqual([67, 33]);
+    });
+
+    it('moves the ratio mode with its step on moveStepUp', () => {
+      component.scheme.set(mixSchemeWith());
+      component.enterEditMode();
+      component.onRatioModeChange('drops', 1);
+
+      component.moveStepUp(1); // mix step → index 0
+
+      expect(component.getRatioMode(0)).toBe('drops');
+      expect(component.getRatioMode(1)).toBe('percent');
+    });
+
+    it('moves the ratio mode with its step on reorderStep', () => {
+      component.scheme.set(mixSchemeWith());
+      component.enterEditMode();
+      component.onRatioModeChange('drops', 1);
+
+      component.reorderStep({ previousIndex: 1, currentIndex: 0 } as never);
+
+      expect(component.getRatioMode(0)).toBe('drops');
+      expect(component.getRatioMode(1)).toBe('percent');
+    });
+  });
+
   describe('Step group creation', () => {
     it('should create a step group with default values', () => {
       const group = component['createStepGroup']();
