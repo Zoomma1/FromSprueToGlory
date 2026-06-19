@@ -1,0 +1,4 @@
+# graphify knowledge graph — union-merge graph.json instead of conflicting.
+# Requires the local driver (set up by the post-clone steps in CLAUDE.md):
+#   git config merge.graphify-union.driver "graphify merge-driver %O %A %B"
+graphify-out/graph.json merge=graphify-union

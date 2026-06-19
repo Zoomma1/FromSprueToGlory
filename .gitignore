@@ -33,9 +33,9 @@ coverage/
 pgdata/
 minio-data/
 
-# Ignore the .claude file which may contain sensitive information
-/CLAUDE.md
-.claude
-
-# Ignore the graphyfy directory
-graphify-out/
+# graphify knowledge graph — shared with the team (see CLAUDE.md "graphify" section)
+# Commit only the useful artifacts; keep the local build cache and metadata ignored.
+graphify-out/cache/*
+graphify-out/manifest.json
+graphify-out/.graphify_labels.json
+graphify-out/.graphify_root
